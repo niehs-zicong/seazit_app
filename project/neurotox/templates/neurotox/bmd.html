@@ -1,0 +1,16 @@
+{% extends "neurotox/base.html" %}
+
+{% block title %}{{block.super}} | BMC by Lab{% endblock %}
+
+{% block content %}
+<div id='main'>
+</div>
+{% endblock content %}
+
+
+{% block extra-js %}
+<script>
+    window.apps.neurotox.renderBmdByLab(document.getElementById('main'));
+</script>
+{% endblock extra-js %}
+

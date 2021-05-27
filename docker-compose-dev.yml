@@ -1,0 +1,22 @@
+version: '2'
+
+volumes:
+  postgres_data: {}
+  postgres_backup: {}
+
+services:
+   
+  postgres:
+    build: ./compose/postgres
+    command: postgres -c 'config_file=/etc/postgresql/postgresql.conf'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - postgres_backup:/backups
+    env_file: .env
+    ports:
+      - "0.0.0.0:5433:5432"
+
+  rserve:
+    build: ./compose/rserve
+    ports:
+      - "0.0.0.0:6311:6311"

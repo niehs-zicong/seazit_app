@@ -1,0 +1,29 @@
+%% NTP sandbox container diagram
+%% https://mermaidjs.github.io/mermaid-live-editor/
+
+graph BT
+
+F===I[nginx]
+
+A[Rserve]
+B[Redis]
+C[RabbitMQ]
+D[PostgreSQL]
+A===|R executor|F["Python django &<br/>job workers"]
+B===|cache|F
+C===|job queue|F
+D===|db|F
+
+O["Enricher<br/>(Java)"]
+O===I
+O===D
+
+P===I
+K===P
+L===P
+P[Static files]
+K["Docs & Django<br/>static files"]
+L["RoC PDFs"]
+
+H===I
+H["Shiny server"]

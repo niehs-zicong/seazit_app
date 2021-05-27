@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+  Login | Sandbox
+{% endblock %}
+
+{% block crumbs %}
+<ul class="breadcrumb">
+    <li><a href="{% url 'home' %}"><i class='fa fa-home'></a></i></li>
+    <li class="active">Login</li>
+</ul>
+{% endblock crumbs %}
+
+{% block content %}
+    <div class='row-fluid'>
+        <div class="col-md-8 col-md-offset-2">
+            {% crispy form %}
+        </div>
+    </div>
+{% endblock content %}
+
+{% block extra-js %}
+  <script type="text/javascript">
+    document.getElementById('id_username').focus();
+  </script>
+{% endblock extra-js %}

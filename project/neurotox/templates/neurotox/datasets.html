@@ -1,0 +1,14 @@
+{% extends "neurotox/base.html" %}
+
+{% block title %}{{block.super}} | Datasets{% endblock %}
+
+{% block content %}
+<div id='main'></div>
+{% endblock content %}
+
+
+{% block extra-js %}
+<script>
+    window.apps.neurotox.renderDatasets(document.getElementById('main'));
+</script>
+{% endblock extra-js %}

@@ -1,0 +1,17 @@
+{% extends "neurotox/base.html" %}
+
+{% block title %}{{block.super}} | Quality Control{% endblock %}
+
+{% block content %}
+<div id='main'></div>
+<iframe id='iframeApp' frameborder=0
+    src="/shiny/neurotox-workshop/?{{ request.GET.urlencode|safe }}"></iframe>
+{% endblock content %}
+
+
+{% block extra-js %}
+<script>
+    window.apps.neurotox.renderQualityControl(document.getElementById('main'));
+    window.apps.resizeIframe(document.getElementById('iframeApp'));
+</script>
+{% endblock extra-js %}

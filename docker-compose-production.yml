@@ -1,0 +1,63 @@
+version: '2'
+
+volumes:
+  postgres_data: {}
+  postgres_backup: {}
+  shiny_apps: {}
+  static_files: {}
+
+services:
+
+  #postgres:
+    #restart: always
+    #build: ./compose/postgres
+    #volumes:
+     # - postgres_data:/var/lib/postgresql/data
+     # - postgres_backup:/backups
+    #env_file: .env
+
+  rabbitmq:
+    restart: always
+    build: ./compose/rabbitmq
+
+  redis:
+    restart: always
+    build: ./compose/redis
+
+  django:
+    restart: always
+    build:
+      context: .
+      dockerfile: ./compose/django/Dockerfile
+    command: /usr/bin/supervisord -c /supervisord.conf --nodaemon
+    depends_on:
+      #- postgres
+      - rabbitmq
+      - redis
+      - rserve
+    env_file: .env
+    volumes:
+      - static_files:/app/public
+      #- postgres_backup:/backups
+
+  rserve:
+    restart: always
+    build: ./compose/rserve
+
+  shiny:
+    restart: always
+    build: ./compose/shiny
+    volumes:
+      - shiny_apps:/srv/shiny-apps
+
+  nginx:
+    restart: always
+    build: ./compose/nginx
+    depends_on:
+      - django
+      - shiny
+    ports:
+      - "0.0.0.0:81:80"
+      - "0.0.0.0:444:443"
+    volumes:
+      - static_files:/app/public

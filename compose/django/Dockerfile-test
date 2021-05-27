@@ -1,0 +1,66 @@
+FROM continuumio/miniconda3:4.4.10
+
+# Install wkhtmltopdf for python pdfkit library
+# Install libaio1; required for oracle client
+# Install libpq-dev; required for postgres client
+# Install supervisord; required to run daemons
+RUN apt-get update && \
+    apt-get install -y \
+        zip unzip wget \
+        wkhtmltopdf libaio1 \
+        libpq-dev supervisor && \
+    apt-get clean
+
+# Install oracle client; expects the file to exist in the path below
+#TODO Sue
+#COPY ./compose/django/drivers/instantclient-basiclite-linux.x64-12.2.0.1.0.zip /instantclient.zip
+#RUN mkdir -p /opt/oracle && \
+    #cd /opt/oracle && \
+    #unzip /instantclient.zip && \
+    #sh -c 'echo /opt/oracle/instantclient_12_2 > /etc/ld.so.conf.d/oracle-instantclient.conf' && \
+    #ldconfig && \
+    #rm /instantclient.zip
+
+# Requirements have to be pulled and installed here, otherwise caching won't work
+COPY ./compose/django/entrypoint.sh /entrypoint.sh
+COPY ./compose/django/gunicorn-test.sh /gunicorn.sh 
+COPY ./compose/django/cull_backups.py /cull_backups.py
+COPY ./compose/django/supervisord.conf /supervisord.conf
+
+COPY ./conda.env /conda.env
+COPY ./requirements /requirements
+
+# 1) install start-scripts
+# 2) create logs path
+RUN \
+    groupadd -r django && \
+    useradd -r -g django django && \
+    chmod +x /entrypoint.sh && \
+    chmod +x /gunicorn.sh && \    
+    chown django /entrypoint.sh && \
+    chown django /gunicorn.sh && \    
+    chown django /supervisord.conf && \
+    \
+    mkdir -p /app/logs
+
+# optional for conda update
+#RUN conda update -n base conda -y
+
+RUN conda env create -f /conda.env  && \
+    \
+    . /opt/conda/etc/profile.d/conda.sh && \
+    conda activate DIVER && \
+    pip install -U pip && \
+    pip install -r /requirements/production.txt
+
+COPY ./docs /app/docs
+COPY ./project /app/project
+
+# django can't write in volume /app/public
+# fix? https://denibertovic.com/posts/handling-permissions-with-docker-volumes/
+RUN chown -R django /app
+#USER django
+
+WORKDIR /app/project
+
+ENTRYPOINT ["/entrypoint.sh"]

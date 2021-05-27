@@ -1,0 +1,19 @@
+{% extends "neurotox/base.html" %}
+
+{% block title %}{{block.super}} | Exposure Value{% endblock %}
+
+{% block content %}
+<div id='main'>
+</div>
+{% endblock content %}
+
+
+{% block extra-js %}
+<!--
+window.apps.neurotox.renderIntegrativeAnalyses(document.getElementById('main'));
+-->
+<script>
+
+    window.apps.neurotox.renderExposureValue(document.getElementById('main'));
+</script>
+{% endblock extra-js %}

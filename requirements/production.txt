@@ -1,0 +1,5 @@
+-r base.txt
+
+# wsgi webserver
+gunicorn==19.6.0
+django-redis==4.8.0

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block crumbs %}
+<ul class="breadcrumb">
+    <li class="active"><i class='fa fa-home'></i></li>
+</ul>
+{% endblock crumbs %}
+
+
+{% block content %}
+<h1>NTP DIVER</h1>
+
+{% if ENVIRONMENT_NAME != 'Production' %}
+    <h2>Applications in production</h2>
+{% endif %}
+
+<ul>    
+   
+    <li><a href="{% url 'neurotox:home' %}">DNT-DIVER</a></li>    
+   
+</ul>
+
+{% if ENVIRONMENT_NAME != 'Production' %}
+    <hr>
+    <h2>Applications currently under development:</h2>
+    <ul>        
+
+        <li><b>Developer tools</b></li>
+        <ul>
+            {% if request.user.is_authenticated %}
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+            {% else %}
+                <li><a href="{% url 'login' %}">Login</a></li>
+            {% endif %}
+            <li><a href="/docs/">Documentation</a></li>
+            <li><a href="{% url 'api-schema' %}">API schema</a></li>
+            <li><a href="{% url 'admin:index' %}">Admin</a></li>
+        </ul>
+    </ul>
+{% endif %}
+{% endblock content %}

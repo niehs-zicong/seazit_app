@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+
+{% block crumbs %}
+<ul class="breadcrumb">
+    <li><a href="{% url 'home' %}"><i class='fa fa-home'></a></i></li>
+    <li class="active">NIEHS alumni career outcomes</li>
+</ul>
+{% endblock crumbs %}
+
+
+{% block content %}
+<iframe id='iframeApp' frameborder=0 src="/shiny/niehs-alumni/"></iframe>
+{% endblock content %}
+
+
+{% block extra-js %}
+<script>
+    window.apps.resizeIframe(document.querySelector('iframe'));
+</script>
+{% endblock extra-js %}

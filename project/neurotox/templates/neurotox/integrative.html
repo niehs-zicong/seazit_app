@@ -1,0 +1,15 @@
+{% extends "neurotox/base.html" %}
+
+{% block title %}{{block.super}} | Integrative Analyses{% endblock %}
+
+{% block content %}
+<div id='main'>
+</div>
+{% endblock content %}
+
+
+{% block extra-js %}
+<script>
+    window.apps.neurotox.renderIntegrativeAnalyses(document.getElementById('main'));
+</script>
+{% endblock extra-js %}
