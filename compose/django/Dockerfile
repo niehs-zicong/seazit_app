@@ -14,13 +14,10 @@ RUN apt-get update && \
 # Requirements have to be pulled and installed here, otherwise caching won't work
 COPY ./compose/django/entrypoint.sh /entrypoint.sh
 COPY ./compose/django/gunicorn.sh /gunicorn.sh
-#COPY ./compose/django/celery.sh /celery.sh
-#COPY ./compose/django/celerybeat.sh /celerybeat.sh
 COPY ./compose/django/cull_backups.py /cull_backups.py
 COPY ./compose/django/supervisord.conf /supervisord.conf
 
 COPY ./conda.env /conda.env
-COPY ./env_diver_v2.yml /env_diver_v2.yml
 COPY ./requirements /requirements
 
 # 1) install start-scripts
@@ -30,8 +27,6 @@ RUN \
     useradd -r -g django django && \
     chmod +x /entrypoint.sh && \
     chmod +x /gunicorn.sh && \
-    #chmod +x /celery.sh && \
-    #chmod +x /celerybeat.sh && \
     chown django /entrypoint.sh && \
     chown django /gunicorn.sh && \
     #chown django /celery.sh && \
@@ -40,11 +35,11 @@ RUN \
     \
     mkdir -p /app/logs
     
-#RUN conda env create -f /conda.env  && \
-RUN conda env create -f /env_diver_v2.yml && \
+RUN conda env create -f /conda.env  && \
+$RUN conda env create -f /env_seazit.yml && \
     \
     . /opt/conda/etc/profile.d/conda.sh && \
-    conda activate DIVER && \
+    conda activate seazit && \
     pip install -U pip && \
     pip install -r /requirements/production.txt
 
