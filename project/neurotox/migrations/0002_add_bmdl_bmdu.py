@@ -10,14 +10,5 @@ class Migration(migrations.Migration):
     dependencies = [("neurotox", "0001_initial")]
 
     operations = [
-        migrations.AddField(
-            model_name="curvep",
-            name="bmdl",
-            field=models.FloatField(null=True, verbose_name="BMDL"),
-        ),
-        migrations.AddField(
-            model_name="curvep",
-            name="bmdu",
-            field=models.FloatField(null=True, verbose_name="BMDU"),
-        ),
+         
     ]
