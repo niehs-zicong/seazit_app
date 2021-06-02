@@ -36,7 +36,7 @@ RUN \
 RUN conda env create -f /conda.env  && \
     \
     . /opt/conda/etc/profile.d/conda.sh && \
-    conda activate DIVER && \
+    conda activate SEAZIT && \
     pip install -U pip && \
     pip install -r /requirements/production.txt
 

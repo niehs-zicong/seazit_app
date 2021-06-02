@@ -1,12 +1,13 @@
 from jinja2 import Environment
 from django.conf import settings
 from django.contrib.staticfiles.storage import staticfiles_storage
-from django.core.urlresolvers import reverse
+#from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 import os
 
 from docx.shared import Inches
-from docxtpl import InlineImage
+#from docxtpl import InlineImage
 
 
 def get_static_url(request, fn):

@@ -3,14 +3,14 @@
 # build static documentation
 mkdir -p /app/public/docs
 pushd docs && \
-    /opt/conda/envs/DIVER/bin/mkdocs build -d /app/public/docs && \
+    /opt/conda/envs/SEAZIT/bin/mkdocs build -d /app/public/docs && \
     popd
 
-/opt/conda/envs/DIVER/bin/python /app/project/manage.py migrate
-/opt/conda/envs/DIVER/bin/python /app/project/manage.py clear_cache
-/opt/conda/envs/DIVER/bin/python /app/project/manage.py collectstatic --noinput
+/opt/conda/envs/SEAZIT/bin/python /app/project/manage.py migrate
+/opt/conda/envs/SEAZIT/bin/python /app/project/manage.py clear_cache
+/opt/conda/envs/SEAZIT/bin/python /app/project/manage.py collectstatic --noinput
 
-/opt/conda/envs/DIVER/bin/gunicorn main.wsgi \
+/opt/conda/envs/SEAZIT/bin/gunicorn main.wsgi \
      --workers 8 \
      --bind 0.0.0.0:5000 \
      --chdir /app/project

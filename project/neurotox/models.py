@@ -7,7 +7,9 @@ import pandas as pd
 import plotly.graph_objs as go
 import seaborn as sns
 from sklearn import decomposition
-from sklearn.preprocessing import Imputer
+#sue deprecated from sklearn.preprocessing import Imputer
+from sklearn.impute import SimpleImputer
+imputer = SimpleImputer(missing_values=np.nan, strategy='mean')
 
 
 
@@ -29,7 +31,7 @@ class Assay(models.Model):
 
 
 class Plate(models.Model):
-    protocol = models.ForeignKey(Assay, related_name="plates")
+    protocol = models.ForeignKey(Assay, related_name="plates", on_delete=models.CASCADE)
     name = models.CharField(max_length=64)
     size = models.PositiveSmallIntegerField()
     comment = models.TextField(blank=True)
@@ -74,7 +76,7 @@ class Readout(models.Model):
         (999, "No direction"),
     )
 
-    protocol = models.ForeignKey(Assay, related_name="readouts")
+    protocol = models.ForeignKey(Assay, related_name="readouts", on_delete=models.CASCADE,)
     endpoint = models.CharField(max_length=64)
     category = models.CharField(max_length=32)
     is_viability = models.BooleanField(default=False)
@@ -194,7 +196,7 @@ class Chemical(models.Model):
 
 class Substance(models.Model):
     lot = models.CharField(max_length=16, blank=True)
-    chemical = models.ForeignKey(Chemical)
+    chemical = models.ForeignKey(Chemical, on_delete=models.CASCADE)
 
     class Meta:
         unique_together = (("lot", "chemical"),)
@@ -224,10 +226,10 @@ class Well(models.Model):
     in some cases.
     """
 
-    plate = models.ForeignKey(Plate, related_name="wells")
+    plate = models.ForeignKey(Plate, related_name="wells", on_delete=models.CASCADE)
     row_index = models.PositiveSmallIntegerField(null=True)
     column_index = models.PositiveSmallIntegerField(null=True)
-    substance = models.ForeignKey(Substance, related_name="wells")
+    substance = models.ForeignKey(Substance, related_name="wells", on_delete=models.CASCADE)
     vehicle_control = models.BooleanField(default=False)
     positive_control = models.BooleanField(default=False)
     concentration = models.FloatField()
@@ -235,8 +237,8 @@ class Well(models.Model):
 
 
 class WellResponse(models.Model):
-    well = models.ForeignKey(Well)
-    readout = models.ForeignKey(Readout)
+    well = models.ForeignKey(Well, on_delete=models.CASCADE)
+    readout = models.ForeignKey(Readout, on_delete=models.CASCADE)
     response_raw = models.FloatField(null=True)
     response_normalized = models.FloatField(null=True)
     is_outlier = models.BooleanField(default=False)

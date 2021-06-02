@@ -18,10 +18,10 @@ tmux select-pane -t 2
 tmux split-window -h
 
 # run commands
-tmux send-keys -t 0 "conda activate DIVER && cd ~/NTPapps/seazit_app/project" enter
-tmux send-keys -t 1 "conda activate DIVER && cd ~/NTPapps/seazit_app/project && npm start" enter
-tmux send-keys -t 2 "conda activate DIVER && cd ~/NTPapps/seazit_app/project && python manage.py runserver 8001" enter
-tmux send-keys -t 3 "conda activate DIVER && cd ~/NTPapps/seazit_app/project && python manage.py shell_plus --ipython" enter
+tmux send-keys -t 0 "conda activate SEAZIT && cd ~/NTPapps/seazit_app/project" enter
+tmux send-keys -t 1 "conda activate SEAZIT && cd ~/NTPapps/seazit_app/project && npm start" enter
+tmux send-keys -t 2 "conda activate SEAZIT && cd ~/NTPapps/seazit_app/project && python manage.py runserver 8001" enter
+tmux send-keys -t 3 "conda activate SEAZIT && cd ~/NTPapps/seazit_app/project && python manage.py shell_plus --ipython" enter
 
 # attach to shell
 tmux select-pane -t 0

@@ -7,19 +7,18 @@ Installing the sandbox is complex; applications require installation both a webs
 
 ### The application environment (python + javascript)
 
-Installation instructions described below. Note that the instructions assume the NTP sandbox will be installed to ``~/dev/sandbox`` and a conda environment will be created which is named ``DIVER``; both of these settings can be changed but instructions will need to be updated:
+Installation instructions described below. Note that the instructions assume the NTP sandbox will be installed to ``~/dev/seazit`` and a conda environment will be created which is named ``seazit``; both of these settings can be changed but instructions will need to be updated:
 
 ```bash
 cd ~/dev
-git clone -b DIVER_V1 --single-branch https://gitlab.niehs.nih.gov/ods/sandbox.git
-OR if you already have sanbox code you just need go to branch 'DIVER_V1'
-git checkout DIVER_V1
+git clone -b seazit_app --single-branch https://gitlab.niehs.nih.gov/ods/seazit_app.git
 
-cd ./sandbox
-conda env create -f conda.env
+cd ./seazit_app
+conda env create -f env_seazit.yml
 
 # install python requirements in new conda environment
-conda activate DIVER
+conda activate seazit
+brew install freetype
 pip install -r requirements/dev.txt
 conda install pygraphviz
 
@@ -65,7 +64,7 @@ You can save your password in the file `~/.pgpass` instead of having to re-enter
 Ensure that your settings in `./project/main/settings/local.py` allow you test connect to the database. Now, sync database state with python state:
 
 ```bash
-source activate DIVER
+source activate seazit
 cd ~/dev/sandbox/project
 python manage.py migrate  # sync application <-> database
 python manage.py createsuperuser  # for admin login
@@ -77,7 +76,7 @@ To run the development environment, you'll need to run an instance of the django
 
 ```bash
 # python [in the first terminal]
-conda activate DIVER
+conda activate seazit
 cd ~/dev/sandbox/project
 python manage.py runserver 8000
 #Running with just:
@@ -87,8 +86,8 @@ python manage.py runserver 8000
 #python manage.py runserver 0.0.0.0:8000 to make it listen on all interfaces
 
 # javascript [in a second terminal]
-conda activate DIVER
-cd ~/dev/sandbox/project
+conda activate seazit
+cd ~/dev/seazit_app/project
 npm start
 ```
 optional :
