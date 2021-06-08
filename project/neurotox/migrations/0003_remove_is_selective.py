@@ -12,12 +12,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='curvep',
-            name='is_selective',
-        ),
-        migrations.RemoveField(
-            model_name='hill',
-            name='is_selective',
-        ),
+         
     ]

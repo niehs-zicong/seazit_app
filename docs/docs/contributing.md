@@ -27,8 +27,6 @@ After writing your package, integrate into the Sandbox by binding a REST target 
 
 Use our shared NTP sandbox PostgreSQL [database](#postgresql). We'll need to have a discussion to determine if we'll append to an existing table in the schema, or add new tables to the schema. Want a non-relational database? Did you know PostgreSQL has queryable and indexible [JSON fields](https://www.postgresql.org/docs/10/static/datatype-json.html)? Still need something else? Ok, let's chat.
 
-Any changes to the database schema should be tracked in the NTP sandbox using the [django migrations](https://docs.djangoproject.com/en/1.11/topics/migrations/). No other software should modify the database schema. To load new data, add notes in developer documentation for how to access the data and how to load.
-
 ### Building a new stateless application?
 
 - **Using Python? ** Create a new django application in the NTP sandbox. Alternatively, if you want a simpler solution, build a [dash](https://plot.ly/products/dash/) application. Write as a python module, should include a setup.py, and unit-tests which are written in [py.test](https://docs.pytest.org/en/latest/). Use [cookiecutter](https://github.com/audreyr/cookiecutter-pypackage) for an ideal package.
@@ -52,21 +50,14 @@ Instructions including examples on how to connect to different resources in the 
 
 ### PostgreSQL
 
-The staging server is available for extetrnal connections; the production server is not exposed for connecting outside the NTP sandbox docker-network.
-
-A read-only user is available for connecting to the staging sandbox, with the following URI:
-
-```
-sandbox-ro:sandbox-ro@ehshpclp119:5432/sandbox
-```
-
+ 
 An example python query to the postgresql server:
 
 ```python
 import pandas
 import psycopg2
 
-uri = 'postgres://sandbox-ro:sandbox-ro@ehshpclp119:5432/sandbox'
+uri = 'postgres:POSTGRES_SERVER_IP=xxxx,port=543x,user=xxx,pw=xxx,Database=lll'
 with psycopg2.connect(uri) as conn:
 
     # works!
@@ -90,11 +81,11 @@ library("RPostgreSQL")
 
 driver <- dbDriver("PostgreSQL")
 conn <- dbConnect(driver,
-    dbname = "sandbox",
-    host = "ehshpclp119",
+    dbname = "seazit",
+    host = "xx",
     port = 5432,
-    user = "sandbox-ro",
-    password = "sandbox-ro")
+    user = "xxx",
+    password = "xxx")
 
 df <- RPostgreSQL::dbGetQuery(conn,
     "SELECT * FROM tox21_assay")

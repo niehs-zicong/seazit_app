@@ -1,4 +1,4 @@
--r base.txt
+-r sz_base.txt
 
 # typing
 mypy==0.812
