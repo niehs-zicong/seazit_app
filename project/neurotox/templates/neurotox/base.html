@@ -8,22 +8,22 @@
     <li role="presentation" class="{% if active_view_name == 'home' %}active{% endif %}">
         <a href="{% url 'neurotox:home' %}"><i class="fa fa-home fa-lg"></i>&nbsp;About</a></li>
 
-    <li role="presentation" class="{% if active_view_name == 'datasets' %}active{% endif %}">
+    <li role="presentation" class="hide {% if active_view_name == 'datasets' %}active{% endif %}">
         <a href="{% url 'neurotox:datasets' %}">Datasets</a></li>
 
-    <li role="presentation" class="{% if active_view_name == 'qc' %}active{% endif %}">
+    <li role="presentation" class="hide {% if active_view_name == 'qc' %}active{% endif %}">
         <a href="{% url 'neurotox:qc' %}">Quality Control</a></li>
 
-    <li role="presentation" class="{% if active_view_name == 'cr' %}active{% endif %}">
+    <li role="presentation" class="hide {% if active_view_name == 'cr' %}active{% endif %}">
         <a href="{% url 'neurotox:cr' %}">Concentration Response</a></li>
 
-    <li role="presentation" class="{% if active_view_name == 'bmd' %}active{% endif %}">
+    <li role="presentation" class="hide {% if active_view_name == 'bmd' %}active{% endif %}">
         <a href="{% url 'neurotox:bmd' %}">BMC by Lab</a></li>
 
-    <li role="presentation" class="{% if active_view_name == 'exposure' %}active{% endif %}">
-        <a href="{% url 'neurotox:exposure' %}">Exposure Value</a></li>
+    <li role="presentation" class="hide {% if active_view_name == 'exposure' %}active{% endif %}">
+        <a href="hide {% url 'neurotox:exposure' %}">Exposure Value</a></li>
 
-    <li role="presentation" class="{% if active_view_name == 'integrative' %}active{% endif %}">
+    <li role="presentation" class="hide {% if active_view_name == 'integrative' %}active{% endif %}">
         <a href="{% url 'neurotox:integrative' %}">Integrative Analyses</a></li>
 
     <li role="presentation" class="{% if active_view_name == 'resources' %}active{% endif %}">
