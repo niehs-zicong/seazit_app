@@ -1,4 +1,4 @@
--r sz_base.txt
+-r seazit_base.txt
 
 # typing
 mypy==0.812

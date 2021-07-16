@@ -1,0 +1,43 @@
+conda env create -f env_seazit.yml
+conda activate seazit_test
+brew install freetype
+update: cd /opt/anaconda3/envs/seazit/lib/python3.8/site-packages/selectable/base.py
+from django.core.urlresolvers import reverse, NoReverseMatch
+from django.urls import reverse, NoReverseMatch
+
+
+$$$$$$$$$#
+Updating Homebrew...
+==> Auto-updated Homebrew!
+Updated 4 taps (homebrew/core, homebrew/cask, homebrew/services and mongodb/brew).
+==> New Formulae
+code-minimap     gpg-tui          matterbridge     principalmapper  pywhat           simde            storj-uplink
+==> Updated Formulae
+Updated 282 formulae.
+==> Deleted Formulae
+mongodb/brew/mongodb-community@4.4
+==> New Casks
+blobsaver                                                   microsoft-openjdk
+==> Updated Casks
+Updated 218 casks.
+==> Deleted Casks
+appstudio                     filedrop                      itrash                        resxtreme
+auristor-client               hex                           netbeans-php                  rss
+cricut-design-space           iograph                       opera-mail                    wraparound
+
+Warning: freetype 2.10.4 is already installed and up-to-date.
+To reinstall 2.10.4, run:
+  brew reinstall freetype
+  #########
+pip install -r requirements/dev.txt
+
+Generator expression must be parenthesized (widgets.py, line 152)
+ImportError: cannot import name 'six' from 'django.utils' (/opt/anaconda3/envs/seazit_test/lib/python3.8/site-packages/django/utils/__init__.py)
+
+#fix the problem
+
+pip install -U Django
+pip install --upgrade django-cors-headers
+
+
+
