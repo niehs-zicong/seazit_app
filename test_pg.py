@@ -3,7 +3,7 @@
 import psycopg2
 import sys
 sys.path.append('../../')
-import config
+#import config
 #from config import config
 
 def connect():
