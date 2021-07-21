@@ -36,13 +36,19 @@ RUN \
     \
     mkdir -p /app/logs
     
-#RUN conda env create -f /conda.env  && \
-RUN conda env create -f /env_seazit.yml && \
-    \
-    . /opt/conda/etc/profile.d/conda.sh && \
-    conda activate seazit && \
-    pip install -U pip && \
-    pip install -r /requirements/production.txt
+ 
+#RUN conda env create -f /env_seazit.yml && \
+#    \
+#    . /opt/conda/etc/profile.d/conda.sh && \
+#    conda activate seazit && \
+#    pip install -U pip && \
+#    pip install -r /requirements/production.txt
+
+RUN conda env create -f /env_seazit.yml
+RUN . /opt/conda/etc/profile.d/conda.sh
+RUN conda activate seazit
+RUN pip install -U pip
+RUN pip install -r /requirements/production.txt
 
 COPY ./project /app/project
 
