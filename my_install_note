@@ -1,5 +1,5 @@
 conda env create -f env_seazit.yml
-conda activate seazit_test
+conda activate seazit
 brew install freetype
 update: cd /opt/anaconda3/envs/seazit/lib/python3.8/site-packages/selectable/base.py
 from django.core.urlresolvers import reverse, NoReverseMatch
