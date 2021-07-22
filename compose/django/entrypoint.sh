@@ -15,7 +15,7 @@ export DATABASE_URL=postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_SERVE
  
 #DATABASE_URL=
 function postgres_ready(){
-/opt/conda/envs/SEAZIT/bin/python << END
+/opt/conda/envs/seazit/bin/python << END
 import sys
 import psycopg2
 
@@ -42,7 +42,7 @@ END
 # ensure we can connect to redis client;
 # requires REDIS_CONNECTION_STRING environment variable
 function redis_ready(){
-/opt/conda/envs/SEAZIT/bin/python << END
+/opt/conda/envs/seazit/bin/python << END
 import sys
 import redis
 try:

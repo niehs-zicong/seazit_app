@@ -5,7 +5,7 @@ LOGFILE="/app/logs/celery.log"
 # wait for migrations
 sleep 10
 
-#exec /opt/conda/envs/SEAZIT/bin/celery worker \
+#exec /opt/conda/envs/seazit/bin/celery worker \
 #    --app=main \
 #    --loglevel=INFO \
 #    --logfile=$LOGFILE \
