@@ -27,7 +27,8 @@ openpyxl==2.4.7
 psycopg2-binary
 
 # docs
-mkdocs==0.17.2
+#mkdocs==0.17.2
+mkdocs==1.2.2
 
 # enricher
 # rdkit==2017.09.3  # install via conda not pip

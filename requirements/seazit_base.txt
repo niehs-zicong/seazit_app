@@ -26,7 +26,8 @@ psycopg2-binary
 #psycopg2>=2.8
 
 # docs
-mkdocs==0.17.2
+#mkdocs==0.17.2
+mkdocs==1.2.2
 
 # enricher
 # rdkit==2017.09.3  # install via conda not pip

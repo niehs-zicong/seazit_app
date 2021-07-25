@@ -1,19 +1,20 @@
 site_name: NTP Sandbox
 theme: readthedocs
-pages:
+#pages:
+nav:
 - NTP Sandbox: index.md
 - Installation: installation.md
 - Applications:
   - Overview: apps/index.md
   - CEBS summary data browser: apps/cebs.md
-  - ChemMaps: apps/chemmaps.md
-  - Enricher: apps/enricher.md
-  - IVIVE: apps/ivive.md
-  - Tox21: apps/tox21.md
-  - Job runner: apps/jobrunner.md
+  #- ChemMaps: apps/chemmaps.md
+  #- Enricher: apps/enricher.md
+  #- IVIVE: apps/ivive.md
+  #- Tox21: apps/tox21.md
+  #- Job runner: apps/jobrunner.md
   - Neurotoxicity workshop: apps/neurotox.md
 #  - Fiveday: apps/fiveday.md
-  - RoC PDFs: apps/roc_pdfs.md
+  #- RoC PDFs: apps/roc_pdfs.md
   - Shiny applications: apps/shiny.md
 - Database:
   - Overview: db/index.md
