@@ -45,5 +45,6 @@ ImportError: cannot import name 'six' from 'django.utils' (/opt/anaconda3/envs/s
 pip install -U Django
 pip install --upgrade django-cors-headers
 
-
+-------Django project structure------
+python manage.py graph_models -a -g -o test.png
 

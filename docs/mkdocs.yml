@@ -6,8 +6,9 @@ nav:
 - Installation: installation.md
 - Applications:
   - Overview: apps/index.md
-  - CEBS summary data browser: apps/cebs.md  
-  - Neurotoxicity workshop: apps/neurotox.md
+  - CEBS summary data browser: apps/cebs.md 
+  - Seazit workshop: apps/seazit.md 
+#  - Neurotoxicity workshop: apps/neurotox.md
 #  - Fiveday: apps/fiveday.md
   #- RoC PDFs: apps/roc_pdfs.md
   - Shiny applications: apps/shiny.md

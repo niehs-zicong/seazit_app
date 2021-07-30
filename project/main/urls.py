@@ -33,7 +33,7 @@ schema_view = get_schema_view(
 urlpatterns = [
     url(r'^$', Home.as_view(), name='home'),
     url(r'^selectable/', include('selectable.urls')),
-    url(r'^neurotox/', include(('neurotox.urls', 'neurotox'), namespace='neurotox')),
+    #url(r'^neurotox/', include(('neurotox.urls', 'neurotox'), namespace='neurotox')),
     url(r'^seazit/', include(('seazit.urls', 'seazit'), namespace='seazit')),
 
      
