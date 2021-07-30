@@ -6,13 +6,14 @@ module.exports = {
     context: __dirname,
 
     entry: {
-        main: ['./assets/index', './neurotox/assets/index'],
+        main: ['./assets/index', './neurotox/assets/index','./seazit/assets/index'],
     },
 
     resolve: {
         modules: [
             path.join(__dirname, 'assets'),
             path.join(__dirname, 'neurotox', 'assets'),
+            path.join(__dirname, 'seazit', 'assets'),
 
             'node_modules',
         ],

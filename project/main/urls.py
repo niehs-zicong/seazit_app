@@ -20,7 +20,7 @@ desc = """Sandbox API Documentation
 """
 schema_view = get_schema_view(
     openapi.Info(
-        title="Sandbox API",
+        title="Seazit API",
         default_version='v1',
         description=desc,
     ),
@@ -34,11 +34,9 @@ urlpatterns = [
     url(r'^$', Home.as_view(), name='home'),
     url(r'^selectable/', include('selectable.urls')),
     url(r'^neurotox/', include(('neurotox.urls', 'neurotox'), namespace='neurotox')),
+    url(r'^seazit/', include(('seazit.urls', 'seazit'), namespace='seazit')),
 
-    url(r'^niehs-alumni/$',
-        TemplateView.as_view(template_name='shiny/niehs-alumni.html'),
-        name='niehs-alumni'),
-
+     
     # api schema docs
     url(r'^api/$',
         RedirectView.as_view(url=reverse_lazy('schema-swagger-ui'), permanent=False),

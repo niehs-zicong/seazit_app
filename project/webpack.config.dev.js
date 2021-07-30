@@ -29,7 +29,12 @@ config.module = {
         {
             test: /\.js$/,
             use: 'happypack/loader?id=js',
-            include: [path.join(__dirname, 'assets'), path.join(__dirname, 'neurotox', 'assets')],
+            include: [
+                path.join(__dirname, 'assets'),                
+                path.join(__dirname, 'seazit', 'assets'),
+                path.join(__dirname, 'neurotox', 'assets'),
+
+            ],
         },
         {
             test: /\.css$/,

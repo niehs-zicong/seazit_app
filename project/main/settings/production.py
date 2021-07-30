@@ -28,7 +28,7 @@ INSTALLED_APPS = [
 ]
 
  
-EMAIL_SUBJECT_PREFIX = '[sandbox-production] '
+EMAIL_SUBJECT_PREFIX = '[seazit-production] '
 DEFAULT_FROM_EMAIL = 'webmaster@sandbox-production.com'
 
 ENVIRONMENT_NAME = 'Production'

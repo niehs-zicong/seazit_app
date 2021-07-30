@@ -1,6 +1,6 @@
 import os
 
-PROJECT_NAME = 'seazit'
+PROJECT_NAME = 'seazit_app'
 PROJECT_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
 PROJECT_ROOT = os.path.abspath(os.path.join(PROJECT_PATH, os.pardir))
 
@@ -130,7 +130,8 @@ INSTALLED_APPS = (
     'webpack_loader',
     'corsheaders',
     'drf_yasg',     
-    'neurotox',     
+    'neurotox', 
+    'seazit',    
     'utils',
 )
 

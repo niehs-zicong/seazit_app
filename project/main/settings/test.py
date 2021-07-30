@@ -46,7 +46,7 @@ EMAIL_PORT = int(os.environ.get('DJANGO_EMAIL_PORT'))
 EMAIL_USE_SSL = bool(os.environ.get('DJANGO_EMAIL_USE_SSL') == 'True')
 DEFAULT_FROM_EMAIL = os.environ.get('DJANGO_DEFAULT_FROM_EMAIL')
 
-EMAIL_SUBJECT_PREFIX = '[sandbox-test] '
+EMAIL_SUBJECT_PREFIX = '[seazit-test] '
 DEFAULT_FROM_EMAIL = 'webmaster@sandbox-staging.com'
 
 PUBLIC_ROOT = os.environ.get('DJANGO_PUBLIC_PATH')
