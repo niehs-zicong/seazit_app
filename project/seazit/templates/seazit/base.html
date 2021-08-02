@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Integrated Screening Strategies for Neurotoxicity at the NTP{% endblock %}
+
+{% block crumbs %}
+<ul class="nav nav-tabs" style="margin: 0.5em 0">
+
+    <li role="presentation" class="{% if active_view_name == 'home' %}active{% endif %}">
+        <a href="{% url 'seazit:home' %}"><i class="fa fa-home fa-lg"></i>&nbsp;About</a></li> 
+
+    <li role="presentation" class="{% if active_view_name == 'resources' %}active{% endif %}">
+        <a href="{% url 'seazit:resources' %}">Resources</a></li>
+
+</ul>
+{% endblock crumbs %}
