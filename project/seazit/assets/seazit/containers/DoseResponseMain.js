@@ -1,0 +1,144 @@
+import React from 'react';
+
+import Loading from 'utils/Loading';
+import DoseResponse from '../components/DoseResponse';
+//import FiveOhEight from '../components/FiveOhEight';
+import HelpButtonWidget from '../widgets/HelpButtonWidget';
+import ChemicalWidget from '../widgets/ChemicalWidget';
+import ReadoutWidget from '../widgets/ReadoutWidget';
+//import DoseResponseGridWidget from '../widgets/DoseResponseGridWidget';
+//import PlotCollapseWidget from '../widgets/PlotCollapseWidget';
+
+import {
+    CHEMFILTER_CATEGORY,
+    CHEMLIST_80,
+    NO_COLLAPSE,
+    getDoseResponsesUrl,
+    loadMetadata,
+    renderNoSelected,
+    CHEMFILTER_CHEMICIAL,
+} from '../shared';
+
+class DoseResponseMain extends React.Component {
+    // lifecycle
+    constructor(props) {
+        super(props);
+        // take 75% of the screen width since main body is col-9 size; assume
+        // each plot is ~400px for a reasonable start, make sure it's at least 1
+        let initialCols = Math.max(1, Math.floor((0.75 * window.innerWidth) / 400));
+        console.log('state1');
+        console.log(this.state);
+        this.state = {
+            // loadMetadata
+            metadataLoaded: false,
+            metadata: null,
+
+            // HelpButtonWidget
+            showHelpText: false,
+
+            // ChemicalSelectorWidget
+            chemList: CHEMLIST_80,
+            // chemicalFilterBy: CHEMFILTER_CATEGORY,
+            chemicalFilterBy: CHEMFILTER_CHEMICIAL,
+
+            chemicals: [],
+            categories: [],
+
+            // ReadoutSelectorWidget
+            assays: [],
+            readouts: [],
+
+            // PlotCollapseWidget
+            plotCollapse: NO_COLLAPSE,
+
+            // DoseResponseGridWidget
+            vizColumns: initialCols,
+            vizHeight: 350,
+        };
+        console.log('state2');
+        console.log(this.state);
+    }
+
+    componentWillMount() {
+        loadMetadata(this);
+    }
+
+    renderNoSelection() {
+        return renderNoSelected({
+            hasReadouts: this.state.readouts.length > 0,
+            hasChems: this.state.chemicals.length > 0,
+        });
+    }
+
+    renderSelection(url) {
+        return (
+            <DoseResponse
+                cols={this.state.vizColumns}
+                collapse={this.state.plotCollapse}
+                height={this.state.vizHeight}
+                url={url}
+            />
+        );
+    }
+
+    _renderHelpText() {
+        if (!this.state.showHelpText) {
+            return null;
+        }
+        return (
+            <div className="alert alert-info">
+                <h2>Help text</h2>
+                <p>helptext zw</p>
+                <p>helptext zw</p>
+                <p>helptext zw</p>
+                <p>helptext zw</p>
+                <p>helptext zw</p>
+                <p>
+                    <i>helptext zw</i>
+                </p>
+                <p>
+                    <i>helptext zw</i>
+                </p>
+            </div>
+        );
+    }
+
+    render() {
+        if (!this.state.metadataLoaded) {
+            return <Loading />;
+        }
+        //         console.log(this.state.readouts)
+        //         console.log(this.state.chemicals)
+        console.log(this.state);
+
+        let url = getDoseResponsesUrl(this.state.assays, this.state.readouts, this.state.chemicals);
+
+        console.log('url');
+        console.log(url);
+
+        return (
+            <div className="row-fluid">
+                <h1>
+                    seazit CR main part zw1
+                    <HelpButtonWidget stateHolder={this} />
+                </h1>
+                <div className="col-md-3">
+                    <ReadoutWidget
+                        stateHolder={this}
+                        hideViability={false}
+                        hideNonViability={false}
+                        multiAssaySelector={true}
+                    />
+                    <hr />
+                    <ChemicalWidget stateHolder={this} />
+                </div>
+                <div className="col-md-9">
+                    {this._renderHelpText()}
+                    {url ? this.renderSelection(url) : this.renderNoSelection()}
+                </div>
+            </div>
+        );
+    }
+}
+
+export default DoseResponseMain;

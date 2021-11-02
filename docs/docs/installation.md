@@ -25,6 +25,8 @@ conda install pygraphviz
 # copy default local settings (and modify as needed)
 cp ./project/main/settings/local.example.py ./project/main/settings/local.py
 
+
+
 # install javascript libraries
 cd ./project
 yarn install

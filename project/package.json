@@ -1,5 +1,5 @@
 {
-    "name": "seazit",
+    "name": "sandbox",
     "version": "1.0.0",
     "description": "add-me",
     "repository": "add-me",
@@ -16,7 +16,10 @@
         "prettify": "prettier --config=./.prettierrc --write \"**/*.{js,css}\""
     },
     "lint-staged": {
-        "*.{js,json,css}": ["prettier --write", "git add"]
+        "*.{js,json,css}": [
+            "prettier --write",
+            "git add"
+        ]
     },
     "devDependencies": {
         "babel-cli": "^6.26.0",
