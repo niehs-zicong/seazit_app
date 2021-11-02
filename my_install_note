@@ -2,6 +2,8 @@ conda env create -f env_seazit.yml
 conda activate seazit
 brew install freetype
 update: cd /opt/anaconda3/envs/seazit/lib/python3.8/site-packages/selectable/base.py
+(use nano or something edit base.py file)
+
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.urls import reverse, NoReverseMatch
 
@@ -48,3 +50,16 @@ pip install --upgrade django-cors-headers
 -------Django project structure------
 python manage.py graph_models -a -g -o test.png
 
+
+# change database.update  in local.py   to this below.
+DATABASES['default'].update({
+    'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    'NAME': 'dev_seazit',
+    'OPTIONS': {
+        'options': '-c search_path=schema_seazit'
+    },
+    'USER': 'ntp_group',
+    'PASSWORD': 'ntp_group',
+    'HOST': '10.98.105.92',
+    'PORT': 5432,
+})
