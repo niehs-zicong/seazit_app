@@ -4,23 +4,23 @@
     "chunks": {
         "vendor": [
             {
-                "name": "vendor.5dffba6234f65fdff692.js",
-                "publicPath": "http://localhost:3000/dist/vendor.5dffba6234f65fdff692.js",
-                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/vendor.5dffba6234f65fdff692.js"
+                "name": "vendor.2eb3cd972dafb209db9f.js",
+                "publicPath": "http://localhost:3000/dist/vendor.2eb3cd972dafb209db9f.js",
+                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/vendor.2eb3cd972dafb209db9f.js"
             }
         ],
         "main": [
             {
-                "name": "main.5dffba6234f65fdff692.js",
-                "publicPath": "http://localhost:3000/dist/main.5dffba6234f65fdff692.js",
-                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/main.5dffba6234f65fdff692.js"
+                "name": "main.2eb3cd972dafb209db9f.js",
+                "publicPath": "http://localhost:3000/dist/main.2eb3cd972dafb209db9f.js",
+                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/main.2eb3cd972dafb209db9f.js"
             }
         ],
         "manifest": [
             {
-                "name": "manifest.5dffba6234f65fdff692.js",
-                "publicPath": "http://localhost:3000/dist/manifest.5dffba6234f65fdff692.js",
-                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/manifest.5dffba6234f65fdff692.js"
+                "name": "manifest.2eb3cd972dafb209db9f.js",
+                "publicPath": "http://localhost:3000/dist/manifest.2eb3cd972dafb209db9f.js",
+                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/manifest.2eb3cd972dafb209db9f.js"
             }
         ]
     }

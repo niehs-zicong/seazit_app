@@ -24,7 +24,6 @@ class ReadoutWidget extends BaseWidget {
                     // label: r,
                     protocol_source: r.protocol_source,
                     seazit_protocol_id: r.seazit_protocol_id,
-                    _,
                 };
             })
             .sortBy('seazit_protocol_id')

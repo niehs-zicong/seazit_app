@@ -130,8 +130,7 @@ INSTALLED_APPS = (
     'webpack_loader',
     'corsheaders',
     'drf_yasg',     
-#    'neurotox', 
-    'seazit',    
+    'seazit',
     'utils',
 )
 
