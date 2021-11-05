@@ -25,8 +25,6 @@ urlpatterns = [
     #url(r'^home/', views.Home.as_view(),name='home'),    `
     url(r"^resources/$", views.Resources.as_view(), name="resources"),
     url(r"^seazit_cr/$", views.SeazitCR.as_view(), name="seazit_cr"),
-    url(r"^seazit_cr2/$", views.seazit_cr, name="seazit_cr2"),
     url(r"^seazit_cr3/$", views.SeazitCR3.as_view(), name="seazit_cr3"),
-    url(r"^seazit_cr4/$", views.seazit_cr4, name="seazit_cr4"),
 
 ]

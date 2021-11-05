@@ -189,8 +189,6 @@ class SeazitProtocol(models.Model):
             SeazitProtocol.objects.all().values_list(*cols)
         )
 
-        # print (pd.DataFrame(list(qs), columns=cols).to_dict(orient="records"))
-        # return pd.DataFrame(list(qs), columns=cols)
         return {
             "protocol_data": pd.DataFrame(list(qs), columns=cols).to_dict(orient="records"),
             # "readouts": pd.DataFrame(list(qs), columns=cols).to_dict(orient="records"),
@@ -338,23 +336,11 @@ class Substance(models.Model):
         qs = (
             ## the query all takes 10 second, too long. TODO
             # cls.objects.all().values_list(*cols)
-
             ## get top 100 values.
             cls.objects.all()[:10].values_list(*cols)
 
             ## filter let protocol_id = 1
-            # cls.objects.all().filter(protocol_id=7).values_list(*cols)
-
         )
-        # qs = cls.objects.select_related("chemical").values(
-        #     "id",
-        #     "lot",
-        #     "chemical__casrn",
-        #     "chemical__name",
-        #     "chemical__category_id",
-        #     "chemical__ntp80",
-        #     "chemical__ntp91",
-        # )
         return pd.DataFrame(list(qs),columns=cols)
 
 
@@ -503,17 +489,9 @@ class Seazit_readout_result(models.Model):
 
     @classmethod
     def dose_responses(cls, protocol_ids, readout_ids, chemical_ids):
-        print ("3+++++++")
-        print (protocol_ids)
-        print (readout_ids)
-        print (chemical_ids)
 
-        dr = (
-            cls.objects.filter(
-                # readout__in=readout_ids, well__substance__chemical__in=chemical_ids)
-                protocol_id__in=protocol_ids , endpoint_name__in=readout_ids, casrn__in=chemical_ids)
-                # .select_related("readout", "substance", "substance__chemical")
-            .values(
+
+        cols = (
                 "endpoint_name",
                 "casrn",
                 "input_chembase",
@@ -546,13 +524,22 @@ class Seazit_readout_result(models.Model):
                 "dtxsid",
                 "preferred_name",
             )
+        dr = (
+            cls.objects.filter(
+                # readout__in=readout_ids, well__substance__chemical__in=chemical_ids)
+                protocol_id__in=protocol_ids , endpoint_name__in=readout_ids, casrn__in=chemical_ids)
+                # .select_related("readout", "substance", "substance__chemical")
+                .values(*cols)
         )
-        input_ids = [89623, 687, 47469, 90253]
-        analysisbmcoutput = (
-            AnalysisBmcOutput.objects.filter(
-                input_id__in=input_ids
-            )
-            .values(
+        print ("3+++++++")
+        print (protocol_ids)
+        print (readout_ids)
+        print (chemical_ids)
+        df =  pd.DataFrame(list(dr))
+        input_ids = set(df['input_id'].tolist())
+
+
+        cols = (
                 "trsh",
                 "rnge",
                 "endpoint_name",
@@ -595,11 +582,13 @@ class Seazit_readout_result(models.Model):
                 "screen_hours",
                 "endpoint_name_only"
         )
+        analysisbmcoutput = (
+            AnalysisBmcOutput.objects.filter(
+                input_id__in=input_ids
+            )
+            .values(*cols)
         )
-        # print (dict(dose_response=list(dr)))
-        # print (dict(dose_response=list(dr)))
-
-        return dict(dose_response=list(dr), analysisbmcoutput=list(analysisbmcoutput))
+        return dict(dose_response=list(dr), bmcoutput=list(analysisbmcoutput))
 
 
 class Seazit_ui_panel(models.Model):
