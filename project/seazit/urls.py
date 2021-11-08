@@ -22,7 +22,8 @@ router.register("seazit_cr12", api.Seazit_readout_resultViewSet)
 urlpatterns = [
     url(r"^api/", include((router.urls, "seazit"), namespace="api")),
     url(r"^$", views.Home.as_view(), name="home"),
-    #url(r'^home/', views.Home.as_view(),name='home'),    `
+    url(r"^quality-control/$", views.QC.as_view(), name="qc"),
+    #url(r'^home/', views.Home.as_view(),name='home'),
     url(r"^resources/$", views.Resources.as_view(), name="resources"),
     url(r"^seazit_cr/$", views.SeazitCR.as_view(), name="seazit_cr"),
     url(r"^seazit_cr2/$", views.seazit_cr, name="seazit_cr2"),

@@ -1,10 +1,17 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "seazit/base.html" %}
+
+{% block title %}{{block.super}} | Quality Control{% endblock %}
+
+{% block content %}
+<div id='main'></div>
+<iframe id='iframeApp' frameborder=0
+        src="https://sandbox-staging.ntp.niehs.nih.gov/rsconnect/seazit_qc/"></iframe>
+           
+{% endblock content %}
+
+{% block extra-js %}
+<script>
+  window.apps.seazit.renderQualityControl(document.getElementById('main'));
+  window.apps.resizeIframe(document.getElementById('iframeApp'));
+</script>
+{% endblock extra-js %}
