@@ -87,28 +87,15 @@ class DoseResponse extends React.Component {
             console.log('data');
             console.log(url);
             console.log(data);
-            console.log(this.state);
-            console.log(this.props.collapse);
+            // console.log(this.state);
+            // console.log(this.props.collapse);
             this.updateData(data, this.props.collapse);
+            console.log(this.props.collapse);
+
             console.log(this.state);
         });
     }
 
-    getColorScale(data, collapse) {
-        if (_.isEmpty(data)) {
-            return _.noop;
-        }
-        switch (collapse) {
-            case COLLAPSE_BY_READOUT:
-                return this.colorScale.domain(_.map(data[0].hill, 'casrn'));
-            case COLLAPSE_BY_CHEMICAL:
-                return this.colorScale.domain(_.map(data[0].hill, 'readout_id'));
-            case NO_COLLAPSE:
-                return _.noop;
-            default:
-                throw 'Unknown collapse type.';
-        }
-    }
     getColorScale(data, collapse) {
         if (_.isEmpty(data)) {
             return _.noop;
@@ -197,6 +184,7 @@ class DoseResponse extends React.Component {
     }
 
     _renderPlot(d, yrange) {
+        console.log('start _renderPlot');
         if (this.refs[d.key] === undefined) {
             return;
         }
@@ -452,8 +440,12 @@ class DoseResponse extends React.Component {
             );
         }
 
+        let colNum = Math.ceil(12 / this.props.cols);
         return (
             <div>
+                {this.state.collapsedData.map((item) => (
+                    <div className={`col-xs-${colNum}`} key={item.key} ref={item.key} />
+                ))}
                 <p>DoseResponse part zw1</p>
             </div>
         );
