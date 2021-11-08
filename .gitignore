@@ -1,0 +1,66 @@
+# python
+*.py[cod]
+
+# javascript
+project/.happypack
+project/node_modules
+#project/static/bundles
+project/webpack-stats.json
+**/.DS_Store
+
+# testing
+.tox
+.cache
+
+*.DS_Store
+*log.txt
+
+# data
+data/
+venv/
+
+# documentation
+docs/_build
+
+# developer environment
+bin/*.local.sh
+project/main/settings/local.py
+.ipynb_checkpoints
+.vscode
+project/yarn.lock
+
+# production environment
+*.log
+public/
+.env
+
+# django (keep path, not contents)
+compose/django/drivers/*
+!compose/django/drivers/.gitkeep
+
+# enricher (keep path, not contents)
+compose/enricher/apps/*
+!compose/enricher/apps/.gitkeep
+
+# nginx (keep path, not contents)
+compose/nginx/ssl/*
+!compose/nginx/ssl/.gitkeep
+
+# nginx (keep path, not contents)
+compose/nginx/conf/*
+!compose/nginx/conf/.gitkeep
+
+# shiny (keep path, not contents)
+compose/shiny/bundles/*
+!compose/shiny/bundles/.gitkeep
+
+# rserve (keep path, not contents)
+compose/rserve/app/*
+!compose/rserve/app/.gitkeep
+
+# chemmaps
+project/chemmaps/static/chemmaps/png/*
+!project/chemmaps/static/chemmaps/png/.gitkeep
+
+#tox21HTS
+project/tox21HTS/migrations/*
