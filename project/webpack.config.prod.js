@@ -35,7 +35,7 @@ config.module = {
         {
             test: /\.js$/,
             use: 'babel-loader',
-            include: [path.join(__dirname, 'assets'), path.join(__dirname, 'neurotox', 'assets')],
+            include: [path.join(__dirname, 'assets'), path.join(__dirname, 'seazit', 'assets')],
         },
         {
             test: /\.css$/,
