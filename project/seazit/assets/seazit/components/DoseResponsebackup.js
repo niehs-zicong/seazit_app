@@ -9,7 +9,7 @@ import { NO_COLLAPSE, COLLAPSE_BY_READOUT, COLLAPSE_BY_CHEMICAL, printFloat } fr
 
 const NO_COLLAPSE_COLORS = {
     responses: '#76B425',
-    bmcoutput: '#1451a5',
+    curvep: '#1451a5',
     hill: '#A52D29',
 };
 
@@ -26,9 +26,6 @@ class DoseResponse extends React.Component {
     }
 
     collapseData(data, collapse) {
-        console.log('data zw1 ');
-        console.log(data);
-
         let keys = _.chain(data.dose_response)
                 .map('key')
                 .uniq()
@@ -42,26 +39,20 @@ class DoseResponse extends React.Component {
                     return {
                         key: k,
                         groupKeys,
-                        dose_response: _.filter(data.dose_response, { key: k }),
-                        bmcoutput: _.filter(data.bmcoutput),
+                        dose_response: _.filter(data.dose_response, {
+                            key: k,
+                        }),
+                        bmcoutput: _.filter(data.bmcoutput, { key: k }),
                     };
                 })
                 .each((d, k) => {
                     let dr = d.dose_response[0];
                     (d.title = this.getPlotTitle(dr, collapse)),
-                        (d.input_ids = _.chain(d.dose_response)
-                            .map('input_id')
-                            .uniq()
-                            .value()),
-                        // filter with input_ids to filter bmcout into different case
-                        (d.bmcoutput = d.bmcoutput.filter((i) => d.input_ids.includes(i.input_id))),
-                        (d.substance_code_input_ids = _.chain(d.dose_response)
-                            .map('substance_code_input_id')
-                            .uniq()
-                            .value()),
-                        (d.endpoint_name = dr.endpoint_name);
+                        (d.chemical_name = dr.chemical_name);
+                    d.endpoint_name = dr.endpoint_name;
                 })
                 .sortBy('endpoint_name')
+                .sortBy('chemical_name')
                 .value(),
             responses,
             yrange,
@@ -69,11 +60,12 @@ class DoseResponse extends React.Component {
 
         // set constant y-range for all charts. ensure 0 is within the
         // domain of values.
-        // console.log(keys)
-        // console.log("collapsedData")
-        // console.log(collapsedData)
+        responses = _.map(data.dose_response, 'normalized_response');
+        responses.push(0);
+        yrange = d3.extent(responses);
+        offset = (yrange[1] - yrange[0]) * 0.15 * 0.5;
+        yrange = [yrange[0] - offset, yrange[1] + offset];
 
-        yrange = [0, 100];
         return {
             data,
             collapsedData,
@@ -92,9 +84,15 @@ class DoseResponse extends React.Component {
                 });
                 return;
             }
-            this.updateData(data, this.props.collapse);
-            // console.log("this.state");
+            console.log('data');
+            console.log(url);
+            console.log(data);
             // console.log(this.state);
+            // console.log(this.props.collapse);
+            this.updateData(data, this.props.collapse);
+            console.log(this.props.collapse);
+
+            console.log(this.state);
         });
     }
 
@@ -103,6 +101,10 @@ class DoseResponse extends React.Component {
             return _.noop;
         }
         switch (collapse) {
+            case COLLAPSE_BY_READOUT:
+                return this.colorScale.domain(_.map(data[0].hill, 'casrn'));
+            case COLLAPSE_BY_CHEMICAL:
+                return this.colorScale.domain(_.map(data[0].hill, 'readout_id'));
             case NO_COLLAPSE:
                 return _.noop;
             default:
@@ -111,19 +113,21 @@ class DoseResponse extends React.Component {
     }
 
     getMarkerColor(d, marker = null) {
-        // if (this.props.collapse === NO_COLLAPSE) {
-        //     return NO_COLLAPSE_COLORS[marker];
-        // } else {
-        //     return this.state.scale(d);
-        // }
-        return this.state.scale(d);
+        if (this.props.collapse === NO_COLLAPSE) {
+            return NO_COLLAPSE_COLORS[marker];
+        } else {
+            return this.state.scale(d);
+        }
     }
 
     getPlotTitle(data, collapse) {
-        // console.log(data)
         switch (collapse) {
+            case COLLAPSE_BY_READOUT:
+                return data.endpoint_name;
+            case COLLAPSE_BY_CHEMICAL:
+                return `${data.chemical_name} (${data.casrn})`;
             case NO_COLLAPSE:
-                return `${data.preferred_name}<br>${data.casrn}|${data.dtxsid}`;
+                return `(${data.casrn}):<br>${data.endpoint_name}`;
             default:
                 throw 'Unknown collapse type.';
         }
@@ -134,6 +138,10 @@ class DoseResponse extends React.Component {
             return '';
         }
         switch (collapse) {
+            case COLLAPSE_BY_READOUT:
+                return `${data[0].chemical_name} (${data[0].casrn})`;
+            case COLLAPSE_BY_CHEMICAL:
+                return data[0].endpoint_name;
             case NO_COLLAPSE:
                 return 'responses';
             default:
@@ -142,22 +150,28 @@ class DoseResponse extends React.Component {
     }
 
     setDatasetKey(data, collapse) {
-        // console.log("setDatasetKey")
         switch (collapse) {
+            case COLLAPSE_BY_READOUT:
+                data.key = data.readout_id;
+                data.groupKey = data.casrn;
+                break;
+            case COLLAPSE_BY_CHEMICAL:
+                data.key = data.casrn;
+                data.groupKey = data.readout_id;
+                break;
             case NO_COLLAPSE:
                 data.key = `${data.endpoint_name}|${data.casrn}`;
-                // data.key = `${data.endpoint_name}|${data.casrn}|${data.substance_code}`;
+                // data.key = `${data.protocol_id}|${data.endpoint_name}|${data.casrn}`;
                 data.groupKey = null;
-                data.substance_code_input_id = `${data.substance_code}@${data.input_id}`;
                 break;
             default:
                 throw 'Unknown collapse type.';
         }
     }
     setKeys(data, collapse) {
-        // console.log(data)
         _.each(data.dose_response, (d) => this.setDatasetKey(d, collapse));
         _.each(data.bmcoutput, (d) => this.setDatasetKey(d, collapse));
+        // _.each(data.hill, (d) => this.setDatasetKey(d, collapse));
     }
 
     updateData(data, collapse) {
@@ -171,18 +185,18 @@ class DoseResponse extends React.Component {
     }
 
     _renderPlot(d, yrange) {
-        //
-        console.log(' _renderPlot');
+        console.log('start _renderPlot');
         console.log(d);
+        console.log(this.refs);
+        console.log(d.key);
 
         if (this.refs[d.key] === undefined) {
             return;
         }
 
         let data = [],
-            dose_range = [0, 1],
-            // dose_range = d3.extent(_.map(d.dose_response, 'n')),
-            trsh = null,
+            dose_range = d3.extent(_.map(d.dose_response, 'conc')),
+            bmr = null,
             annotations = [];
 
         let svgConfig = {
@@ -206,17 +220,15 @@ class DoseResponse extends React.Component {
             shapes: [],
             xaxis: {
                 type: 'log',
-                // type: 'linear',
                 autorange: true,
                 title: 'Concentration (µM)',
                 dtick: 1,
             },
             yaxis: {
                 type: 'linear',
-                // autorange: true,
+                autorange: false,
                 title: 'Response (normalized)',
-                // range should be [0, 100]
-                range: [-10, 110],
+                range: yrange,
             },
             // add room for collapsed plot legends
             height: this.props.height + d.groupKeys.length * 19 + 20,
@@ -225,65 +237,56 @@ class DoseResponse extends React.Component {
         d.groupKeys.map((gk) => {
             // add raw data
             let drs = d.dose_response.filter((r) => r.groupKey == gk);
-            console.log(drs);
-            d.substance_code_input_ids.map((id_flag) => {
-                // drs splited into different group based on substance_code_input_ids
-                let drs_split = drs.filter((r) => r.substance_code_input_id == id_flag);
-                drs_split = _.sortBy(drs_split, 'dose');
-                console.log(drs_split);
-                // console.log(drs_split2)
-
-                // let response = drs_split.map(obj => { return (obj.n_in / obj.n) * 100})
-                //     .sort
-                data.push({
-                    x: _.map(drs_split, 'dose'),
-                    y: drs_split.map((obj) => {
-                        return (obj.n_in / obj.n) * 100;
-                    }),
-                    legendgroup: 'plot',
-                    // mode: 'markers',
-                    mode: 'line',
-                    type: 'scatter',
-                    name: drs_split[0].substance_code_input_id,
-                    showlegend: true,
-                    marker: {
-                        color: this.getMarkerColor(gk, 'responses'),
-                    },
-                    opacity: 0.8,
-                });
+            data.push({
+                x: _.map(drs, 'conc'),
+                y: _.map(drs, 'normalized_response'),
+                legendgroup: 'plot',
+                mode: 'markers',
+                type: 'scatter',
+                name: this.getResponseLabels(drs, this.props.collapse),
+                showlegend: true,
+                marker: {
+                    color: this.getMarkerColor(gk, 'responses'),
+                },
+                opacity: 0.8,
             });
-            // add bmcoutput if exists`````````
-            // console.log(d.bmcoutput)
 
-            if (d.bmcoutput.length > 0) {
-                d.bmcoutput
-                    .filter((r) => r.groupKey == gk)
-                    .forEach((el) => {
-                        if (el.hit_confidence >= 0.5) {
-                            annotations.push(
-                                `BMC:  ${el.input_id}  ${Math.pow(10, el.pod_med) * 1000000} µM`
-                            );
-                            trsh = el.trsh;
-                            let dash = gk ? { dash: 'dot' } : null;
-                            data.push({
-                                x: el.pod_cil,
-                                y: el.pod_med,
-                                legendgroup: 'plot',
-                                mode: 'line',
-                                name: 'bmcoutput',
-                                showlegend: !gk,
-                                line: {
-                                    color: this.getMarkerColor(gk, 'bmcoutput'),
-                                    width: 2,
-                                    ...dash,
-                                },
-                                opacity: 0.8,
-                            });
-                        }
-                    });
-            }
+            // add curvep if exists
+            // if (d.curvep.length > 0) {
+            //     d.curvep
+            //         .filter((r) => r.groupKey == gk)
+            //         .forEach((el) => {
+            //             if (el.bmd === null || el.bmd <= 0) {
+            //                 return;
+            //             }
+            //
+            //             bmr = el.bmr;
+            //             let dash = gk ? { dash: 'dot' } : null;
+            //             // console.log('dash')
+            //             // console.log(dash)
+            //
+            //             data.push({
+            //                 x: el.doses,
+            //                 y: el.responses,
+            //                 legendgroup: 'plot',
+            //                 mode: 'line',
+            //                 name: 'curvep',
+            //                 showlegend: !gk,
+            //                 line: {
+            //                     color: this.getMarkerColor(gk, 'curvep'),
+            //                     width: 2,
+            //                     ...dash,
+            //                 },
+            //                 opacity: 0.8,
+            //             });
+            //             if (this.props.collapse === NO_COLLAPSE) {
+            //                 annotations.push(`CurveP: ${printFloat(el.bmd)} µM`);
+            //             }
+            //         });
+            // }
+
+            // add hill if exists
         });
-
         if (annotations.length > 0) {
             layout.annotations = [
                 {
@@ -300,14 +303,13 @@ class DoseResponse extends React.Component {
             ];
         }
 
-        if (this.props.collapse === NO_COLLAPSE && trsh) {
+        if (this.props.collapse === NO_COLLAPSE && bmr) {
             layout.shapes.push({
                 type: 'line',
-                xref: 'paper',
-                x0: 0,
-                y0: trsh,
-                x1: 1,
-                y1: trsh,
+                x0: dose_range[0],
+                y0: 1 + bmr,
+                x1: dose_range[1],
+                y1: 1 + bmr,
                 line: {
                     color: 'grey',
                     width: 2,
@@ -316,7 +318,7 @@ class DoseResponse extends React.Component {
             });
         }
 
-        // add grouped hill and bmcoutput legends if plot is collapsed
+        // add grouped hill and curvep legends if plot is collapsed
         if (this.props.collapse !== NO_COLLAPSE) {
             // move legend to bottom of plot
             layout.legend = { orientation: 'h', y: -0.3 };
@@ -349,7 +351,7 @@ class DoseResponse extends React.Component {
                     y: [null],
                     legendgroup: 'collapsed',
                     mode: 'line',
-                    name: 'bmcoutput',
+                    name: 'curvep',
                     showlegend: true,
                     line: {
                         color: 'grey',
@@ -364,6 +366,9 @@ class DoseResponse extends React.Component {
     }
 
     loadDoseResponse() {
+        // console.log(d)
+        console.log(this.state);
+
         this.state.collapsedData.map((d) => this._renderPlot(d, this.state.yrange));
     }
 
@@ -405,6 +410,7 @@ class DoseResponse extends React.Component {
                 {this.state.collapsedData.map((item) => (
                     <div className={`col-xs-${colNum}`} key={item.key} ref={item.key} />
                 ))}
+                <p>DoseResponse part zw1</p>
             </div>
         );
     }

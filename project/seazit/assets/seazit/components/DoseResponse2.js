@@ -55,10 +55,6 @@ class DoseResponse extends React.Component {
                             .value()),
                         // filter with input_ids to filter bmcout into different case
                         (d.bmcoutput = d.bmcoutput.filter((i) => d.input_ids.includes(i.input_id))),
-                        (d.substance_code_input_ids = _.chain(d.dose_response)
-                            .map('substance_code_input_id')
-                            .uniq()
-                            .value()),
                         (d.endpoint_name = dr.endpoint_name);
                 })
                 .sortBy('endpoint_name')
@@ -111,12 +107,11 @@ class DoseResponse extends React.Component {
     }
 
     getMarkerColor(d, marker = null) {
-        // if (this.props.collapse === NO_COLLAPSE) {
-        //     return NO_COLLAPSE_COLORS[marker];
-        // } else {
-        //     return this.state.scale(d);
-        // }
-        return this.state.scale(d);
+        if (this.props.collapse === NO_COLLAPSE) {
+            return NO_COLLAPSE_COLORS[marker];
+        } else {
+            return this.state.scale(d);
+        }
     }
 
     getPlotTitle(data, collapse) {
@@ -225,44 +220,29 @@ class DoseResponse extends React.Component {
         d.groupKeys.map((gk) => {
             // add raw data
             let drs = d.dose_response.filter((r) => r.groupKey == gk);
-            console.log(drs);
-            d.substance_code_input_ids.map((id_flag) => {
-                // drs splited into different group based on substance_code_input_ids
-                let drs_split = drs.filter((r) => r.substance_code_input_id == id_flag);
-                drs_split = _.sortBy(drs_split, 'dose');
-                console.log(drs_split);
-                // console.log(drs_split2)
-
-                // let response = drs_split.map(obj => { return (obj.n_in / obj.n) * 100})
-                //     .sort
-                data.push({
-                    x: _.map(drs_split, 'dose'),
-                    y: drs_split.map((obj) => {
-                        return (obj.n_in / obj.n) * 100;
-                    }),
-                    legendgroup: 'plot',
-                    // mode: 'markers',
-                    mode: 'line',
-                    type: 'scatter',
-                    name: drs_split[0].substance_code_input_id,
-                    showlegend: true,
-                    marker: {
-                        color: this.getMarkerColor(gk, 'responses'),
-                    },
-                    opacity: 0.8,
-                });
+            data.push({
+                x: _.map(drs, 'dose'),
+                y: drs.map((obj) => {
+                    return (obj.n_in / obj.n) * 100;
+                }),
+                legendgroup: 'plot',
+                mode: 'markers',
+                type: 'scatter',
+                name: this.getResponseLabels(drs, this.props.collapse),
+                showlegend: true,
+                marker: {
+                    color: this.getMarkerColor(gk, 'responses'),
+                },
+                opacity: 0.8,
             });
             // add bmcoutput if exists`````````
-            // console.log(d.bmcoutput)
-
+            console.log(d.bmcoutput);
             if (d.bmcoutput.length > 0) {
                 d.bmcoutput
                     .filter((r) => r.groupKey == gk)
                     .forEach((el) => {
                         if (el.hit_confidence >= 0.5) {
-                            annotations.push(
-                                `BMC:  ${el.input_id}  ${Math.pow(10, el.pod_med) * 1000000} µM`
-                            );
+                            annotations.push(`BMC:${Math.pow(10, el.pod_med) * 1000000} µM`);
                             trsh = el.trsh;
                             let dash = gk ? { dash: 'dot' } : null;
                             data.push({
@@ -301,6 +281,8 @@ class DoseResponse extends React.Component {
         }
 
         if (this.props.collapse === NO_COLLAPSE && trsh) {
+            // console.log("trsh")
+            // console.log(trsh)
             layout.shapes.push({
                 type: 'line',
                 xref: 'paper',

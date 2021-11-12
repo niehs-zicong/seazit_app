@@ -150,8 +150,7 @@ class SeazitDose(models.Model):
         # return pd.DataFrame(list(qs), columns=cols)
         return {
             "data": pd.DataFrame(list(qs), columns=cols).to_dict(orient="records"),
-            # "substances": Substance.get_flat().to_dict(orient="records"),
-            # "substances": SeazitProtocol.get_flat().to_dict(orient="records"),
+
         }
 
 
@@ -526,19 +525,11 @@ class Seazit_readout_result(models.Model):
             )
         dr = (
             cls.objects.filter(
-                # readout__in=readout_ids, well__substance__chemical__in=chemical_ids)
                 protocol_id__in=protocol_ids , endpoint_name__in=readout_ids, casrn__in=chemical_ids)
-                # .select_related("readout", "substance", "substance__chemical")
                 .values(*cols)
         )
-        print ("3+++++++")
-        print (protocol_ids)
-        print (readout_ids)
-        print (chemical_ids)
         df =  pd.DataFrame(list(dr))
         input_ids = set(df['input_id'].tolist())
-
-
         cols = (
                 "trsh",
                 "rnge",

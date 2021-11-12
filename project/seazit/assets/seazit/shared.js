@@ -35,8 +35,8 @@ const AXIS_LINEAR = 1,
     URL_CHEMXLSX = '/static/resources/seazit/NTP%20Chemical%20Library.xlsx',
     //    URL_METADATA = '/seazit/api/assay/metadata/?format=json',
     //        URL_METADATA = '/seazit/api/seazit_cr4/doses/?format=tsv',
-    URL_METADATA = '/seazit/api/seazit_cr6/metadata/?format=json',
-    URL_CONCRESPMATRIX = '/seazit/api/seazit_cr12/drs/',
+    URL_METADATA = '/seazit/api/seazit_cr_protocol/metadata/?format=json',
+    URL_CONCRESPMATRIX = '/seazit/api/seazit_cr_readout_result/drs/',
     INTVIZ_OBAMA = 1,
     INTVIZ_BOXPLOT = 2,
     INTVIZ_ASSAY_PCA = 3,
@@ -52,9 +52,9 @@ const AXIS_LINEAR = 1,
         'Selectivity is estimated and true value may be higher; viability BMC could not be calculated and was therefore estimated to equal the maximum tested dose.',
     loadMetadata = function(component) {
         d3.json(URL_METADATA, (d) => {
-            console.log('d');
-            console.log(d);
-            //
+            // console.log('d');
+            // console.log(d);
+            // //
             //            d.readouts.forEach((r) => {
             //                r.provider_category = `${r.protocol__provider}: ${r.category}`;
             //            });
@@ -63,12 +63,8 @@ const AXIS_LINEAR = 1,
             component.setState({
                 metadataLoaded: true,
                 protocol_data: d.protocol_data,
-                // readouts: d.readouts,
-                // tbl_readouts: d.readouts,
-                // tbl_substances: d.substances,
                 AnalysisBmcInput: d.AnalysisBmcInput,
                 Seazit_chemical_info: d.Seazit_chemical_info,
-                // Seazit_readout_result: d.Seazit_readout_result,
                 Seazit_ui_panel: d.Seazit_ui_panel,
             });
         });
@@ -136,7 +132,7 @@ const AXIS_LINEAR = 1,
             ro = readout_ids.join(','),
             chems = casrns.join(',');
         // return url, ro is the readout_id
-        console.log(ids, ro, chems);
+        // console.log(ids, ro, chems);
         return `${URL_CONCRESPMATRIX}?format=json&protocol_ids=${ids}&readouts=${ro}&casrns=${chems}`;
     },
     printFloat = function(v) {
