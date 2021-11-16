@@ -45,8 +45,12 @@ RUN \
 #    pip install -r /requirements/production.txt
 
 RUN conda env create -f /env_seazit.yml
+RUN /bin/bash -c ". activate seazit && \
+    pip install -U pip && \
+    pip install -r /requirements/production.txt"
+
 #RUN . /opt/conda/etc/profile.d/conda.sh
-RUN conda activate seazit
+ 
 # fix the django 2.0 import error
 #replace 
 #from django.core.urlresolvers import reverse, NoReverseMatch
