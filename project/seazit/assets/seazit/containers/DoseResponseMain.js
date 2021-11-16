@@ -7,7 +7,7 @@ import HelpButtonWidget from '../widgets/HelpButtonWidget';
 import ChemicalWidget from '../widgets/ChemicalWidget';
 import ReadoutWidget from '../widgets/ReadoutWidget';
 //import DoseResponseGridWidget from '../widgets/DoseResponseGridWidget';
-//import PlotCollapseWidget from '../widgets/PlotCollapseWidget';
+import PlotCollapseWidget from '../widgets/PlotCollapseWidget';
 
 import {
     CHEMFILTER_CATEGORY,
@@ -120,6 +120,8 @@ class DoseResponseMain extends React.Component {
                     />
                     <hr />
                     <ChemicalWidget stateHolder={this} />
+                    <hr />
+                    <PlotCollapseWidget stateHolder={this} />
                 </div>
                 <div className="col-md-9">
                     {this._renderHelpText()}

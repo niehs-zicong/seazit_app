@@ -20,10 +20,10 @@ class ReadoutWidget extends BaseWidget {
             .map((r) => {
                 return {
                     protocol_name: r.protocol_name,
-                    // key: r,
-                    // label: r,
                     protocol_source: r.protocol_source,
                     seazit_protocol_id: r.seazit_protocol_id,
+                    key: r.seazit_protocol_id,
+                    label: r.protocol_name,
                 };
             })
             .sortBy('seazit_protocol_id')

@@ -71,6 +71,9 @@ const AXIS_LINEAR = 1,
     },
     renderSelectMultiWidget = function(name, label, options, values, handleChange) {
         let size = Math.min(options.length, 11);
+        // console.log("options")
+        // console.log(options)
+
         return (
             <div>
                 <label>Select {label}(s):</label>
@@ -84,8 +87,8 @@ const AXIS_LINEAR = 1,
                 >
                     {options.map((d) => {
                         return (
-                            <option key={d.protocol_name} value={d.seazit_protocol_id}>
-                                {d.protocol_name}
+                            <option key={d.key} value={d.key}>
+                                {d.label}
                             </option>
                         );
                     })}

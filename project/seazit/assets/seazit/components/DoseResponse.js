@@ -26,7 +26,7 @@ class DoseResponse extends React.Component {
     }
 
     collapseData(data, collapse) {
-        console.log('data zw1 ');
+        console.log('data');
         console.log(data);
 
         let keys = _.chain(data.dose_response)
@@ -49,13 +49,20 @@ class DoseResponse extends React.Component {
                 .each((d, k) => {
                     let dr = d.dose_response[0];
                     (d.title = this.getPlotTitle(dr, collapse)),
-                        (d.input_ids = _.chain(d.dose_response)
+                        // (d.input_ids = _.chain(d.dose_response)
+                        (d.input_ids = _.chain(d.bmcoutput)
                             .map('input_id')
                             .uniq()
                             .value()),
                         // filter with input_ids to filter bmcout into different case
                         (d.bmcoutput = d.bmcoutput.filter((i) => d.input_ids.includes(i.input_id))),
-                        (d.substance_code_input_ids = _.chain(d.dose_response)
+                        // (d.substance_code_input_ids = _.chain(d.dose_response)
+                        //                                                 .map('substance_code_input_id')
+                        //                                                 .uniq()
+                        //                                                 .value()),
+                        (d.substance_code_input_ids = _.chain(
+                            d.dose_response.filter((i) => d.input_ids.includes(i.input_id))
+                        )
                             .map('substance_code_input_id')
                             .uniq()
                             .value()),
@@ -70,8 +77,8 @@ class DoseResponse extends React.Component {
         // set constant y-range for all charts. ensure 0 is within the
         // domain of values.
         // console.log(keys)
-        // console.log("collapsedData")
-        // console.log(collapsedData)
+        console.log('collapsedData');
+        console.log(collapsedData);
 
         yrange = [0, 100];
         return {
@@ -102,7 +109,15 @@ class DoseResponse extends React.Component {
         if (_.isEmpty(data)) {
             return _.noop;
         }
+        // console.log(data)
+        // console.log(collapse)
+
         switch (collapse) {
+            // TODO
+            case COLLAPSE_BY_READOUT:
+                return this.colorScale.domain(_.map(data[0].dose_response, 'casrn'));
+            case COLLAPSE_BY_CHEMICAL:
+                return this.colorScale.domain(_.map(data[0].dose_response, 'endpoint_name'));
             case NO_COLLAPSE:
                 return _.noop;
             default:
@@ -122,6 +137,10 @@ class DoseResponse extends React.Component {
     getPlotTitle(data, collapse) {
         // console.log(data)
         switch (collapse) {
+            case COLLAPSE_BY_READOUT:
+                return `${data.endpoint_name}`;
+            case COLLAPSE_BY_CHEMICAL:
+                return `(${data.casrn})`;
             case NO_COLLAPSE:
                 return `${data.preferred_name}<br>${data.casrn}|${data.dtxsid}`;
             default:
@@ -134,6 +153,10 @@ class DoseResponse extends React.Component {
             return '';
         }
         switch (collapse) {
+            case COLLAPSE_BY_READOUT:
+                return `${data[0].chemical_name} (${data[0].casrn})`;
+            case COLLAPSE_BY_CHEMICAL:
+                return data[0].endpoint_name;
             case NO_COLLAPSE:
                 return 'responses';
             default:
@@ -142,8 +165,29 @@ class DoseResponse extends React.Component {
     }
 
     setDatasetKey(data, collapse) {
-        // console.log("setDatasetKey")
+        console.log('setDatasetKey');
+        console.log(data);
+
         switch (collapse) {
+            case COLLAPSE_BY_READOUT:
+                // data.key = data.readout_id;
+                // data.groupKey = data.casrn;
+                data.key = data.endpoint_name;
+                // data.groupKey = data.casrn;
+                data.groupKey = null;
+
+                data.substance_code_input_id = `${data.substance_code}@${data.input_id}`;
+
+                break;
+            case COLLAPSE_BY_CHEMICAL:
+                data.key = data.casrn;
+                data.groupKey = data.readout_id;
+                // data.key = data.casrn;
+                // data.groupKey = data.endpoint_name;
+                // data.substance_code_input_id = `${data.substance_code}@${data.input_id}`;
+
+                break;
+
             case NO_COLLAPSE:
                 data.key = `${data.endpoint_name}|${data.casrn}`;
                 // data.key = `${data.endpoint_name}|${data.casrn}|${data.substance_code}`;
@@ -225,16 +269,16 @@ class DoseResponse extends React.Component {
         d.groupKeys.map((gk) => {
             // add raw data
             let drs = d.dose_response.filter((r) => r.groupKey == gk);
-            console.log(drs);
+            // console.log(drs);
             d.substance_code_input_ids.map((id_flag) => {
                 // drs splited into different group based on substance_code_input_ids
+                // console.log("drs")
+                //                 console.log(drs)
+
                 let drs_split = drs.filter((r) => r.substance_code_input_id == id_flag);
                 drs_split = _.sortBy(drs_split, 'dose');
                 console.log(drs_split);
-                // console.log(drs_split2)
 
-                // let response = drs_split.map(obj => { return (obj.n_in / obj.n) * 100})
-                //     .sort
                 data.push({
                     x: _.map(drs_split, 'dose'),
                     y: drs_split.map((obj) => {
@@ -254,31 +298,22 @@ class DoseResponse extends React.Component {
             });
             // add bmcoutput if exists`````````
             // console.log(d.bmcoutput)
+            // console.log(el)
 
             if (d.bmcoutput.length > 0) {
                 d.bmcoutput
                     .filter((r) => r.groupKey == gk)
                     .forEach((el) => {
+                        // console.log(el)
+                        trsh = el.trsh;
+                        let dash = gk ? { dash: 'dot' } : null;
+
                         if (el.hit_confidence >= 0.5) {
                             annotations.push(
-                                `BMC:  ${el.input_id}  ${Math.pow(10, el.pod_med) * 1000000} µM`
+                                `${el.input_id}:${(Math.pow(10, el.pod_med) * 1000000).toFixed(
+                                    6
+                                )} µM`
                             );
-                            trsh = el.trsh;
-                            let dash = gk ? { dash: 'dot' } : null;
-                            data.push({
-                                x: el.pod_cil,
-                                y: el.pod_med,
-                                legendgroup: 'plot',
-                                mode: 'line',
-                                name: 'bmcoutput',
-                                showlegend: !gk,
-                                line: {
-                                    color: this.getMarkerColor(gk, 'bmcoutput'),
-                                    width: 2,
-                                    ...dash,
-                                },
-                                opacity: 0.8,
-                            });
                         }
                     });
             }
