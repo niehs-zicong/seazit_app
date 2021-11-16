@@ -21,7 +21,7 @@ import psycopg2
 
 try:
 
-    conn = psycopg2.connect(user = "$POSTGRES_USER",password = "my_dev_password",host = "10.98.105.92",port = "5432", database = "sandbox")
+    conn = psycopg2.connect(user = "$POSTGRES_USER",password = "ntp_group",host = "10.98.105.92",port = "5432", database = "dev_seazit")
     cur = conn.cursor()
     print('PostgreSQL database version:')
     cur.execute('SELECT version()')

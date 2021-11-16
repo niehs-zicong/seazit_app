@@ -17,8 +17,8 @@ COPY ./compose/django/gunicorn.sh /gunicorn.sh
 COPY ./compose/django/cull_backups.py /cull_backups.py
 COPY ./compose/django/supervisord.conf /supervisord.conf
 
-COPY ./conda.env /conda.env
-#COPY ./env_seazit.yml /env_seazit.yml
+#COPY ./conda.env /conda.env
+COPY ./env_seazit.yml /env_seazit.yml
 COPY ./requirements /requirements
 
 # 1) install start-scripts

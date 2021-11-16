@@ -33,6 +33,9 @@ class Home(SeazitTemplateView):
     template_name = "seazit/home.html"
     active_view_name = "home"
 
+class QC(SeazitTemplateView):
+    template_name = "seazit/qc.html"
+    active_view_name = "qc"
 
 class Resources(SeazitTemplateView):
     template_name = "seazit/resources.html"

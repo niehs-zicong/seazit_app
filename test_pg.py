@@ -15,7 +15,7 @@ def connect():
 
         # connect to the PostgreSQL server
         print('Connecting to the PostgreSQL database...')
-        conn = psycopg2.connect(host='10.98.105.92',port='5432',database='dev_seazit',user='sandbox',password='my_dev_password')
+        conn = psycopg2.connect(host='10.98.105.92',port='5432',database='dev_seazit',user='ntp_group',password='ntp_group')
       
         # create a cursor
         cur = conn.cursor()

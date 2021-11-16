@@ -18,6 +18,8 @@
 
     <li role="presentation" class="{% if active_view_name == 'resources' %}active{% endif %}">
         <a href="{% url 'seazit:resources' %}">Resources</a></li>
+    <li role="presentation" class="{% if active_view_name == 'qc' %}active{% endif %}">
+        <a href="{% url 'seazit:qc' %}">Quality Control</a></li>
 
 </ul>
 {% endblock crumbs %}
