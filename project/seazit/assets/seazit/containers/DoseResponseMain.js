@@ -7,7 +7,7 @@ import HelpButtonWidget from '../widgets/HelpButtonWidget';
 import ChemicalWidget from '../widgets/ChemicalWidget';
 import ReadoutWidget from '../widgets/ReadoutWidget';
 //import DoseResponseGridWidget from '../widgets/DoseResponseGridWidget';
-//import PlotCollapseWidget from '../widgets/PlotCollapseWidget';
+import PlotCollapseWidget from '../widgets/PlotCollapseWidget';
 
 import {
     CHEMFILTER_CATEGORY,
@@ -26,8 +26,6 @@ class DoseResponseMain extends React.Component {
         // take 75% of the screen width since main body is col-9 size; assume
         // each plot is ~400px for a reasonable start, make sure it's at least 1
         let initialCols = Math.max(1, Math.floor((0.75 * window.innerWidth) / 400));
-        console.log('state1');
-        console.log(this.state);
         this.state = {
             // loadMetadata
             metadataLoaded: false,
@@ -55,8 +53,6 @@ class DoseResponseMain extends React.Component {
             vizColumns: initialCols,
             vizHeight: 350,
         };
-        console.log('state2');
-        console.log(this.state);
     }
 
     componentWillMount() {
@@ -107,19 +103,12 @@ class DoseResponseMain extends React.Component {
         if (!this.state.metadataLoaded) {
             return <Loading />;
         }
-        //         console.log(this.state.readouts)
-        //         console.log(this.state.chemicals)
-        console.log(this.state);
 
         let url = getDoseResponsesUrl(this.state.assays, this.state.readouts, this.state.chemicals);
-
-        console.log('url');
-        console.log(url);
-
         return (
             <div className="row-fluid">
                 <h1>
-                    seazit CR main part zw1
+                    Concentration Response
                     <HelpButtonWidget stateHolder={this} />
                 </h1>
                 <div className="col-md-3">
@@ -131,6 +120,8 @@ class DoseResponseMain extends React.Component {
                     />
                     <hr />
                     <ChemicalWidget stateHolder={this} />
+                    <hr />
+                    <PlotCollapseWidget stateHolder={this} />
                 </div>
                 <div className="col-md-9">
                     {this._renderHelpText()}

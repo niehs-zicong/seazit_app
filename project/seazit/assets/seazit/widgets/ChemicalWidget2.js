@@ -128,35 +128,20 @@ class ChemicalWidget extends BaseWidget {
                 .sortBy('preferred_name')
                 .map((r) => {
                     return {
-                        category: 'Chemical Names',
+                        // category: null,
                         key: r.casrn,
                         label: `${r.preferred_name} (${r.casrn})`,
                     };
                 })
                 .groupBy('category')
                 .value();
-            // console.log(opts)
-            // console.log(state)
-
-            // opts = _.chain(state.Seazit_chemical_info)
-            //     .groupBy('preferred_name')
-            //     // .filter(filterInChemlist)
-            //     .map((r) => r[0])
-            //     .uniq()
-            //     .map((r) => {
-            //         return {
-            //             key: r.casrn,
-            //             label: `${r.preferred_name} (${r.casrn})`,
-            //         };
-            //     })
-            //     .sortBy('key')
-            //     .value();
-            //
+            console.log(opts);
+            console.log(state);
 
             return renderSelectMultiOptgroupWidget(
                 // return renderSelectMultiWidget(
                 'chemicals',
-                'chemical',
+                'chemica zw1',
                 opts,
                 state.chemicals,
                 this.handleSelectMultiChange
@@ -177,7 +162,7 @@ class ChemicalWidget extends BaseWidget {
 
             return renderSelectMultiWidget(
                 'categories',
-                'category',
+                'category zw2',
                 opts,
                 state.categories,
                 this.handleCategoryChange

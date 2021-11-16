@@ -59,10 +59,6 @@ class AnalysisBmcInput(models.Model):
 
             ## get top 100 values.
             cls.objects.all()[:10].values_list(*cols)
-            #  cls.objects.all()[:1000].values_list(*cols)
-
-        # filter let protocol_id = 1
-        #     cls.objects.all().filter(protocol_id=1).values_list(*cols)
 
         )
         return pd.DataFrame(list(qs),columns=cols)
@@ -154,8 +150,7 @@ class SeazitDose(models.Model):
         # return pd.DataFrame(list(qs), columns=cols)
         return {
             "data": pd.DataFrame(list(qs), columns=cols).to_dict(orient="records"),
-            # "substances": Substance.get_flat().to_dict(orient="records"),
-            # "substances": SeazitProtocol.get_flat().to_dict(orient="records"),
+
         }
 
 
@@ -193,8 +188,6 @@ class SeazitProtocol(models.Model):
             SeazitProtocol.objects.all().values_list(*cols)
         )
 
-        # print (pd.DataFrame(list(qs), columns=cols).to_dict(orient="records"))
-        # return pd.DataFrame(list(qs), columns=cols)
         return {
             "protocol_data": pd.DataFrame(list(qs), columns=cols).to_dict(orient="records"),
             # "readouts": pd.DataFrame(list(qs), columns=cols).to_dict(orient="records"),
@@ -342,23 +335,11 @@ class Substance(models.Model):
         qs = (
             ## the query all takes 10 second, too long. TODO
             # cls.objects.all().values_list(*cols)
-
             ## get top 100 values.
             cls.objects.all()[:10].values_list(*cols)
 
             ## filter let protocol_id = 1
-            # cls.objects.all().filter(protocol_id=7).values_list(*cols)
-
         )
-        # qs = cls.objects.select_related("chemical").values(
-        #     "id",
-        #     "lot",
-        #     "chemical__casrn",
-        #     "chemical__name",
-        #     "chemical__category_id",
-        #     "chemical__ntp80",
-        #     "chemical__ntp91",
-        # )
         return pd.DataFrame(list(qs),columns=cols)
 
 
@@ -507,16 +488,9 @@ class Seazit_readout_result(models.Model):
 
     @classmethod
     def dose_responses(cls, protocol_ids, readout_ids, chemical_ids):
-        print (protocol_ids)
-        print (readout_ids)
-        print (chemical_ids)
 
-        dr = (
-            cls.objects.filter(
-                # readout__in=readout_ids, well__substance__chemical__in=chemical_ids)
-                protocol_id__in=protocol_ids , endpoint_name__in=readout_ids, casrn__in=chemical_ids)
-                # .select_related("readout", "substance", "substance__chemical")
-            .values(
+
+        cols = (
                 "endpoint_name",
                 "casrn",
                 "input_chembase",
@@ -549,11 +523,63 @@ class Seazit_readout_result(models.Model):
                 "dtxsid",
                 "preferred_name",
             )
+        dr = (
+            cls.objects.filter(
+                protocol_id__in=protocol_ids , endpoint_name__in=readout_ids, casrn__in=chemical_ids)
+                .values(*cols)
         )
-
-        # filter
-
-        return dict(dose_response=list(dr))
+        df =  pd.DataFrame(list(dr))
+        input_ids = set(df['input_id'].tolist())
+        cols = (
+                "trsh",
+                "rnge",
+                "endpoint_name",
+                "input_chembase",
+                "plate_name",
+                "lowest_conc",
+                "highest_conc",
+                "n_conc",
+                "mean_conc_spacing",
+                "max_resp_med",
+                "min_resp_med",
+                "ncorrected_med",
+                "emax_med",
+                "slope_med",
+                "auc_med",
+                "wauc_med",
+                "wauc_prev_med",
+                "ec50_med",
+                "pod_med",
+                "emax_ciu",
+                "slope_ciu",
+                "auc_ciu",
+                "wauc_ciu",
+                "wauc_prev_ciu",
+                "ec50_ciu",
+                "pod_ciu",
+                "emax_cil",
+                "slope_cil",
+                "auc_cil",
+                "wauc_cil",
+                "wauc_prev_cil",
+                "ec50_cil",
+                "pod_cil",
+                "n_curves",
+                "hit_confidence",
+                "embryo_type",
+                "protocol_id",
+                "substance_id",
+                "input_id",
+                "screen_hours",
+                "endpoint_name_only"
+        )
+        analysisbmcoutput = (
+            AnalysisBmcOutput.objects.filter(
+                input_id__in=input_ids
+            )
+            .values(*cols)
+        )
+        return dict(dose_response=list(dr), bmcoutput=list(analysisbmcoutput))
 
 
 class Seazit_ui_panel(models.Model):

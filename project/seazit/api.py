@@ -235,9 +235,10 @@ class Seazit_readout_resultViewSet(CachedReadOnlyViewSet):
     @list_route(methods=["get"], renderer_classes=plotly_renderers)
     def drs(self, request, *args, **kwargs):
 
-        print (self.request.GET.get("readouts", None))
         protocol_ids = self.request.GET.get("protocol_ids", None)
-        readouts = self.request.GET.get("readouts", None)
+        # readouts contains plus sign (+), it will replace by white space in Django,
+        # So I reaplace whitespace back to +
+        readouts = self.request.GET.get("readouts", None).replace(" ", "+")
         casrns = self.request.GET.get("casrns", None)
         if protocol_ids is None:
              raise ValidationError("requires `protocol_ids` argument.")
@@ -245,20 +246,13 @@ class Seazit_readout_resultViewSet(CachedReadOnlyViewSet):
             raise ValidationError("requires `readouts` argument.")
         if casrns is None:
             raise ValidationError("requires `casrns` argument.")
-        print (protocol_ids)
-        print (readouts)
-        print(casrns)
-        protocol_ids = protocol_ids.split(",")
-        # readout_ids = [d for d in readouts.split(",")]
-        readout_ids = readouts.split(",")
-        # readout_ids = readouts
-        carsns = casrns.split(",")
-        readout_ids = "Abnormal_heartbeat%2bMort@120"
 
-        print(protocol_ids)
-        print(readout_ids)
-        print(casrns)
-        if len(readout_ids) * len(carsns) > 40:
+        protocol_ids = protocol_ids.split(",")
+        readout_ids = readouts.split(",")
+        carsns = casrns.split(",")
+        if len(readout_ids) * len(carsns) > 100:
+        # if len(readout_ids) * len(carsns) > 40:
+
             raise ValidationError(
                 "Too many dose-response curves selected; please reduce the number of selected readouts and/or chemicals"  # noqa: E501
             )
