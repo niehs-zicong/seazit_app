@@ -45,7 +45,7 @@ RUN \
 #    pip install -r /requirements/production.txt
 
 RUN conda env create -f /env_seazit.yml
-RUN . /opt/conda/etc/profile.d/conda.sh
+#RUN . /opt/conda/etc/profile.d/conda.sh
 RUN conda activate seazit
 # fix the django 2.0 import error
 #replace 
