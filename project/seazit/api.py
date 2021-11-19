@@ -259,3 +259,20 @@ class Seazit_readout_resultViewSet(CachedReadOnlyViewSet):
 
         return Response(models.Seazit_readout_result.dose_responses(protocol_ids, readout_ids, carsns))
 
+
+
+
+class Seazit_bmc_readout_resultViewSet(CachedReadOnlyViewSet):
+    """
+    retrieve:
+        Return a CurveP BMD instance.
+    list:
+        Return all available CurveP BMDs.
+    flat:
+        Return all readouts [flat file formats].
+            - Can specify one or more casrns
+            - Can specify one or more readout_ids
+    """
+    model = models.Seazit_bmc_readout_result
+    queryset = models.Seazit_bmc_readout_result.objects.all()
+    serializer_class = serializers.Seazit_bmc_readout_resultSerializer
