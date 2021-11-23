@@ -1,6 +1,7 @@
 import os
 
 PROJECT_NAME = 'seazit_app'
+DB_NAME = os.environ['POSTGRES_DBNAME']
 PROJECT_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
 PROJECT_ROOT = os.path.abspath(os.path.join(PROJECT_PATH, os.pardir))
 
@@ -19,8 +20,7 @@ SERVER_EMAIL = 'webmaster@sandbox.ntp.niehs.gov'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        #'NAME': PROJECT_NAME,
-        'NAME':DB_NAME,
+        'NAME': DB_NAME,
     },     
 }
 
