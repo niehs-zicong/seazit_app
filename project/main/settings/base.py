@@ -1,6 +1,7 @@
 import os
 
 PROJECT_NAME = 'seazit_app'
+DB_NAME = 'dev_seazit'
 DB_NAME = os.environ['POSTGRES_DBNAME']
 PROJECT_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
 PROJECT_ROOT = os.path.abspath(os.path.join(PROJECT_PATH, os.pardir))
@@ -21,7 +22,11 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': DB_NAME,
-    },     
+        'OPTIONS': {
+            'options': '-c search_path=schema_seazit'
+        },
+    },  
+
 }
 
 DATABASE_ROUTERS = [
