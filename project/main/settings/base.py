@@ -19,7 +19,8 @@ SERVER_EMAIL = 'webmaster@sandbox.ntp.niehs.gov'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': PROJECT_NAME,
+        #'NAME': PROJECT_NAME,
+        'NAME':DB_NAME,
     },     
 }
 
