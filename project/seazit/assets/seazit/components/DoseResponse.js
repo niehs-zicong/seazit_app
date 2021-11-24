@@ -26,8 +26,8 @@ class DoseResponse extends React.Component {
     }
 
     collapseData(data, collapse) {
-        console.log('data');
-        console.log(data);
+        // console.log('data');
+        // console.log(data);
 
         let keys = _.chain(data.dose_response)
                 .map('key')
@@ -73,8 +73,8 @@ class DoseResponse extends React.Component {
 
         // set constant y-range for all charts. ensure 0 is within the
         // domain of values.
-        console.log('collapsedData');
-        console.log(collapsedData);
+        // console.log('collapsedData');
+        // console.log(collapsedData);
 
         yrange = [0, 100];
         return {
@@ -103,6 +103,7 @@ class DoseResponse extends React.Component {
         if (_.isEmpty(data)) {
             return _.noop;
         }
+
         switch (collapse) {
             // TODO
             case COLLAPSE_BY_READOUT:
@@ -144,11 +145,27 @@ class DoseResponse extends React.Component {
         }
         switch (collapse) {
             case COLLAPSE_BY_READOUT:
-                return `(${data[0].casrn})`;
+                return `${data[0].preferred_name}|${data[0].casrn}|${data[0].dtxsid}`;
             case COLLAPSE_BY_CHEMICAL:
                 return data[0].endpoint_name;
             case NO_COLLAPSE:
-                return 'responses';
+                return data[0].substance_code_input_id;
+            default:
+                throw 'Unknown collapse type.';
+        }
+    }
+
+    getBMCLabels(data, collapse) {
+        if (_.isEmpty(data)) {
+            return '';
+        }
+        switch (collapse) {
+            case COLLAPSE_BY_READOUT:
+                return `${data.endpoint_name}@${data.substance_id}@${data.input_id}`;
+            case COLLAPSE_BY_CHEMICAL:
+                return `${data.endpoint_name}@${data.substance_id}@${data.input_id}`;
+            case NO_COLLAPSE:
+                return data.input_id;
             default:
                 throw 'Unknown collapse type.';
         }
@@ -230,40 +247,33 @@ class DoseResponse extends React.Component {
             shapes: [],
             xaxis: {
                 type: 'log',
-                // type: 'linear',
                 autorange: true,
                 title: 'Concentration (µM)',
                 dtick: 1,
             },
             yaxis: {
                 type: 'linear',
-                // autorange: true,
                 title: 'Response (normalized)',
                 // range should be [0, 100]
                 range: [-10, 110],
             },
             // add room for collapsed plot legends
             height: this.props.height + d.groupKeys.length * 19 + 20,
+            autosize: true,
         };
-        // console.log(d);
         d.groupKeys.map((gk) => {
-            // add raw data
-            // console.log(gk);
             let drs = d.dose_response.filter((r) => r.groupKey == gk);
-            //
-            // console.log('zw1');
-            // console.log(drs);
-
             d.substance_code_input_ids.map((id_flag) => {
-                // console.log(id_flag)
-                let drs_split = drs.filter((r) => r.substance_code_input_id == id_flag);
+                let drs_split = drs.filter((r) => r.substance_code_input_id == id_flag),
+                    legendNames = _.chain(data)
+                        .map('name')
+                        .uniq()
+                        .value();
                 drs_split = _.sortBy(drs_split, 'dose');
-                // console.log(drs_split);
 
                 if (drs_split.length > 0) {
                     data.push({
                         x: _.map(drs_split, 'dose'),
-                        // y: _.map(drs, 'normalized_response'),
                         y: drs_split.map((obj) => {
                             return (obj.n_in / obj.n) * 100;
                         }),
@@ -271,9 +281,13 @@ class DoseResponse extends React.Component {
                         // mode: 'markers',
                         mode: 'line',
                         type: 'scatter',
-                        // name: this.getResponseLabels(drs, this.props.collapse),
-                        name: drs_split[0].substance_code_input_id,
-                        showlegend: true,
+                        name: this.getResponseLabels(drs_split, this.props.collapse),
+                        // TODO
+                        showlegend: legendNames.includes(
+                            this.getResponseLabels(drs_split, this.props.collapse)
+                        )
+                            ? false
+                            : true,
                         marker: {
                             color: this.getMarkerColor(gk, 'responses'),
                         },
@@ -293,27 +307,13 @@ class DoseResponse extends React.Component {
                         }
                         trsh = el.trsh;
                         let dash = gk ? { dash: 'dot' } : null;
-                        // data.push({
-                        //     x: el.doses,
-                        //     y: el.responses,
-                        //     legendgroup: 'plot',
-                        //     mode: 'line',
-                        //     name: 'curvep',
-                        //     showlegend: !gk,
-                        //     line: {
-                        //         color: this.getMarkerColor(gk, 'curvep'),
-                        //         width: 2,
-                        //         ...dash,
-                        //     },
-                        //     opacity: 0.8,
-                        // });
-                        if (this.props.collapse === NO_COLLAPSE) {
-                            annotations.push(
-                                `${el.input_id}:${(Math.pow(10, el.pod_med) * 1000000).toFixed(
-                                    2
-                                )} µM`
-                            );
-                        }
+                        let bmc_name = null;
+                        // console.log(el)
+
+                        bmc_name = this.getBMCLabels(el, this.props.collapse);
+                        annotations.push(
+                            `${bmc_name}:${(Math.pow(10, el.pod_med) * 1000000).toFixed(2)} µM`
+                        );
                     });
             }
         });
@@ -354,53 +354,14 @@ class DoseResponse extends React.Component {
         if (this.props.collapse !== NO_COLLAPSE) {
             // move legend to bottom of plot
             layout.legend = { orientation: 'h', y: -0.3 };
-            data.push(
-                {
-                    x: [null],
-                    y: [null],
-                    legendgroup: 'collapsed',
-                    mode: 'markers',
-                    name: 'responses',
-                    showlegend: true,
-                    marker: {
-                        color: 'grey',
-                    },
-                },
-                // {
-                //     x: [null],
-                //     y: [null],
-                //     legendgroup: 'collapsed',
-                //     mode: 'line',
-                //     name: 'hill',
-                //     showlegend: true,
-                //     line: {
-                //         color: 'grey',
-                //         width: 2,
-                //     },
-                // },
-                {
-                    x: [null],
-                    y: [null],
-                    legendgroup: 'collapsed',
-                    mode: 'line',
-                    name: 'bmcoutput',
-                    showlegend: true,
-                    line: {
-                        color: 'grey',
-                        width: 2,
-                        dash: 'dot',
-                    },
-                }
-            );
+            // layout.annotations = { orientation: 'h', y: -0.3};
         }
+        console.log(layout);
 
         Plotly.newPlot(this.refs[d.key], data, layout, svgConfig);
     }
 
     loadDoseResponse() {
-        console.log('this.state.collapsedData');
-        console.log(this.state.collapsedData);
-
         this.state.collapsedData.map((d) => this._renderPlot(d, this.state.yrange));
     }
 

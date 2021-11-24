@@ -77,7 +77,7 @@ class ChemicalWidget extends BaseWidget {
     _renderFilterBy(state) {
         return (
             <div>
-                <label>Filter chemicals zw1 by: </label>
+                <label>Filter chemicals by: </label>
                 <div className="radio">
                     <label>
                         <input
