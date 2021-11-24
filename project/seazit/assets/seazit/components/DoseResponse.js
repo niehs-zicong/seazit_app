@@ -134,6 +134,8 @@ class DoseResponse extends React.Component {
                 return `(${data.casrn})`;
             case NO_COLLAPSE:
                 return `${data.preferred_name}<br>${data.casrn}|${data.dtxsid}:<br>${data.endpoint_name}`;
+            // return `${data.preferred_name}|${data.casrn}|${data.dtxsid}:${data.endpoint_name}`;
+
             default:
                 throw 'Unknown collapse type.';
         }
@@ -308,7 +310,7 @@ class DoseResponse extends React.Component {
                         trsh = el.trsh;
                         let dash = gk ? { dash: 'dot' } : null;
                         let bmc_name = null;
-                        // console.log(el)
+                        console.log(el);
 
                         bmc_name = this.getBMCLabels(el, this.props.collapse);
                         annotations.push(
@@ -323,8 +325,10 @@ class DoseResponse extends React.Component {
                 {
                     xref: 'paper',
                     yref: 'paper',
-                    x: 1,
-                    y: 0,
+                    // x: 1,
+                    // y: 0,
+                    x: 0,
+                    y: 0.5,
                     xanchor: 'left',
                     yanchor: 'bottom',
                     align: 'left',
@@ -356,7 +360,7 @@ class DoseResponse extends React.Component {
             layout.legend = { orientation: 'h', y: -0.3 };
             // layout.annotations = { orientation: 'h', y: -0.3};
         }
-        console.log(layout);
+        // console.log(layout);
 
         Plotly.newPlot(this.refs[d.key], data, layout, svgConfig);
     }
