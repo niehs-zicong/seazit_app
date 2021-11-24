@@ -17,6 +17,7 @@ router.register("seazit_cr9", api.SeazitSubstanceMappingViewSet)
 router.register("seazit_cr10", api.SeazitTestViewSet)
 router.register("seazit_cr11", api.SeazitWellViewSet)
 router.register("seazit_cr_readout_result", api.Seazit_readout_resultViewSet)
+router.register("seazit_cr12", api.Seazit_bmc_readout_resultViewSet)
 
 
 urlpatterns = [

@@ -87,3 +87,8 @@ class Seazit_readout_resultSerializer(serializers.ModelSerializer):
         model = models.Seazit_readout_result
         fields = "__all__"
 
+class Seazit_bmc_readout_resultSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Seazit_bmc_readout_result
+        fields = "__all__"
+

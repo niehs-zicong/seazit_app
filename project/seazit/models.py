@@ -44,24 +44,6 @@ class AnalysisBmcInput(models.Model):
         db_table = 'analysis_bmc_input'
 
 
-    @classmethod
-    def get_flat(cls):
-        cols = (
-            "input_chembase",
-            "endpoint_name",
-            "protocol_id",
-            "substance_id",
-            "input_id",
-        )
-        qs = (
-            ## the query all takes 10 second, too long. TODO
-            # cls.objects.all().values_list(*cols)
-
-            ## get top 100 values.
-            cls.objects.all()[:10].values_list(*cols)
-
-        )
-        return pd.DataFrame(list(qs),columns=cols)
 
 
 class AnalysisBmcOutput(models.Model):
@@ -85,7 +67,8 @@ class AnalysisBmcOutput(models.Model):
     ec50_med = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     pod_med = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     emax_ciu = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
-    slope_ciu = models.TextField(blank=True, null=True)
+    # slope_ciu = models.TextField(blank=True, null=True)
+    slope_ciu = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     auc_ciu = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     wauc_ciu = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     wauc_prev_ciu = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
@@ -193,7 +176,7 @@ class SeazitProtocol(models.Model):
             # "readouts": pd.DataFrame(list(qs), columns=cols).to_dict(orient="records"),
             # "substances": Substance.get_flat().to_dict(orient="records"),
             # "AnalysisBmcInput": AnalysisBmcInput.get_flat().to_dict(orient="records"),
-            "Seazit_readout_result": Seazit_readout_result.get_flat().to_dict(orient="records"),
+            # "Seazit_readout_result": Seazit_readout_result.get_flat().to_dict(orient="records"),
             "Seazit_chemical_info": Seazit_chemical_info.get_chemicals().to_dict(orient="records"),
             "Seazit_ui_panel": Seazit_ui_panel.get_flat().to_dict(orient="records"),
         }
@@ -445,50 +428,8 @@ class Seazit_readout_result(models.Model):
     class Meta:
         managed = False
         db_table = 'mvw_seazit_readout_result'
-
-    @classmethod
-    def get_flat(cls):
-        cols = (
-            "input_chembase",
-            "substance_name_by_lab",
-            "plate_name",
-            "dose_id",
-            "endpoint_name",
-            "n",
-            "n_in",
-            "embryo_type",
-            "protocol_id",
-            "substance_id",
-            "input_id",
-            "endpoint_name_only",
-            "dose",
-            "dose_unit",
-            "protocol_source",
-            "plate_map_name",
-            "plate_screen_time_end",
-            "plate_screen_id",
-            "hour_post_fertilization",
-            "substance_type",
-            "substance_lab",
-            "substance_code",
-            "seazit_substance_id",
-            "casrn",
-            "stock_conc_mm",
-            "supplier",
-            "lot_number",
-            "coa_purity",
-            "determined_purity",
-            "dtxsid",
-            "preferred_name",
-        )
-        qs = (
-            cls.objects.all()[:10].values_list(*cols)
-        )
-        return pd.DataFrame(list(qs),columns=cols)
-
     @classmethod
     def dose_responses(cls, protocol_ids, readout_ids, chemical_ids):
-
 
         cols = (
                 "endpoint_name",
@@ -528,8 +469,6 @@ class Seazit_readout_result(models.Model):
                 protocol_id__in=protocol_ids , endpoint_name__in=readout_ids, casrn__in=chemical_ids)
                 .values(*cols)
         )
-        df =  pd.DataFrame(list(dr))
-        input_ids = set(df['input_id'].tolist())
         cols = (
                 "trsh",
                 "rnge",
@@ -571,15 +510,76 @@ class Seazit_readout_result(models.Model):
                 "substance_id",
                 "input_id",
                 "screen_hours",
-                "endpoint_name_only"
+                "endpoint_name_only",
+                "casrn",
+                "dtxsid",
+                "preferred_name"
         )
         analysisbmcoutput = (
-            AnalysisBmcOutput.objects.filter(
-                input_id__in=input_ids
+            Seazit_bmc_readout_result.objects.filter(
+                protocol_id__in=protocol_ids , endpoint_name__in=readout_ids, casrn__in=chemical_ids
             )
             .values(*cols)
         )
         return dict(dose_response=list(dr), bmcoutput=list(analysisbmcoutput))
+
+
+
+
+class Seazit_bmc_readout_result(models.Model):
+
+    trsh = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    rnge = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    endpoint_name = models.TextField(blank=True, null=True)
+    input_chembase = models.TextField(blank=True, null=True)
+    plate_name = models.TextField(blank=True, null=True)
+    lowest_conc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    highest_conc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    n_conc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    mean_conc_spacing = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    max_resp_med = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    min_resp_med = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    ncorrected_med = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    emax_med = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    slope_med = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    auc_med = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    wauc_med = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    wauc_prev_med = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    ec50_med = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    pod_med = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    emax_ciu = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    # slope_ciu = models.TextField(blank=True, null=True)
+    slope_ciu = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    auc_ciu = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    wauc_ciu = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    wauc_prev_ciu = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    ec50_ciu = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    pod_ciu = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    emax_cil = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    slope_cil = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    auc_cil = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    wauc_cil = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    wauc_prev_cil = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    ec50_cil = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    pod_cil = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    n_curves = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    hit_confidence = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    embryo_type = models.TextField(blank=True, null=True)
+    protocol_id = models.IntegerField(blank=True, null=True)
+    substance_id = models.IntegerField(blank=True, null=True)
+    # input = models.ForeignKey('AnalysisInputKey', models.DO_NOTHING, unique=True, blank=True, null=True)
+    input_id = models.IntegerField(blank=True,  primary_key=True)
+    screen_hours = models.IntegerField(blank=True,  primary_key=True)
+    endpoint_name_only = models.TextField(blank=True, null=True)
+    casrn = models.TextField(blank=True, null=True)
+    dtxsid = models.TextField(blank=True, null=True)
+    preferred_name = models.TextField(blank=True, null=True)
+
+
+
+    class Meta:
+        managed = False
+        db_table = 'mvw_seazit_bmc_readout_result'
 
 
 class Seazit_ui_panel(models.Model):
