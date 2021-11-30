@@ -163,9 +163,9 @@ class DoseResponse extends React.Component {
         }
         switch (collapse) {
             case COLLAPSE_BY_READOUT:
-                return `${data.endpoint_name}@${data.substance_id}@${data.input_id}`;
+                return `${data.endpoint_name}@${data.substance_code}@${data.input_id}`;
             case COLLAPSE_BY_CHEMICAL:
-                return `${data.endpoint_name}@${data.substance_id}@${data.input_id}`;
+                return `${data.endpoint_name}@${data.substance_code}@${data.input_id}`;
             case NO_COLLAPSE:
                 return data.input_id;
             default:
@@ -215,8 +215,8 @@ class DoseResponse extends React.Component {
 
     _renderPlot(d, yrange) {
         //
-        console.log(' _renderPlot');
-        console.log(d);
+        // console.log(' _renderPlot');
+        // console.log(d);
 
         if (this.refs[d.key] === undefined) {
             return;
@@ -274,6 +274,17 @@ class DoseResponse extends React.Component {
                 drs_split = _.sortBy(drs_split, 'dose');
 
                 if (drs_split.length > 0) {
+                    console.log(d.bmcoutput.filter((r) => r.input_id == drs_split[0].input_id));
+                    let bmcData = d.bmcoutput.filter((r) => r.input_id == drs_split[0].input_id),
+                        bmcText = '';
+                    console.log(bmcData);
+                    console.log(bmcData[0]);
+                    bmcData = bmcData[0];
+                    if (bmcData.trsh === null || bmcData.hit_confidence < 0.5) {
+                        return;
+                    } else {
+                        bmcText = `BMC:${(Math.pow(10, bmcData.pod_med) * 1000000).toFixed(2)} µM`;
+                    }
                     data.push({
                         x: _.map(drs_split, 'dose'),
                         y: drs_split.map((obj) => {
@@ -284,7 +295,8 @@ class DoseResponse extends React.Component {
                         mode: 'line',
                         type: 'scatter',
                         name: this.getResponseLabels(drs_split, this.props.collapse),
-                        // TODO
+                        // text: `BMC:${(Math.pow(10, 1) * 1000000).toFixed(2)} µM`,
+                        text: bmcText,
                         showlegend: legendNames.includes(
                             this.getResponseLabels(drs_split, this.props.collapse)
                         )
@@ -310,9 +322,12 @@ class DoseResponse extends React.Component {
                         trsh = el.trsh;
                         let dash = gk ? { dash: 'dot' } : null;
                         let bmc_name = null;
-                        console.log(el);
+                        // console.log(d.bmcoutput);
+                        // // console.log(gk);
+                        // console.log(el);
 
                         bmc_name = this.getBMCLabels(el, this.props.collapse);
+                        // console.log(bmc_name)
                         annotations.push(
                             `${bmc_name}:${(Math.pow(10, el.pod_med) * 1000000).toFixed(2)} µM`
                         );
