@@ -177,7 +177,7 @@ class ChemicalWidget extends BaseWidget {
 
             return renderSelectMultiWidget(
                 'categories',
-                'category',
+                'category zw3',
                 opts,
                 state.categories,
                 this.handleCategoryChange
