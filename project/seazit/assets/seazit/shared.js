@@ -33,8 +33,6 @@ const AXIS_LINEAR = 1,
     COLLAPSE_BY_READOUT = 'COLLAPSE_BY_READOUT',
     NO_COLLAPSE = 'NO_COLLAPSE',
     URL_CHEMXLSX = '/static/resources/seazit/NTP%20Chemical%20Library.xlsx',
-    //    URL_METADATA = '/seazit/api/assay/metadata/?format=json',
-    //        URL_METADATA = '/seazit/api/seazit_cr4/doses/?format=tsv',
     URL_METADATA = '/seazit/api/seazit_cr_protocol/metadata/?format=json',
     URL_CONCRESPMATRIX = '/seazit/api/seazit_cr_readout_result/drs/',
     INTVIZ_OBAMA = 1,
@@ -52,8 +50,8 @@ const AXIS_LINEAR = 1,
         'Selectivity is estimated and true value may be higher; viability BMC could not be calculated and was therefore estimated to equal the maximum tested dose.',
     loadMetadata = function(component) {
         d3.json(URL_METADATA, (d) => {
-            // console.log('d');
-            // console.log(d);
+            console.log('d');
+            console.log(d);
             // //
             //            d.readouts.forEach((r) => {
             //                r.provider_category = `${r.protocol__provider}: ${r.category}`;

@@ -26,8 +26,8 @@ class DoseResponse extends React.Component {
     }
 
     collapseData(data, collapse) {
-        // console.log('data');
-        // console.log(data);
+        console.log('data');
+        console.log(data);
 
         let keys = _.chain(data.dose_response)
                 .map('key')
@@ -157,6 +157,18 @@ class DoseResponse extends React.Component {
         }
     }
 
+    getTextLabels(drs_split, d) {
+        if (drs_split.length > 0) {
+            let bmcData = d.bmcoutput.filter((r) => r.input_id == drs_split[0].input_id);
+            bmcData = bmcData[0];
+            if (bmcData.hit_confidence < 0.5) {
+                return ' ';
+            } else {
+                return `BMC:${(Math.pow(10, bmcData.pod_med) * 1000000).toFixed(2)} µM`;
+            }
+        }
+    }
+
     getBMCLabels(data, collapse) {
         if (_.isEmpty(data)) {
             return '';
@@ -265,7 +277,7 @@ class DoseResponse extends React.Component {
         };
         d.groupKeys.map((gk) => {
             let drs = d.dose_response.filter((r) => r.groupKey == gk);
-            d.substance_code_input_ids.map((id_flag) => {
+            d.substance_code_input_ids.map((id_flag, index) => {
                 let drs_split = drs.filter((r) => r.substance_code_input_id == id_flag),
                     legendNames = _.chain(data)
                         .map('name')
@@ -273,41 +285,27 @@ class DoseResponse extends React.Component {
                         .value();
                 drs_split = _.sortBy(drs_split, 'dose');
 
-                if (drs_split.length > 0) {
-                    console.log(d.bmcoutput.filter((r) => r.input_id == drs_split[0].input_id));
-                    let bmcData = d.bmcoutput.filter((r) => r.input_id == drs_split[0].input_id),
-                        bmcText = '';
-                    console.log(bmcData);
-                    console.log(bmcData[0]);
-                    bmcData = bmcData[0];
-                    if (bmcData.trsh === null || bmcData.hit_confidence < 0.5) {
-                        return;
-                    } else {
-                        bmcText = `BMC:${(Math.pow(10, bmcData.pod_med) * 1000000).toFixed(2)} µM`;
-                    }
-                    data.push({
-                        x: _.map(drs_split, 'dose'),
-                        y: drs_split.map((obj) => {
-                            return (obj.n_in / obj.n) * 100;
-                        }),
-                        legendgroup: 'plot',
-                        // mode: 'markers',
-                        mode: 'line',
-                        type: 'scatter',
-                        name: this.getResponseLabels(drs_split, this.props.collapse),
-                        // text: `BMC:${(Math.pow(10, 1) * 1000000).toFixed(2)} µM`,
-                        text: bmcText,
-                        showlegend: legendNames.includes(
-                            this.getResponseLabels(drs_split, this.props.collapse)
-                        )
-                            ? false
-                            : true,
-                        marker: {
-                            color: this.getMarkerColor(gk, 'responses'),
-                        },
-                        opacity: 0.8,
-                    });
-                }
+                data.push({
+                    x: _.map(drs_split, 'dose'),
+                    y: drs_split.map((obj) => {
+                        return (obj.n_in / obj.n) * 100;
+                    }),
+                    legendgroup: 'plot',
+                    // mode: 'markers',
+                    mode: 'line',
+                    type: 'scatter',
+                    name: 'Repoduction: ' + index,
+                    text: this.getTextLabels(drs_split, d),
+                    showlegend: legendNames.includes(
+                        this.getResponseLabels(drs_split, this.props.collapse)
+                    )
+                        ? false
+                        : true,
+                    marker: {
+                        color: this.getMarkerColor(gk, 'responses'),
+                    },
+                    opacity: 0.8,
+                });
             });
 
             // add curvep if exists
@@ -321,37 +319,31 @@ class DoseResponse extends React.Component {
                         }
                         trsh = el.trsh;
                         let dash = gk ? { dash: 'dot' } : null;
-                        let bmc_name = null;
-                        // console.log(d.bmcoutput);
-                        // // console.log(gk);
-                        // console.log(el);
-
-                        bmc_name = this.getBMCLabels(el, this.props.collapse);
-                        // console.log(bmc_name)
-                        annotations.push(
-                            `${bmc_name}:${(Math.pow(10, el.pod_med) * 1000000).toFixed(2)} µM`
-                        );
+                        // let bmc_name = null;
+                        // bmc_name = this.getBMCLabels(el, this.props.collapse);
+                        // annotations.push(
+                        //     `${bmc_name}:${(Math.pow(10, el.pod_med) * 1000000).toFixed(2)} µM`
+                        // );
                     });
             }
         });
 
-        if (annotations.length > 0) {
-            layout.annotations = [
-                {
-                    xref: 'paper',
-                    yref: 'paper',
-                    // x: 1,
-                    // y: 0,
-                    x: 0,
-                    y: 0.5,
-                    xanchor: 'left',
-                    yanchor: 'bottom',
-                    align: 'left',
-                    text: '<b>BMCs</b><br>' + annotations.join('<br>'),
-                    showarrow: false,
-                },
-            ];
-        }
+        // if (annotations.length > 0) {
+        //     layout.annotations = [
+        //         {
+        //             xref: 'paper',
+        //             yref: 'paper',
+        //
+        //             x: 0,
+        //             y: 0.5,
+        //             xanchor: 'left',
+        //             yanchor: 'bottom',
+        //             align: 'left',
+        //             text: '<b>BMCs</b><br>' + annotations.join('<br>'),
+        //             showarrow: false,
+        //         },
+        //     ];
+        // }
 
         if (this.props.collapse === NO_COLLAPSE && trsh) {
             layout.shapes.push({
@@ -373,9 +365,7 @@ class DoseResponse extends React.Component {
         if (this.props.collapse !== NO_COLLAPSE) {
             // move legend to bottom of plot
             layout.legend = { orientation: 'h', y: -0.3 };
-            // layout.annotations = { orientation: 'h', y: -0.3};
         }
-        // console.log(layout);
 
         Plotly.newPlot(this.refs[d.key], data, layout, svgConfig);
     }

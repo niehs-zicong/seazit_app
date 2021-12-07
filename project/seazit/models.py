@@ -156,6 +156,13 @@ class SeazitProtocol(models.Model):
     protocol_source = models.TextField(blank=True, null=True)
     seazit_protocol_id = models.AutoField(primary_key=True)
 
+    lab_anonymous_code = models.TextField(blank=True, null=True)
+    study_phase = models.TextField(blank=True, null=True)
+    test_condition = models.TextField(blank=True, null=True)
+    protocol_name_long = models.TextField(blank=True, null=True)
+    protocol_name_plot = models.TextField(blank=True, null=True)
+
+
     def __str__(self):
         return self.protocol
 
@@ -166,6 +173,11 @@ class SeazitProtocol(models.Model):
             "protocol_type",
             "protocol_source",
             "seazit_protocol_id",
+            "lab_anonymous_code",
+            "study_phase",
+            "test_condition",
+            "protocol_name_long",
+            "protocol_name_plot",
         )
         qs = (
             SeazitProtocol.objects.all().values_list(*cols)
@@ -173,10 +185,6 @@ class SeazitProtocol(models.Model):
 
         return {
             "protocol_data": pd.DataFrame(list(qs), columns=cols).to_dict(orient="records"),
-            # "readouts": pd.DataFrame(list(qs), columns=cols).to_dict(orient="records"),
-            # "substances": Substance.get_flat().to_dict(orient="records"),
-            # "AnalysisBmcInput": AnalysisBmcInput.get_flat().to_dict(orient="records"),
-            # "Seazit_readout_result": Seazit_readout_result.get_flat().to_dict(orient="records"),
             "Seazit_chemical_info": Seazit_chemical_info.get_chemicals().to_dict(orient="records"),
             "Seazit_ui_panel": Seazit_ui_panel.get_flat().to_dict(orient="records"),
         }
@@ -304,28 +312,6 @@ class Substance(models.Model):
         managed = False
         db_table = 'analysis_bmc_input'
 
-    @classmethod
-    def get_flat(cls):
-
-
-        cols = (
-            "input_chembase",
-            "endpoint_name",
-            "protocol_id",
-            "substance_id",
-            "input_id",
-        )
-        qs = (
-            ## the query all takes 10 second, too long. TODO
-            # cls.objects.all().values_list(*cols)
-            ## get top 100 values.
-            cls.objects.all()[:10].values_list(*cols)
-
-            ## filter let protocol_id = 1
-        )
-        return pd.DataFrame(list(qs),columns=cols)
-
-
 
 
 class Seazit_chemical_info(models.Model):
@@ -346,6 +332,10 @@ class Seazit_chemical_info(models.Model):
     dtxsid = models.TextField(blank=True, null=True)
     preferred_name = models.TextField(blank=True, null=True)
 
+    use_category1 = models.TextField(blank=True, null=True)
+    use_category2 = models.TextField(blank=True, null=True)
+    compound_name = models.TextField(blank=True, null=True)
+
 
 
     # def __str__(self):
@@ -356,7 +346,7 @@ class Seazit_chemical_info(models.Model):
         db_table = 'mvw_seazit_chemical_info'
 
     @classmethod
-    def get_flat(cls):
+    def get_chemicals(cls):
         cols = (
             "substance_name_by_lab",
             "substance_type",
@@ -371,18 +361,9 @@ class Seazit_chemical_info(models.Model):
             "determined_purity",
             "dtxsid",
             "preferred_name",
-        )
-        qs = (
-            cls.objects.all().values_list(*cols)
-        )
-        return pd.DataFrame(list(qs),columns=cols)
-
-
-    @classmethod
-    def get_chemicals(cls):
-        cols = (
-            "preferred_name",
-            "casrn",
+            "use_category1",
+            "use_category2",
+            "compound_name",
         )
         qs = (
             cls.objects.all().values_list(*cols).distinct()
@@ -396,8 +377,6 @@ class Seazit_readout_result(models.Model):
     plate_name = models.TextField(blank=True, null=True)
     dose_id = models.IntegerField(blank=True, null=True)
     endpoint_name = models.TextField(blank=True, null=True)
-    protocol_name = models.TextField(blank=True, null=True)
-    endpoint_name_only = models.TextField(blank=True, null=True)
     n = models.FloatField(blank=True, null=True)
     n_in = models.FloatField(blank=True, null=True)
     embryo_type = models.TextField(blank=True, null=True)
@@ -425,6 +404,9 @@ class Seazit_readout_result(models.Model):
     dtxsid = models.TextField(blank=True, null=True)
     preferred_name = models.TextField(blank=True, null=True)
 
+    use_category1 = models.TextField(blank=True, null=True)
+    use_category2 = models.TextField(blank=True, null=True)
+    compound_name = models.TextField(blank=True, null=True)
     class Meta:
         managed = False
         db_table = 'mvw_seazit_readout_result'
@@ -432,12 +414,11 @@ class Seazit_readout_result(models.Model):
     def dose_responses(cls, protocol_ids, readout_ids, chemical_ids):
 
         cols = (
-                "endpoint_name",
-                "casrn",
                 "input_chembase",
                 "substance_name_by_lab",
                 "plate_name",
                 "dose_id",
+                "endpoint_name",
                 "n",
                 "n_in",
                 "embryo_type",
@@ -456,6 +437,7 @@ class Seazit_readout_result(models.Model):
                 "substance_lab",
                 "substance_code",
                 "seazit_substance_id",
+                "casrn",
                 "stock_conc_mm",
                 "supplier",
                 "lot_number",
@@ -463,6 +445,9 @@ class Seazit_readout_result(models.Model):
                 "determined_purity",
                 "dtxsid",
                 "preferred_name",
+                "use_category1",
+                "use_category2",
+                "compound_name",
             )
         dr = (
             cls.objects.filter(
@@ -513,7 +498,12 @@ class Seazit_readout_result(models.Model):
                 "endpoint_name_only",
                 "casrn",
                 "dtxsid",
-                "preferred_name"
+                "preferred_name",
+                "use_category1",
+                "use_category2",
+                "compound_name",
+                "substance_code",
+
         )
         analysisbmcoutput = (
             Seazit_bmc_readout_result.objects.filter(
@@ -575,6 +565,11 @@ class Seazit_bmc_readout_result(models.Model):
     dtxsid = models.TextField(blank=True, null=True)
     preferred_name = models.TextField(blank=True, null=True)
 
+    use_category1 = models.TextField(blank=True, null=True)
+    use_category2 = models.TextField(blank=True, null=True)
+    compound_name = models.TextField(blank=True, null=True)
+    substance_code = models.TextField(blank=True, null=True)
+
 
 
     class Meta:
@@ -589,10 +584,10 @@ class Seazit_ui_panel(models.Model):
     endpoint_name = models.TextField(blank=True, null=True)
     endpoint_name_only = models.TextField(blank=True, null=True)
 
-
-
-    # def __str__(self):
-    #     return self.input_id
+    study_phase = models.TextField(blank=True, null=True)
+    test_condition = models.TextField(blank=True, null=True)
+    protocol_name_long = models.TextField(blank=True, null=True)
+    protocol_name_plot = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -605,6 +600,10 @@ class Seazit_ui_panel(models.Model):
             "seazit_protocol_id",
             "endpoint_name",
             "endpoint_name_only",
+            "study_phase",
+            "test_condition",
+            "protocol_name_long",
+            "protocol_name_plot",
         )
         qs = (
             cls.objects.all().values_list(*cols)
