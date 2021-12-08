@@ -7,6 +7,8 @@
 
     <li role="presentation" class="{% if active_view_name == 'home' %}active{% endif %}">
         <a href="{% url 'seazit:home' %}"><i class="fa fa-home fa-lg"></i>&nbsp;About</a></li>
+<li role="presentation" class="{% if active_view_name == 'dataset' %}active{% endif %}">
+        <a href="{% url 'seazit:dataset' %}">Datasets</a></li>
 
     <li role="presentation" class="{% if active_view_name == 'qc' %}active{% endif %}">
         <a href="{% url 'seazit:qc' %}">Quality Control</a></li>

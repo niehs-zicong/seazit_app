@@ -37,6 +37,10 @@ class QC(SeazitTemplateView):
     template_name = "seazit/qc.html"
     active_view_name = "qc"
 
+class Dataset(SeazitTemplateView):
+    template_name = "seazit/dataset.html"
+    active_view_name = "dataset"
+
 class Resources(SeazitTemplateView):
     template_name = "seazit/resources.html"
     active_view_name = "resources"
