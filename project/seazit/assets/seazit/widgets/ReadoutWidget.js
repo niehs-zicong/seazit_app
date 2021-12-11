@@ -4,7 +4,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import BaseWidget from './BaseWidget';
 
-import { renderSelectMultiWidget, renderSelectMultiOptgroupWidget } from '../shared';
+import {
+    renderSelectMultiWidget,
+    renderSelectSingleWidget,
+    renderSelectMultiOptgroupWidget,
+} from '../shared';
 
 class ReadoutWidget extends BaseWidget {
     /*
@@ -19,20 +23,17 @@ class ReadoutWidget extends BaseWidget {
         let options = _.chain(state.protocol_data)
             .map((r) => {
                 return {
+                    key: r.seazit_protocol_id,
+                    label: r.protocol_name_long,
                     protocol_name: r.protocol_name,
                     protocol_type: r.protocol_type,
-
                     protocol_source: r.protocol_source,
                     seazit_protocol_id: r.seazit_protocol_id,
                     lab_anonymous_code: r.lab_anonymous_code,
                     study_phase: r.study_phase,
                     test_condition: r.test_condition,
-                    studprotocol_name_longy_phase: r.protocol_name_long,
-
+                    protocol_name_long: r.protocol_name_long,
                     protocol_name_plot: r.protocol_name_plot,
-
-                    key: r.seazit_protocol_id,
-                    label: r.protocol_name_long,
                 };
             })
             .sortBy('seazit_protocol_id')
@@ -40,6 +41,7 @@ class ReadoutWidget extends BaseWidget {
         console.log('options');
 
         console.log(options);
+        console.log(state.assay);
         if (this.props.multiAssaySelector === true) {
             return renderSelectMultiWidget(
                 'assays',
@@ -49,23 +51,12 @@ class ReadoutWidget extends BaseWidget {
                 this.handleSelectMultiChange
             );
         } else {
-            return (
-                <div>
-                    <label>Select an assay:</label>
-                    <select
-                        name="assay"
-                        className="form-control"
-                        onChange={this.handleSelectChange}
-                        size="11"
-                        value={state.assay}
-                    >
-                        {_.map(options, (d) => (
-                            <option key={d.key} value={d.key}>
-                                {d.label}state.assay
-                            </option>
-                        ))}
-                    </select>
-                </div>
+            return renderSelectSingleWidget(
+                'assay',
+                'Assay/Protocol  zw5',
+                options,
+                state.assays,
+                this.handleSelectChange
             );
         }
     }
@@ -77,13 +68,22 @@ class ReadoutWidget extends BaseWidget {
                 return _.includes(assays, r.seazit_protocol_id.toString());
             })
             .value();
+        console.log(opts);
 
         opts = _.chain(opts)
             .map((r) => {
                 return {
                     key: r.endpoint_name.toString(),
-                    category: r.protocol_name,
+                    // category: r.protocol_name,
+                    category: r.protocol_name_plot,
                     label: r.endpoint_name,
+
+                    protocol_name: r.protocol_name,
+                    seazit_protocol_id: r.seazit_protocol_id,
+                    study_phase: r.study_phase,
+                    test_condition: r.test_condition,
+                    protocol_name_long: r.protocol_name_long,
+                    protocol_name_plot: r.protocol_name_plot,
                 };
             })
             .sortBy('label')
@@ -94,6 +94,8 @@ class ReadoutWidget extends BaseWidget {
         if (_.keys(opts).length === 0) {
             return null;
         }
+        // console.log("opts")
+        // console.log(opts)
 
         return renderSelectMultiOptgroupWidget(
             'readouts',

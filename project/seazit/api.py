@@ -256,10 +256,31 @@ class Seazit_readout_resultViewSet(CachedReadOnlyViewSet):
             raise ValidationError(
                 "Too many dose-response curves selected; please reduce the number of selected readouts and/or chemicals"  # noqa: E501
             )
-
         return Response(models.Seazit_readout_result.dose_responses(protocol_ids, readout_ids, carsns))
 
+    @list_route(methods=["get"], renderer_classes=plotly_renderers)
+    def bmds(self, request, *args, **kwargs):
+        protocol_ids = self.request.GET.get("protocol_ids", None)
+        # readouts contains plus sign (+), it will replace by white space in Django,
+        # So I reaplace whitespace back to +
+        readouts = self.request.GET.get("readouts", None).replace(" ", "+")
+        if protocol_ids is None:
+             raise ValidationError("requires `protocol_ids` argument.")
+        if readouts is None:
+            raise ValidationError("requires `readouts` argument.")
 
+        protocol_ids = protocol_ids.split(",")
+        readout_ids = readouts.split(",")
+        # if len(readout_ids) * len(carsns) > 100:
+        # # if len(readout_ids) * len(carsns) > 40:
+        #
+        #     raise ValidationError(
+        #         "Too many dose-response curves selected; please reduce the number of selected readouts and/or chemicals"  # noqa: E501
+        #     )
+        # print (protocol_ids)
+        # print (readout_ids)
+
+        return Response(models.Seazit_readout_result.bmds_responses(protocol_ids, readout_ids))
 
 
 class Seazit_bmc_readout_resultViewSet(CachedReadOnlyViewSet):

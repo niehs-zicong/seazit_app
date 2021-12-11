@@ -22,6 +22,8 @@ class DoseResponse extends React.Component {
             scale: _.noop,
             collapsedData: [],
             error: null,
+            substance_codeList: [],
+            input_idList: [],
         };
     }
 
@@ -95,7 +97,9 @@ class DoseResponse extends React.Component {
                 });
                 return;
             }
+            // console.log(data)
             this.updateData(data, this.props.collapse);
+            // console.log(data)
         });
     }
 
@@ -133,9 +137,8 @@ class DoseResponse extends React.Component {
             case COLLAPSE_BY_CHEMICAL:
                 return `(${data.casrn})`;
             case NO_COLLAPSE:
-                return `${data.preferred_name}<br>${data.casrn}|${data.dtxsid}:<br>${data.endpoint_name}`;
-            // return `${data.preferred_name}|${data.casrn}|${data.dtxsid}:${data.endpoint_name}`;
-
+                // return `${data.preferred_name}<br>${data.casrn}|${data.dtxsid}:<br>${data.endpoint_name}`;
+                return `${data.protocol_name_plot}<br>${data.preferred_name}<br>${data.casrn}|${data.dtxsid}:<br>${data.endpoint_name}`;
             default:
                 throw 'Unknown collapse type.';
         }
@@ -145,13 +148,23 @@ class DoseResponse extends React.Component {
         if (_.isEmpty(data)) {
             return '';
         }
+        if (!this.state.substance_codeList.includes(data.substance_code)) {
+            this.state.substance_codeList.push(data.substance_code);
+        }
+        if (!this.state.input_idList.includes(data.input_id)) {
+            this.state.input_idList.push(data.input_id);
+        }
         switch (collapse) {
             case COLLAPSE_BY_READOUT:
-                return `${data[0].preferred_name}|${data[0].casrn}|${data[0].dtxsid}`;
+                return `${data.preferred_name}|${data.casrn}|${data.dtxsid}`;
             case COLLAPSE_BY_CHEMICAL:
-                return data[0].endpoint_name;
+                return data.endpoint_name;
             case NO_COLLAPSE:
-                return data[0].substance_code_input_id;
+                if (data.substance_code == 'PC') {
+                    return 'PC| ' + this.state.input_idList.length;
+                } else {
+                    return `dup${this.state.substance_codeList.length} | plate${this.state.input_idList.length}`;
+                }
             default:
                 throw 'Unknown collapse type.';
         }
@@ -256,7 +269,7 @@ class DoseResponse extends React.Component {
         let layout = {
             title: d.title,
             titlefont: {
-                size: 14,
+                size: 12,
             },
             shapes: [],
             xaxis: {
@@ -271,20 +284,24 @@ class DoseResponse extends React.Component {
                 // range should be [0, 100]
                 range: [-10, 110],
             },
+
             // add room for collapsed plot legends
             height: this.props.height + d.groupKeys.length * 19 + 20,
             autosize: true,
         };
         d.groupKeys.map((gk) => {
             let drs = d.dose_response.filter((r) => r.groupKey == gk);
+            this.state.substance_codeList = [];
+            this.state.input_idList = [];
             d.substance_code_input_ids.map((id_flag, index) => {
                 let drs_split = drs.filter((r) => r.substance_code_input_id == id_flag),
                     legendNames = _.chain(data)
                         .map('name')
                         .uniq()
                         .value();
+                // console.log(legendNames)
                 drs_split = _.sortBy(drs_split, 'dose');
-
+                console.log(drs_split);
                 data.push({
                     x: _.map(drs_split, 'dose'),
                     y: drs_split.map((obj) => {
@@ -294,10 +311,10 @@ class DoseResponse extends React.Component {
                     // mode: 'markers',
                     mode: 'line',
                     type: 'scatter',
-                    name: 'Repoduction: ' + index,
+                    name: this.getResponseLabels(drs_split[0], this.props.collapse),
                     text: this.getTextLabels(drs_split, d),
                     showlegend: legendNames.includes(
-                        this.getResponseLabels(drs_split, this.props.collapse)
+                        this.getResponseLabels(drs_split[0], this.props.collapse)
                     )
                         ? false
                         : true,
