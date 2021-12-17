@@ -22,6 +22,7 @@ class DoseResponse extends React.Component {
             scale: _.noop,
             collapsedData: [],
             error: null,
+            labelsDict: {},
             substance_codeList: [],
             input_idList: [],
         };
@@ -144,7 +145,7 @@ class DoseResponse extends React.Component {
         }
     }
 
-    getResponseLabels(data, collapse) {
+    getResponseLabels(data, collapse, labelCase) {
         if (_.isEmpty(data)) {
             return '';
         }
@@ -154,16 +155,28 @@ class DoseResponse extends React.Component {
         if (!this.state.input_idList.includes(data.input_id)) {
             this.state.input_idList.push(data.input_id);
         }
+
         switch (collapse) {
             case COLLAPSE_BY_READOUT:
                 return `${data.preferred_name}|${data.casrn}|${data.dtxsid}`;
             case COLLAPSE_BY_CHEMICAL:
                 return data.endpoint_name;
             case NO_COLLAPSE:
-                if (data.substance_code == 'PC') {
+                if (labelCase == 'PC') {
                     return 'PC| ' + this.state.input_idList.length;
+                } else if (labelCase.length == 1) {
+                    return 'plate| ' + this.state.input_idList.length;
                 } else {
-                    return `dup${this.state.substance_codeList.length} | plate${this.state.input_idList.length}`;
+                    let index1 = data.substance_code,
+                        index2 = data.input_id;
+
+                    if (!this.state.labelsDict[index1].includes(data.input_id)) {
+                        this.state.labelsDict[data.substance_code].push(data.input_id);
+                    }
+                    // return `dup  ${index1} | plate${index2}`;
+                    return `dup  ${this.state.substance_codeList.indexOf(index1) + 1} | plate ${
+                        this.state.labelsDict[index1].length
+                    }`;
                 }
             default:
                 throw 'Unknown collapse type.';
@@ -290,18 +303,27 @@ class DoseResponse extends React.Component {
             autosize: true,
         };
         d.groupKeys.map((gk) => {
-            let drs = d.dose_response.filter((r) => r.groupKey == gk);
+            let drs = d.dose_response.filter((r) => r.groupKey == gk),
+                substance_codeCase = _.chain(drs)
+                    .map('substance_code')
+                    .uniq()
+                    .value();
             this.state.substance_codeList = [];
             this.state.input_idList = [];
+            this.state.labelsDict = [];
+            substance_codeCase.forEach((val) =>
+                val in this.state.labelsDict
+                    ? (this.state.labelsDict[val] = [])
+                    : (this.state.labelsDict[val] = [])
+            );
+
             d.substance_code_input_ids.map((id_flag, index) => {
                 let drs_split = drs.filter((r) => r.substance_code_input_id == id_flag),
                     legendNames = _.chain(data)
                         .map('name')
                         .uniq()
                         .value();
-                // console.log(legendNames)
                 drs_split = _.sortBy(drs_split, 'dose');
-                console.log(drs_split);
                 data.push({
                     x: _.map(drs_split, 'dose'),
                     y: drs_split.map((obj) => {
@@ -311,10 +333,18 @@ class DoseResponse extends React.Component {
                     // mode: 'markers',
                     mode: 'line',
                     type: 'scatter',
-                    name: this.getResponseLabels(drs_split[0], this.props.collapse),
+                    name: this.getResponseLabels(
+                        drs_split[0],
+                        this.props.collapse,
+                        substance_codeCase
+                    ),
                     text: this.getTextLabels(drs_split, d),
                     showlegend: legendNames.includes(
-                        this.getResponseLabels(drs_split[0], this.props.collapse)
+                        this.getResponseLabels(
+                            drs_split[0],
+                            this.props.collapse,
+                            substance_codeCase
+                        )
                     )
                         ? false
                         : true,
@@ -323,10 +353,10 @@ class DoseResponse extends React.Component {
                     },
                     opacity: 0.8,
                 });
+                console.log(this.state.labelsDict);
             });
 
-            // add curvep if exists
-
+            // add trsh if exists
             if (d.bmcoutput.length > 0) {
                 d.bmcoutput
                     .filter((r) => r.groupKey == gk)
@@ -344,23 +374,6 @@ class DoseResponse extends React.Component {
                     });
             }
         });
-
-        // if (annotations.length > 0) {
-        //     layout.annotations = [
-        //         {
-        //             xref: 'paper',
-        //             yref: 'paper',
-        //
-        //             x: 0,
-        //             y: 0.5,
-        //             xanchor: 'left',
-        //             yanchor: 'bottom',
-        //             align: 'left',
-        //             text: '<b>BMCs</b><br>' + annotations.join('<br>'),
-        //             showarrow: false,
-        //         },
-        //     ];
-        // }
 
         if (this.props.collapse === NO_COLLAPSE && trsh) {
             layout.shapes.push({
