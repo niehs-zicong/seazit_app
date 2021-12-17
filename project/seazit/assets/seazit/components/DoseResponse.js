@@ -23,7 +23,6 @@ class DoseResponse extends React.Component {
             collapsedData: [],
             error: null,
             labelsDict: {},
-            substance_codeList: [],
             input_idList: [],
         };
     }
@@ -149,13 +148,11 @@ class DoseResponse extends React.Component {
         if (_.isEmpty(data)) {
             return '';
         }
-        if (!this.state.substance_codeList.includes(data.substance_code)) {
-            this.state.substance_codeList.push(data.substance_code);
+        if (!this.state.labelsDict[data.substance_code].includes(data.input_id)) {
+            this.state.labelsDict[data.substance_code].push(data.input_id);
         }
-        if (!this.state.input_idList.includes(data.input_id)) {
-            this.state.input_idList.push(data.input_id);
-        }
-
+        let index1 = data.substance_code,
+            index2 = data.input_id;
         switch (collapse) {
             case COLLAPSE_BY_READOUT:
                 return `${data.preferred_name}|${data.casrn}|${data.dtxsid}`;
@@ -163,20 +160,18 @@ class DoseResponse extends React.Component {
                 return data.endpoint_name;
             case NO_COLLAPSE:
                 if (labelCase == 'PC') {
-                    return 'PC| ' + this.state.input_idList.length;
+                    // return 'PC| ' + this.state.input_idList.length;
+                    return `PC|  ${Object.values(this.state.labelsDict[labelCase]).indexOf(index2) +
+                        1}`;
                 } else if (labelCase.length == 1) {
-                    return 'plate| ' + this.state.input_idList.length;
+                    // return 'plate| ' + this.state.input_idList.length;
+                    return `plate|  ${Object.values(this.state.labelsDict[labelCase]).indexOf(
+                        index2
+                    ) + 1}`;
                 } else {
-                    let index1 = data.substance_code,
-                        index2 = data.input_id;
-
-                    if (!this.state.labelsDict[index1].includes(data.input_id)) {
-                        this.state.labelsDict[data.substance_code].push(data.input_id);
-                    }
-                    // return `dup  ${index1} | plate${index2}`;
-                    return `dup  ${this.state.substance_codeList.indexOf(index1) + 1} | plate ${
-                        this.state.labelsDict[index1].length
-                    }`;
+                    return `dup  ${Object.keys(this.state.labelsDict).indexOf(index1) +
+                        1}| plate ${Object.values(this.state.labelsDict[index1]).indexOf(index2) +
+                        1}`;
                 }
             default:
                 throw 'Unknown collapse type.';
@@ -308,7 +303,6 @@ class DoseResponse extends React.Component {
                     .map('substance_code')
                     .uniq()
                     .value();
-            this.state.substance_codeList = [];
             this.state.input_idList = [];
             this.state.labelsDict = [];
             substance_codeCase.forEach((val) =>
@@ -353,7 +347,6 @@ class DoseResponse extends React.Component {
                     },
                     opacity: 0.8,
                 });
-                console.log(this.state.labelsDict);
             });
 
             // add trsh if exists
