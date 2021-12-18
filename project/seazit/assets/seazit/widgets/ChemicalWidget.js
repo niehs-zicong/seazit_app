@@ -29,49 +29,48 @@ class ChemicalWidget extends BaseWidget {
         this.handleCategoryChange = this.handleCategoryChange.bind(this);
     }
 
-    _getSelectedChemicals(substances, categories, chemList) {
-        return _.chain(substances)
-            .filter((r) => {
-                return _.includes(categories, r.chemical__category_id);
-            })
-            .filter((r) => {
-                if (chemList === CHEMLIST_80) {
-                    return r.chemical__ntp80;
-                } else if (chemList === CHEMLIST_91) {
-                    return r.chemical__ntp91;
-                } else {
-                    return true;
-                }
-            })
-            .map('chemical__casrn')
-            .uniq()
-            .value();
-    }
+    // _getSelectedChemicals(substances, categories, chemList) {
+    //     return _.chain(substances)
+    //         .filter((r) => {
+    //             return _.includes(categories, r.chemical__category_id);
+    //         })
+    //         .map('chemical__casrn')
+    //         .uniq()
+    //         .value();
+    // }
 
     handleChemlistChange(e) {
-        let d = {},
-            state = this.props.stateHolder.state,
-            value = parseInt(e.target.value);
-
-        d[e.target.name] = value;
-
-        // also update chemicals based on chemfilters
-        d['chemicals'] = this._getSelectedChemicals(state.tbl_substances, state.categories, value);
-
-        this.props.stateHolder.setState(d);
+        // let d = {},
+        //     state = this.props.stateHolder.state,
+        //     value = parseInt(e.target.value);
+        //
+        // d[e.target.name] = value;
+        //
+        // // also update chemicals based on chemfilters
+        // d['chemicals'] = this._getSelectedChemicals(state.tbl_substances, state.categories, value);
+        //
+        // this.props.stateHolder.setState(d);
     }
 
     handleCategoryChange(e) {
         let d = {},
             vals = $(e.target).val(),
             state = this.props.stateHolder.state;
-
         d[e.target.name] = vals;
-
         // also update chemicals based on chemfilters
-        d['chemicals'] = this._getSelectedChemicals(state.tbl_substances, vals, state.chemList);
+        // d['casrn'] =  _.chain(state.Seazit_chemical_info)
+        d['chemicals'] = _.chain(state.Seazit_chemical_info)
 
+            .filter((r) => {
+                return _.includes(vals, r.use_category1);
+            })
+            .map('casrn')
+            .uniq()
+            .value();
         this.props.stateHolder.setState(d);
+        console.log('chemicals by category');
+        console.log(vals);
+        console.log(d);
     }
 
     _renderFilterBy(state) {
@@ -108,17 +107,7 @@ class ChemicalWidget extends BaseWidget {
     }
 
     _renderSelector(state) {
-        let filterInChemlist = (r) => {
-                switch (state.chemList) {
-                    case CHEMLIST_80:
-                        return r.chemical__ntp80;
-                    case CHEMLIST_91:
-                        return r.chemical__ntp91;
-                    default:
-                        return true;
-                }
-            },
-            opts;
+        let opts;
 
         if (state.chemicalFilterBy === CHEMFILTER_CHEMICIAL) {
             opts = _.chain(state.Seazit_chemical_info)
@@ -135,23 +124,10 @@ class ChemicalWidget extends BaseWidget {
                 })
                 .groupBy('category')
                 .value();
-            // console.log(opts)
-            // console.log(state)
-
-            // opts = _.chain(state.Seazit_chemical_info)
-            //     .groupBy('preferred_name')
-            //     // .filter(filterInChemlist)
-            //     .map((r) => r[0])
-            //     .uniq()
-            //     .map((r) => {
-            //         return {
-            //             key: r.casrn,
-            //             label: `${r.preferred_name} (${r.casrn})`,
-            //         };
-            //     })
-            //     .sortBy('key')
-            //     .value();
-            //
+            console.log('name');
+            console.log(state);
+            console.log(opts);
+            console.log(state.chemicals);
 
             return renderSelectMultiOptgroupWidget(
                 // return renderSelectMultiWidget(
@@ -161,19 +137,31 @@ class ChemicalWidget extends BaseWidget {
                 state.chemicals,
                 this.handleSelectMultiChange
             );
+            // return renderSelectMultiWidget(
+            //     'chemicals',
+            //     'chemical',
+            //     opts,
+            //     state.chemicals,
+            //     this.handleCategoryChange
+            // )
         } else {
-            opts = _.chain(state.tbl_substances)
-                .filter(filterInChemlist)
-                .map('chemical__category_id')
-                .uniq()
+            opts = _.chain(state.Seazit_chemical_info)
+                .groupBy('use_category1')
+                .values()
+                .map((r) => r[0])
+                .sortBy('use_category1')
+                // .uniq()
                 .map((r) => {
                     return {
-                        key: r,
-                        label: r,
+                        key: r.use_category1,
+                        label: r.use_category1,
                     };
                 })
-                .sortBy('key')
+                // .sortBy('key')
                 .value();
+            console.log('category');
+            console.log(opts);
+            console.log(state.categories);
 
             return renderSelectMultiWidget(
                 'categories',

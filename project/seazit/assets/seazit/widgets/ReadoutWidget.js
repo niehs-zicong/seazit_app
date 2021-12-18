@@ -38,10 +38,9 @@ class ReadoutWidget extends BaseWidget {
             })
             .sortBy('seazit_protocol_id')
             .value();
-        console.log('options');
-
-        console.log(options);
-        console.log(state.assay);
+        // console.log('options');
+        // console.log(options);
+        // console.log(state.assay);
         if (this.props.multiAssaySelector === true) {
             return renderSelectMultiWidget(
                 'assays',
@@ -68,7 +67,7 @@ class ReadoutWidget extends BaseWidget {
                 return _.includes(assays, r.seazit_protocol_id.toString());
             })
             .value();
-        console.log(opts);
+        // console.log(opts);
 
         opts = _.chain(opts)
             .map((r) => {
