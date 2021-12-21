@@ -128,9 +128,6 @@ class SeazitDose(models.Model):
         qs = (
             SeazitDose.objects.all().values_list(*cols)
         )
-
-        # print (pd.DataFrame(list(qs), columns=cols).to_dict(orient="records"))
-        # return pd.DataFrame(list(qs), columns=cols)
         return {
             "data": pd.DataFrame(list(qs), columns=cols).to_dict(orient="records"),
 
@@ -449,7 +446,7 @@ class Seazit_readout_result(models.Model):
                 "use_category2",
                 "compound_name",
             )
-        dr = (
+        dr = pd.DataFrame(
             cls.objects.filter(
                 protocol_id__in=protocol_ids , endpoint_name__in=readout_ids, casrn__in=chemical_ids)
                 .values(*cols)
@@ -505,14 +502,138 @@ class Seazit_readout_result(models.Model):
                 "substance_code",
 
         )
-        analysisbmcoutput = (
+        analysisbmcoutput = pd.DataFrame(
             Seazit_bmc_readout_result.objects.filter(
                 protocol_id__in=protocol_ids , endpoint_name__in=readout_ids, casrn__in=chemical_ids
             )
             .values(*cols)
         )
-        return dict(dose_response=list(dr), bmcoutput=list(analysisbmcoutput))
 
+        cols = (
+            "protocol_name",
+            "protocol_type",
+            "protocol_source",
+            "seazit_protocol_id",
+            "lab_anonymous_code",
+            "study_phase",
+            "test_condition",
+            "protocol_name_long",
+            "protocol_name_plot",
+        )
+        # protocol_data = pd.DataFrame(list(qs), columns=cols).to_dict(orient="records")
+        # protocol_data = pd.DataFrame(SeazitProtocol.objects.all().values_list(*cols))
+        protocol_data = pd.DataFrame(SeazitProtocol.objects.all().values_list(*cols), columns=cols)
+        # print(pd.DataFrame(dr))
+        # c = pd.merge(protocol_data2, b, left_on='seazit_protocol_id', right_on='protocol_id')
+        dr = pd.merge(protocol_data, dr, left_on='seazit_protocol_id', right_on='protocol_id')
+        analysisbmcoutput = pd.merge(protocol_data, analysisbmcoutput, left_on='seazit_protocol_id', right_on='protocol_id')
+        return dict(dose_response=dr.to_dict(orient="records"), bmcoutput=analysisbmcoutput.to_dict(orient="records"))
+        # return dict(dose_response=list(dr), bmcoutput=list(analysisbmcoutput), c = c.to_dict(orient="records"))
+
+    @classmethod
+    def bmds_responses(cls, protocol_ids, readout_ids):
+
+        cols = (
+                "input_chembase",
+                "substance_name_by_lab",
+                "plate_name",
+                "dose_id",
+                "endpoint_name",
+                "n",
+                "n_in",
+                "embryo_type",
+                "protocol_id",
+                "substance_id",
+                "input_id",
+                "endpoint_name_only",
+                "dose",
+                "dose_unit",
+                "protocol_source",
+                "plate_map_name",
+                "plate_screen_time_end",
+                "plate_screen_id",
+                "hour_post_fertilization",
+                "substance_type",
+                "substance_lab",
+                "substance_code",
+                "seazit_substance_id",
+                "casrn",
+                "stock_conc_mm",
+                "supplier",
+                "lot_number",
+                "coa_purity",
+                "determined_purity",
+                "dtxsid",
+                "preferred_name",
+                "use_category1",
+                "use_category2",
+                "compound_name",
+            )
+        dr = (
+            cls.objects.filter(
+                protocol_id__in=protocol_ids , endpoint_name__in=readout_ids)
+                .values(*cols)
+        )
+        cols = (
+                "trsh",
+                "rnge",
+                "endpoint_name",
+                "input_chembase",
+                "plate_name",
+                "lowest_conc",
+                "highest_conc",
+                "n_conc",
+                "mean_conc_spacing",
+                "max_resp_med",
+                "min_resp_med",
+                "ncorrected_med",
+                "emax_med",
+                "slope_med",
+                "auc_med",
+                "wauc_med",
+                "wauc_prev_med",
+                "ec50_med",
+                "pod_med",
+                "emax_ciu",
+                "slope_ciu",
+                "auc_ciu",
+                "wauc_ciu",
+                "wauc_prev_ciu",
+                "ec50_ciu",
+                "pod_ciu",
+                "emax_cil",
+                "slope_cil",
+                "auc_cil",
+                "wauc_cil",
+                "wauc_prev_cil",
+                "ec50_cil",
+                "pod_cil",
+                "n_curves",
+                "hit_confidence",
+                "embryo_type",
+                "protocol_id",
+                "substance_id",
+                "input_id",
+                "screen_hours",
+                "endpoint_name_only",
+                "casrn",
+                "dtxsid",
+                "preferred_name",
+                "use_category1",
+                "use_category2",
+                "compound_name",
+                "substance_code",
+
+        )
+        analysisbmcoutput = (
+            Seazit_bmc_readout_result.objects.filter(
+                protocol_id__in=protocol_ids , endpoint_name__in=readout_ids
+            )
+            .values(*cols)
+        )
+
+
+        return dict(dose_response=list(dr), bmcoutput=list(analysisbmcoutput))
 
 
 

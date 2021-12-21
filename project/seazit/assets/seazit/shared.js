@@ -35,6 +35,7 @@ const AXIS_LINEAR = 1,
     URL_CHEMXLSX = '/static/resources/seazit/NTP%20Chemical%20Library.xlsx',
     URL_METADATA = '/seazit/api/seazit_cr_protocol/metadata/?format=json',
     URL_CONCRESPMATRIX = '/seazit/api/seazit_cr_readout_result/drs/',
+    URL_BMD = '/seazit/api/seazit_cr_readout_result/bmds/',
     INTVIZ_OBAMA = 1,
     INTVIZ_BOXPLOT = 2,
     INTVIZ_ASSAY_PCA = 3,
@@ -52,16 +53,9 @@ const AXIS_LINEAR = 1,
         d3.json(URL_METADATA, (d) => {
             console.log('d');
             console.log(d);
-            // //
-            //            d.readouts.forEach((r) => {
-            //                r.provider_category = `${r.protocol__provider}: ${r.category}`;
-            //            });
-            //            console.log(d)
-
             component.setState({
                 metadataLoaded: true,
                 protocol_data: d.protocol_data,
-                AnalysisBmcInput: d.AnalysisBmcInput,
                 Seazit_chemical_info: d.Seazit_chemical_info,
                 Seazit_ui_panel: d.Seazit_ui_panel,
             });
@@ -69,9 +63,6 @@ const AXIS_LINEAR = 1,
     },
     renderSelectMultiWidget = function(name, label, options, values, handleChange) {
         let size = Math.min(options.length, 11);
-        // console.log("options")
-        // console.log(options)
-
         return (
             <div>
                 <label>Select {label}(s):</label>
@@ -81,6 +72,28 @@ const AXIS_LINEAR = 1,
                     multiple={true}
                     size={size}
                     onChange={handleChange}
+                    value={values}
+                >
+                    {options.map((d) => {
+                        return (
+                            <option key={d.key} value={d.key}>
+                                {d.label}
+                            </option>
+                        );
+                    })}
+                </select>
+            </div>
+        );
+    },
+    renderSelectSingleWidget = function(name, label, options, values, handleChange) {
+        return (
+            <div>
+                <label>Select an {label}(s):</label>
+                <select
+                    name={name}
+                    className="form-control"
+                    onChange={handleChange}
+                    size={Math.min(options.length, 11)}
                     value={values}
                 >
                     {options.map((d) => {
@@ -135,6 +148,15 @@ const AXIS_LINEAR = 1,
         // return url, ro is the readout_id
         // console.log(ids, ro, chems);
         return `${URL_CONCRESPMATRIX}?format=json&protocol_ids=${ids}&readouts=${ro}&casrns=${chems}`;
+    },
+    getBmdsUrl = function(protocol_ids, readout_ids) {
+        if (protocol_ids.length === 0 || readout_ids.length === 0) {
+            return null;
+        }
+        let ids = protocol_ids.join(','),
+            ro = readout_ids.join(',');
+        // return url, ro is the readout_id
+        return `${URL_BMD}?format=json&protocol_ids=${ids}&readouts=${ro}`;
     },
     printFloat = function(v) {
         if (v <= 0) {
@@ -211,8 +233,10 @@ export {
     SELECTIVITY_FOOTNOTE,
     URL_CHEMXLSX,
     getDoseResponsesUrl,
+    getBmdsUrl,
     loadMetadata,
     renderSelectMultiWidget,
+    renderSelectSingleWidget,
     renderSelectMultiOptgroupWidget,
     insertIntoDom,
     printFloat,

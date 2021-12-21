@@ -50,7 +50,7 @@ class SeazitCR(SeazitTemplateView):
     active_view_name = "seazit_cr"
 
 
-class SeazitCR3(SeazitTemplateView):
+class SeazitBmcByLab(SeazitTemplateView):
     template_name = "seazit/seazit_bmcByLab.html"
     active_view_name = "seazit_bmcByLab"
 
