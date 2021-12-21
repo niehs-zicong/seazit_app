@@ -446,7 +446,7 @@ class Seazit_readout_result(models.Model):
                 "use_category2",
                 "compound_name",
             )
-        dr = (
+        dr = pd.DataFrame(
             cls.objects.filter(
                 protocol_id__in=protocol_ids , endpoint_name__in=readout_ids, casrn__in=chemical_ids)
                 .values(*cols)
@@ -502,13 +502,33 @@ class Seazit_readout_result(models.Model):
                 "substance_code",
 
         )
-        analysisbmcoutput = (
+        analysisbmcoutput = pd.DataFrame(
             Seazit_bmc_readout_result.objects.filter(
                 protocol_id__in=protocol_ids , endpoint_name__in=readout_ids, casrn__in=chemical_ids
             )
             .values(*cols)
         )
-        return dict(dose_response=list(dr), bmcoutput=list(analysisbmcoutput))
+
+        cols = (
+            "protocol_name",
+            "protocol_type",
+            "protocol_source",
+            "seazit_protocol_id",
+            "lab_anonymous_code",
+            "study_phase",
+            "test_condition",
+            "protocol_name_long",
+            "protocol_name_plot",
+        )
+        # protocol_data = pd.DataFrame(list(qs), columns=cols).to_dict(orient="records")
+        # protocol_data = pd.DataFrame(SeazitProtocol.objects.all().values_list(*cols))
+        protocol_data = pd.DataFrame(SeazitProtocol.objects.all().values_list(*cols), columns=cols)
+        # print(pd.DataFrame(dr))
+        # c = pd.merge(protocol_data2, b, left_on='seazit_protocol_id', right_on='protocol_id')
+        dr = pd.merge(protocol_data, dr, left_on='seazit_protocol_id', right_on='protocol_id')
+        analysisbmcoutput = pd.merge(protocol_data, analysisbmcoutput, left_on='seazit_protocol_id', right_on='protocol_id')
+        return dict(dose_response=dr.to_dict(orient="records"), bmcoutput=analysisbmcoutput.to_dict(orient="records"))
+        # return dict(dose_response=list(dr), bmcoutput=list(analysisbmcoutput), c = c.to_dict(orient="records"))
 
     @classmethod
     def bmds_responses(cls, protocol_ids, readout_ids):
@@ -611,6 +631,8 @@ class Seazit_readout_result(models.Model):
             )
             .values(*cols)
         )
+
+
         return dict(dose_response=list(dr), bmcoutput=list(analysisbmcoutput))
 
 

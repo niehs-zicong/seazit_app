@@ -23,7 +23,6 @@ class DoseResponse extends React.Component {
             collapsedData: [],
             error: null,
             labelsDict: {},
-            input_idList: [],
         };
     }
 
@@ -97,7 +96,8 @@ class DoseResponse extends React.Component {
                 });
                 return;
             }
-            // console.log(data)
+            console.log(data);
+            console.log(this.state);
             this.updateData(data, this.props.collapse);
             // console.log(data)
         });
@@ -177,6 +177,40 @@ class DoseResponse extends React.Component {
                 throw 'Unknown collapse type.';
         }
     }
+    // getResponseLabels(data, collapse, labelCase) {
+    //     if (_.isEmpty(data)) {
+    //         return '';
+    //     }
+    //     if (!this.state.labelsDict[data.substance_code].includes(data.input_id)) {
+    //         this.state.labelsDict[data.substance_code].push(data.input_id);
+    //     }
+    //     let index1 = data.substance_code,
+    //         index2 = data.input_id;
+    //     switch (collapse) {
+    //         case COLLAPSE_BY_READOUT:
+    //             return `${data.preferred_name}|${data.casrn}|${data.dtxsid}`;
+    //         case COLLAPSE_BY_CHEMICAL:
+    //             return data.endpoint_name;
+    //         case NO_COLLAPSE:
+    //             if (labelCase == 'PC') {
+    //                 // return 'PC| ' + this.state.input_idList.length;
+    //                 return `PC|  ${Object.values(this.state.labelsDict[labelCase]).indexOf(index2) +
+    //                     1}`;
+    //             } else if (labelCase.length == 1) {
+    //                 // return 'plate| ' + this.state.input_idList.length;
+    //                 return `plate|  ${Object.values(this.state.labelsDict[labelCase]).indexOf(
+    //                     index2
+    //                 ) + 1}`;
+    //             } else {
+    //                   return `dup  ${Object.keys(this.state.labelsDict).indexOf(index1) + 1} | plate ${
+    //                     this.state.labelsDict[index1].length
+    //                 }`;
+    //
+    //             }
+    //         default:
+    //             throw 'Unknown collapse type.';
+    //     }
+    // }
 
     getTextLabels(drs_split, d) {
         if (drs_split.length > 0) {
@@ -303,7 +337,6 @@ class DoseResponse extends React.Component {
                     .map('substance_code')
                     .uniq()
                     .value();
-            this.state.input_idList = [];
             this.state.labelsDict = [];
             substance_codeCase.forEach((val) =>
                 val in this.state.labelsDict
