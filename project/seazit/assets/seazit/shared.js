@@ -109,6 +109,40 @@ const AXIS_LINEAR = 1,
     },
     renderSelectMultiOptgroupWidget = function(name, label, options, values, handleChange) {
         let size = 10;
+        console.log(options);
+        console.log(values);
+
+        return (
+            <div>
+                <label>Select {label}(s):</label>
+                <select
+                    name={name}
+                    className="form-control"
+                    multiple={true}
+                    size={size}
+                    onChange={handleChange}
+                    value={values}
+                >
+                    {_.map(options, (value, category) => {
+                        return (
+                            <optgroup key={category} label={category}>
+                                {value.map((d) => (
+                                    <option key={d.key} value={d.key}>
+                                        {d.label}
+                                    </option>
+                                ))}
+                            </optgroup>
+                        );
+                    })}
+                </select>
+            </div>
+        );
+    },
+    renderSelectMultiOptgroupWidget2 = function(name, label, options, values, handleChange) {
+        let size = 10;
+        console.log(options);
+        console.log(values);
+
         return (
             <div>
                 <label>Select {label}(s):</label>

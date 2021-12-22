@@ -74,8 +74,6 @@ class DoseResponse extends React.Component {
 
         // set constant y-range for all charts. ensure 0 is within the
         // domain of values.
-        // console.log('collapsedData');
-        // console.log(collapsedData);
 
         yrange = [0, 100];
         return {
@@ -97,7 +95,6 @@ class DoseResponse extends React.Component {
                 return;
             }
             console.log(data);
-            console.log(this.state);
             this.updateData(data, this.props.collapse);
             // console.log(data)
         });
@@ -109,7 +106,6 @@ class DoseResponse extends React.Component {
         }
 
         switch (collapse) {
-            // TODO
             case COLLAPSE_BY_READOUT:
                 return this.colorScale.domain(_.map(data[0].dose_response, 'casrn'));
             case COLLAPSE_BY_CHEMICAL:
@@ -122,11 +118,6 @@ class DoseResponse extends React.Component {
     }
 
     getMarkerColor(d, marker = null) {
-        // if (this.props.collapse === NO_COLLAPSE) {
-        //     return NO_COLLAPSE_COLORS[marker];
-        // } else {
-        //     return this.state.scale(d);
-        // }
         return this.state.scale(d);
     }
 
@@ -148,69 +139,35 @@ class DoseResponse extends React.Component {
         if (_.isEmpty(data)) {
             return '';
         }
-        if (!this.state.labelsDict[data.substance_code].includes(data.input_id)) {
-            this.state.labelsDict[data.substance_code].push(data.input_id);
-        }
         let index1 = data.substance_code,
             index2 = data.input_id;
+        if (!this.state.labelsDict[index1]) {
+            this.state.labelsDict[index1] = [];
+            this.state.labelsDict[index1].push(index2);
+        } else {
+            if (!this.state.labelsDict[index1].includes(index2)) {
+                this.state.labelsDict[index1].push(index2);
+            }
+        }
         switch (collapse) {
             case COLLAPSE_BY_READOUT:
                 return `${data.preferred_name}|${data.casrn}|${data.dtxsid}`;
             case COLLAPSE_BY_CHEMICAL:
-                return data.endpoint_name;
+                return `${data.protocol_name_plot}|${data.endpoint_name}`;
             case NO_COLLAPSE:
                 if (labelCase == 'PC') {
-                    // return 'PC| ' + this.state.input_idList.length;
-                    return `PC|  ${Object.values(this.state.labelsDict[labelCase]).indexOf(index2) +
-                        1}`;
+                    return `PC| ${Object.values(this.state.labelsDict[index1]).length}`;
                 } else if (labelCase.length == 1) {
-                    // return 'plate| ' + this.state.input_idList.length;
-                    return `plate|  ${Object.values(this.state.labelsDict[labelCase]).indexOf(
-                        index2
-                    ) + 1}`;
+                    return `plate| ${Object.values(this.state.labelsDict[index1]).length}`;
                 } else {
-                    return `dup  ${Object.keys(this.state.labelsDict).indexOf(index1) +
-                        1}| plate ${Object.values(this.state.labelsDict[index1]).indexOf(index2) +
-                        1}`;
+                    return `dup ${Object.keys(this.state.labelsDict).length}| plate ${
+                        Object.values(this.state.labelsDict[index1]).length
+                    }`;
                 }
             default:
                 throw 'Unknown collapse type.';
         }
     }
-    // getResponseLabels(data, collapse, labelCase) {
-    //     if (_.isEmpty(data)) {
-    //         return '';
-    //     }
-    //     if (!this.state.labelsDict[data.substance_code].includes(data.input_id)) {
-    //         this.state.labelsDict[data.substance_code].push(data.input_id);
-    //     }
-    //     let index1 = data.substance_code,
-    //         index2 = data.input_id;
-    //     switch (collapse) {
-    //         case COLLAPSE_BY_READOUT:
-    //             return `${data.preferred_name}|${data.casrn}|${data.dtxsid}`;
-    //         case COLLAPSE_BY_CHEMICAL:
-    //             return data.endpoint_name;
-    //         case NO_COLLAPSE:
-    //             if (labelCase == 'PC') {
-    //                 // return 'PC| ' + this.state.input_idList.length;
-    //                 return `PC|  ${Object.values(this.state.labelsDict[labelCase]).indexOf(index2) +
-    //                     1}`;
-    //             } else if (labelCase.length == 1) {
-    //                 // return 'plate| ' + this.state.input_idList.length;
-    //                 return `plate|  ${Object.values(this.state.labelsDict[labelCase]).indexOf(
-    //                     index2
-    //                 ) + 1}`;
-    //             } else {
-    //                   return `dup  ${Object.keys(this.state.labelsDict).indexOf(index1) + 1} | plate ${
-    //                     this.state.labelsDict[index1].length
-    //                 }`;
-    //
-    //             }
-    //         default:
-    //             throw 'Unknown collapse type.';
-    //     }
-    // }
 
     getTextLabels(drs_split, d) {
         if (drs_split.length > 0) {
@@ -338,12 +295,6 @@ class DoseResponse extends React.Component {
                     .uniq()
                     .value();
             this.state.labelsDict = [];
-            substance_codeCase.forEach((val) =>
-                val in this.state.labelsDict
-                    ? (this.state.labelsDict[val] = [])
-                    : (this.state.labelsDict[val] = [])
-            );
-
             d.substance_code_input_ids.map((id_flag, index) => {
                 let drs_split = drs.filter((r) => r.substance_code_input_id == id_flag),
                     legendNames = _.chain(data)
@@ -351,6 +302,10 @@ class DoseResponse extends React.Component {
                         .uniq()
                         .value();
                 drs_split = _.sortBy(drs_split, 'dose');
+                // console.log("drs_split")
+                // // console.log(drs)
+                // console.log(drs_split)
+
                 data.push({
                     x: _.map(drs_split, 'dose'),
                     y: drs_split.map((obj) => {
@@ -366,15 +321,6 @@ class DoseResponse extends React.Component {
                         substance_codeCase
                     ),
                     text: this.getTextLabels(drs_split, d),
-                    showlegend: legendNames.includes(
-                        this.getResponseLabels(
-                            drs_split[0],
-                            this.props.collapse,
-                            substance_codeCase
-                        )
-                    )
-                        ? false
-                        : true,
                     marker: {
                         color: this.getMarkerColor(gk, 'responses'),
                     },

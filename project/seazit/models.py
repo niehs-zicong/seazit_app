@@ -152,7 +152,6 @@ class SeazitProtocol(models.Model):
     protocol_type = models.TextField(blank=True, null=True)
     protocol_source = models.TextField(blank=True, null=True)
     seazit_protocol_id = models.AutoField(primary_key=True)
-
     lab_anonymous_code = models.TextField(blank=True, null=True)
     study_phase = models.TextField(blank=True, null=True)
     test_condition = models.TextField(blank=True, null=True)
@@ -369,6 +368,7 @@ class Seazit_chemical_info(models.Model):
 
 class Seazit_readout_result(models.Model):
 
+
     input_chembase = models.TextField(blank=True, null=True)
     substance_name_by_lab = models.TextField(blank=True, null=True)
     plate_name = models.TextField(blank=True, null=True)
@@ -404,9 +404,17 @@ class Seazit_readout_result(models.Model):
     use_category1 = models.TextField(blank=True, null=True)
     use_category2 = models.TextField(blank=True, null=True)
     compound_name = models.TextField(blank=True, null=True)
+
+    lab_anonymous_code = models.TextField(blank=True, null=True)
+    # study_phase = models.TextField(blank=True, null=True)
+    test_condition = models.TextField(blank=True, null=True)
+    protocol_name_long = models.TextField(blank=True, null=True)
+    protocol_name_plot = models.TextField(blank=True, null=True)
+
     class Meta:
         managed = False
         db_table = 'mvw_seazit_readout_result'
+
     @classmethod
     def dose_responses(cls, protocol_ids, readout_ids, chemical_ids):
 
@@ -445,12 +453,14 @@ class Seazit_readout_result(models.Model):
                 "use_category1",
                 "use_category2",
                 "compound_name",
+                "lab_anonymous_code",
+                "test_condition",
+                "protocol_name_long",
+                "protocol_name_plot",
             )
-        dr = pd.DataFrame(
-            cls.objects.filter(
-                protocol_id__in=protocol_ids , endpoint_name__in=readout_ids, casrn__in=chemical_ids)
-                .values(*cols)
-        )
+        dr =cls.objects.filter(
+                protocol_id__in=protocol_ids , endpoint_name__in=readout_ids, casrn__in=chemical_ids
+                ).values(*cols)
         cols = (
                 "trsh",
                 "rnge",
@@ -500,35 +510,16 @@ class Seazit_readout_result(models.Model):
                 "use_category2",
                 "compound_name",
                 "substance_code",
-
+                "lab_anonymous_code",
+                "test_condition",
+                "protocol_name_long",
+                "protocol_name_plot",
         )
-        analysisbmcoutput = pd.DataFrame(
-            Seazit_bmc_readout_result.objects.filter(
+        analysisbmcoutput =Seazit_bmc_readout_result.objects.filter(
                 protocol_id__in=protocol_ids , endpoint_name__in=readout_ids, casrn__in=chemical_ids
-            )
-            .values(*cols)
-        )
+                ).values(*cols)
 
-        cols = (
-            "protocol_name",
-            "protocol_type",
-            "protocol_source",
-            "seazit_protocol_id",
-            "lab_anonymous_code",
-            "study_phase",
-            "test_condition",
-            "protocol_name_long",
-            "protocol_name_plot",
-        )
-        # protocol_data = pd.DataFrame(list(qs), columns=cols).to_dict(orient="records")
-        # protocol_data = pd.DataFrame(SeazitProtocol.objects.all().values_list(*cols))
-        protocol_data = pd.DataFrame(SeazitProtocol.objects.all().values_list(*cols), columns=cols)
-        # print(pd.DataFrame(dr))
-        # c = pd.merge(protocol_data2, b, left_on='seazit_protocol_id', right_on='protocol_id')
-        dr = pd.merge(protocol_data, dr, left_on='seazit_protocol_id', right_on='protocol_id')
-        analysisbmcoutput = pd.merge(protocol_data, analysisbmcoutput, left_on='seazit_protocol_id', right_on='protocol_id')
-        return dict(dose_response=dr.to_dict(orient="records"), bmcoutput=analysisbmcoutput.to_dict(orient="records"))
-        # return dict(dose_response=list(dr), bmcoutput=list(analysisbmcoutput), c = c.to_dict(orient="records"))
+        return dict(dose_response=list(dr), bmcoutput=list(analysisbmcoutput))
 
     @classmethod
     def bmds_responses(cls, protocol_ids, readout_ids):
@@ -568,6 +559,11 @@ class Seazit_readout_result(models.Model):
                 "use_category1",
                 "use_category2",
                 "compound_name",
+
+                "lab_anonymous_code",
+                "test_condition",
+                "protocol_name_long",
+                "protocol_name_plot",
             )
         dr = (
             cls.objects.filter(
@@ -624,6 +620,11 @@ class Seazit_readout_result(models.Model):
                 "compound_name",
                 "substance_code",
 
+                "lab_anonymous_code",
+                "test_condition",
+                "protocol_name_long",
+                "protocol_name_plot",
+
         )
         analysisbmcoutput = (
             Seazit_bmc_readout_result.objects.filter(
@@ -631,7 +632,6 @@ class Seazit_readout_result(models.Model):
             )
             .values(*cols)
         )
-
 
         return dict(dose_response=list(dr), bmcoutput=list(analysisbmcoutput))
 
@@ -691,7 +691,11 @@ class Seazit_bmc_readout_result(models.Model):
     compound_name = models.TextField(blank=True, null=True)
     substance_code = models.TextField(blank=True, null=True)
 
-
+    lab_anonymous_code = models.TextField(blank=True, null=True)
+    # study_phase = models.TextField(blank=True, null=True)
+    test_condition = models.TextField(blank=True, null=True)
+    protocol_name_long = models.TextField(blank=True, null=True)
+    protocol_name_plot = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = False
