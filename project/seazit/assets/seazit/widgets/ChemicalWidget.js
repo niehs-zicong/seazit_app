@@ -68,9 +68,6 @@ class ChemicalWidget extends BaseWidget {
             .uniq()
             .value();
         this.props.stateHolder.setState(d);
-        // console.log('chemicals by category');
-        // console.log(vals);
-        // console.log(d);
     }
 
     _renderFilterBy(state) {
@@ -124,10 +121,6 @@ class ChemicalWidget extends BaseWidget {
                 })
                 .groupBy('category')
                 .value();
-            // console.log('name');
-            // console.log(state);
-            // console.log(opts);
-            // console.log(state.chemicals);
 
             return renderSelectMultiOptgroupWidget(
                 // return renderSelectMultiWidget(

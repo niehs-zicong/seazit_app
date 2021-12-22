@@ -38,9 +38,6 @@ class ReadoutWidget extends BaseWidget {
             })
             .sortBy('seazit_protocol_id')
             .value();
-        // console.log('options');
-        // console.log(options);
-        // console.log(state.assay);
         if (this.props.multiAssaySelector === true) {
             return renderSelectMultiWidget(
                 'assays',
@@ -67,16 +64,13 @@ class ReadoutWidget extends BaseWidget {
                 return _.includes(assays, r.seazit_protocol_id.toString());
             })
             .value();
-        // console.log(opts);
-
         opts = _.chain(opts)
             .map((r) => {
                 return {
+                    // key: `${r.endpoint_name} | ${r.seazit_protocol_id}`,
                     key: r.endpoint_name.toString(),
-                    // category: r.protocol_name,
                     category: r.protocol_name_plot,
                     label: r.endpoint_name,
-
                     protocol_name: r.protocol_name,
                     seazit_protocol_id: r.seazit_protocol_id,
                     study_phase: r.study_phase,
@@ -93,8 +87,6 @@ class ReadoutWidget extends BaseWidget {
         if (_.keys(opts).length === 0) {
             return null;
         }
-        // console.log("opts")
-        // console.log(opts)
 
         return renderSelectMultiOptgroupWidget(
             'readouts',
