@@ -42,13 +42,15 @@ USE_TZ = True
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'public', 'media')
 MEDIA_URL = '/media/'
 
-STATIC_ROOT = os.path.join(PROJECT_ROOT, 'public', 'static')
-STATIC_URL = '/static/'
-STATIC_URL2 = '/static2/'
+#STATIC_ROOT = os.path.join(PROJECT_ROOT, 'public', 'static')
+#STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'public', 'static_seazit')
+STATIC_URL = '/static_seazit/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    os.path.join(PROJECT_PATH, 'static'),
+    os.path.join(PROJECT_PATH, 'static_seazit'),
+    #os.path.join(PROJECT_PATH, 'static'),
 )
 
 STATICFILES_FINDERS = (
