@@ -44,6 +44,7 @@ MEDIA_URL = '/media/'
 
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'public', 'static')
 STATIC_URL = '/static/'
+STATIC_URL2 = '/static2/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
