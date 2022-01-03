@@ -5,7 +5,7 @@
     "repository": "add-me",
     "license": "add-me",
     "scripts": {
-        "clean": "rimraf ./static/bundles/* && rimraf ./webpack-stats.json",
+        "clean": "rimraf ./static_seazit/bundles/* && rimraf ./webpack-stats.json",
         "build": "npm run clean && npm run build:production",
         "build:production": "NODE_ENV=production webpack --config webpack.config.prod.js",
         "build:dev": "webpack --config webpack.config.dev.js",
