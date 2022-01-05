@@ -381,6 +381,9 @@ class Seazit_readout_result(models.Model):
     substance_id = models.IntegerField(blank=True, null=True)
     input_id = models.IntegerField(blank=True, null=True)
     endpoint_name_only = models.TextField(blank=True, null=True)
+
+    endpoint_name_protocol = models.TextField(blank=True, null=True)
+
     dose = models.FloatField(blank=True, null=True)
     dose_unit = models.TextField(blank=True, null=True)
     protocol_source = models.TextField(blank=True, null=True)
@@ -431,6 +434,7 @@ class Seazit_readout_result(models.Model):
                 "substance_id",
                 "input_id",
                 "endpoint_name_only",
+                "endpoint_name_protocol",
                 "dose",
                 "dose_unit",
                 "protocol_source",
@@ -459,7 +463,7 @@ class Seazit_readout_result(models.Model):
                 "protocol_name_plot",
             )
         dr =cls.objects.filter(
-                protocol_id__in=protocol_ids , endpoint_name__in=readout_ids, casrn__in=chemical_ids
+                protocol_id__in=protocol_ids , endpoint_name_protocol__in=readout_ids, casrn__in=chemical_ids
                 ).values(*cols)
         cols = (
                 "trsh",
@@ -514,9 +518,10 @@ class Seazit_readout_result(models.Model):
                 "test_condition",
                 "protocol_name_long",
                 "protocol_name_plot",
+                "endpoint_name_protocol",
         )
         analysisbmcoutput =Seazit_bmc_readout_result.objects.filter(
-                protocol_id__in=protocol_ids , endpoint_name__in=readout_ids, casrn__in=chemical_ids
+                protocol_id__in=protocol_ids , endpoint_name_protocol__in=readout_ids, casrn__in=chemical_ids
                 ).values(*cols)
 
         return dict(dose_response=list(dr), bmcoutput=list(analysisbmcoutput))
@@ -567,7 +572,7 @@ class Seazit_readout_result(models.Model):
             )
         dr = (
             cls.objects.filter(
-                protocol_id__in=protocol_ids , endpoint_name__in=readout_ids)
+                protocol_id__in=protocol_ids , endpoint_name_protocol__in=readout_ids)
                 .values(*cols)
         )
         cols = (
@@ -628,7 +633,7 @@ class Seazit_readout_result(models.Model):
         )
         analysisbmcoutput = (
             Seazit_bmc_readout_result.objects.filter(
-                protocol_id__in=protocol_ids , endpoint_name__in=readout_ids
+                protocol_id__in=protocol_ids , endpoint_name_protocol__in=readout_ids
             )
             .values(*cols)
         )
@@ -697,6 +702,9 @@ class Seazit_bmc_readout_result(models.Model):
     protocol_name_long = models.TextField(blank=True, null=True)
     protocol_name_plot = models.TextField(blank=True, null=True)
 
+    endpoint_name_protocol = models.TextField(blank=True, null=True)
+
+
     class Meta:
         managed = False
         db_table = 'mvw_seazit_bmc_readout_result'
@@ -714,6 +722,8 @@ class Seazit_ui_panel(models.Model):
     protocol_name_long = models.TextField(blank=True, null=True)
     protocol_name_plot = models.TextField(blank=True, null=True)
 
+    endpoint_name_protocol = models.TextField(blank=True, null=True)
+
     class Meta:
         managed = False
         db_table = 'mvw_seazit_ui_panel'
@@ -729,6 +739,7 @@ class Seazit_ui_panel(models.Model):
             "test_condition",
             "protocol_name_long",
             "protocol_name_plot",
+            "endpoint_name_protocol",
         )
         qs = (
             cls.objects.all().values_list(*cols)

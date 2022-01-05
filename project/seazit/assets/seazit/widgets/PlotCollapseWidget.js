@@ -44,7 +44,7 @@ class PlotCollapseWidget extends BaseWidget {
                             value={NO_COLLAPSE}
                             checked={state.plotCollapse === NO_COLLAPSE}
                         />
-                        Chemical + Readout
+                        Chemical + Endpoint
                     </label>
 
                     <span style={{ paddingLeft: '0.5em', paddingRight: '0.5em' }}>|</span>
@@ -62,7 +62,7 @@ class PlotCollapseWidget extends BaseWidget {
                             value={COLLAPSE_BY_CHEMICAL}
                             checked={state.plotCollapse === COLLAPSE_BY_CHEMICAL}
                         />
-                        Chemical (casrn)
+                        Chemical
                     </label>
 
                     <span style={{ paddingLeft: '0.5em', paddingRight: '0.5em' }}>|</span>
@@ -80,7 +80,7 @@ class PlotCollapseWidget extends BaseWidget {
                             value={COLLAPSE_BY_READOUT}
                             checked={state.plotCollapse === COLLAPSE_BY_READOUT}
                         />
-                        Readout (endpoint_name)
+                        Endpoint
                     </label>
                 </div>
                 <p className="help-block">Hover for more details on each option.</p>

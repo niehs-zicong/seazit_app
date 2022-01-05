@@ -41,7 +41,7 @@ class ReadoutWidget extends BaseWidget {
         if (this.props.multiAssaySelector === true) {
             return renderSelectMultiWidget(
                 'assays',
-                'Assay/Protocol zw2',
+                'Dataset',
                 options,
                 state.assays,
                 this.handleSelectMultiChange
@@ -64,11 +64,13 @@ class ReadoutWidget extends BaseWidget {
                 return _.includes(assays, r.seazit_protocol_id.toString());
             })
             .value();
+        console.log(opts);
         opts = _.chain(opts)
             .map((r) => {
                 return {
                     // key: `${r.endpoint_name} | ${r.seazit_protocol_id}`,
-                    key: r.endpoint_name.toString(),
+                    // key: r.endpoint_name.toString(),
+                    key: r.endpoint_name_protocol.toString(),
                     category: r.protocol_name_plot,
                     label: r.endpoint_name,
                     protocol_name: r.protocol_name,
@@ -77,12 +79,14 @@ class ReadoutWidget extends BaseWidget {
                     test_condition: r.test_condition,
                     protocol_name_long: r.protocol_name_long,
                     protocol_name_plot: r.protocol_name_plot,
+                    endpoint_name_protocol: r.endpoint_name_protocol,
                 };
             })
             .sortBy('label')
             .sortBy('category')
             .groupBy('category')
             .value();
+        console.log(opts);
 
         if (_.keys(opts).length === 0) {
             return null;
@@ -90,7 +94,7 @@ class ReadoutWidget extends BaseWidget {
 
         return renderSelectMultiOptgroupWidget(
             'readouts',
-            'Readout/Endpoint zw1',
+            'Endpoint',
             opts,
             state.readouts,
             this.handleSelectMultiChange

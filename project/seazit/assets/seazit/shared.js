@@ -109,9 +109,6 @@ const AXIS_LINEAR = 1,
     },
     renderSelectMultiOptgroupWidget = function(name, label, options, values, handleChange) {
         let size = 10;
-        console.log(options);
-        console.log(values);
-
         return (
             <div>
                 <label>Select {label}(s):</label>
