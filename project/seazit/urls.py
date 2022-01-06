@@ -23,6 +23,7 @@ router.register("seazit_cr12", api.Seazit_bmc_readout_resultViewSet)
 urlpatterns = [
     url(r"^api/", include((router.urls, "seazit"), namespace="api")),
     url(r"^$", views.Home.as_view(), name="home"),
+    url(r"^dataset/$", views.Dataset.as_view(), name="dataset"),
     url(r"^quality-control/$", views.QC.as_view(), name="qc"),
     #url(r'^home/', views.Home.as_view(),name='home'),
     url(r"^resources/$", views.Resources.as_view(), name="resources"),

@@ -24,6 +24,7 @@ DATABASES['default']['HOST'] = DB_SERVER
 DATABASES['default']['USER'] = DB_USER
 DATABASES['default']['PASSWORD'] = DB_PW
 DATABASES['default']['PORT'] = DB_PORT
+DATABASES['default']['NAME'] = DB_NAME
 
 #DATABASES['default']['HOST'] = os.environ['POSTGRES_SERVER_IP']
 #DATABASES['default']['USER'] = os.environ['POSTGRES_USER']
@@ -50,7 +51,8 @@ EMAIL_SUBJECT_PREFIX = '[seazit-test] '
 DEFAULT_FROM_EMAIL = 'webmaster@sandbox-staging.com'
 
 PUBLIC_ROOT = os.environ.get('DJANGO_PUBLIC_PATH')
-STATIC_ROOT = os.path.join(PUBLIC_ROOT, 'static')
+STATIC_ROOT = os.path.join(PUBLIC_ROOT, 'static_seazit')
+#STATIC_ROOT = os.path.join(PUBLIC_ROOT, 'static')
 MEDIA_ROOT = os.path.join(PUBLIC_ROOT, 'media')
 
 LOGGING['handlers']['file'].update(

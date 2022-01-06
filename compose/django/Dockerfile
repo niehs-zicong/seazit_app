@@ -44,9 +44,21 @@ RUN \
 #    pip install -U pip && \
 #    pip install -r /requirements/production.txt
 
-RUN conda env create -f /env_seazit.yml
-RUN . /opt/conda/etc/profile.d/conda.sh
-RUN conda activate seazit
+#RUN conda env create -f /env_seazit.yml
+#RUN /bin/bash -c ". activate seazit && \
+#    pip install -U pip && \
+#    pip install -r /requirements/production.txt"
+
+RUN conda env create -f /env_seazit.yml  && \
+    \
+    . /opt/conda/etc/profile.d/conda.sh && \
+    conda activate seazit && \
+    pip install -U pip && \
+    pip install -r /requirements/production.txt
+
+RUN apt-get install nano
+
+ 
 # fix the django 2.0 import error
 #replace 
 #from django.core.urlresolvers import reverse, NoReverseMatch
@@ -54,8 +66,9 @@ RUN conda activate seazit
 #from django.urls import reverse, NoReverseMatch
 RUN sed -e 's/core.urlresolvers/urls/g' /opt/conda/envs/seazit/lib/python3.8/site-packages/selectable/base.py>/opt/conda/envs/seazit/lib/python3.8/site-packages/selectable/base.py.new
 RUN mv /opt/conda/envs/seazit/lib/python3.8/site-packages/selectable/base.py.new /opt/conda/envs/seazit/lib/python3.8/site-packages/selectable/base.py
-RUN pip install -U pip
-RUN pip install -r /requirements/production.txt
+
+#RUN pip install -U pip
+#RUN pip install -r /requirements/production.txt
 
 COPY ./project /app/project
 

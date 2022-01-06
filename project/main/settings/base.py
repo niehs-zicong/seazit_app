@@ -1,6 +1,7 @@
 import os
 
 PROJECT_NAME = 'seazit_app'
+DB_NAME = 'dev_seazit'
 PROJECT_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
 PROJECT_ROOT = os.path.abspath(os.path.join(PROJECT_PATH, os.pardir))
 
@@ -19,8 +20,12 @@ SERVER_EMAIL = 'webmaster@sandbox.ntp.niehs.gov'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': PROJECT_NAME,
-    },     
+        'NAME': DB_NAME,
+        'OPTIONS': {
+            'options': '-c search_path=schema_seazit'
+        },
+    },  
+
 }
 
 DATABASE_ROUTERS = [
@@ -37,12 +42,15 @@ USE_TZ = True
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'public', 'media')
 MEDIA_URL = '/media/'
 
-STATIC_ROOT = os.path.join(PROJECT_ROOT, 'public', 'static')
-STATIC_URL = '/static/'
+#STATIC_ROOT = os.path.join(PROJECT_ROOT, 'public', 'static')
+#STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'public', 'static_seazit')
+STATIC_URL = '/static_seazit/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    os.path.join(PROJECT_PATH, 'static'),
+    os.path.join(PROJECT_PATH, 'static_seazit'),
+    #os.path.join(PROJECT_PATH, 'static'),
 )
 
 STATICFILES_FINDERS = (

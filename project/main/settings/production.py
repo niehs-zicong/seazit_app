@@ -11,10 +11,12 @@ DATABASES['default']['HOST'] = DB_SERVER
 DATABASES['default']['USER'] = DB_USER
 DATABASES['default']['PASSWORD'] = DB_PW
 DATABASES['default']['PORT'] = DB_PORT
+DATABASES['default']['NAME'] = DB_NAME
 
-DATABASES['default']['HOST'] = os.environ['DB_HOST']
-DATABASES['default']['USER'] = os.environ['POSTGRES_USER']
-DATABASES['default']['PASSWORD'] = os.environ['POSTGRES_PASSWORD']
+#DATABASES['default']['HOST'] = os.environ['DB_HOST']
+#DATABASES['default']['USER'] = os.environ['POSTGRES_USER']
+#DATABASES['default']['PASSWORD'] = os.environ['POSTGRES_PASSWORD']
+
 
 STAGING_ONLY_APPS = (
  #   'cebs',

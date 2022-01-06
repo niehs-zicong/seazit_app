@@ -49,7 +49,8 @@ EMAIL_SUBJECT_PREFIX = '[seazit-staging] '
 DEFAULT_FROM_EMAIL = 'webmaster@sandbox-staging.com'
 
 PUBLIC_ROOT = os.environ.get('DJANGO_PUBLIC_PATH')
-STATIC_ROOT = os.path.join(PUBLIC_ROOT, 'static')
+#STATIC_ROOT = os.path.join(PUBLIC_ROOT, 'static')
+STATIC_ROOT = os.path.join(PUBLIC_ROOT, 'static_seazit')
 MEDIA_ROOT = os.path.join(PUBLIC_ROOT, 'media')
 
 LOGGING['handlers']['file'].update(

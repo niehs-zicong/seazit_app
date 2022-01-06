@@ -6,30 +6,60 @@
     <div class="row">
         <div class="col-md-8">
             <h1>
-                <span class="acronym-letter">D</span>evelopmental <span class="acronym-letter">N</span>euro<span class="acronym-letter">T</span>oxicity <span class="acronym-letter"> (<span class="acronym-letter">DNT-SEAZIT</span>)
+                <span class="acronym-letter">S</span>ystematic <span class="acronym-letter">E</span>valuation of the <span class="acronym-letter">A</span>pplication of  
+                <span class="acronym-letter">Z</span>ebrafish in 
+                <span class="acronym-letter">T</span>oxicology - 
+                <span class="acronym-letter">D</span>ata
+                <span class="acronym-letter">I</span>ntegration and 
+                <span class="acronym-letter">V</span>isualization 
+                <span class="acronym-letter">E</span>nabling
+                <span class="acronym-letter">R</span>esource 
+                <span class="acronym-letter"> (<span class="acronym-letter">SEAZIT-DIVER</span>)
             </h1>
-
+            <p>    
+            </p>
             <img class="img-responsive center-block" src="{{STATIC_URL}}img/seazit/logo-2.jpg"
                 alt="Logo: a zebrafish, neurons firing, data and charts" />
 
             <br/>
+                          
             <p>
-                 
+                The small size and rapid development of the zebrafish (Danio rerio) embryo make it a useful vertebrate model for assessing the potential effects of test substances on growth and development (i.e., developmental toxicity) using high-throughput screening methods.  However, deficits in the following key areas hinder the broader adoption of the embryonic zebrafish model for toxicological screening:                
+            </p>
+            
+            <ul style="padding: 1px 10px 0px 30px;"><li>Consistent experimental protocol elements
+                <li>Consistent informatics approaches used for classification of outcomes</li>
+                <li>Clear understanding of mechanisms of chemical absorption, distribution, metabolism, and excretion</li>
+            </ul>             
+
+            <p>
+                To facilitate broader acceptance and increase confidence for toxicological screening, NTP established the Systematic Evaluation of the Application of Zebrafish in Toxicology (<a href ="https://ods.ntp.niehs.nih.gov:444/seazit/seazit_bmcByLab/">SEAZIT</a>) program, jointly led by NTP and NICEATM scientists.  Information gathering sessions and workshops hosted by SEAZIT led to the development of several projects to specifically address the impact of protocol design and informatics approaches used for classification of toxicity outcomes.  
+            </p>
+            <h2>Interlaboratory Study:</h2>
+            <p>
+                Participating laboratories utilized in-house protocols for toxicological screening in zebrafish embryos to evaluate a defined set of test substances while varying the two protocol elements which are anticipated to influence toxicity outcomes (<a href="https://www.altex.org/index.php/altex/article/view/997">Hamm et al 2019</a>): 
+                <ul style="padding: 1px 10px 0px 30px;"><li>Intact chorion vs embryo dechorionation prior to exposure to a test substance </li>
+                    <li>Static (i.e., one-time) vs static-renewal exposure (i.e., daily) over the 5-day study period</li>
+                </ul>
             </p>
             <p>
-                 
+                Test substances were selected based upon 1) overlap with other NTP studies, 2) available reference data from rodent and other zebrafish developmental toxicity studies representing a range of potencies, and 3) physicochemical properties.  In total, 41 test substances were blinded and provided to three laboratories for assessment in concentration-response in triplicate. Three of the 42 test substances are duplicates, which were randomly selected to assess assay reproducibility within a single experiment.  Additionally, DMSO and 3,4-Dichloroanaline were provided to laboratories for evaluation as negative and positive controls, respectively, within and across experimental runs. 
+                </p>
+                <p> 
+                Toxicity endpoints evaluated include mortality and the development of adverse phenotypes (i.e., malformations).  A dose-range finding (DRF) study was conducted to establish a concentration range to optimally evaluate potency shifts across experimental conditions.  In the DRF, each laboratory tested all test substances under one assay condition prior to conducting the Definitive (Def) Study which included a comparative assessment of all test substances under 4 assay conditions (e.g., static exposure with intact chorion; static exposure following dechorionation; static-renewal exposure with intact chorion; static-renewal exposure following dechorionation).  
+                </p>
+                <p>
+                To compare results across laboratories, the incidence of mortality and/or malformations was collected for each embryo. Due to a lack of common terminology describing malformations across the laboratories, an additional step of ontology harmonization was applied before data analysis.  All data and the associated ontology terms are stored in the open-source PostgreSQL database. By leveraging the database, we implemented a data analysis pipeline to derive a benchmark concentration (BMC) value for each test substance and endpoint under investigation. 
+
             </p>
             <p>
-                
-            </p>
-            <p>
-                Within DNT-SEAZIT, comparisons are organized on different tabs including experimental design summary, quality control, chemical-specific concentration response curves, ranking of chemical toxicity per lab/assay, and comparison of results across assays. We also provide downloadable resources including raw and final data, along with the <a href="{{STATIC_URL}}resources/seazit/NTP%20Chemical%20Library.xlsx">NTP Chemical Library (Microsoft Excel&nbsp;<i class="fa fa-file-excel-o"></i>)</a> that was tested by collaborators in their respective models.
+                SEAZIT-DIVER was developed to analyze, compare, and visualize intra- and inter-laboratory data in an interactive web-application.  Within SEAZIT-DIVER, comparisons are organized on different tabs including experimental design summary, quality control, chemical-specific concentration response curves, ranking of chemical toxicity per lab/assay, and comparison of results across assays. 
             </p>
             <h2>
                 Suggestions?
             </h2>
             <p>
-                We are currently refining assays, analyses, and visualizations, and would appreciate your input! Please direct questions or suggestions to <a href="mailto:jui-hua.hsieh@nih.gov?subject=DNT-SEAZIT%20suggestion">Jui-hua Hsieh</a> and <a href="mailto:kristen.ryan@nih.gov??subject=DNT-SEAZIT%20suggestion">Kristen Ryan</a>.
+                We are currently refining assays, analyses, and visualizations, and would appreciate your input! Please direct questions or suggestions to <a href="mailto:kristen.ryan@nih.gov??subject=DNT-SEAZIT%20suggestion">Kristen Ryan</a>.
             </div>
             </p>
     </div>

@@ -55,7 +55,6 @@ RUN conda env create -f /env_seazit.yml  && \
     pip install -U pip && \
     pip install -r /requirements/production.txt
 
-#RUN conda install nano
 RUN apt-get install nano
 
 COPY ./docs /app/docs
