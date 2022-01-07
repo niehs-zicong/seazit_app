@@ -64,7 +64,6 @@ class ReadoutWidget extends BaseWidget {
                 return _.includes(assays, r.seazit_protocol_id.toString());
             })
             .value();
-        console.log(opts);
         opts = _.chain(opts)
             .map((r) => {
                 return {
@@ -86,8 +85,17 @@ class ReadoutWidget extends BaseWidget {
             .sortBy('category')
             .groupBy('category')
             .value();
-        console.log(opts);
-
+        // console.log(opts);
+        let endpointCases = ['MalformedAny+Mort@120', 'Mortality@120', 'Mortality@24'];
+        Object.values(opts).forEach((val) => {
+            val.forEach(function(item, i) {
+                if (endpointCases.includes(item.label)) {
+                    val.splice(i, 1);
+                    val.unshift(item);
+                }
+            });
+        });
+        // console.log(opts)
         if (_.keys(opts).length === 0) {
             return null;
         }
