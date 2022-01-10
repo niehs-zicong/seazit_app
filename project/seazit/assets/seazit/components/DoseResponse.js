@@ -124,9 +124,9 @@ class DoseResponse extends React.Component {
     getPlotTitle(data, collapse) {
         switch (collapse) {
             case COLLAPSE_BY_READOUT:
-                return `${data.endpoint_name}`;
+                return `${data.protocol_name_plot}<br>${data.endpoint_name}`;
             case COLLAPSE_BY_CHEMICAL:
-                return `(${data.casrn})`;
+                return `${data.casrn}|${data.dtxsid}`;
             case NO_COLLAPSE:
                 // return `${data.preferred_name}<br>${data.casrn}|${data.dtxsid}:<br>${data.endpoint_name}`;
                 return `${data.protocol_name_plot}<br>${data.preferred_name}<br>${data.casrn}|${data.dtxsid}:<br>${data.endpoint_name}`;
@@ -200,20 +200,22 @@ class DoseResponse extends React.Component {
     setDatasetKey(data, collapse) {
         switch (collapse) {
             case COLLAPSE_BY_READOUT:
-                data.key = data.endpoint_name;
+                // data.key = data.endpoint_name;
+                data.key = `${data.protocol_id}|${data.endpoint_name}`;
                 data.groupKey = data.casrn;
                 data.substance_code_input_id = `${data.substance_code}|${data.input_id}`;
 
                 break;
             case COLLAPSE_BY_CHEMICAL:
-                data.key = data.casrn;
+                // data.key = data.casrn;
+                data.key = `${data.protocol_id}|${data.casrn}`;
                 data.groupKey = data.endpoint_name;
                 data.substance_code_input_id = `${data.substance_code}|${data.input_id}`;
-
                 break;
 
             case NO_COLLAPSE:
-                data.key = `${data.endpoint_name}|${data.casrn}`;
+                // data.key = `${data.endpoint_name}|${data.casrn}`;
+                data.key = `${data.protocol_id}|${data.endpoint_name}|${data.casrn}`;
                 data.groupKey = null;
                 data.substance_code_input_id = `${data.substance_code}|${data.input_id}`;
 
@@ -239,8 +241,8 @@ class DoseResponse extends React.Component {
 
     _renderPlot(d, yrange) {
         //
-        // console.log(' _renderPlot');
-        // console.log(d);
+        console.log(' _renderPlot data');
+        console.log(d);
 
         if (this.refs[d.key] === undefined) {
             return;
@@ -279,7 +281,7 @@ class DoseResponse extends React.Component {
             },
             yaxis: {
                 type: 'linear',
-                title: 'Response (normalized)',
+                title: 'response (%)',
                 // range should be [0, 100]
                 range: [-10, 110],
             },
@@ -302,9 +304,9 @@ class DoseResponse extends React.Component {
                         .uniq()
                         .value();
                 drs_split = _.sortBy(drs_split, 'dose');
-                // console.log("drs_split")
+                console.log('drs_split');
                 // // console.log(drs)
-                // console.log(drs_split)
+                console.log(drs_split);
 
                 data.push({
                     x: _.map(drs_split, 'dose'),

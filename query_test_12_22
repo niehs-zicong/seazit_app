@@ -1,0 +1,31 @@
+-- select protocol_id, endpoint_name, casrn, dtxsid from schema_seazit.mvw_seazit_bmc_readout_result
+-- WHERE protocol_id IN (1, 4)
+-- AND endpoint_name = 'Abnormal_heartbeat+Mort@120'
+-- AND casrn = '79-94-7'
+
+
+-- select protocol_id, endpoint_name, casrn, dtxsid from schema_seazit.mvw_seazit_bmc_readout_result
+-- WHERE protocol_id = 1
+-- AND endpoint_name = 'Abnormal_heartbeat+Mort@120'
+-- AND casrn = '79-94-7'
+
+-- select protocol_id, endpoint_name, casrn, dtxsid from schema_seazit.mvw_seazit_bmc_readout_result
+-- WHERE protocol_id = 4
+-- AND endpoint_name = 'Abnormal_heartbeat+Mort@120'
+-- AND casrn = '79-94-7'
+
+-- select protocol_id, endpoint_name, casrn, dtxsid from schema_seazit.mvw_seazit_bmc_readout_result
+-- WHERE protocol_id = 1
+-- AND endpoint_name = 'Abnormal_heartbeat+Mort@120'
+-- AND casrn = '79-94-7'
+-- OR protocol_id = 4
+-- AND endpoint_name = 'Mortality@120'
+-- AND casrn = '79-94-7'
+
+
+select protocol_id, endpoint_name, casrn, dtxsid from schema_seazit.mvw_seazit_bmc_readout_result
+WHERE protocol_id IN (1,4)
+AND endpoint_name = 'Abnormal_heartbeat+Mort@120'
+AND casrn = '79-94-7'
+OR endpoint_name = 'Mortality@120'
+AND casrn = '79-94-7'

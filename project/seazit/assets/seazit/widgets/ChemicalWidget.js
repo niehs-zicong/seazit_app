@@ -174,11 +174,7 @@ class ChemicalWidget extends BaseWidget {
                         className="btn btn-default btn-sm pull-right"
                         style={{ marginTop: 5 }}
                         href={URL_CHEMXLSX}
-                    >
-                        <i className="fa fa-file-excel-o" />
-                        &nbsp; View categories
-                    </a>
-                    * compounds with evidence of NT/DNT in literature
+                    ></a>
                 </p>
             </div>
         );
