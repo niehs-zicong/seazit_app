@@ -107,6 +107,29 @@ class AnalysisInputKey(models.Model):
         db_table = 'analysis_input_key'
 
 
+
+class SeazitBmcMinMaxVw(models.Model):
+    protocol_id = models.IntegerField(blank=True, null=True)
+    endpoint_name = models.TextField(blank=True, null=True)
+    dtxsid = models.TextField(blank=True, null=True)
+    med_pod = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    min_pod = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    max_pod = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    med_hitconf = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    n_values = models.IntegerField(blank=True, null=True)
+    mort_med_pod = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    mort_min_pod = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    mort_max_pod = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    mort_med_hitconf = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    mort_n_values = models.IntegerField(blank=True, null=True)
+    casrn = models.TextField(blank=True, null=True)
+    preferred_name = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'seazit_bmc_min_max_vw'
+
+
 class SeazitDose(models.Model):
     dose = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     dose_unit = models.TextField(blank=True, null=True)
@@ -282,7 +305,6 @@ class Readout(models.Model):
 
 
 
-#TODO
 ## this substance function = bmc input function. we may conbime them later
 class Substance(models.Model):
     input_chembase = models.TextField(blank=True, null=True)
@@ -542,6 +564,7 @@ class Seazit_readout_result(models.Model):
                 "substance_id",
                 "input_id",
                 "endpoint_name_only",
+                "endpoint_name_protocol",
                 "dose",
                 "dose_unit",
                 "protocol_source",
@@ -564,17 +587,14 @@ class Seazit_readout_result(models.Model):
                 "use_category1",
                 "use_category2",
                 "compound_name",
-
                 "lab_anonymous_code",
                 "test_condition",
                 "protocol_name_long",
                 "protocol_name_plot",
             )
-        dr = (
-            cls.objects.filter(
-                protocol_id__in=protocol_ids , endpoint_name_protocol__in=readout_ids)
-                .values(*cols)
-        )
+        dr =cls.objects.filter(
+                protocol_id__in=protocol_ids , endpoint_name__in=readout_ids
+                ).values(*cols)
         cols = (
                 "trsh",
                 "rnge",
@@ -624,21 +644,43 @@ class Seazit_readout_result(models.Model):
                 "use_category2",
                 "compound_name",
                 "substance_code",
-
                 "lab_anonymous_code",
                 "test_condition",
                 "protocol_name_long",
                 "protocol_name_plot",
+                "endpoint_name_protocol",
+        )
+        analysisbmcoutput =Seazit_bmc_readout_result.objects.filter(
+                protocol_id__in=protocol_ids , endpoint_name__in=readout_ids
+                ).values(*cols)
+
+        cols = (
+                "protocol_id",
+                "endpoint_name",
+                "casrn",
+                "preferred_name",
+                "dtxsid",
+                "min_pod_med",
+
+                "med_pod_med",
+                "max_pod_med",
+                "med_hitconf",
+                "n_values",
+                "mort_min_pod_med",
+                "mort_med_pod_med",
+
+                "mort_max_pod_med",
+                "mort_med_hitconf",
+                "mort_n_values",
+
 
         )
-        analysisbmcoutput = (
-            Seazit_bmc_readout_result.objects.filter(
-                protocol_id__in=protocol_ids , endpoint_name_protocol__in=readout_ids
-            )
-            .values(*cols)
-        )
+        bmcMinMaxVwOutput =Seazit_bmc_min_max.objects.filter(
+                protocol_id__in=protocol_ids , endpoint_name__in=readout_ids
+                ).values(*cols)
 
-        return dict(dose_response=list(dr), bmcoutput=list(analysisbmcoutput))
+        return dict(readout_result=list(dr), bmc_readout_result=list(analysisbmcoutput),
+                    bmc_min_max_result = list(bmcMinMaxVwOutput))
 
 
 
@@ -708,6 +750,28 @@ class Seazit_bmc_readout_result(models.Model):
     class Meta:
         managed = False
         db_table = 'mvw_seazit_bmc_readout_result'
+
+class Seazit_bmc_min_max(models.Model):
+    protocol_id = models.IntegerField(blank=True, null=True)
+    endpoint_name = models.TextField(blank=True, null=True)
+    casrn = models.TextField(blank=True, null=True)
+    preferred_name = models.TextField(blank=True, null=True)
+    dtxsid = models.TextField(blank=True, null=True)
+    min_pod_med = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    med_pod_med = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    max_pod_med = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    med_hitconf = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    n_values = models.BigIntegerField(blank=True, null=True)
+    mort_min_pod_med = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    mort_med_pod_med = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    mort_max_pod_med = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    mort_med_hitconf = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    mort_n_values = models.BigIntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'mvw_seazit_bmc_min_max'
+
 
 
 class Seazit_ui_panel(models.Model):

@@ -13,16 +13,16 @@ const AXIS_LINEAR = 1,
         2: 'hill',
     },
     CATEGORY_COLORS = {
-        Drug: '#3182bd',
-        'Drug*': '#9ecae1',
-        'Flame Retardant': '#e7ba52',
-        Industrial: '#31a354',
-        'Industrial*': '#a1d99b',
-        'Assay specific control': '#ee7621',
-        Negative: '#636363',
+        Insecticide: '#d62976',
+        Fungicide: '#f9d70b',
+        Herbicide: '#3BD6C6',
+        'Positive Control': '#ee7621',
+        Preservative: '#c89f73',
+        'Industrial Compound': '#31a354',
         PAH: '#756bb1',
-        Pesticide: '#ad494a',
-        'Pesticide*': '#d6616b',
+        'Flame Retardant': '#e7ba52',
+        Drug: '#3182bd',
+        'Vehicle Control': '#ee7621',
     },
     CHEMFILTER_CATEGORY = 1,
     CHEMFILTER_CHEMICIAL = 2,
@@ -88,7 +88,7 @@ const AXIS_LINEAR = 1,
     renderSelectSingleWidget = function(name, label, options, values, handleChange) {
         return (
             <div>
-                <label>Select an {label}(s):</label>
+                <label>Select one {label}(s):</label>
                 <select
                     name={name}
                     className="form-control"
@@ -180,11 +180,11 @@ const AXIS_LINEAR = 1,
         // console.log(ids, ro, chems);
         return `${URL_CONCRESPMATRIX}?format=json&protocol_ids=${ids}&readouts=${ro}&casrns=${chems}`;
     },
-    getBmdsUrl = function(protocol_ids, readout_ids) {
-        if (protocol_ids.length === 0 || readout_ids.length === 0) {
+    getBmdsUrl = function(protocol_id, readout_ids) {
+        if (protocol_id.length === 0 || readout_ids.length === 0) {
             return null;
         }
-        let ids = protocol_ids.join(','),
+        let ids = protocol_id,
             ro = readout_ids.join(',');
         // return url, ro is the readout_id
         return `${URL_BMD}?format=json&protocol_ids=${ids}&readouts=${ro}`;

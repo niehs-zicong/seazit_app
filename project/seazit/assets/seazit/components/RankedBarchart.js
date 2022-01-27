@@ -10,6 +10,7 @@ import { getBmdsUrl, getDoseResponsesUrl, NO_COLLAPSE, svg_download_form } from 
 import BootstrapModal from 'utils/BootstrapModal';
 import { Header, SingleCurveBody, ParrallelCurveBody } from './DoseResponseModal';
 import RankedBarchartHandler from './RankedBarchartHandler';
+
 import {
     AXIS_LINEAR,
     AXIS_LOG10,
@@ -26,44 +27,54 @@ let renderPlot = function(el, data, opts) {
     // stateless; outside react component
     // clear div if non-empty
     $(el).empty();
-
+    //
     if (data.length === 0) {
         $(el).append('<div class="alert alert-info"><p>No BMC data are available.</p></div>');
         return;
     }
+    console.log('rankdedchart data');
+    console.log(data);
+    console.log(opts);
+    console.log(el);
+    // let pod_medData, mort_pod_medData ;
+    let medData, pod_medData, mort_pod_medData;
+    medData = _.sortBy(data.bmc_min_max_result, 'med_pod_med');
+    pod_medData = _.filter(medData, (d) => d.med_pod_med !== null);
+    mort_pod_medData = _.filter(medData, (d) => d.mort_med_pod_med !== null);
 
-    let nonviabilityData = _.chain(data)
-            .map(
-                (d) =>
-                    d.minimimumNonViability &&
-                    Object.assign({}, d.minimimumNonViability, {
-                        maximumSelectivity: d.maximumSelectivity,
-                    })
-            )
-            .compact()
-            .value(),
-        viabilityData = _.chain(data)
-            .map('minimimumViability')
-            .compact()
-            .value();
+    console.log('rankdedchart data');
+    console.log(medData);
+    console.log(pod_medData);
+    console.log(mort_pod_medData);
 
     // set dimensions and margins
     let elWidth = Math.max(Math.floor($(el).innerWidth()), 800),
         margin = { top: 40, right: 100, bottom: 25, left: 300 },
         width = elWidth - margin.left - margin.right,
-        height = data.length * 20 + 100 - margin.top - margin.bottom,
+        height = medData.length * 20 + 100 - margin.top - margin.bottom,
         categoryWidth = 150,
         categoryPadding = 5,
         barStart = categoryWidth + categoryPadding * 2;
 
-    let xScaleFunction;
+    let xScaleFunction = d3.scaleLog;
+    // if (opts.selectedAxis === AXIS_LOG10) {
+    //     xScaleFunction = d3.scaleLog;
+    // }
 
-    // set the ranges
+    //set the ranges
     let extent = d3.extent(
             _.compact(
                 _.flattenDeep([
-                    _.map(nonviabilityData, (d) => [d.bmd, d.bmdl, d.bmdu]),
-                    _.map(viabilityData, (d) => [d.bmd, d.bmdl, d.bmdu]),
+                    _.map(pod_medData, (d) => [
+                        Math.pow(10, d.med_pod_med) * 1000000,
+                        Math.pow(10, d.min_pod_med) * 1000000,
+                        Math.pow(10, d.max_pod_med) * 1000000,
+                    ]),
+                    _.map(mort_pod_medData, (d) => [
+                        Math.pow(10, d.mort_med_pod_med) * 1000000,
+                        Math.pow(10, d.mort_min_pod_med) * 1000000,
+                        Math.pow(10, d.mort_max_pod_med) * 1000000,
+                    ]),
                 ])
             )
         ),
@@ -75,12 +86,16 @@ let renderPlot = function(el, data, opts) {
             .scaleBand()
             .range([0, height])
             .padding(0.1)
-            .domain(data.map((d) => d.chemical_name));
+            .domain(medData.map((d) => d.preferred_name));
+
+    console.log(extent);
+    console.log(y);
+
     let showDoseResponse = function(d) {
         // if there is no second element, readout_id.
         // not quite sure if readout_id 0 is not a certain id.
         // i made this 0 , meaning that not exist.
-        var d2 = nonviabilityData.concat(viabilityData).filter((a) => {
+        var d2 = pod_medData.concat(mort_pod_medData).filter((a) => {
             return a.chemical_casrn == d.chemical_casrn && a.readout_id != d.readout_id;
         });
         if (d2.length == 0) {
@@ -90,7 +105,7 @@ let renderPlot = function(el, data, opts) {
         }
         // ZW 730
         new BootstrapModal(Header, ParrallelCurveBody, {
-            title: `${d.chemical_name} (${d.chemical_casrn}): ${d.readout_endpoint}`,
+            title: `${d.preferred_name} (${d.chemical_casrn}): ${d.readout_endpoint}`,
             readout_id: [d.readout_id, d2[0].readout_id],
             casrn: d.chemical_casrn,
         });
@@ -107,57 +122,91 @@ let renderPlot = function(el, data, opts) {
 
     let barG = svg.append('g').attr('transform', `translate(${barStart},0)`);
 
-    // add nonviability error bars
+    // add pod_med error bars
     barG.selectAll('.nonviability-errorbar')
-        .data(nonviabilityData)
+        .data(pod_medData)
         .enter()
         .append('line')
         .attr('class', 'nonviability-errorbar')
-        .attr('x1', (d) => x(d3.min([d.bmdl, d.bmd])))
-        .attr('x2', (d) => x(d3.max([d.bmd, d.bmdu])))
-        .attr('y1', (d) => y(d.chemical_name) + y.bandwidth() / 2)
-        .attr('y2', (d) => y(d.chemical_name) + y.bandwidth() / 2)
-        .style('stroke', (d) => CATEGORY_COLORS[d.chemical_category])
+        .attr('x1', (d) =>
+            x(
+                d3.min([
+                    Math.pow(10, d.min_pod_med) * 1000000,
+                    Math.pow(10, d.med_pod_med) * 1000000,
+                ])
+            )
+        )
+        .attr('x2', (d) =>
+            x(
+                d3.max([
+                    Math.pow(10, d.med_pod_med) * 1000000,
+                    Math.pow(10, d.max_pod_med) * 1000000,
+                ])
+            )
+        )
+        // .attr('x1', (d) => x(Math.pow(10, d.min_pod_med) * 1000000))
+        // .attr('x2', (d) => x(Math.pow(10, d.max_pod_med) * 1000000))
+        .attr('y1', (d) => y(d.preferred_name) + y.bandwidth() / 2)
+        .attr('y2', (d) => y(d.preferred_name) + y.bandwidth() / 2)
+        // .style('stroke', (d) => CATEGORY_COLORS[d.chemical_category])
         .style('stroke-width', 8)
         .style('pointer-events', 'none');
 
-    // add nonviability circle
+    // add mort_pod_med circle
     barG.selectAll('.nonviability-circle')
-        .data(nonviabilityData)
+        .data(pod_medData)
         .enter()
         .append('circle')
         .attr('class', 'nonviability-circle')
-        .attr('cx', (d) => x(d.bmd))
-        .attr('cy', (d) => y(d.chemical_name) + y.bandwidth() / 2)
+        .attr('cx', (d) => x(Math.pow(10, d.med_pod_med) * 1000000))
+        .attr('cy', (d) => y(d.preferred_name) + y.bandwidth() / 2)
         .attr('r', 10)
-        .style('fill', (d) => CATEGORY_COLORS[d.chemical_category])
+        // .style('fill', (d) => CATEGORY_COLORS[d.chemical_category])
         .style('cursor', 'pointer')
         .on('click', showDoseResponse);
 
-    // add viability error bars
+    // add mort_pod_medData error bars
     barG.selectAll('.viability-errorbar')
-        .data(viabilityData)
+        .data(mort_pod_medData)
         .enter()
         .append('line')
         .attr('class', 'viability-errorbar')
-        .attr('x1', (d) => x(d3.min([d.bmdl, d.bmd])))
-        .attr('x2', (d) => x(d3.max([d.bmd, d.bmdu])))
-        .attr('y1', (d) => y(d.chemical_name) + y.bandwidth() / 2)
-        .attr('y2', (d) => y(d.chemical_name) + y.bandwidth() / 2)
+        // .attr('x1', (d) => x(Math.pow(10, d.mort_min_pod_med) * 1000000))
+        // .attr('x2', (d) => x(Math.pow(10, d.mort_max_pod_med) * 1000000))
+
+        .attr('x1', (d) =>
+            x(
+                d3.min([
+                    Math.pow(10, d.mort_min_pod_med) * 1000000,
+                    Math.pow(10, d.mort_med_pod_med) * 1000000,
+                ])
+            )
+        )
+        .attr('x2', (d) =>
+            x(
+                d3.max([
+                    Math.pow(10, d.mort_med_pod_med) * 1000000,
+                    Math.pow(10, d.mort_max_pod_med) * 1000000,
+                ])
+            )
+        )
+
+        .attr('y1', (d) => y(d.preferred_name) + y.bandwidth() / 2)
+        .attr('y2', (d) => y(d.preferred_name) + y.bandwidth() / 2)
         .style('stroke', 'black')
         .style('stroke-width', 4)
         .style('stroke-dasharray', '4, 2')
         .style('pointer-events', 'none')
         .style('opacity', 0.8);
 
-    // add viability circle
+    // add mort_pod_medData circle
     barG.selectAll('.viability-circle')
-        .data(viabilityData)
+        .data(mort_pod_medData)
         .enter()
         .append('circle')
         .attr('class', 'viability-circle')
-        .attr('cx', (d) => x(d.bmd))
-        .attr('cy', (d) => y(d.chemical_name) + y.bandwidth() / 2)
+        .attr('cx', (d) => x(Math.pow(10, d.mort_med_pod_med) * 1000000))
+        .attr('cy', (d) => y(d.preferred_name) + y.bandwidth() / 2)
         .attr('r', 7)
         .style('fill', 'black')
         .style('opacity', 0.8)
@@ -175,18 +224,21 @@ let renderPlot = function(el, data, opts) {
             .text('Selectivity');
 
         svg.selectAll('.selectivity-text')
-            .data(nonviabilityData)
+            .data(pod_medData)
             .enter()
             .append('text')
             .attr('x', elWidth - margin.right - margin.left + 24)
-            .attr('y', (d) => y(d.chemical_name) + y.bandwidth() / 2)
+            .attr('y', (d) => y(d.preferred_name) + y.bandwidth() / 2)
             .attr('dy', '0.35em')
             .style('font-family', 'sans-serif')
             .text((d) => {
-                return d.has_viability_bmd
-                    ? printFloat(d.maximumSelectivity)
-                    : `≥ ${printFloat(d.maximumSelectivity)}`;
+                return 'zw';
             })
+            // .text((d) => {
+            //     return d.has_viability_bmd
+            //         ? printFloat(d.maximumSelectivity)
+            //         : `≥ ${printFloat(d.maximumSelectivity)}`;
+            // })
             .each(function(d) {
                 if (!d.has_viability_bmd) {
                     // add footnote; adjust text so that numbers are aligned
@@ -211,25 +263,25 @@ let renderPlot = function(el, data, opts) {
     // append category ids
 
     svg.selectAll('.category')
-        .data(data)
+        .data(medData)
         .enter()
         .append('rect')
         .attr('class', 'category')
         .attr('x', categoryPadding)
         .attr('width', categoryWidth)
-        .attr('y', (d) => y(d.chemical_name))
-        .attr('height', y.bandwidth())
-        .style('fill', (d) => CATEGORY_COLORS[d.chemical_category]);
+        .attr('y', (d) => y(d.preferred_name))
+        .attr('height', y.bandwidth());
+    // .style('fill', (d) => CATEGORY_COLORS[d.preferred_name]);
 
     // append category label
     svg.selectAll('.category-text')
-        .data(data)
+        .data(medData)
         .enter()
         .append('text')
         .attr('x', categoryPadding + 2)
-        .attr('y', (d) => y(d.chemical_name) + y.bandwidth() / 2)
+        .attr('y', (d) => y(d.preferred_name) + y.bandwidth() / 2)
         .attr('dy', '0.35em')
-        .text((d) => d.chemical_category)
+        .text((d) => d.preferred_name)
         .style('fill', 'white');
 
     // add axes
@@ -310,13 +362,13 @@ let renderPlot = function(el, data, opts) {
         .append('text')
         .attr('x', 38)
         .attr('y', 0)
-        .text('Non-viability');
+        .text('pod data');
 
     barLegend
         .append('text')
         .attr('x', 38)
         .attr('y', 15)
-        .text('Viability');
+        .text('mort pod data');
 };
 
 class RankedBarChart extends React.Component {
@@ -335,7 +387,7 @@ class RankedBarChart extends React.Component {
     _renderPlot(props) {
         renderPlot(this.refs.bmd_svg, props.data, {
             isSelective: props.visualization === BMDVIZ_SELECTIVITY,
-            // selectedAxis: props.selectedAxis,
+            selectedAxis: props.selectedAxis,
         });
     }
 

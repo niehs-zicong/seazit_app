@@ -169,13 +169,6 @@ class ChemicalWidget extends BaseWidget {
             <div className="clearfix">
                 {this._renderFilterBy(state)}
                 {this._renderSelector(state)}
-                <p className="help-block">
-                    <a
-                        className="btn btn-default btn-sm pull-right"
-                        style={{ marginTop: 5 }}
-                        href={URL_CHEMXLSX}
-                    ></a>
-                </p>
             </div>
         );
     }
