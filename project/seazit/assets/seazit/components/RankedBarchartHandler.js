@@ -59,12 +59,6 @@ class RankedBarchartHandler extends React.Component {
     }
 
     fetchBmdData(url) {
-        // console.log('this.state zw2  '  );
-        // console.log(this.state);
-        // console.log(this.props);
-
-        // let url = `/seazit/api/seazit_cr_readout_result/bmds/?format=json&protocol_ids=1&readouts=Mortality@24_1`;
-        // let url = this.props.url;
         d3.json(url, (error, data) => {
             if (error) {
                 let err = error.target.responseText.replace('["', '').replace('"]', '');

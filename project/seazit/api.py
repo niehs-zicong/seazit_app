@@ -273,7 +273,6 @@ class Seazit_readout_resultViewSet(CachedReadOnlyViewSet):
         readout_ids = readouts.split(",")
         return Response(models.Seazit_readout_result.bmds_responses(protocol_ids, readout_ids))
 
-
 class Seazit_bmc_readout_resultViewSet(CachedReadOnlyViewSet):
     """
     retrieve:

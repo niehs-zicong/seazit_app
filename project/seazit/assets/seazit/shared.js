@@ -180,14 +180,15 @@ const AXIS_LINEAR = 1,
         // console.log(ids, ro, chems);
         return `${URL_CONCRESPMATRIX}?format=json&protocol_ids=${ids}&readouts=${ro}&casrns=${chems}`;
     },
-    getBmdsUrl = function(protocol_id, readout_ids) {
-        if (protocol_id.length === 0 || readout_ids.length === 0) {
+    getBmdsUrl = function(protocol_id, readout_id) {
+        if (protocol_id.length === 0 || readout_id.length === 0) {
             return null;
         }
-        let ids = protocol_id,
-            ro = readout_ids.join(',');
+
+        let id = protocol_id,
+            ro = readout_id.join(',');
         // return url, ro is the readout_id
-        return `${URL_BMD}?format=json&protocol_ids=${ids}&readouts=${ro}`;
+        return `${URL_BMD}?format=json&protocol_ids=${id}&readouts=${ro}`;
     },
     printFloat = function(v) {
         if (v <= 0) {

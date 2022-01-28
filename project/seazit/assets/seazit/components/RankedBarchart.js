@@ -8,7 +8,7 @@ import ReactDOM from 'react-dom';
 import DoseResponse from './DoseResponse';
 import { getBmdsUrl, getDoseResponsesUrl, NO_COLLAPSE, svg_download_form } from '../shared';
 import BootstrapModal from 'utils/BootstrapModal';
-import { Header, SingleCurveBody, ParrallelCurveBody } from './DoseResponseModal';
+import { Header, SingleCurveBody } from './DoseResponseModal';
 import RankedBarchartHandler from './RankedBarchartHandler';
 
 import {
@@ -89,25 +89,30 @@ let renderPlot = function(el, data, opts) {
             .domain(medData.map((d) => d.preferred_name));
 
     console.log(extent);
-    console.log(y);
 
     let showDoseResponse = function(d) {
         // if there is no second element, readout_id.
         // not quite sure if readout_id 0 is not a certain id.
         // i made this 0 , meaning that not exist.
-        var d2 = pod_medData.concat(mort_pod_medData).filter((a) => {
-            return a.chemical_casrn == d.chemical_casrn && a.readout_id != d.readout_id;
-        });
-        if (d2.length == 0) {
-            var _ = {};
-            _.readout_id = 0;
-            d2.push(_);
-        }
+
+        // var d2 = pod_medData.concat(mort_pod_medData).filter((a) => {
+        //     return a.chemical_casrn == d.chemical_casrn && a.readout_id != d.readout_id;
+        // });
+        // if (d2.length == 0) {
+        //     var _ = {};
+        //     _.readout_id = 0;
+        //     d2.push(_);
+        // }
+        console.log('d2');
+        console.log(d);
+        // console.log(d2)
         // ZW 730
-        new BootstrapModal(Header, ParrallelCurveBody, {
-            title: `${d.preferred_name} (${d.chemical_casrn}): ${d.readout_endpoint}`,
-            readout_id: [d.readout_id, d2[0].readout_id],
-            casrn: d.chemical_casrn,
+        new BootstrapModal(Header, SingleCurveBody, {
+            // title: `${d.preferred_name} (${d.chemical_casrn}): ${d.readout_endpoint}`,
+            title: `zw`,
+            protocol_id: d.protocol_id,
+            readout_id: d.endpoint_name + '_' + d.protocol_id,
+            casrn: d.casrn,
         });
     };
 
@@ -123,11 +128,11 @@ let renderPlot = function(el, data, opts) {
     let barG = svg.append('g').attr('transform', `translate(${barStart},0)`);
 
     // add pod_med error bars
-    barG.selectAll('.nonviability-errorbar')
+    barG.selectAll('.pod-errorbar')
         .data(pod_medData)
         .enter()
         .append('line')
-        .attr('class', 'nonviability-errorbar')
+        .attr('class', 'pod-errorbar')
         .attr('x1', (d) =>
             x(
                 d3.min([
@@ -144,36 +149,33 @@ let renderPlot = function(el, data, opts) {
                 ])
             )
         )
-        // .attr('x1', (d) => x(Math.pow(10, d.min_pod_med) * 1000000))
-        // .attr('x2', (d) => x(Math.pow(10, d.max_pod_med) * 1000000))
         .attr('y1', (d) => y(d.preferred_name) + y.bandwidth() / 2)
         .attr('y2', (d) => y(d.preferred_name) + y.bandwidth() / 2)
         // .style('stroke', (d) => CATEGORY_COLORS[d.chemical_category])
+        .style('stroke', '#d62976')
         .style('stroke-width', 8)
         .style('pointer-events', 'none');
 
     // add mort_pod_med circle
-    barG.selectAll('.nonviability-circle')
+    barG.selectAll('.pod-circle')
         .data(pod_medData)
         .enter()
         .append('circle')
-        .attr('class', 'nonviability-circle')
+        .attr('class', 'pod-circle')
         .attr('cx', (d) => x(Math.pow(10, d.med_pod_med) * 1000000))
         .attr('cy', (d) => y(d.preferred_name) + y.bandwidth() / 2)
         .attr('r', 10)
         // .style('fill', (d) => CATEGORY_COLORS[d.chemical_category])
+        .style('fill', '#d62976')
         .style('cursor', 'pointer')
         .on('click', showDoseResponse);
 
     // add mort_pod_medData error bars
-    barG.selectAll('.viability-errorbar')
+    barG.selectAll('.mort_pod-errorbar')
         .data(mort_pod_medData)
         .enter()
         .append('line')
-        .attr('class', 'viability-errorbar')
-        // .attr('x1', (d) => x(Math.pow(10, d.mort_min_pod_med) * 1000000))
-        // .attr('x2', (d) => x(Math.pow(10, d.mort_max_pod_med) * 1000000))
-
+        .attr('class', 'mort_pod-errorbar')
         .attr('x1', (d) =>
             x(
                 d3.min([
@@ -200,11 +202,11 @@ let renderPlot = function(el, data, opts) {
         .style('opacity', 0.8);
 
     // add mort_pod_medData circle
-    barG.selectAll('.viability-circle')
+    barG.selectAll('.mort_pod-circle')
         .data(mort_pod_medData)
         .enter()
         .append('circle')
-        .attr('class', 'viability-circle')
+        .attr('class', 'mort_pod-circle')
         .attr('cx', (d) => x(Math.pow(10, d.mort_med_pod_med) * 1000000))
         .attr('cy', (d) => y(d.preferred_name) + y.bandwidth() / 2)
         .attr('r', 7)
@@ -235,12 +237,12 @@ let renderPlot = function(el, data, opts) {
                 return 'zw';
             })
             // .text((d) => {
-            //     return d.has_viability_bmd
+            //     return d.has_mort_pod_bmd
             //         ? printFloat(d.maximumSelectivity)
             //         : `≥ ${printFloat(d.maximumSelectivity)}`;
             // })
             .each(function(d) {
-                if (!d.has_viability_bmd) {
+                if (!d.has_mort_pod_bmd) {
                     // add footnote; adjust text so that numbers are aligned
                     d3.select(this)
                         .attr('x', elWidth - margin.right - margin.left + 10)
@@ -261,7 +263,7 @@ let renderPlot = function(el, data, opts) {
     }
 
     // append category ids
-
+    // TODO
     svg.selectAll('.category')
         .data(medData)
         .enter()
@@ -270,8 +272,9 @@ let renderPlot = function(el, data, opts) {
         .attr('x', categoryPadding)
         .attr('width', categoryWidth)
         .attr('y', (d) => y(d.preferred_name))
-        .attr('height', y.bandwidth());
-    // .style('fill', (d) => CATEGORY_COLORS[d.preferred_name]);
+        .attr('height', y.bandwidth())
+        // .style('fill', (d) => CATEGORY_COLORS[d.preferred_name]);
+        .style('fill', '#d62976');
 
     // append category label
     svg.selectAll('.category-text')

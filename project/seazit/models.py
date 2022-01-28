@@ -683,6 +683,116 @@ class Seazit_readout_result(models.Model):
                     bmc_min_max_result = list(bmcMinMaxVwOutput))
 
 
+    @classmethod
+    def bmds_doseresponses(cls, protocol_ids, readout_ids, chems_ids):
+        print (protocol_ids, readout_ids, chems_ids)
+
+        cols = (
+                "input_chembase",
+                "substance_name_by_lab",
+                "plate_name",
+                "dose_id",
+                "endpoint_name",
+                "n",
+                "n_in",
+                "embryo_type",
+                "protocol_id",
+                "substance_id",
+                "input_id",
+                "endpoint_name_only",
+                "endpoint_name_protocol",
+                "dose",
+                "dose_unit",
+                "protocol_source",
+                "plate_map_name",
+                "plate_screen_time_end",
+                "plate_screen_id",
+                "hour_post_fertilization",
+                "substance_type",
+                "substance_lab",
+                "substance_code",
+                "seazit_substance_id",
+                "casrn",
+                "stock_conc_mm",
+                "supplier",
+                "lot_number",
+                "coa_purity",
+                "determined_purity",
+                "dtxsid",
+                "preferred_name",
+                "use_category1",
+                "use_category2",
+                "compound_name",
+                "lab_anonymous_code",
+                "test_condition",
+                "protocol_name_long",
+                "protocol_name_plot",
+            )
+        dr =cls.objects.filter(
+                protocol_id__in=protocol_ids , endpoint_name__in=readout_ids
+                ).values(*cols)
+        cols = (
+                "trsh",
+                "rnge",
+                "endpoint_name",
+                "input_chembase",
+                "plate_name",
+                "lowest_conc",
+                "highest_conc",
+                "n_conc",
+                "mean_conc_spacing",
+                "max_resp_med",
+                "min_resp_med",
+                "ncorrected_med",
+                "emax_med",
+                "slope_med",
+                "auc_med",
+                "wauc_med",
+                "wauc_prev_med",
+                "ec50_med",
+                "pod_med",
+                "emax_ciu",
+                "slope_ciu",
+                "auc_ciu",
+                "wauc_ciu",
+                "wauc_prev_ciu",
+                "ec50_ciu",
+                "pod_ciu",
+                "emax_cil",
+                "slope_cil",
+                "auc_cil",
+                "wauc_cil",
+                "wauc_prev_cil",
+                "ec50_cil",
+                "pod_cil",
+                "n_curves",
+                "hit_confidence",
+                "embryo_type",
+                "protocol_id",
+                "substance_id",
+                "input_id",
+                "screen_hours",
+                "endpoint_name_only",
+                "casrn",
+                "dtxsid",
+                "preferred_name",
+                "use_category1",
+                "use_category2",
+                "compound_name",
+                "substance_code",
+                "lab_anonymous_code",
+                "test_condition",
+                "protocol_name_long",
+                "protocol_name_plot",
+                "endpoint_name_protocol",
+        )
+        analysisbmcoutput =Seazit_bmc_readout_result.objects.filter(
+                protocol_id__in=protocol_ids , endpoint_name__in=readout_ids
+                ).values(*cols)
+
+
+        return dict(readout_result=list(dr), bmc_readout_result=list(analysisbmcoutput))
+
 
 class Seazit_bmc_readout_result(models.Model):
 
