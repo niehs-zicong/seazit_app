@@ -150,6 +150,7 @@ class BmdByLabMain extends React.Component {
                         hideViability={true}
                         hideNonViability={false}
                         multiAssaySelector={false}
+                        multiReadoutSelector={false}
                         tabName={'BmdByLab'}
                     />
                     <hr />

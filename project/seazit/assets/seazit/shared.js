@@ -135,37 +135,6 @@ const AXIS_LINEAR = 1,
             </div>
         );
     },
-    renderSelectMultiOptgroupWidget2 = function(name, label, options, values, handleChange) {
-        let size = 10;
-        console.log(options);
-        console.log(values);
-
-        return (
-            <div>
-                <label>Select {label}(s):</label>
-                <select
-                    name={name}
-                    className="form-control"
-                    multiple={true}
-                    size={size}
-                    onChange={handleChange}
-                    value={values}
-                >
-                    {_.map(options, (value, category) => {
-                        return (
-                            <optgroup key={category} label={category}>
-                                {value.map((d) => (
-                                    <option key={d.key} value={d.key}>
-                                        {d.label}
-                                    </option>
-                                ))}
-                            </optgroup>
-                        );
-                    })}
-                </select>
-            </div>
-        );
-    },
     insertIntoDom = function(Component, el) {
         ReactDOM.render(React.createElement(Component), el);
     },
@@ -186,7 +155,9 @@ const AXIS_LINEAR = 1,
         }
 
         let id = protocol_id,
-            ro = readout_id.join(',');
+            // ro = readout_id.join(',');
+            ro = readout_id;
+
         // return url, ro is the readout_id
         return `${URL_BMD}?format=json&protocol_ids=${id}&readouts=${ro}`;
     },

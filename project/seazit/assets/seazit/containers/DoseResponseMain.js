@@ -120,6 +120,7 @@ class DoseResponseMain extends React.Component {
                         hideViability={false}
                         hideNonViability={false}
                         multiAssaySelector={true}
+                        multiReadoutSelector={true}
                         tabName={'DoseResponse'}
                     />
                     <hr />
