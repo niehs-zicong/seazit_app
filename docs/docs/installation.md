@@ -20,7 +20,7 @@ conda env create -f env_seazit.yml
 conda activate seazit
 brew install freetype
 pip install -r requirements/dev.txt
-conda install pygraphviz
+conda install pygraphviz ??? this may not needed.
 
 # copy default local settings (and modify as needed)
 cp ./project/main/settings/local.example.py ./project/main/settings/local.py
