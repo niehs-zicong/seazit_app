@@ -93,109 +93,6 @@ class RankedBarchartHandler extends React.Component {
         data.chemicalKey = `${data.casrn}|${data.dtxsid}`;
     }
 
-    _getFilteredData() {
-        // console.log(this.state.data)
-        // _.each(this.state.data.bmc_readout_result, (d) => this.setDatasetKey(d));
-        // _.each(this.state.data.readout_result, (d) => this.setDatasetKey(d));
-        // console.log(this.state.data)
-        //
-        // let nonViableIds = this.props.selectedReadouts.map((d) => parseInt(d)),
-        //     nonViables = _.filter(this.state.data, (d) => _.includes(nonViableIds, d.readout_id)),
-        //     protocols = _.chain(nonViables)
-        //         .map('protocol')
-        //         .uniq()
-        //         .value(),
-        //     viables = _.filter(this.state.data, (d) => {
-        //         return d.readout_is_viability == true && _.includes(protocols, d.protocol);
-        //     }),
-        //     data = _.flattenDeep([viables, nonViables]),
-        //     setNullNameFields = [
-        //         'maximumSelectivity',
-        //         'minimumBmd',
-        //         'minimimumViability',
-        //         'minimimumNonViability',
-        //     ];
-        // let forPlot = _.chain(data)
-        //     .groupBy('chemical_casrn')
-        //     .values()
-        //     .map((data) => {
-        //         let viables = _.filter(data, (d) => d.readout_is_viability == true),
-        //             nonViables = _.filter(data, (d) => d.readout_is_viability == false),
-        //             maximumSelectivity = _.chain(data)
-        //                 .filter((d) => d.selectivity_ratio > 0)
-        //                 .map('selectivity_ratio')
-        //                 .max()
-        //                 .value(),
-        //             minimumBmd = _.chain(data)
-        //                 .filter((d) => d.bmd > 0)
-        //                 .map('bmd')
-        //                 .min()
-        //                 .value(),
-        //             minimimumViability = _.chain(viables)
-        //                 .filter((d) => d.bmd > 0)
-        //                 .min((d) => d.bmd)
-        //                 .value(),
-        //             minimimumNonViability = _.chain(nonViables)
-        //                 .filter((d) => d.bmd > 0)
-        //                 .min((d) => d.bmd)
-        //                 .value();
-        //
-        //         return {
-        //             chemical_casrn: data[0].chemical_casrn,
-        //             chemical_name: data[0].chemical_name,
-        //             chemical_category: data[0].chemical_category,
-        //             viables,
-        //             nonViables,
-        //             maximumSelectivity,
-        //             minimumBmd,
-        //             minimimumViability,
-        //             minimimumNonViability,
-        //         };
-        //     })
-        //     .each((d) => {
-        //         setNullNameFields.forEach((name) => {
-        //             if (!_.isObject(d[name]) && !isFinite(d[name])) {
-        //                 d[name] = null;
-        //             }
-        //         });
-        //     })
-        //     .value();
-        //
-        // return forPlot;
-    }
-
-    _getData() {
-        /*
-        Plot only contains a subset of data
-        this part is for BMC by lab,
-        */
-        console.log(this.state);
-        console.log(this.props);
-
-        let data = this._getFilteredData(),
-            filterFunc,
-            sortByFunc;
-        // if (this.props.visualization === BMDVIZ_ACTIVITY) {
-        //     filterFunc = (d) => d.minimumBmd !== null;
-        //     sortByFunc = 'minimumBmd';
-        // } else {
-        //     filterFunc = (d) => {
-        //         return (
-        //             d.maximumSelectivity !== null &&
-        //             d.maximumSelectivity > this.props.selectivityCutoff
-        //         );
-        //     };
-        //     sortByFunc = (d) => -d.maximumSelectivity;
-        // }
-        return {
-            plotData: _.chain(data)
-                .filter(filterFunc)
-                .sortBy(sortByFunc)
-                .value(),
-            tableData: data,
-        };
-    }
-
     componentWillMount() {
         this.fetchBmdData(this.props.url);
     }
@@ -229,6 +126,7 @@ class RankedBarchartHandler extends React.Component {
             // { plotData, tableData } = this._getData();
             plotData = this.state.data,
             tableData = this.state.data;
+        console.log(this.props);
 
         return (
             <div>
@@ -270,11 +168,11 @@ class RankedBarchartHandler extends React.Component {
                     {/*    Export data Json*/}
                     {/*</button>*/}
                 </h2>
-                {/*{this.props.visualization === BMDVIZ_ACTIVITY ? (*/}
-                {/*    <BmdTable data={tableData} />*/}
-                {/*) : (*/}
-                {/*    <SelectivityTable data={tableData} />*/}
-                {/*)}*/}
+                {this.props.visualization === BMDVIZ_ACTIVITY ? (
+                    <BmdTable data={tableData} />
+                ) : (
+                    <SelectivityTable data={tableData} />
+                )}
             </div>
         );
     }

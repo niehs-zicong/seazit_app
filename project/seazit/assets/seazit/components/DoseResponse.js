@@ -27,9 +27,6 @@ class DoseResponse extends React.Component {
     }
 
     collapseData(data, collapse) {
-        console.log('collapseData');
-
-        console.log(data);
         let keys = _.chain(data.dose_response)
                 .map('key')
                 .uniq()
@@ -97,10 +94,7 @@ class DoseResponse extends React.Component {
                 });
                 return;
             }
-            console.log(data);
-
             this.updateData(data, this.props.collapse);
-            console.log(data);
         });
     }
 

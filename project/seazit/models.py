@@ -556,6 +556,8 @@ class Seazit_readout_result(models.Model):
                 "endpoint_name",
                 "casrn",
                 "preferred_name",
+                "use_category1",
+
                 "dtxsid",
                 "min_pod_med",
 
@@ -648,6 +650,7 @@ class Seazit_bmc_min_max(models.Model):
     endpoint_name = models.TextField(blank=True, null=True)
     casrn = models.TextField(blank=True, null=True)
     preferred_name = models.TextField(blank=True, null=True)
+    use_category1 = models.TextField(blank=True, null=True)
     dtxsid = models.TextField(blank=True, null=True)
     min_pod_med = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     med_pod_med = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)

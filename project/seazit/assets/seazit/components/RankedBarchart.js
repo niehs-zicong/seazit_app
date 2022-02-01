@@ -32,20 +32,18 @@ let renderPlot = function(el, data, opts) {
         $(el).append('<div class="alert alert-info"><p>No BMC data are available.</p></div>');
         return;
     }
-    console.log('rankdedchart data');
-    console.log(data);
-    console.log(opts);
-    console.log(el);
     // let pod_medData, mort_pod_medData ;
     let medData, pod_medData, mort_pod_medData;
     medData = _.sortBy(data.bmc_min_max_result, 'med_pod_med');
     pod_medData = _.filter(medData, (d) => d.med_pod_med !== null);
     mort_pod_medData = _.filter(medData, (d) => d.mort_med_pod_med !== null);
 
-    console.log('rankdedchart data');
-    console.log(medData);
-    console.log(pod_medData);
-    console.log(mort_pod_medData);
+    //
+    // let mort_pod_medData2 = mort_pod_medData.map(function(v, i) {
+    //     return _.extend(v, {
+    //         mort_key: 'mort_pod_medData',
+    //     });
+    // });
 
     // set dimensions and margins
     let elWidth = Math.max(Math.floor($(el).innerWidth()), 800),
@@ -87,34 +85,23 @@ let renderPlot = function(el, data, opts) {
             .range([0, height])
             .padding(0.1)
             .domain(medData.map((d) => d.preferred_name));
-
-    console.log(extent);
-
-    let showDoseResponse = function(d) {
-        // if there is no second element, readout_id.
-        // not quite sure if readout_id 0 is not a certain id.
-        // i made this 0 , meaning that not exist.
-
-        // var d2 = pod_medData.concat(mort_pod_medData).filter((a) => {
-        //     return a.chemical_casrn == d.chemical_casrn && a.readout_id != d.readout_id;
-        // });
-        // if (d2.length == 0) {
-        //     var _ = {};
-        //     _.readout_id = 0;
-        //     d2.push(_);
-        // }
-        console.log('d2');
-        console.log(d);
-        // console.log(d2)
-        // ZW 730
-        new BootstrapModal(Header, SingleCurveBody, {
-            // title: `${d.preferred_name} (${d.chemical_casrn}): ${d.readout_endpoint}`,
-            title: `zw`,
-            protocol_id: d.protocol_id,
-            readout_id: d.endpoint_name + '_' + d.protocol_id,
-            casrn: d.casrn,
-        });
-    };
+    //
+    // let showDoseResponse = function(d) {
+    //     let readout_id;
+    //     if (d.mort_key == "mort_pod_medData") {
+    //         d.readout_id =  'Mort@120' + '_' + d.protocol_id
+    //     } else {
+    //         d.readout_id =  d.endpoint_name + '_' + d.protocol_id
+    //     }
+    //     console.log(d.readout_id)
+    //     new BootstrapModal(Header, SingleCurveBody, {
+    //         // title: `${d.preferred_name} (${d.chemical_casrn}): ${d.readout_endpoint}`,
+    //         title: `zw`,
+    //         protocol_id: d.protocol_id,
+    //         readout_id: d.endpoint_name + '_' + d.protocol_id,
+    //         casrn: d.casrn,
+    //     });
+    // };
 
     // append plot
     let svg = d3
@@ -151,8 +138,7 @@ let renderPlot = function(el, data, opts) {
         )
         .attr('y1', (d) => y(d.preferred_name) + y.bandwidth() / 2)
         .attr('y2', (d) => y(d.preferred_name) + y.bandwidth() / 2)
-        // .style('stroke', (d) => CATEGORY_COLORS[d.chemical_category])
-        .style('stroke', '#d62976')
+        .style('stroke', (d) => CATEGORY_COLORS[d.use_category1])
         .style('stroke-width', 8)
         .style('pointer-events', 'none');
 
@@ -165,10 +151,17 @@ let renderPlot = function(el, data, opts) {
         .attr('cx', (d) => x(Math.pow(10, d.med_pod_med) * 1000000))
         .attr('cy', (d) => y(d.preferred_name) + y.bandwidth() / 2)
         .attr('r', 10)
-        // .style('fill', (d) => CATEGORY_COLORS[d.chemical_category])
-        .style('fill', '#d62976')
+        .style('fill', (d) => CATEGORY_COLORS[d.use_category1])
         .style('cursor', 'pointer')
-        .on('click', showDoseResponse);
+        .on('click', function(d) {
+            new BootstrapModal(Header, SingleCurveBody, {
+                // title: `${d.preferred_name} (${d.chemical_casrn}): ${d.readout_endpoint}`,
+                title: `zw`,
+                protocol_id: d.protocol_id,
+                readout_id: d.endpoint_name + '_' + d.protocol_id,
+                casrn: d.casrn,
+            });
+        });
 
     // add mort_pod_medData error bars
     barG.selectAll('.mort_pod-errorbar')
@@ -213,7 +206,15 @@ let renderPlot = function(el, data, opts) {
         .style('fill', 'black')
         .style('opacity', 0.8)
         .style('cursor', 'pointer')
-        .on('click', showDoseResponse);
+        .on('click', function(d) {
+            new BootstrapModal(Header, SingleCurveBody, {
+                // title: `${d.preferred_name} (${d.chemical_casrn}): ${d.readout_endpoint}`,
+                title: `zw`,
+                protocol_id: d.protocol_id,
+                readout_id: 'Mortality@120' + '_' + d.protocol_id,
+                casrn: d.casrn,
+            });
+        });
 
     // add selectivity-ratio text
     if (opts.isSelective) {
@@ -263,7 +264,6 @@ let renderPlot = function(el, data, opts) {
     }
 
     // append category ids
-    // TODO
     svg.selectAll('.category')
         .data(medData)
         .enter()
@@ -273,8 +273,8 @@ let renderPlot = function(el, data, opts) {
         .attr('width', categoryWidth)
         .attr('y', (d) => y(d.preferred_name))
         .attr('height', y.bandwidth())
-        // .style('fill', (d) => CATEGORY_COLORS[d.preferred_name]);
-        .style('fill', '#d62976');
+        .style('fill', (d) => CATEGORY_COLORS[d.use_category1]);
+    // .style('fill', '#d62976');
 
     // append category label
     svg.selectAll('.category-text')
@@ -284,7 +284,7 @@ let renderPlot = function(el, data, opts) {
         .attr('x', categoryPadding + 2)
         .attr('y', (d) => y(d.preferred_name) + y.bandwidth() / 2)
         .attr('dy', '0.35em')
-        .text((d) => d.preferred_name)
+        .text((d) => d.use_category1)
         .style('fill', 'white');
 
     // add axes

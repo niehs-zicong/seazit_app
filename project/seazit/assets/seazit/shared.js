@@ -153,7 +153,6 @@ const AXIS_LINEAR = 1,
         if (protocol_id.length === 0 || readout_id.length === 0) {
             return null;
         }
-
         let id = protocol_id,
             // ro = readout_id.join(',');
             ro = readout_id;

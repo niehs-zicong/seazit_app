@@ -130,7 +130,6 @@ class BmdByLabMain extends React.Component {
         }
         console.log(this.state);
         let url = getBmdsUrl(this.state.assay, this.state.readouts);
-        console.log(url);
 
         return (
             <div className="row-fluid">

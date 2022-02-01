@@ -7,29 +7,49 @@ import { Header, SingleCurveBody } from './DoseResponseModal';
 
 import { printFloat } from '../shared';
 
-var BmdTableData;
-
-let renderBmdModal = function(jsonData) {
+let renderMedPodModal = function(jsonData, flag) {
     if (!jsonData) {
         // match button padding-left
         return <span style={{ paddingLeft: 12 }}>-</span>;
     }
-
     let showModal = () => {
         new BootstrapModal(Header, SingleCurveBody, {
-            title: `${jsonData.chemical_name} (${jsonData.chemical_casrn}): ${jsonData.readout_endpoint}`,
-            readout_id: jsonData.readout_id,
-            casrn: jsonData.chemical_casrn,
+            // title: `${d.preferred_name} (${d.chemical_casrn}): ${d.readout_endpoint}`,
+            title: `zw`,
+            protocol_id: jsonData.protocol_id,
+
+            // TODO. Sort colorful dot and black dot. Black dot is mortilaty@120.
+            readout_id: jsonData.endpoint_name + '_' + jsonData.protocol_id,
+            casrn: jsonData.casrn,
         });
     };
+    let med_result, min_med_result, max_med_result;
 
-    let bmdl = jsonData.bmdl ? printFloat(jsonData.bmdl) : 'NR',
-        bmdu = jsonData.bmdu ? printFloat(jsonData.bmdu) : 'NR';
-
+    if (flag == 'pod_med') {
+        (med_result = jsonData.med_pod_med
+            ? printFloat(Math.pow(10, jsonData.med_pod_med) * 1000000)
+            : '-'),
+            (min_med_result = jsonData.min_pod_med
+                ? printFloat(Math.pow(10, jsonData.min_pod_med) * 1000000)
+                : '-'),
+            (max_med_result = jsonData.max_pod_med
+                ? printFloat(Math.pow(10, jsonData.max_pod_med) * 1000000)
+                : '-');
+    } else {
+        (med_result = jsonData.mort_med_pod_med
+            ? printFloat(Math.pow(10, jsonData.mort_med_pod_med) * 1000000)
+            : '-'),
+            (min_med_result = jsonData.mort_min_pod_med
+                ? printFloat(Math.pow(10, jsonData.mort_min_pod_med) * 1000000)
+                : '-'),
+            (max_med_result = jsonData.mort_max_pod_med
+                ? printFloat(Math.pow(10, jsonData.mort_max_pod_med) * 1000000)
+                : '-');
+    }
     return (
         <button className="btn btn-link" onClick={showModal} style={{ textAlign: 'left' }}>
-            {printFloat(jsonData.bmd)}
-            <br />({bmdl} – {bmdu})
+            {med_result}
+            <br />({min_med_result} – {max_med_result})
         </button>
     );
 };
@@ -37,12 +57,13 @@ let renderBmdModal = function(jsonData) {
 class BmdTable extends React.Component {
     _renderRow(d) {
         return (
-            <tr key={d.chemical_casrn}>
-                <td>{d.chemical_name}</td>
-                <td>{d.chemical_casrn}</td>
-                <td>{d.chemical_category}</td>
-                <td>{renderBmdModal(d.minimimumNonViability)}</td>
-                <td>{renderBmdModal(d.minimimumViability)}</td>
+            <tr key={d.casrn}>
+                <td>{d.preferred_name}</td>
+                <td>{d.casrn}</td>
+                <td>{d.use_category1}</td>
+                {/*<td>{d.med_pod_med}</td>*/}
+                <td>{renderMedPodModal(d, 'pod_med')}</td>
+                <td>{renderMedPodModal(d, 'mort_pod_med')}</td>
             </tr>
         );
     }
@@ -51,15 +72,10 @@ class BmdTable extends React.Component {
         if (this.props.data.length === 0) {
             return null;
         }
+        console.log(this.props.data);
 
-        let zeroes = _.filter(this.props.data, (d) => d.minimumBmd <= 0),
-            nonzeroes = _.chain(this.props.data)
-                .filter((d) => d.minimumBmd > 0)
-                .sortBy('minimumBmd')
-                .value();
-
-        //
-
+        let medData, pod_medData, mort_pod_medData;
+        medData = _.sortBy(this.props.data.bmc_min_max_result, 'med_pod_med');
         return (
             <div>
                 <table id="IA_table01" ref="table" className="table table-condensed table-hover">
@@ -69,21 +85,18 @@ class BmdTable extends React.Component {
                             <th style={{ width: '20%' }}>CASRN</th>
                             <th style={{ width: '20%' }}>Category</th>
                             <th style={{ width: '20%' }}>
-                                Minimum nonviability BMC
+                                med_pod_med
                                 <br />
-                                (BMCL – BMCU)
+                                (min – max)
                             </th>
                             <th style={{ width: '20%' }}>
-                                Minimum viability BMC
+                                mort_med_pod_med
                                 <br />
-                                (BMCL – BMCU)
+                                (min – max)
                             </th>
                         </tr>
                     </thead>
-                    <tbody>
-                        {nonzeroes.map(this._renderRow)}
-                        {zeroes.map(this._renderRow)}
-                    </tbody>
+                    <tbody>{medData.map(this._renderRow)}</tbody>
                 </table>
             </div>
         );

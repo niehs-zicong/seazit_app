@@ -251,7 +251,6 @@ class Seazit_readout_resultViewSet(CachedReadOnlyViewSet):
         readout_ids = readouts.split(",")
         carsns = casrns.split(",")
         if len(readout_ids) * len(carsns) > 100:
-        # if len(readout_ids) * len(carsns) > 40:
 
             raise ValidationError(
                 "Too many dose-response curves selected; please reduce the number of selected readouts and/or chemicals"  # noqa: E501

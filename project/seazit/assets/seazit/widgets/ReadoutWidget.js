@@ -88,8 +88,22 @@ class ReadoutWidget extends BaseWidget {
                 .value();
             Object.values(opts).forEach((val) => {
                 val.forEach(function(item, index) {
-                    if (item.key == 'Mortality@120' || item.key == 'Mortality@24') {
+                    if (
+                        item.key == 'Mortality@120' ||
+                        item.key == 'Mortality@24' ||
+                        item.key.includes('@24')
+                    ) {
                         delete val[index];
+                    }
+                });
+            });
+
+            let endpointCases = ['MalformedAny+Mort@120'];
+            Object.values(opts).forEach((val) => {
+                val.forEach(function(item, i) {
+                    if (endpointCases.includes(item.label)) {
+                        val.splice(i, 1);
+                        val.unshift(item);
                     }
                 });
             });
