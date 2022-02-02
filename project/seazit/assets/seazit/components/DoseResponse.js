@@ -174,7 +174,8 @@ class DoseResponse extends React.Component {
             if (bmcData.hit_confidence < 0.5) {
                 return ' ';
             } else {
-                return `BMC:${(Math.pow(10, bmcData.pod_med) * 1000000).toFixed(2)} µM`;
+                // return `BMC:${(Math.pow(10, bmcData.pod_med) * 1000000).toFixed(2)} µM`;
+                return `BMC:${printFloat(Math.pow(10, bmcData.pod_med) * 1000000)} µM`;
             }
         }
     }

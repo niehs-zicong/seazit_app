@@ -54,3 +54,6 @@ pip install --upgrade django-cors-headers
 python manage.py graph_models -a -g -o test.png
 
 
+Zicong Wang
+2-2-2022
+
