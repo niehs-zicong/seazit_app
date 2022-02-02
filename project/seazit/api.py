@@ -251,7 +251,6 @@ class Seazit_readout_resultViewSet(CachedReadOnlyViewSet):
         readout_ids = readouts.split(",")
         carsns = casrns.split(",")
         if len(readout_ids) * len(carsns) > 100:
-        # if len(readout_ids) * len(carsns) > 40:
 
             raise ValidationError(
                 "Too many dose-response curves selected; please reduce the number of selected readouts and/or chemicals"  # noqa: E501
@@ -271,17 +270,7 @@ class Seazit_readout_resultViewSet(CachedReadOnlyViewSet):
 
         protocol_ids = protocol_ids.split(",")
         readout_ids = readouts.split(",")
-        # if len(readout_ids) * len(carsns) > 100:
-        # # if len(readout_ids) * len(carsns) > 40:
-        #
-        #     raise ValidationError(
-        #         "Too many dose-response curves selected; please reduce the number of selected readouts and/or chemicals"  # noqa: E501
-        #     )
-        # print (protocol_ids)
-        # print (readout_ids)
-
         return Response(models.Seazit_readout_result.bmds_responses(protocol_ids, readout_ids))
-
 
 class Seazit_bmc_readout_resultViewSet(CachedReadOnlyViewSet):
     """

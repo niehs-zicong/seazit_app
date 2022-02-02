@@ -27,9 +27,6 @@ class DoseResponse extends React.Component {
     }
 
     collapseData(data, collapse) {
-        console.log('data');
-        console.log(data);
-
         let keys = _.chain(data.dose_response)
                 .map('key')
                 .uniq()
@@ -85,6 +82,9 @@ class DoseResponse extends React.Component {
     }
 
     fetchDoseResponseData(url) {
+        console.log('bmc url ');
+        console.log(url);
+
         d3.json(url, (error, data) => {
             if (error) {
                 let err = error.target.responseText.replace('["', '').replace('"]', '');
@@ -94,9 +94,7 @@ class DoseResponse extends React.Component {
                 });
                 return;
             }
-            console.log(data);
             this.updateData(data, this.props.collapse);
-            // console.log(data)
         });
     }
 
@@ -241,9 +239,6 @@ class DoseResponse extends React.Component {
 
     _renderPlot(d, yrange) {
         //
-        console.log(' _renderPlot data');
-        console.log(d);
-
         if (this.refs[d.key] === undefined) {
             return;
         }
@@ -304,10 +299,6 @@ class DoseResponse extends React.Component {
                         .uniq()
                         .value();
                 drs_split = _.sortBy(drs_split, 'dose');
-                console.log('drs_split');
-                // // console.log(drs)
-                console.log(drs_split);
-
                 data.push({
                     x: _.map(drs_split, 'dose'),
                     y: drs_split.map((obj) => {

@@ -46,10 +46,10 @@ class BmdByLabMain extends React.Component {
             selectivityCutoff: 0.5,
 
             // AxisSelectorWidget
-            // selectedAxis: AXIS_LOG10,
+            selectedAxis: AXIS_LOG10,
 
             // ReadoutSelectorWidget
-            assay: '',
+            assay: [],
             readouts: [],
 
             visualization: BMDVIZ_ACTIVITY,
@@ -65,6 +65,19 @@ class BmdByLabMain extends React.Component {
             hasAssay: this.state.assay.length > 0,
             hasReadouts: this.state.readouts.length > 0,
         });
+    }
+
+    renderSelection(url) {
+        return (
+            <RankedBarchartHandler
+                // selectedArray={this.state.array}
+                // selectedReadouts={this.state.readouts}
+                visualization={this.state.visualization}
+                selectivityCutoff={this.state.selectivityCutoff}
+                selectedAxis={this.state.selectedAxis}
+                url={url}
+            />
+        );
     }
     _renderHelpText() {
         if (!this.state.showHelpText) {
@@ -111,28 +124,13 @@ class BmdByLabMain extends React.Component {
         );
     }
 
-    _renderMain(url) {
-        // let hasReadouts = this.state.readouts.length > 0;
-        // if (!hasReadouts) {
-        //     return renderNoSelected({
-        //         hasReadouts,
-        //         hasChems: true,
-        //     });
-        // }
-        return (
-            <RankedBarchartHandler
-                selectedArray={this.state.array}
-                selectedReadouts={this.state.readouts}
-                visualization={this.state.visualization}
-                selectivityCutoff={this.state.selectivityCutoff}
-            />
-        );
-    }
-
     render() {
         if (!this.state.metadataLoaded) {
             return <Loading />;
         }
+        console.log(this.state);
+        let url = getBmdsUrl(this.state.assay, this.state.readouts);
+
         return (
             <div className="row-fluid">
                 <div className="col-md-12">
@@ -151,6 +149,8 @@ class BmdByLabMain extends React.Component {
                         hideViability={true}
                         hideNonViability={false}
                         multiAssaySelector={false}
+                        multiReadoutSelector={false}
+                        tabName={'BmdByLab'}
                     />
                     <hr />
                     <BmdByLabPlotWidget stateHolder={this} />
@@ -160,7 +160,7 @@ class BmdByLabMain extends React.Component {
                 </div>
                 <div className="col-md-9">
                     {this._renderHelpText()}
-                    {this._renderMain()}
+                    {url ? this.renderSelection(url) : this.renderNoSelection()}
                 </div>
             </div>
         );
