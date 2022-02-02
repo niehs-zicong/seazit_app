@@ -24,6 +24,7 @@ let renderMedPodModal = function(jsonData, flag) {
         });
     };
     let med_result, min_med_result, max_med_result;
+    let result;
 
     if (flag == 'pod_med') {
         (med_result = jsonData.med_pod_med
@@ -31,20 +32,20 @@ let renderMedPodModal = function(jsonData, flag) {
             : '-'),
             (min_med_result = jsonData.min_pod_med
                 ? printFloat(Math.pow(10, jsonData.min_pod_med) * 1000000)
-                : '-'),
+                : ''),
             (max_med_result = jsonData.max_pod_med
                 ? printFloat(Math.pow(10, jsonData.max_pod_med) * 1000000)
-                : '-');
+                : '');
     } else {
         (med_result = jsonData.mort_med_pod_med
             ? printFloat(Math.pow(10, jsonData.mort_med_pod_med) * 1000000)
             : '-'),
             (min_med_result = jsonData.mort_min_pod_med
                 ? printFloat(Math.pow(10, jsonData.mort_min_pod_med) * 1000000)
-                : '-'),
+                : ''),
             (max_med_result = jsonData.mort_max_pod_med
                 ? printFloat(Math.pow(10, jsonData.mort_max_pod_med) * 1000000)
-                : '-');
+                : '');
     }
     return (
         <button className="btn btn-link" onClick={showModal} style={{ textAlign: 'left' }}>
@@ -85,14 +86,14 @@ class BmdTable extends React.Component {
                             <th style={{ width: '20%' }}>CASRN</th>
                             <th style={{ width: '20%' }}>Category</th>
                             <th style={{ width: '20%' }}>
-                                med_pod_med
+                                Non-Mortality BMC (Median)
                                 <br />
-                                (min – max)
+                                (Min – Max)
                             </th>
                             <th style={{ width: '20%' }}>
-                                mort_med_pod_med
+                                Mortality BMC (Median)
                                 <br />
-                                (min – max)
+                                (Min – Max)
                             </th>
                         </tr>
                     </thead>

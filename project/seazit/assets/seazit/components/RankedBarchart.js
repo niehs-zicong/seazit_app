@@ -348,13 +348,13 @@ let renderPlot = function(el, data, opts) {
         .append('text')
         .attr('x', 38)
         .attr('y', 0)
-        .text('pod data');
+        .text('non-mortality');
 
     barLegend
         .append('text')
         .attr('x', 38)
         .attr('y', 15)
-        .text('mort pod data');
+        .text('mortality');
 };
 
 class RankedBarChart extends React.Component {

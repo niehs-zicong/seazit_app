@@ -122,12 +122,10 @@ class RankedBarchartHandler extends React.Component {
         // let url = getBmdsUrl(this.state.assays, this.state.readouts);
 
         // let chartName = this.props.visualization === BMDVIZ_ACTIVITY ? 'activity' : 'selectivity',
-        let chartName = 'zw1',
+        let chartName = 'activity',
             // { plotData, tableData } = this._getData();
             plotData = this.state.data,
             tableData = this.state.data;
-        console.log(this.props);
-
         return (
             <div>
                 <h2>
@@ -153,7 +151,7 @@ class RankedBarchartHandler extends React.Component {
                     the concentration-response curves from which the BMC was derived.
                 </p>
                 <h2>
-                    BMC for all chemicals zw2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    BMC for all chemicals &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     {/*<button*/}
                     {/*    onClick={() => data_exportToCSVFile(this._sortData(tableData_input), keys)}*/}
                     {/*    class="btn btn-primary"*/}
