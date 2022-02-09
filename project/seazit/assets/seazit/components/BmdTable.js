@@ -12,14 +12,16 @@ let renderMedPodModal = function(jsonData, flag) {
         // match button padding-left
         return <span style={{ paddingLeft: 12 }}>-</span>;
     }
+    // console.log(jsonData)
     let showModal = () => {
         new BootstrapModal(Header, SingleCurveBody, {
             // title: `${d.preferred_name} (${d.chemical_casrn}): ${d.readout_endpoint}`,
-            title: `zw`,
+            title: jsonData.preferred_name + `: ` + jsonData.endpoint_name,
             protocol_id: jsonData.protocol_id,
-
-            // TODO. Sort colorful dot and black dot. Black dot is mortilaty@120.
-            readout_id: jsonData.endpoint_name + '_' + jsonData.protocol_id,
+            readout_id:
+                flag == 'pod_med'
+                    ? jsonData.endpoint_name + '_' + jsonData.protocol_id
+                    : 'Mortality@120' + '_' + jsonData.protocol_id,
             casrn: jsonData.casrn,
         });
     };
@@ -57,6 +59,8 @@ let renderMedPodModal = function(jsonData, flag) {
 
 class BmdTable extends React.Component {
     _renderRow(d) {
+        // console.log("bmd d")
+        // console.log(d)
         return (
             <tr key={d.casrn}>
                 <td>{d.preferred_name}</td>
@@ -73,7 +77,7 @@ class BmdTable extends React.Component {
         if (this.props.data.length === 0) {
             return null;
         }
-        console.log(this.props.data);
+        // console.log(this.props.data);
 
         let medData, pod_medData, mort_pod_medData;
         medData = _.sortBy(this.props.data.bmc_min_max_result, 'med_pod_med');

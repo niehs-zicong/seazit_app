@@ -139,7 +139,7 @@ let renderPlot = function(el, data, opts) {
         .on('click', function(d) {
             new BootstrapModal(Header, SingleCurveBody, {
                 // title: `${d.preferred_name} (${d.chemical_casrn}): ${d.readout_endpoint}`,
-                title: `zw`,
+                title: d.preferred_name + `: ` + d.endpoint_name,
                 protocol_id: d.protocol_id,
                 readout_id: d.endpoint_name + '_' + d.protocol_id,
                 casrn: d.casrn,
@@ -192,7 +192,7 @@ let renderPlot = function(el, data, opts) {
         .on('click', function(d) {
             new BootstrapModal(Header, SingleCurveBody, {
                 // title: `${d.preferred_name} (${d.chemical_casrn}): ${d.readout_endpoint}`,
-                title: `zw`,
+                title: d.preferred_name + `: ` + d.endpoint_name,
                 protocol_id: d.protocol_id,
                 readout_id: 'Mortality@120' + '_' + d.protocol_id,
                 casrn: d.casrn,

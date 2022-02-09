@@ -61,6 +61,17 @@ const AXIS_LINEAR = 1,
             });
         });
     },
+    data_exportToJsonFile = function(jsonData) {
+        let filename = 'jsonData.csv';
+
+        let dataStr = JSON.stringify(jsonData);
+        let dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+
+        let linkElement = document.createElement('a');
+        linkElement.setAttribute('href', dataUri);
+        linkElement.setAttribute('download', filename);
+        linkElement.click();
+    },
     renderSelectMultiWidget = function(name, label, options, values, handleChange) {
         let size = Math.min(options.length, 11);
         return (
@@ -244,4 +255,5 @@ export {
     printFloat,
     renderNoDataAlert,
     renderNoSelected,
+    data_exportToJsonFile,
 };

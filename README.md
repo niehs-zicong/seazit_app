@@ -9,3 +9,8 @@ The staging website is here(SEAZIT coming soon): https://sandbox-staging.ntp.nie
 Read the docs (SEAZIT coming soon): https://sandbox-staging.ntp.niehs.nih.gov/docs/
 
 Deploy see: https://gitlab.niehs.nih.gov/ods/deploy-seazit/-/blob/master/readme.md
+
+For local development command:
+conda activate seazit &&  python manage.py runserver
+conda activate seazit &&  npm start
+
