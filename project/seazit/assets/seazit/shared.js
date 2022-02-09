@@ -97,6 +97,7 @@ const AXIS_LINEAR = 1,
         );
     },
     renderSelectSingleWidget = function(name, label, options, values, handleChange) {
+        // console.log(options)
         return (
             <div>
                 <label>Select one {label}(s):</label>
@@ -109,7 +110,7 @@ const AXIS_LINEAR = 1,
                 >
                     {options.map((d) => {
                         return (
-                            <option key={d.key} value={d.key}>
+                            <option title={d.label} key={d.key} value={d.key}>
                                 {d.label}
                             </option>
                         );
