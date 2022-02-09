@@ -1,43 +1,43 @@
 ## Quickstart development environment
 
-Installing the sandbox is complex; applications require installation both a webserver and a database. The following pre-requisites are required:
+Installing the SEAZIT application requires installation both a webserver and a database. The following pre-requisites are required:
 
 - Anaconda or Miniconda
 - Docker and Docker compose
 
 ### The application environment (python + javascript)
 
-Installation instructions described below. Note that the instructions assume the NTP sandbox will be installed to ``~/dev/seazit`` and a conda environment will be created which is named ``seazit``; both of these settings can be changed but instructions will need to be updated:
+Installation instructions described below. Note that the instructions assume the NTP SEAZIT will be installed to ``~/dev/seazit_app`` and a conda environment will be created which is named ``SEAZIT``; both of these settings can be changed but instructions will need to be updated:
 
 ```bash
 cd ~/dev
-git clone -b seazit_app --single-branch https://gitlab.niehs.nih.gov/ods/seazit_app.git
+ 
+git clone https://gitlab.niehs.nih.gov/ods/seazit_app.git 
 
-cd ./seazit_app
-conda env create -f env_seazit.yml
+cd ./SEAZIT
+conda env create -f conda.yml
 
 # install python requirements in new conda environment
-conda activate seazit
+conda activate SEAZIT
 brew install freetype
 pip install -r requirements/dev.txt
-conda install pygraphviz ??? this may not needed.
+conda install pygraphviz
 
 # copy default local settings (and modify as needed)
 cp ./project/main/settings/local.example.py ./project/main/settings/local.py
-
-
 
 # install javascript libraries
 cd ./project
 yarn install
 ```
-
 Installation notes:
 
 
+### The database environment (postgreSQL) 
 
-### The database environment (postgreSQL)
+There are two options for SEAZIT to access database. If you have vpn connect you can chose either option 1 or 2. If you cannot access vpn you need install database on your local box which is option 1
 
+**Option 1.** Install local docker db
 Create a docker environment file at the root `sandbox` directory named `.env`. Add the following variables:
 
 ```
@@ -65,8 +65,15 @@ You can save your password in the file `~/.pgpass` instead of having to re-enter
 
 Ensure that your settings in `./project/main/settings/local.py` allow you test connect to the database. Now, sync database state with python state:
 
+**option 2.** Database connect to NTP dev server (need vpn connection)
+
 ```bash
-source activate seazit
+--Detail coming soon
+--see NTP database admin
+```
+
+```bash
+source activate SEAZIT
 cd ~/dev/sandbox/project
 python manage.py migrate  # sync application <-> database
 python manage.py createsuperuser  # for admin login
@@ -78,29 +85,30 @@ To run the development environment, you'll need to run an instance of the django
 
 ```bash
 # python [in the first terminal]
-conda activate seazit
-cd ~/dev/sandbox/project
+conda activate SEAZIT
+cd ~/dev/SEAZIT/project
 python manage.py runserver 8000
+
 #Running with just:
-#manage.py runserver
+ 
 #only makes the system available via localhost
 #if it is a server Use :
 #python manage.py runserver 0.0.0.0:8000 to make it listen on all interfaces
 
 # javascript [in a second terminal]
-conda activate seazit
-cd ~/dev/seazit_app/project
+conda activate SEAZIT
+cd ~/dev/SEAZIT/project
 npm start
 ```
 optional :
 
 ```bash
-load DIVER data:
-cp DIVER.sql to your server
-psql -h localhost -p 5433 -d sandbox -U sandbox -f DIVER.sql
+load SEAZIT data:
+cp SEAZIT.sql to your server
+psql -h localhost -p 5433 -d sandbox -U sandbox -f SEAZIT.sql
 ```
 
-Navigate to [http://127.0.0.1:8000/](http://127.0.0.1:8000/), and you should be able to see the NTP sandbox homepage!
+Navigate to [http://127.0.0.1:8000/](http://127.0.0.1:8000/), and you should be able to see the NTP SEAZIT homepage!
 
 For convenience, a Makefile is available which starts a developer environment in one shell using [tmux](https://tmux.github.io/). The Makefile is designed such that if a local version of the tmux configuration is present, it is called instead, which allows more user-specific customization of the application.
 
@@ -124,7 +132,7 @@ You can modify conda environments to set environment variables or other settings
 For more details, read the [docs](https://conda.io/docs/user-guide/tasks/manage-environments.html#saving-environment-variables). The example below includes all required steps:
 
 ```bash
-conda activate DIVER
+conda activate SEAZIT
 cd $CONDA_PREFIX
 mkdir -p ./etc/conda/activate.d
 mkdir -p ./etc/conda/deactivate.d
@@ -154,6 +162,7 @@ Docs are built using [mkdocs](http://www.mkdocs.org/). The project Makefile incl
 make servedocs
 ```
 
+
 Diagrams are generated using [mermaid](https://github.com/mermaidjs/mermaid.cli); install using yarn. The [online editor](https://mermaidjs.github.io/mermaid-live-editor/) is helpful for rapidly iterating; to build from files:
 
 ```bash
@@ -172,7 +181,6 @@ Testing the base django-application is done using the ``make test`` command; tes
 
 The installation above is the minimal installation to get a working environment; to test some features which may application-specific, see the additional notes by application:
 
-- [job-queue](/apps/jobrunner/#developer-instructions)
 - [shiny applications](/apps/shiny/#developer-instructions)
 
 ## FAQ
@@ -181,40 +189,23 @@ The installation above is the minimal installation to get a working environment;
 
 Entity-relationship models can be automatically created using django and the django extensions module. To create ER diagrams:
 
-```bash
-pip install pygraphviz
+## Error fixing:
+update base.py: 
 
-# for all models in a particular application
-python manage.py graph_models -g -o tox21.png tox21
+cd /opt/anaconda3/envs/seazit/lib/python3.8/site-packages/selectable/base.py
+(use nano or something edit base.py file)
 
-# for a subset of models
-python manage.py graph_models -g -o tox21-assays.png \
-    --include-models Gene,TargetSub,Target,Protocol,Call,Assay,Readout tox21
-```
+from django.core.urlresolvers import reverse, NoReverseMatch
 
-### Squash migrations migrations in django
+from django.urls import reverse, NoReverseMatch
+*******
+##matplotlib RuntimeError: 
+"Python is not installed as a framework.""
 
-When iterating on new development, you may end up creating lots of django migrations as your data schema evolves. After you've got a more stable version of the database, you can collapse all the migration files into a new single file.
+Add a line:
+  backend: TkAgg
 
-Assuming your app is named `myapp`:
+in file: ~/.matplotlib/matplotlibrc
 
-```bash
-rm myapp/migrations/0*
-```
 
-Remove old migrations from database:
 
-```python
-from django.db import connection
-
-APP_NAME = 'myapp'
-with connection.cursor() as cursor:
-    cursor.execute(f"DELETE FROM django_migrations WHERE app = '{APP_NAME}';")
-```
-
-Create new migration, and then fake apply it without actually modifying the db schema:
-
-```bash
-python manage.py makemigrations
-python manage.py migrate --fake
-```
