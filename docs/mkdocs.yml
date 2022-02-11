@@ -1,9 +1,9 @@
-site_name: NTP Sandbox
+site_name: NTP Seazit
 theme: readthedocs
 #pages:
 nav:
 - NTP Sandbox: index.md
-- Installation: installation.md
+- Installation: seazit_installation.md
 - Applications:
   - Overview: apps/index.md
   - CEBS summary data browser: apps/cebs.md 

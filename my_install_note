@@ -45,7 +45,7 @@ pip install -r requirements/dev.txt
 Generator expression must be parenthesized (widgets.py, line 152)
 ImportError: cannot import name 'six' from 'django.utils' (/opt/anaconda3/envs/seazit_test/lib/python3.8/site-packages/django/utils/__init__.py)
 
-#fix the problem
+#fix the problems
 
 pip install -U Django
 pip install --upgrade django-cors-headers
@@ -53,6 +53,11 @@ pip install --upgrade django-cors-headers
 -------Django project structure------
 python manage.py graph_models -a -g -o test.png
 
+#matplotlib RuntimeError: Python is not installed as a framework.
+Add a line:
+  backend: TkAgg
+in file:
+~/.matplotlib/matplotlibrc
 
 Zicong Wang
 2-2-2022
