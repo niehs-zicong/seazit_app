@@ -64,49 +64,7 @@ class ReadoutWidget extends BaseWidget {
                 return _.includes(assays, r.seazit_protocol_id.toString());
             })
             .value();
-        if (this.props.multiReadoutSelector) {
-            opts = _.chain(opts)
-                .map((r) => {
-                    return {
-                        // key: `${r.endpoint_name} | ${r.seazit_protocol_id}`,
-                        // key: r.endpoint_name.toString(),
-                        key: r.endpoint_name_protocol.toString(),
-                        category: r.protocol_name_plot,
-                        label: r.endpoint_name,
-                        protocol_name: r.protocol_name,
-                        seazit_protocol_id: r.seazit_protocol_id,
-                        study_phase: r.study_phase,
-                        test_condition: r.test_condition,
-                        protocol_name_long: r.protocol_name_long,
-                        protocol_name_plot: r.protocol_name_plot,
-                        endpoint_name_protocol: r.endpoint_name_protocol,
-                    };
-                })
-                .sortBy('label')
-                .sortBy('category')
-                .groupBy('category')
-                .value();
-            let endpointCases = ['MalformedAny+Mort@120', 'Mortality@120', 'Mortality@24'];
-            Object.values(opts).forEach((val) => {
-                val.forEach(function(item, i) {
-                    if (endpointCases.includes(item.label)) {
-                        val.splice(i, 1);
-                        val.unshift(item);
-                    }
-                });
-            });
-            if (_.keys(opts).length === 0) {
-                return null;
-            }
-
-            return renderSelectMultiOptgroupWidget(
-                'readouts',
-                'Endpoint',
-                opts,
-                state.readouts,
-                this.handleSelectMultiChange
-            );
-        } else {
+        if (this.props.multiReadoutSelector === false) {
             opts = _.chain(opts)
                 .map((r) => {
                     return {
@@ -160,6 +118,48 @@ class ReadoutWidget extends BaseWidget {
                 opts,
                 state.readouts,
                 this.handleSelectChange
+            );
+        } else {
+            opts = _.chain(opts)
+                .map((r) => {
+                    return {
+                        // key: `${r.endpoint_name} | ${r.seazit_protocol_id}`,
+                        // key: r.endpoint_name.toString(),
+                        key: r.endpoint_name_protocol.toString(),
+                        category: r.protocol_name_plot,
+                        label: r.endpoint_name,
+                        protocol_name: r.protocol_name,
+                        seazit_protocol_id: r.seazit_protocol_id,
+                        study_phase: r.study_phase,
+                        test_condition: r.test_condition,
+                        protocol_name_long: r.protocol_name_long,
+                        protocol_name_plot: r.protocol_name_plot,
+                        endpoint_name_protocol: r.endpoint_name_protocol,
+                    };
+                })
+                .sortBy('label')
+                .sortBy('category')
+                .groupBy('category')
+                .value();
+            let endpointCases = ['MalformedAny+Mort@120', 'Mortality@120', 'Mortality@24'];
+            Object.values(opts).forEach((val) => {
+                val.forEach(function(item, i) {
+                    if (endpointCases.includes(item.label)) {
+                        val.splice(i, 1);
+                        val.unshift(item);
+                    }
+                });
+            });
+            if (_.keys(opts).length === 0) {
+                return null;
+            }
+
+            return renderSelectMultiOptgroupWidget(
+                'readouts',
+                'Endpoint',
+                opts,
+                state.readouts,
+                this.handleSelectMultiChange
             );
         }
     }

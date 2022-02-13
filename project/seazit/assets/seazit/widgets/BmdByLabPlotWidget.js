@@ -34,7 +34,6 @@ class BmdByLabPlotWidget extends BaseWidget {
                             name="visualization"
                             onChange={this.handleRadioChange}
                             value={BMDVIZ_SELECTIVITY}
-                            disabled={true}
                             checked={state.visualization === BMDVIZ_SELECTIVITY}
                         />
                         Selectivity

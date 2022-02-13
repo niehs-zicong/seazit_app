@@ -12,21 +12,18 @@ let renderMedPodModal = function(jsonData, flag) {
         // match button padding-left
         return <span style={{ paddingLeft: 12 }}>-</span>;
     }
-    // console.log(jsonData)
     let showModal = () => {
         new BootstrapModal(Header, SingleCurveBody, {
             // title: `${d.preferred_name} (${d.chemical_casrn}): ${d.readout_endpoint}`,
-            title: jsonData.preferred_name + `: ` + jsonData.endpoint_name,
+            title: `zw`,
             protocol_id: jsonData.protocol_id,
-            readout_id:
-                flag == 'pod_med'
-                    ? jsonData.endpoint_name + '_' + jsonData.protocol_id
-                    : 'Mortality@120' + '_' + jsonData.protocol_id,
+
+            // TODO. Sort colorful dot and black dot. Black dot is mortilaty@120.
+            readout_id: jsonData.endpoint_name + '_' + jsonData.protocol_id,
             casrn: jsonData.casrn,
         });
     };
     let med_result, min_med_result, max_med_result;
-    let result;
 
     if (flag == 'pod_med') {
         (med_result = jsonData.med_pod_med
@@ -34,20 +31,20 @@ let renderMedPodModal = function(jsonData, flag) {
             : '-'),
             (min_med_result = jsonData.min_pod_med
                 ? printFloat(Math.pow(10, jsonData.min_pod_med) * 1000000)
-                : ''),
+                : '-'),
             (max_med_result = jsonData.max_pod_med
                 ? printFloat(Math.pow(10, jsonData.max_pod_med) * 1000000)
-                : '');
+                : '-');
     } else {
         (med_result = jsonData.mort_med_pod_med
             ? printFloat(Math.pow(10, jsonData.mort_med_pod_med) * 1000000)
             : '-'),
             (min_med_result = jsonData.mort_min_pod_med
                 ? printFloat(Math.pow(10, jsonData.mort_min_pod_med) * 1000000)
-                : ''),
+                : '-'),
             (max_med_result = jsonData.mort_max_pod_med
                 ? printFloat(Math.pow(10, jsonData.mort_max_pod_med) * 1000000)
-                : '');
+                : '-');
     }
     return (
         <button className="btn btn-link" onClick={showModal} style={{ textAlign: 'left' }}>
@@ -59,8 +56,6 @@ let renderMedPodModal = function(jsonData, flag) {
 
 class BmdTable extends React.Component {
     _renderRow(d) {
-        // console.log("bmd d")
-        // console.log(d)
         return (
             <tr key={d.casrn}>
                 <td>{d.preferred_name}</td>
@@ -77,7 +72,7 @@ class BmdTable extends React.Component {
         if (this.props.data.length === 0) {
             return null;
         }
-        // console.log(this.props.data);
+        console.log(this.props.data);
 
         let medData, pod_medData, mort_pod_medData;
         medData = _.sortBy(this.props.data.bmc_min_max_result, 'med_pod_med');
@@ -90,14 +85,14 @@ class BmdTable extends React.Component {
                             <th style={{ width: '20%' }}>CASRN</th>
                             <th style={{ width: '20%' }}>Category</th>
                             <th style={{ width: '20%' }}>
-                                Non-Mortality BMC (Median)
+                                med_pod_med
                                 <br />
-                                (Min – Max)
+                                (min – max)
                             </th>
                             <th style={{ width: '20%' }}>
-                                Mortality BMC (Median)
+                                mort_med_pod_med
                                 <br />
-                                (Min – Max)
+                                (min – max)
                             </th>
                         </tr>
                     </thead>

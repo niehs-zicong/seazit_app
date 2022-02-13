@@ -51,6 +51,8 @@ const AXIS_LINEAR = 1,
         'Selectivity is estimated and true value may be higher; viability BMC could not be calculated and was therefore estimated to equal the maximum tested dose.',
     loadMetadata = function(component) {
         d3.json(URL_METADATA, (d) => {
+            console.log('d');
+            console.log(d);
             component.setState({
                 metadataLoaded: true,
                 protocol_data: d.protocol_data,
@@ -58,17 +60,6 @@ const AXIS_LINEAR = 1,
                 Seazit_ui_panel: d.Seazit_ui_panel,
             });
         });
-    },
-    data_exportToJsonFile = function(jsonData) {
-        let filename = 'jsonData.csv';
-
-        let dataStr = JSON.stringify(jsonData);
-        let dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
-
-        let linkElement = document.createElement('a');
-        linkElement.setAttribute('href', dataUri);
-        linkElement.setAttribute('download', filename);
-        linkElement.click();
     },
     renderSelectMultiWidget = function(name, label, options, values, handleChange) {
         let size = Math.min(options.length, 11);
@@ -95,7 +86,6 @@ const AXIS_LINEAR = 1,
         );
     },
     renderSelectSingleWidget = function(name, label, options, values, handleChange) {
-        // console.log(options)
         return (
             <div>
                 <label>Select one {label}(s):</label>
@@ -108,7 +98,7 @@ const AXIS_LINEAR = 1,
                 >
                     {options.map((d) => {
                         return (
-                            <option title={d.label} key={d.key} value={d.key}>
+                            <option key={d.key} value={d.key}>
                                 {d.label}
                             </option>
                         );
@@ -254,5 +244,4 @@ export {
     printFloat,
     renderNoDataAlert,
     renderNoSelected,
-    data_exportToJsonFile,
 };

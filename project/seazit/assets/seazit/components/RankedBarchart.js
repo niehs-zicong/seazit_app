@@ -86,6 +86,23 @@ let renderPlot = function(el, data, opts) {
             .padding(0.1)
             .domain(medData.map((d) => d.preferred_name));
     //
+    // let showDoseResponse = function(d) {
+    //     let readout_id;
+    //     if (d.mort_key == "mort_pod_medData") {
+    //         d.readout_id =  'Mort@120' + '_' + d.protocol_id
+    //     } else {
+    //         d.readout_id =  d.endpoint_name + '_' + d.protocol_id
+    //     }
+    //     console.log(d.readout_id)
+    //     new BootstrapModal(Header, SingleCurveBody, {
+    //         // title: `${d.preferred_name} (${d.chemical_casrn}): ${d.readout_endpoint}`,
+    //         title: `zw`,
+    //         protocol_id: d.protocol_id,
+    //         readout_id: d.endpoint_name + '_' + d.protocol_id,
+    //         casrn: d.casrn,
+    //     });
+    // };
+
     // append plot
     let svg = d3
         .select(el)
@@ -139,7 +156,7 @@ let renderPlot = function(el, data, opts) {
         .on('click', function(d) {
             new BootstrapModal(Header, SingleCurveBody, {
                 // title: `${d.preferred_name} (${d.chemical_casrn}): ${d.readout_endpoint}`,
-                title: d.preferred_name + `: ` + d.endpoint_name,
+                title: `zw`,
                 protocol_id: d.protocol_id,
                 readout_id: d.endpoint_name + '_' + d.protocol_id,
                 casrn: d.casrn,
@@ -192,7 +209,7 @@ let renderPlot = function(el, data, opts) {
         .on('click', function(d) {
             new BootstrapModal(Header, SingleCurveBody, {
                 // title: `${d.preferred_name} (${d.chemical_casrn}): ${d.readout_endpoint}`,
-                title: d.preferred_name + `: ` + d.endpoint_name,
+                title: `zw`,
                 protocol_id: d.protocol_id,
                 readout_id: 'Mortality@120' + '_' + d.protocol_id,
                 casrn: d.casrn,
@@ -348,13 +365,13 @@ let renderPlot = function(el, data, opts) {
         .append('text')
         .attr('x', 38)
         .attr('y', 0)
-        .text('non-mortality');
+        .text('pod data');
 
     barLegend
         .append('text')
         .attr('x', 38)
         .attr('y', 15)
-        .text('mortality');
+        .text('mort pod data');
 };
 
 class RankedBarChart extends React.Component {
