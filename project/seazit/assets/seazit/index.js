@@ -1,4 +1,4 @@
-//import DatasetsMain from './containers/DatasetsMain';
+import DatasetsMain from './containers/DatasetsMain';
 import QualityControlMain from './containers/QualityControlMain';
 import DoseResponseMain from './containers/DoseResponseMain';
 import BmdByLabMain from './containers/BmdByLabMain';
@@ -8,7 +8,7 @@ import BmdByLabMain from './containers/BmdByLabMain';
 
 import { insertIntoDom } from './shared';
 
-const //renderDatasets = (el) => insertIntoDom(DatasetsMain, el),
+const renderDatasets = (el) => insertIntoDom(DatasetsMain, el),
     renderQualityControl = (el) => insertIntoDom(QualityControlMain, el),
     renderBmdByLab = (el) => insertIntoDom(BmdByLabMain, el),
     renderDoseResponse = (el) => insertIntoDom(DoseResponseMain, el);
@@ -17,7 +17,7 @@ const //renderDatasets = (el) => insertIntoDom(DatasetsMain, el),
 //renderWidgets = (el) => insertIntoDom(WidgetsMain, el);
 
 export {
-    //renderDatasets,
+    renderDatasets,
     renderQualityControl,
     renderDoseResponse,
     renderBmdByLab,
