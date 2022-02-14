@@ -18,7 +18,7 @@ class DatasetsMain extends React.Component {
         }
         return (
             <div className="alert alert-info">
-                <h2>Help text*****</h2>
+                <h2>Help text for Datasets</h2>
 
                 <p>
                     This page allows for the visualization of DMSO response variability for each
@@ -132,7 +132,7 @@ class DatasetsMain extends React.Component {
             <div className="row-fluid">
                 <div className="col-md-12">
                     <h1>
-                        Quality control
+                        Datasets
                         <HelpButtonWidget stateHolder={this} />
                     </h1>
                     {this._renderHelpText()}
