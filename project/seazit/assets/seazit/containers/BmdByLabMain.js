@@ -128,7 +128,7 @@ class BmdByLabMain extends React.Component {
         if (!this.state.metadataLoaded) {
             return <Loading />;
         }
-        console.log(this.state);
+        // console.log(this.state);
         let url = getBmdsUrl(this.state.assay, this.state.readouts);
 
         return (
