@@ -145,4 +145,4 @@ class DatasetsMain extends React.Component {
     }
 }
 
-export default QualityControlMain;
+export default DatasetsMain;
