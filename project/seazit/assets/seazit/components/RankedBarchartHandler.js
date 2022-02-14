@@ -12,14 +12,15 @@ import {
     getBmdsUrl,
     BMDVIZ_ACTIVITY,
     BMD_CW,
-    svg_download_form,
+    // svg_download_form,
     data_exportToJsonFile,
-    data_exportToCSVFile,
+    // data_exportToCSVFile,
     CHEMLIST_80,
     CHEMFILTER_CHEMICIAL,
     NO_COLLAPSE,
     COLLAPSE_BY_READOUT,
     COLLAPSE_BY_CHEMICAL,
+    printFloat,
 } from '../shared';
 
 class RankedBarchartHandler extends React.Component {
@@ -93,6 +94,83 @@ class RankedBarchartHandler extends React.Component {
         data.chemicalKey = `${data.casrn}|${data.dtxsid}`;
     }
 
+    data_exportToCSVFile = function(jsonData) {
+        if (jsonData.length == 0) {
+            return '';
+        }
+        let medData = _.sortBy(jsonData.bmc_min_max_result, 'med_pod_med');
+        console.log('bmd d');
+        console.log(medData);
+        let keys = [
+            'preferred_name',
+            'casrn',
+            'use_category1',
+            'med_pod_med',
+            'min_pod_med',
+            'max_pod_med',
+
+            'mort_med_pod_med',
+            'mort_min_pod_med',
+            'mort_max_pod_med',
+        ];
+        var filename = 'csvData.csv';
+        let columnDelimiter = ',';
+        let lineDelimiter = '\n';
+        let csvColumnHeader = keys.join(columnDelimiter);
+        let csvStr = csvColumnHeader + lineDelimiter;
+        medData.forEach((item) => {
+            keys.forEach((key, index) => {
+                if (index > 0 && index < keys.length) {
+                    // if( (index > 0) && (index < keys.length-1) ) {
+                    csvStr += columnDelimiter;
+                }
+                switch (key) {
+                    case 'preferred_name':
+                        csvStr += `"${item[key]}"`;
+                        break;
+                    case 'casrn':
+                        csvStr += `"${item[key]}"`;
+                        break;
+                    case 'use_category1':
+                        csvStr += `"${item[key]}"`;
+                        break;
+                    case 'med_pod_med':
+                        csvStr += `"${printFloat(Math.pow(10, item[key]) * 1000000)}"`;
+                        break;
+
+                    case 'min_pod_med':
+                        csvStr += `"${printFloat(Math.pow(10, item[key]) * 1000000)}"`;
+                        break;
+
+                    case 'max_pod_med':
+                        csvStr += `"${printFloat(Math.pow(10, item[key]) * 1000000)}"`;
+                        break;
+                    case 'mort_med_pod_med':
+                        csvStr += `"${printFloat(Math.pow(10, item[key]) * 1000000)}"`;
+                        break;
+
+                    case 'mort_min_pod_med':
+                        csvStr += `"${printFloat(Math.pow(10, item[key]) * 1000000)}"`;
+                        break;
+
+                    case 'mort_max_pod_med':
+                        csvStr += `"${printFloat(Math.pow(10, item[key]) * 1000000)}"`;
+                        break;
+                    default:
+                        csvStr += 'undefined';
+                }
+            });
+            csvStr += lineDelimiter;
+        });
+        csvStr = encodeURIComponent(csvStr);
+
+        let dataUri = 'data:text/csv;charset=utf-8,' + csvStr;
+        let linkElement = document.createElement('a');
+        linkElement.setAttribute('href', dataUri);
+        linkElement.setAttribute('download', filename);
+        linkElement.click();
+    };
+
     componentWillMount() {
         this.fetchBmdData(this.props.url);
     }
@@ -122,12 +200,10 @@ class RankedBarchartHandler extends React.Component {
         // let url = getBmdsUrl(this.state.assays, this.state.readouts);
 
         // let chartName = this.props.visualization === BMDVIZ_ACTIVITY ? 'activity' : 'selectivity',
-        let chartName = 'zw1',
+        let chartName = 'activity',
             // { plotData, tableData } = this._getData();
             plotData = this.state.data,
             tableData = this.state.data;
-        console.log(this.props);
-
         return (
             <div>
                 <h2>
@@ -153,19 +229,19 @@ class RankedBarchartHandler extends React.Component {
                     the concentration-response curves from which the BMC was derived.
                 </p>
                 <h2>
-                    BMC for all chemicals zw2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    BMC for all chemicals &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button
+                        onClick={() => this.data_exportToCSVFile(tableData)}
+                        class="btn btn-primary"
+                    >
+                        Export data .csv
+                    </button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     {/*<button*/}
-                    {/*    onClick={() => data_exportToCSVFile(this._sortData(tableData_input), keys)}*/}
+                    {/*    onClick={() => this.data_exportToJsonFile(tableData)}*/}
                     {/*    class="btn btn-primary"*/}
                     {/*>*/}
-                    {/*    Export data CSV*/}
-                    {/*</button>*/}
-                    {/*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/}
-                    {/*<button*/}
-                    {/*    onClick={() => data_exportToJsonFile(tableData_input)}*/}
-                    {/*    class="btn btn-primary"*/}
-                    {/*>*/}
-                    {/*    Export data Json*/}
+                    {/*    Export data .json*/}
                     {/*</button>*/}
                 </h2>
                 {this.props.visualization === BMDVIZ_ACTIVITY ? (
