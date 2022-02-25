@@ -8,10 +8,10 @@ class FiveOhEight extends React.Component {
                 technology may find parts of this page are not fully accessible. The datasets
                 that&nbsp; underlie these graphics are available on the{' '}
                 <a href="/seazit/resources/">Resources</a>&nbsp; tab. For assistance,{' '}
-                <a href="mailto:ntpwebrequest@niehs.nih.gov?subject=Accessibility%20Assistance">
-                    email us
-                </a>
-                &nbsp; or use our{' '}
+                {/*<a href="mailto:ntpwebrequest@niehs.nih.gov?subject=Accessibility%20Assistance">*/}
+                {/*    email us*/}
+                {/*</a>*/}
+                email us (ntpwebrequest@niehs.nih.gov) or use our{' '}
                 <a href="https://tools.niehs.nih.gov/webforms/index.cfm/main/formViewer/form_id/521/to/cdm">
                     contact form
                 </a>

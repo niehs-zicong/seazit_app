@@ -73,9 +73,6 @@ class DoseResponse extends React.Component {
         // domain of values.
 
         yrange = [0, 100];
-        console.log('collapsedData');
-        console.log(collapsedData);
-
         return {
             data,
             collapsedData,
@@ -85,8 +82,8 @@ class DoseResponse extends React.Component {
     }
 
     fetchDoseResponseData(url) {
-        // //console.log('bmc url ');
-        // //console.log(url);
+        // console.log('bmc url ');
+        // console.log(url);
 
         d3.json(url, (error, data) => {
             if (error) {
@@ -119,8 +116,6 @@ class DoseResponse extends React.Component {
     }
 
     getMarkerColor(d, marker = null) {
-        // console.log("color")
-        // console.log(d)
         return this.state.scale(d);
     }
 
@@ -129,8 +124,9 @@ class DoseResponse extends React.Component {
             case COLLAPSE_BY_READOUT:
                 return `${data.protocol_name_plot}<br>${data.endpoint_name}`;
             case COLLAPSE_BY_CHEMICAL:
-                return `${data.preferred_name}|${data.casrn}`;
+                return `${data.casrn}|${data.dtxsid}`;
             case NO_COLLAPSE:
+                // return `${data.preferred_name}<br>${data.casrn}|${data.dtxsid}:<br>${data.endpoint_name}`;
                 return `${data.protocol_name_plot}<br>${data.preferred_name}<br>${data.casrn}|${data.dtxsid}:<br>${data.endpoint_name}`;
             default:
                 throw 'Unknown collapse type.';
@@ -178,7 +174,10 @@ class DoseResponse extends React.Component {
             if (bmcData.hit_confidence < 0.5) {
                 return ' ';
             } else {
-                return `BMC:${printFloat(Math.pow(10, bmcData.pod_med) * 1000000)} µM`;
+                // return `BMC:${(Math.pow(10, bmcData.pod_med) * 1000000).toFixed(2)} µM`;
+                return ` zwwwwwwwwwww  BMC:${printFloat(
+                    Math.pow(10, bmcData.pod_med) * 1000000
+                )} µM`;
             }
         }
     }
@@ -202,34 +201,31 @@ class DoseResponse extends React.Component {
     setDatasetKey(data, collapse) {
         switch (collapse) {
             case COLLAPSE_BY_READOUT:
+                // data.key = data.endpoint_name;
                 data.key = `${data.protocol_id}|${data.endpoint_name}`;
-                // data.key =data.endpoint_name;
                 data.groupKey = data.casrn;
                 data.substance_code_input_id = `${data.substance_code}|${data.input_id}`;
 
                 break;
             case COLLAPSE_BY_CHEMICAL:
-                // data.key = `${data.protocol_id}|${data.casrn}`;
-                data.key = data.casrn;
-                // data.groupKey = data.endpoint_name;
-                data.groupKey = `${data.protocol_id}|${data.endpoint_name}`;
+                // data.key = data.casrn;
+                data.key = `${data.protocol_id}|${data.casrn}`;
+                data.groupKey = data.endpoint_name;
                 data.substance_code_input_id = `${data.substance_code}|${data.input_id}`;
                 break;
 
             case NO_COLLAPSE:
-                data.key = `${data.protocol_id}|${data.endpoint_name}|${data.casrn}`;
                 // data.key = `${data.endpoint_name}|${data.casrn}`;
+                data.key = `${data.protocol_id}|${data.endpoint_name}|${data.casrn}`;
                 data.groupKey = null;
                 data.substance_code_input_id = `${data.substance_code}|${data.input_id}`;
+
                 break;
             default:
                 throw 'Unknown collapse type.';
         }
     }
     setKeys(data, collapse) {
-        // console.log(data)
-        // console.log(data)
-
         _.each(data.dose_response, (d) => this.setDatasetKey(d, collapse));
         _.each(data.bmcoutput, (d) => this.setDatasetKey(d, collapse));
     }
@@ -287,21 +283,17 @@ class DoseResponse extends React.Component {
                 // range should be [0, 100]
                 range: [-10, 110],
             },
-            showlegend: false,
+
             // add room for collapsed plot legends
             height: this.props.height + d.groupKeys.length * 19 + 20,
             autosize: true,
         };
-        console.log('d');
-        console.log(d);
-
         d.groupKeys.map((gk) => {
             let drs = d.dose_response.filter((r) => r.groupKey == gk),
                 substance_codeCase = _.chain(drs)
                     .map('substance_code')
                     .uniq()
                     .value();
-
             this.state.labelsDict = [];
             d.substance_code_input_ids.map((id_flag, index) => {
                 let drs_split = drs.filter((r) => r.substance_code_input_id == id_flag),
@@ -310,29 +302,23 @@ class DoseResponse extends React.Component {
                         .uniq()
                         .value();
                 drs_split = _.sortBy(drs_split, 'dose');
-                // //console.log("drs")
-                // //console.log(drs)
                 data.push({
                     x: _.map(drs_split, 'dose'),
                     y: drs_split.map((obj) => {
                         return (obj.n_in / obj.n) * 100;
                     }),
                     legendgroup: 'plot',
+                    // mode: 'markers',
                     mode: 'line',
                     type: 'scatter',
-                    // name: this.getResponseLabels(
-                    //     drs_split[0],
-                    //     this.props.collapse,
-                    //     substance_codeCase
-                    // ),
-                    text: `${this.getResponseLabels(
+                    name: this.getResponseLabels(
                         drs_split[0],
                         this.props.collapse,
                         substance_codeCase
-                    )}<br>${this.getTextLabels(drs_split, d)}`,
+                    ),
+                    text: this.getTextLabels(drs_split, d),
                     marker: {
                         color: this.getMarkerColor(gk, 'responses'),
-                        // color: this.getMarkerColor(id_flag, 'responses'),
                     },
                     opacity: 0.8,
                 });
@@ -378,14 +364,11 @@ class DoseResponse extends React.Component {
             // move legend to bottom of plot
             layout.legend = { orientation: 'h', y: -0.3 };
         }
-        //console.log(data)
+
         Plotly.newPlot(this.refs[d.key], data, layout, svgConfig);
     }
 
     loadDoseResponse() {
-        console.log('zw');
-
-        console.log(this.state.collapsedData);
         this.state.collapsedData.map((d) => this._renderPlot(d, this.state.yrange));
     }
 

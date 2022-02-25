@@ -119,9 +119,9 @@ class DoseResponse extends React.Component {
     }
 
     getMarkerColor(d, marker = null) {
-        // console.log("color")
-        // console.log(d)
-        return this.state.scale(d);
+        console.log('color');
+        console.log(d);
+        // return this.state.scale(d);
     }
 
     getPlotTitle(data, collapse) {
@@ -131,6 +131,7 @@ class DoseResponse extends React.Component {
             case COLLAPSE_BY_CHEMICAL:
                 return `${data.preferred_name}|${data.casrn}`;
             case NO_COLLAPSE:
+                // return `${data.preferred_name}<br>${data.casrn}|${data.dtxsid}:<br>${data.endpoint_name}`;
                 return `${data.protocol_name_plot}<br>${data.preferred_name}<br>${data.casrn}|${data.dtxsid}:<br>${data.endpoint_name}`;
             default:
                 throw 'Unknown collapse type.';
@@ -211,8 +212,8 @@ class DoseResponse extends React.Component {
             case COLLAPSE_BY_CHEMICAL:
                 // data.key = `${data.protocol_id}|${data.casrn}`;
                 data.key = data.casrn;
-                // data.groupKey = data.endpoint_name;
-                data.groupKey = `${data.protocol_id}|${data.endpoint_name}`;
+
+                data.groupKey = data.endpoint_name;
                 data.substance_code_input_id = `${data.substance_code}|${data.input_id}`;
                 break;
 
@@ -292,8 +293,8 @@ class DoseResponse extends React.Component {
             height: this.props.height + d.groupKeys.length * 19 + 20,
             autosize: true,
         };
-        console.log('d');
-        console.log(d);
+        //console.log("d")
+        //console.log(d)
 
         d.groupKeys.map((gk) => {
             let drs = d.dose_response.filter((r) => r.groupKey == gk),

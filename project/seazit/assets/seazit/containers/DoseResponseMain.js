@@ -2,7 +2,7 @@ import React from 'react';
 
 import Loading from 'utils/Loading';
 import DoseResponse from '../components/DoseResponse';
-//import FiveOhEight from '../components/FiveOhEight';
+import FiveOhEight from '../components/FiveOhEight';
 import HelpButtonWidget from '../widgets/HelpButtonWidget';
 import ChemicalWidget from '../widgets/ChemicalWidget';
 import ReadoutWidget from '../widgets/ReadoutWidget';
@@ -103,17 +103,22 @@ class DoseResponseMain extends React.Component {
         if (!this.state.metadataLoaded) {
             return <Loading />;
         }
-        console.log('this.state');
-        console.log(this.state);
+        // console.log('this.state');
+        // console.log(this.state);
         let url = getDoseResponsesUrl(this.state.assays, this.state.readouts, this.state.chemicals);
         // console.log(url);
 
         return (
             <div className="row-fluid">
-                <h1>
-                    Concentration Response
-                    <HelpButtonWidget stateHolder={this} />
-                </h1>
+                <div className="col-md-12">
+                    <h1>
+                        Concentration Response
+                        <HelpButtonWidget stateHolder={this} />
+                    </h1>
+                </div>
+                <div className="col-md-12">
+                    <FiveOhEight />
+                </div>
                 <div className="col-md-3">
                     <ReadoutWidget
                         stateHolder={this}
@@ -121,7 +126,7 @@ class DoseResponseMain extends React.Component {
                         hideNonViability={false}
                         multiAssaySelector={true}
                         multiReadoutSelector={true}
-                        tabName={'DoseResponse'}
+                        tabName={'DoseResponseMain'}
                     />
                     <hr />
                     <ChemicalWidget stateHolder={this} />

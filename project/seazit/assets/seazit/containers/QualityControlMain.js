@@ -132,7 +132,7 @@ class QualityControlMain extends React.Component {
             <div className="row-fluid">
                 <div className="col-md-12">
                     <h1>
-                        Quality control
+                        Quality Check
                         <HelpButtonWidget stateHolder={this} />
                     </h1>
                     {this._renderHelpText()}
