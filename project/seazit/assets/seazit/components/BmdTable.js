@@ -69,6 +69,7 @@ class BmdTable extends React.Component {
                 {/*<td>{d.med_pod_med}</td>*/}
                 <td>{renderMedPodModal(d, 'pod_med')}</td>
                 <td>{renderMedPodModal(d, 'mort_pod_med')}</td>
+                <td>{d.n_values}</td>
             </tr>
         );
     }
@@ -77,7 +78,7 @@ class BmdTable extends React.Component {
         if (this.props.data.length === 0) {
             return null;
         }
-        // console.log(this.props.data);
+        console.log(this.props.data);
 
         let medData, pod_medData, mort_pod_medData;
         medData = _.sortBy(this.props.data.bmc_min_max_result, 'med_pod_med');
@@ -90,15 +91,16 @@ class BmdTable extends React.Component {
                             <th style={{ width: '20%' }}>CASRN</th>
                             <th style={{ width: '20%' }}>Category</th>
                             <th style={{ width: '20%' }}>
-                                Non-Mortality BMC (Median)
+                                Non-Mortality BMC
                                 <br />
                                 (Min – Max)
                             </th>
                             <th style={{ width: '20%' }}>
-                                Mortality BMC (Median)
+                                Mortality BMC
                                 <br />
                                 (Min – Max)
                             </th>
+                            <th style={{ width: '20%' }}>Number of BMC</th>
                         </tr>
                     </thead>
                     <tbody>{medData.map(this._renderRow)}</tbody>

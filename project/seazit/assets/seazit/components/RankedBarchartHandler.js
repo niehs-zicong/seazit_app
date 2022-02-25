@@ -230,12 +230,12 @@ class RankedBarchartHandler extends React.Component {
                 </p>
                 <h2>
                     BMC for all chemicals &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <button
-                        onClick={() => this.data_exportToCSVFile(tableData)}
-                        class="btn btn-primary"
-                    >
-                        Export data .csv
-                    </button>
+                    {/*<button*/}
+                    {/*    onClick={() => this.data_exportToCSVFile(tableData)}*/}
+                    {/*    class="btn btn-primary"*/}
+                    {/*>*/}
+                    {/*    Export data .csv*/}
+                    {/*</button>*/}
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     {/*<button*/}
                     {/*    onClick={() => this.data_exportToJsonFile(tableData)}*/}

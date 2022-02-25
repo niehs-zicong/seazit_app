@@ -34,7 +34,7 @@ class PlotCollapseWidget extends BaseWidget {
                 <div className="radio">
                     <label
                         data-toggle="tooltip"
-                        data-title="One chart for each chemical + readout combination"
+                        data-title="One chart for each chemical + endpoint combination"
                     >
                         <input
                             type="radio"
@@ -52,7 +52,7 @@ class PlotCollapseWidget extends BaseWidget {
                     <label
                         htmlFor={COLLAPSE_BY_CHEMICAL}
                         data-toggle="tooltip"
-                        data-title="One chart for each chemical (multiple readouts on chart)"
+                        data-title="One chart for each chemical (multiple endpoints on chart)"
                     >
                         <input
                             type="radio"
@@ -70,7 +70,7 @@ class PlotCollapseWidget extends BaseWidget {
                     <label
                         htmlFor={COLLAPSE_BY_READOUT}
                         data-toggle="tooltip"
-                        data-title="One chart for each readout (multiple chemicals on chart)"
+                        data-title="One chart for each endpoint (multiple chemicals on chart)"
                     >
                         <input
                             type="radio"

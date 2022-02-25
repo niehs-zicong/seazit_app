@@ -143,14 +143,13 @@ class BmdByLabMain extends React.Component {
                     <FiveOhEight />
                 </div>
                 <div className="col-md-3">
-                    <hr />
                     <ReadoutWidget
                         stateHolder={this}
                         hideViability={true}
                         hideNonViability={false}
                         multiAssaySelector={false}
                         multiReadoutSelector={false}
-                        tabName={'BmdByLab'}
+                        tabName={'BmdByLabMain'}
                     />
                     <hr />
                     <BmdByLabPlotWidget stateHolder={this} />

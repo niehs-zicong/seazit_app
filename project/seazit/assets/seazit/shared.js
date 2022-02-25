@@ -98,7 +98,7 @@ const AXIS_LINEAR = 1,
         // console.log(options)
         return (
             <div>
-                <label>Select one {label}(s):</label>
+                <label>Select one {label}:</label>
                 <select
                     name={name}
                     className="form-control"

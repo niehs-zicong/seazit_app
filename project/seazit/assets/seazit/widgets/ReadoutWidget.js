@@ -41,7 +41,7 @@ class ReadoutWidget extends BaseWidget {
         if (this.props.multiAssaySelector === true) {
             return renderSelectMultiWidget(
                 'assays',
-                'Dataset',
+                'dataset',
                 options,
                 state.assays,
                 this.handleSelectMultiChange
@@ -49,7 +49,7 @@ class ReadoutWidget extends BaseWidget {
         } else {
             return renderSelectSingleWidget(
                 'assay',
-                'Dataset',
+                'dataset',
                 options,
                 state.assay,
                 this.handleSelectChange
@@ -101,7 +101,7 @@ class ReadoutWidget extends BaseWidget {
 
             return renderSelectMultiOptgroupWidget(
                 'readouts',
-                'Endpoint',
+                'endpoint',
                 opts,
                 state.readouts,
                 this.handleSelectMultiChange
@@ -156,7 +156,7 @@ class ReadoutWidget extends BaseWidget {
             opts = Object.values(opts)[0];
             return renderSelectSingleWidget(
                 'readouts',
-                'Endpoint',
+                'endpoint',
                 opts,
                 state.readouts,
                 this.handleSelectChange
