@@ -1,0 +1,19 @@
+
+{% extends "seazit/base.html" %}
+
+{% block title %}{{block.super}} | DoseResponse {% endblock %}
+
+
+
+{% block content %}
+<div id='main'>
+</div>
+{% endblock content %}
+
+
+{% block extra-js %}
+<script>
+            window.apps.seazit.renderBmdByLab(document.getElementById('main'));
+
+</script>
+{% endblock extra-js %}
