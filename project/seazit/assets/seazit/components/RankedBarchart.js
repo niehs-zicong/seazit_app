@@ -32,9 +32,10 @@ let renderPlot = function(el, data, opts) {
         $(el).append('<div class="alert alert-info"><p>No BMC data are available.</p></div>');
         return;
     }
+
     // let pod_medData, mort_pod_medData ;
     let medData, pod_medData, mort_pod_medData;
-    medData = _.sortBy(data.bmc_min_max_result, 'med_pod_med');
+    medData = _.sortBy(data.bmc_activity, 'med_pod_med');
     pod_medData = _.filter(medData, (d) => d.med_pod_med !== null);
     mort_pod_medData = _.filter(medData, (d) => d.mort_med_pod_med !== null);
 

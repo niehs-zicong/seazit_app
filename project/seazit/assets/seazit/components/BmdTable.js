@@ -78,10 +78,10 @@ class BmdTable extends React.Component {
         if (this.props.data.length === 0) {
             return null;
         }
-        console.log(this.props.data);
+        // console.log(this.props.data);
 
         let medData, pod_medData, mort_pod_medData;
-        medData = _.sortBy(this.props.data.bmc_min_max_result, 'med_pod_med');
+        medData = _.sortBy(this.props.data.bmc_activity, 'med_pod_med');
         return (
             <div>
                 <table id="IA_table01" ref="table" className="table table-condensed table-hover">

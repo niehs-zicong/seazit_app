@@ -73,9 +73,9 @@ class DoseResponse extends React.Component {
         // domain of values.
 
         yrange = [0, 100];
-        console.log('collapsedData');
+        // console.log('collapsedData');
         console.log(collapsedData);
-
+        //
         return {
             data,
             collapsedData,
@@ -383,9 +383,6 @@ class DoseResponse extends React.Component {
     }
 
     loadDoseResponse() {
-        console.log('zw');
-
-        console.log(this.state.collapsedData);
         this.state.collapsedData.map((d) => this._renderPlot(d, this.state.yrange));
     }
 

@@ -1,7 +1,7 @@
 
 {% extends "seazit/base.html" %}
 
-{% block title %}{{block.super}} | DoseResponse {% endblock %}
+{% block title %}{{block.super}} | Integrative Analyses {% endblock %}
 
 
 
@@ -13,7 +13,6 @@
 
 {% block extra-js %}
 <script>
-            window.apps.seazit.renderBmdByLab(document.getElementById('main'));
-
+            window.apps.seazit.renderIntegrativeAnalyses(document.getElementById('main'));
 </script>
 {% endblock extra-js %}

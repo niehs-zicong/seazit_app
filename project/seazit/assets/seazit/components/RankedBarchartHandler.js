@@ -71,6 +71,9 @@ class RankedBarchartHandler extends React.Component {
             }
             // this.updateData(data, this.props.collapse);
             this.setState({ data });
+            console.log('this.state.data');
+            console.log(this.state.data);
+
             // this.updateData(data, this.props.collapse);
         });
     }
@@ -98,9 +101,9 @@ class RankedBarchartHandler extends React.Component {
         if (jsonData.length == 0) {
             return '';
         }
-        let medData = _.sortBy(jsonData.bmc_min_max_result, 'med_pod_med');
-        console.log('bmd d');
-        console.log(medData);
+        let medData = _.sortBy(jsonData.bmc_activity, 'med_pod_med');
+        // console.log('bmd d');
+        // console.log(medData);
         let keys = [
             'preferred_name',
             'casrn',
@@ -108,7 +111,6 @@ class RankedBarchartHandler extends React.Component {
             'med_pod_med',
             'min_pod_med',
             'max_pod_med',
-
             'mort_med_pod_med',
             'mort_min_pod_med',
             'mort_max_pod_med',
@@ -204,6 +206,7 @@ class RankedBarchartHandler extends React.Component {
             // { plotData, tableData } = this._getData();
             plotData = this.state.data,
             tableData = this.state.data;
+
         return (
             <div>
                 <h2>

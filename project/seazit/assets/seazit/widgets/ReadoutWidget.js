@@ -20,12 +20,16 @@ class ReadoutWidget extends BaseWidget {
     }
 
     _renderAssaySelector(state) {
+        // console.log("state")
+        // console.log(state)
+
         let options = _.chain(state.protocol_data)
             .map((r) => {
                 return {
                     key: r.seazit_protocol_id,
                     label: r.protocol_name_long,
                     protocol_name: r.protocol_name,
+                    // description: r.endpoint_description,
                     protocol_type: r.protocol_type,
                     protocol_source: r.protocol_source,
                     seazit_protocol_id: r.seazit_protocol_id,
@@ -64,6 +68,7 @@ class ReadoutWidget extends BaseWidget {
                 return _.includes(assays, r.seazit_protocol_id.toString());
             })
             .value();
+        console.log(opts);
         if (this.props.multiReadoutSelector) {
             opts = _.chain(opts)
                 .map((r) => {
@@ -73,6 +78,7 @@ class ReadoutWidget extends BaseWidget {
                         key: r.endpoint_name_protocol.toString(),
                         category: r.protocol_name_plot,
                         label: r.endpoint_name,
+                        description: r.endpoint_description,
                         protocol_name: r.protocol_name,
                         seazit_protocol_id: r.seazit_protocol_id,
                         study_phase: r.study_phase,
@@ -115,6 +121,7 @@ class ReadoutWidget extends BaseWidget {
                         key: r.endpoint_name.toString(),
                         category: r.protocol_name_plot,
                         label: r.endpoint_name,
+                        description: r.endpoint_description,
                         protocol_name: r.protocol_name,
                         seazit_protocol_id: r.seazit_protocol_id.toString(),
                         study_phase: r.study_phase,

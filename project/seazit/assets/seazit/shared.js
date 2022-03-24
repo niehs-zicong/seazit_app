@@ -57,6 +57,7 @@ const AXIS_LINEAR = 1,
                 Seazit_chemical_info: d.Seazit_chemical_info,
                 Seazit_ui_panel: d.Seazit_ui_panel,
             });
+            console.log(d);
         });
     },
     data_exportToJsonFile = function(jsonData) {
@@ -72,6 +73,8 @@ const AXIS_LINEAR = 1,
     },
     renderSelectMultiWidget = function(name, label, options, values, handleChange) {
         let size = Math.min(options.length, 11);
+        console.log(options);
+
         return (
             <div>
                 <label>Select {label}(s):</label>
@@ -85,7 +88,7 @@ const AXIS_LINEAR = 1,
                 >
                     {options.map((d) => {
                         return (
-                            <option key={d.key} value={d.key}>
+                            <option title={d.description} key={d.key} value={d.key}>
                                 {d.label}
                             </option>
                         );
@@ -108,7 +111,7 @@ const AXIS_LINEAR = 1,
                 >
                     {options.map((d) => {
                         return (
-                            <option title={d.label} key={d.key} value={d.key}>
+                            <option title={d.description} key={d.key} value={d.key}>
                                 {d.label}
                             </option>
                         );
@@ -134,7 +137,7 @@ const AXIS_LINEAR = 1,
                         return (
                             <optgroup key={category} label={category}>
                                 {value.map((d) => (
-                                    <option key={d.key} value={d.key}>
+                                    <option title={d.description} key={d.key} value={d.key}>
                                         {d.label}
                                     </option>
                                 ))}
