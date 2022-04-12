@@ -68,7 +68,6 @@ class ReadoutWidget extends BaseWidget {
                 return _.includes(assays, r.seazit_protocol_id.toString());
             })
             .value();
-        console.log(opts);
         if (this.props.multiReadoutSelector) {
             opts = _.chain(opts)
                 .map((r) => {

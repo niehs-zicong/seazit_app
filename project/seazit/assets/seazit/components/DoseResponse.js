@@ -68,6 +68,9 @@ class DoseResponse extends React.Component {
             responses,
             yrange,
             offset;
+        console.log(keys)
+
+        console.log(collapsedData)
 
         // set constant y-range for all charts. ensure 0 is within the
         // domain of values.

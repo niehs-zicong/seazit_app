@@ -81,7 +81,7 @@ class BmdTable extends React.Component {
         // console.log(this.props.data);
 
         let medData, pod_medData, mort_pod_medData;
-        medData = _.sortBy(this.props.data.bmc_activity, 'med_pod_med');
+        medData = _.sortBy(this.props.data.bmd_activity_selectivity, 'med_pod_med');
         return (
             <div>
                 <table id="IA_table01" ref="table" className="table table-condensed table-hover">
@@ -101,6 +101,8 @@ class BmdTable extends React.Component {
                                 (Min – Max)
                             </th>
                             <th style={{ width: '20%' }}>Number of BMC</th>
+
+
                         </tr>
                     </thead>
                     <tbody>{medData.map(this._renderRow)}</tbody>

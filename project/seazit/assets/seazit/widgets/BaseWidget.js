@@ -17,6 +17,7 @@ class BaseWidget extends React.Component {
         this.handleRadioChange = this.handleRadioChange.bind(this);
         this.handleIntegerInputChange = this.handleIntegerInputChange.bind(this);
         this.handleFloatInputChange = this.handleFloatInputChange.bind(this);
+        this.handleCheckboxInputChange = this.handleCheckboxInputChange.bind(this);
     }
 
     handleRadioChange(e) {
@@ -48,6 +49,14 @@ class BaseWidget extends React.Component {
         d[e.target.name] = parseFloat(e.target.value);
         this.props.stateHolder.setState(d);
     }
+
+    handleCheckboxInputChange(e) {
+        let d = {};
+        d[e.target.name] = $(e.target).val();
+        this.props.stateHolder.setState(d);
+    }
+
+
 }
 
 BaseWidget.propTypes = {

@@ -1619,7 +1619,7 @@ webpackJsonp(
                                     var e = void 0;
                                     return (
                                         (e = p.default.sortBy(
-                                            this.props.data.bmc_activity,
+                                            this.props.data.bmd_activity_selectivity,
                                             'med_pod_med'
                                         )),
                                         s.default.createElement(
@@ -1972,7 +1972,7 @@ webpackJsonp(
                     var a = void 0,
                         r = void 0,
                         o = void 0;
-                    (a = d.default.sortBy(t.bmc_activity, 'med_pod_med')),
+                    (a = d.default.sortBy(t.bmd_activity_selectivity, 'med_pod_med')),
                         (r = d.default.filter(a, function(e) {
                             return null !== e.med_pod_med;
                         })),
@@ -4054,7 +4054,7 @@ webpackJsonp(
                         return (
                             (n.data_exportToCSVFile = function(e) {
                                 if (0 == e.length) return '';
-                                var t = m.default.sortBy(e.bmc_activity, 'med_pod_med');
+                                var t = m.default.sortBy(e.bmd_activity_selectivity, 'med_pod_med');
                                 console.log('bmd d'), console.log(t);
                                 var n = [
                                         'preferred_name',

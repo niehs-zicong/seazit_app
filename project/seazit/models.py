@@ -569,6 +569,53 @@ class Seazit_readout_result(models.Model):
     def bmds_responses(cls, protocol_ids, readout_ids):
 
         cols = (
+
+            "protocol_id",
+            "endpoint_name",
+            "casrn",
+            "preferred_name",
+            "use_category1",
+            "dtxsid",
+            "min_pod_med",
+            "med_pod_med",
+            "max_pod_med",
+            "med_hitconf",
+            "n_values",
+
+            "mort_min_pod_med",
+            "mort_med_pod_med",
+            "mort_max_pod_med",
+            "mort_med_hitconf",
+            "mort_n_values",
+
+            "min_lowest_conc",
+            "max_highest_conc",
+            "mean_pod",
+            "mean_selectivity",
+            "med_mort_hit_confidence",
+            "n_rep_max_dev_call",
+            "n_rep",
+            "f_max_dev_call",
+            "final_dev_call",
+            "malformation",
+            "endpoint_name_protocol",
+            "lab_anonymous_code",
+            "test_condition",
+            "protocol_name_long",
+            "protocol_name_plot",
+        )
+        bmdActivitySelectivity =Seazit_bmc_activate_selectivity_result.objects.filter(
+                protocol_id__in=protocol_ids , endpoint_name__in=readout_ids
+                ).values(*cols)
+
+
+        return dict(
+                     bmd_activity_selectivity = list(bmdActivitySelectivity))
+
+    @classmethod
+    def bmds_responses_backup(cls, protocol_ids, readout_ids):
+
+        cols = (
                 "protocol_id",
                 "endpoint_name",
                 "casrn",

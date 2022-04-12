@@ -35,16 +35,9 @@ let renderPlot = function(el, data, opts) {
 
     // let pod_medData, mort_pod_medData ;
     let medData, pod_medData, mort_pod_medData;
-    medData = _.sortBy(data.bmc_activity, 'med_pod_med');
+    medData = _.sortBy(data.bmd_activity_selectivity, 'med_pod_med');
     pod_medData = _.filter(medData, (d) => d.med_pod_med !== null);
     mort_pod_medData = _.filter(medData, (d) => d.mort_med_pod_med !== null);
-
-    //
-    // let mort_pod_medData2 = mort_pod_medData.map(function(v, i) {
-    //     return _.extend(v, {
-    //         mort_key: 'mort_pod_medData',
-    //     });
-    // });
 
     // set dimensions and margins
     let elWidth = Math.max(Math.floor($(el).innerWidth()), 800),
@@ -199,7 +192,6 @@ let renderPlot = function(el, data, opts) {
                 casrn: d.casrn,
             });
         });
-
     // add selectivity-ratio text
     if (opts.isSelective) {
         // axis label
@@ -219,15 +211,12 @@ let renderPlot = function(el, data, opts) {
             .attr('dy', '0.35em')
             .style('font-family', 'sans-serif')
             .text((d) => {
-                return 'zw';
+                return d.med_mort_hit_confidence < 0.5
+                    ? `≥ ${printFloat(d.mean_selectivity)}`
+                    : printFloat(d.mean_selectivity) ;
             })
-            // .text((d) => {
-            //     return d.has_mort_pod_bmd
-            //         ? printFloat(d.maximumSelectivity)
-            //         : `≥ ${printFloat(d.maximumSelectivity)}`;
-            // })
             .each(function(d) {
-                if (!d.has_mort_pod_bmd) {
+                if (d.med_mort_hit_confidence < 0.5) {
                     // add footnote; adjust text so that numbers are aligned
                     d3.select(this)
                         .attr('x', elWidth - margin.right - margin.left + 10)
@@ -375,6 +364,7 @@ class RankedBarChart extends React.Component {
         renderPlot(this.refs.bmd_svg, props.data, {
             isSelective: props.visualization === BMDVIZ_SELECTIVITY,
             selectedAxis: props.selectedAxis,
+            selectivityList: props.selectivityList === BMDVIZ_SELECTIVITY,
         });
     }
 

@@ -67,7 +67,7 @@ class ChemicalWidget extends BaseWidget {
             .map('casrn')
             .uniq()
             .value();
-        this.props.stateHolder.setState(d);
+
     }
 
     _renderFilterBy(state) {
