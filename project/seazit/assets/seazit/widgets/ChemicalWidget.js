@@ -40,16 +40,16 @@ class ChemicalWidget extends BaseWidget {
     // }
 
     handleChemlistChange(e) {
-        // let d = {},
-        //     state = this.props.stateHolder.state,
-        //     value = parseInt(e.target.value);
-        //
-        // d[e.target.name] = value;
-        //
-        // // also update chemicals based on chemfilters
-        // d['chemicals'] = this._getSelectedChemicals(state.tbl_substances, state.categories, value);
-        //
-        // this.props.stateHolder.setState(d);
+        let d = {},
+            state = this.props.stateHolder.state,
+            value = parseInt(e.target.value);
+
+        d[e.target.name] = value;
+
+        // also update chemicals based on chemfilters
+        d['chemicals'] = this._getSelectedChemicals(state.tbl_substances, state.categories, value);
+
+        this.props.stateHolder.setState(d);
     }
 
     handleCategoryChange(e) {
@@ -67,6 +67,7 @@ class ChemicalWidget extends BaseWidget {
             .map('casrn')
             .uniq()
             .value();
+        this.props.stateHolder.setState(d);
 
     }
 
@@ -123,8 +124,6 @@ class ChemicalWidget extends BaseWidget {
                 })
                 .groupBy('category')
                 .value();
-            // console.log("opts")
-            // console.log(opts)
 
             return renderSelectMultiOptgroupWidget(
                 // return renderSelectMultiWidget(

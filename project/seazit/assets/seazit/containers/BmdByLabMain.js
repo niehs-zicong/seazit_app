@@ -91,13 +91,8 @@ class BmdByLabMain extends React.Component {
     }
 
     renderSelection(url) {
-        console.log("sthis.state")
-        console.log(this.state)
-
         return (
             <RankedBarchartHandler
-                // selectedArray={this.state.array}
-                // selectedReadouts={this.state.readouts}
                 visualization={this.state.visualization}
                 selectivityCutoff={this.state.selectivityCutoff}
                 selectivityList={this.state.selectivityList}
@@ -113,7 +108,6 @@ class BmdByLabMain extends React.Component {
         return (
             <div className="alert alert-info">
                 <h2>Help text</h2>
-
                 <p>
                     This page allows for each investigator to see how the chemicals rank by activity
                     in two ways:
@@ -180,9 +174,9 @@ class BmdByLabMain extends React.Component {
                     />
                     <hr />
                     <BmdByLabPlotWidget stateHolder={this} />
-                    {this.state.visualization === BMDVIZ_SELECTIVITY ? (
-                        <SelectorSliderWidget stateHolder={this} />
-                    ) : null}
+                    {/*{this.state.visualization === BMDVIZ_SELECTIVITY ? (*/}
+                    {/*    <SelectorSliderWidget stateHolder={this} />*/}
+                    {/*) : null}*/}
                     {this.state.visualization === BMDVIZ_SELECTIVITY ? (
                         <CheckBoxWidget stateHolder={this} />
                     ) : null}

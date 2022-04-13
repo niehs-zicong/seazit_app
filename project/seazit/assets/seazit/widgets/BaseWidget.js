@@ -48,15 +48,24 @@ class BaseWidget extends React.Component {
         let d = {};
         d[e.target.name] = parseFloat(e.target.value);
         this.props.stateHolder.setState(d);
+        // console.log("d")
+        // console.log(d)
+        // console.log(this.props.stateHolder)
     }
 
-    handleCheckboxInputChange(e) {
-        let d = {};
-        d[e.target.name] = $(e.target).val();
-        this.props.stateHolder.setState(d);
-    }
-
-
+   handleCheckboxInputChange(e) {
+        const { name, checked } = e.target;
+        let list = this.props.stateHolder.state.selectivityList
+        list.map((i) => {
+              if (i.name === name)
+              {
+                    i.isChecked=checked
+              }
+          }
+          );
+       this.props.stateHolder.setState(list);
+       // console.log(this.props.stateHolder.state)
+      };
 }
 
 BaseWidget.propTypes = {

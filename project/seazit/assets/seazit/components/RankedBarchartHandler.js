@@ -28,34 +28,8 @@ class RankedBarchartHandler extends React.Component {
         super(props);
         // console.log(props.stateHolder.state)
         // this.parseJSONToCSVStr = this.parseJSONToCSVStr.bind(this);
-        this.state = {
-            // loadMetadata
-            metadataLoaded: false,
-            metadata: null,
+        this.state = { data: null };
 
-            // HelpButtonWidget
-            showHelpText: false,
-
-            // ChemicalSelectorWidget
-            chemList: CHEMLIST_80,
-            // chemicalFilterBy: CHEMFILTER_CATEGORY,
-            chemicalFilterBy: CHEMFILTER_CHEMICIAL,
-
-            chemicals: [],
-            categories: [],
-
-            // ReadoutSelectorWidget
-            assays: [],
-            readouts: [],
-
-            // PlotCollapseWidget
-            plotCollapse: NO_COLLAPSE,
-
-            // DoseResponseGridWidget
-            // vizColumns: initialCols,
-            vizHeight: 350,
-            data: null,
-        };
     }
 
     fetchBmdData(url) {
@@ -68,25 +42,32 @@ class RankedBarchartHandler extends React.Component {
                 });
                 return;
             }
+            console.log(this.state.data)
+            console.log("data")
+            console.log(url)
+            console.log(data)
+
             // this.updateData(data, this.props.collapse);
             this.setState({ data });
+            // console.log(this.state.data)
+
             // this.updateData(data, this.props.collapse);
         });
     }
 
-    loadBmd() {
-        // this.state.collapsedData.map((d) => this._renderPlot(d, this.state.yrange));
-    }
+    // loadBmd() {
+    //     // this.state.collapsedData.map((d) => this._renderPlot(d, this.state.yrange));
+    // }
 
-    updateData(data, collapse) {
-        this.setKeys(data, collapse);
-        let update = this.collapseData(data, collapse);
-        let scale = this.getColorScale(update.collapsedData, collapse);
-        this.setState({
-            ...update,
-            scale,
-        });
-    }
+    // updateData(data, collapse) {
+    //     this.setKeys(data, collapse);
+    //     let update = this.collapseData(data, collapse);
+    //     let scale = this.getColorScale(update.collapsedData, collapse);
+    //     this.setState({
+    //         ...update,
+    //         scale,
+    //     });
+    // }
 
     setDatasetKey(data) {
         data.key = `${data.endpoint_name}|${data.protocol_id}`;
@@ -194,30 +175,26 @@ class RankedBarchartHandler extends React.Component {
         if (!this.state.data) {
             return <Loading />;
         }
-
         // let url = getBmdsUrl(this.state.assays, this.state.readouts);
-
         let chartName = this.props.visualization === BMDVIZ_ACTIVITY ? 'activity' : 'selectivity',
              plotData, tableData;
-        //
 
         if (this.props.visualization === BMDVIZ_ACTIVITY) {
             plotData = this.state.data,
             tableData = this.state.data;
         } else {
-            plotData = this.state.data,
-            tableData = this.state.data;
-
             let selectivityCheckedArray = _.chain(this.props.selectivityList)
                 .filter((r) => r.isChecked === true)
                 .map('name')
                 .uniq()
                 .value();
-          console.log("zw result")
+            tableData = this.state.data;
+            plotData = {
+                bmd_activity_selectivity:  this.state.data.bmd_activity_selectivity.filter( i => selectivityCheckedArray.includes( i.final_dev_call ) )
+            }
+            console.log("zw result")
+            console.log(this.state.data)
             console.log(plotData)
-            plotData.bmd_activity_selectivity = plotData.bmd_activity_selectivity.filter( i => selectivityCheckedArray.includes( i.final_dev_call ) );
-            console.log(plotData)
-
          }
 
         return (
@@ -240,7 +217,6 @@ class RankedBarchartHandler extends React.Component {
                     visualization={this.props.visualization}
                     selectedAxis={this.props.selectedAxis}
                     selectivityList={this.props.selectivityList}
-
                 />
                 <p class="help-block">
                     <b>Interactivity note:</b> This barchart is interactive. Click an item to view
@@ -274,8 +250,8 @@ class RankedBarchartHandler extends React.Component {
 }
 
 RankedBarchartHandler.propTypes = {
-    selectedArray: PropTypes.string.isRequired,
-    selectedReadouts: PropTypes.array.isRequired,
+    // selectedArray: PropTypes.string.isRequired,
+    // selectedReadouts: PropTypes.array.isRequired,
     visualization: PropTypes.number.isRequired,
     selectivityCutoff: PropTypes.number.isRequired,
     selectivityList: PropTypes.array.isRequired,
