@@ -7,6 +7,8 @@ import BmdByLabPlotWidget from '../widgets/BmdByLabPlotWidget';
 // import BmdWidget from '../widgets/BmdWidget';
 import ReadoutWidget from '../widgets/ReadoutWidget';
 import SelectorSliderWidget from '../widgets/SelectorSliderWidget';
+import CheckBoxWidget from "../widgets/CheckBoxWidget";
+
 // import AxisSelectorWidget from '../widgets/AxisSelectorWidget';
 import RankedBarchartHandler from '../components/RankedBarchartHandler';
 
@@ -33,9 +35,6 @@ class BmdByLabMain extends React.Component {
             // HelpButtonWidget
             showHelpText: false,
 
-            // BmdWidget
-            // bmdType: BMD_HILL,
-
             // ChemicalSelectorWidget
             chemList: CHEMLIST_80,
             chemicalFilterBy: CHEMFILTER_CATEGORY,
@@ -44,6 +43,30 @@ class BmdByLabMain extends React.Component {
 
             // SelectorSliderWidget
             selectivityCutoff: 0.5,
+                        // CheckBoxWidget
+            selectivityList: [
+                {
+                    id: 1,
+                    name: "dev tox",
+                    isChecked: true,
+                },
+                {
+                    id: 2,
+                    name: "general tox",
+                    isChecked: false,
+
+                },
+                {
+                    id: 3,
+                    name: "inconclusive",
+                    isChecked: false,
+                },
+                {
+                    id: 4,
+                    name: "inactive",
+                    isChecked: false,
+                }
+            ],
 
             // AxisSelectorWidget
             selectedAxis: AXIS_LOG10,
@@ -70,10 +93,9 @@ class BmdByLabMain extends React.Component {
     renderSelection(url) {
         return (
             <RankedBarchartHandler
-                // selectedArray={this.state.array}
-                // selectedReadouts={this.state.readouts}
                 visualization={this.state.visualization}
                 selectivityCutoff={this.state.selectivityCutoff}
+                selectivityList={this.state.selectivityList}
                 selectedAxis={this.state.selectedAxis}
                 url={url}
             />
@@ -86,7 +108,6 @@ class BmdByLabMain extends React.Component {
         return (
             <div className="alert alert-info">
                 <h2>Help text</h2>
-
                 <p>
                     This page allows for each investigator to see how the chemicals rank by activity
                     in two ways:
@@ -153,8 +174,11 @@ class BmdByLabMain extends React.Component {
                     />
                     <hr />
                     <BmdByLabPlotWidget stateHolder={this} />
+                    {/*{this.state.visualization === BMDVIZ_SELECTIVITY ? (*/}
+                    {/*    <SelectorSliderWidget stateHolder={this} />*/}
+                    {/*) : null}*/}
                     {this.state.visualization === BMDVIZ_SELECTIVITY ? (
-                        <SelectorSliderWidget stateHolder={this} />
+                        <CheckBoxWidget stateHolder={this} />
                     ) : null}
                 </div>
                 <div className="col-md-9">

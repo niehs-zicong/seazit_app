@@ -55,3 +55,7 @@ class SeazitBmcByLab(SeazitTemplateView):
     active_view_name = "seazit_bmcByLab"
 
 
+class SeazitIntegrative(SeazitTemplateView):
+    template_name = "seazit/seazit_integrative.html"
+    active_view_name = "seazit_integrative"
+

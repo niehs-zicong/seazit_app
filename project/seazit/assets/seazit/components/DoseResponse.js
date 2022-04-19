@@ -69,13 +69,13 @@ class DoseResponse extends React.Component {
             yrange,
             offset;
 
+
         // set constant y-range for all charts. ensure 0 is within the
         // domain of values.
 
         yrange = [0, 100];
-        console.log('collapsedData');
-        console.log(collapsedData);
-
+        // console.log('collapsedData');
+        //
         return {
             data,
             collapsedData,
@@ -292,9 +292,6 @@ class DoseResponse extends React.Component {
             height: this.props.height + d.groupKeys.length * 19 + 20,
             autosize: true,
         };
-        console.log('d');
-        console.log(d);
-
         d.groupKeys.map((gk) => {
             let drs = d.dose_response.filter((r) => r.groupKey == gk),
                 substance_codeCase = _.chain(drs)
@@ -383,9 +380,6 @@ class DoseResponse extends React.Component {
     }
 
     loadDoseResponse() {
-        console.log('zw');
-
-        console.log(this.state.collapsedData);
         this.state.collapsedData.map((d) => this._renderPlot(d, this.state.yrange));
     }
 

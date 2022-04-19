@@ -10,7 +10,7 @@ from django.urls import reverse, NoReverseMatch
 aftre install cp cert to nginx:
 docker cp certificate_key.pem seazit_app_nginx_1:etc/nginx/ssl
 For test vm: 
-docker cp /ddn/gs1/home/noltesz/nginxcert/certificate_key.pem seazit_app_nginx_1:etc/nginx/ssl
+docker cp /ddfrom django.core.urlresolversn/gs1/home/noltesz/nginxcert/certificate_key.pem seazit_app_nginx_1:etc/nginx/ssl
 
 --
 /opt/conda/envs/seazit/bin/gunicorn main.wsgi --workers 8 --bind 0.0.0.0:5000 --chdir /app/project

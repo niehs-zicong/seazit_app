@@ -18,11 +18,12 @@
 
 
      <li role="presentation" class="{% if active_view_name == 'seazit_bmcByLab' %}active{% endif %}">
-         <a href="{% url 'seazit:seazit_bmcByLab' %}">BMC by Lab Tab </a></li>
+         <a href="{% url 'seazit:seazit_bmcByLab' %}">BMC by Dataset</a></li>
+
+    <li role="presentation" class="{% if active_view_name == 'seazit_integrative' %}active{% endif %}">
+        <a href="{% url 'seazit:seazit_integrative' %}">Integrative Analyses</a></li>
 
     <li role="presentation" class="{% if active_view_name == 'resources' %}active{% endif %}">
         <a href="{% url 'seazit:resources' %}">Resources</a></li>
-
-
 </ul>
 {% endblock crumbs %}

@@ -1,11 +1,6 @@
 from rest_framework import serializers
 
 from . import models
-
-
-
-
-
 class AnalysisBmcInputSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.AnalysisBmcInput

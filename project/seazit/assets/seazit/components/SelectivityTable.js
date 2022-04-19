@@ -1,57 +1,76 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import _ from 'lodash';
+
 import BootstrapModal from 'utils/BootstrapModal';
 import { Header, SingleCurveBody } from './DoseResponseModal';
 
-import { printFloat, SELECTIVITY_FOOTNOTE } from '../shared';
+import { printFloat } from '../shared';
 
-let showSelectivityValue = function(d) {
-        if (d.maximumSelectivity && !d.minimimumNonViability.has_viability_bmd) {
-            return (
-                <span>
-                    ≥{printFloat(d.maximumSelectivity)}
-                    <sup>†</sup>
-                </span>
-            );
-        } else if (d.maximumSelectivity) {
-            return printFloat(d.maximumSelectivity);
-        } else {
-            return '-';
-        }
-    },
-    renderBmdModal = function(jsonData) {
-        if (!jsonData) {
-            // match button padding-left
-            return <span style={{ paddingLeft: 12 }}>-</span>;
-        }
-
-        let showModal = () => {
-            new BootstrapModal(Header, SingleCurveBody, {
-                title: `${jsonData.chemical_name} (${jsonData.chemical_casrn}): ${jsonData.readout_endpoint}`,
-                readout_id: jsonData.readout_id,
-                casrn: jsonData.chemical_casrn,
-            });
-        };
-
-        return (
-            <button className="btn btn-link" onClick={showModal}>
-                {printFloat(jsonData.bmd)}
-            </button>
-        );
+let renderMedPodModal = function(jsonData, flag) {
+    if (!jsonData) {
+        // match button padding-left
+        return <span style={{ paddingLeft: 12 }}>-</span>;
+    }
+    // console.log(jsonData)
+    let showModal = () => {
+        new BootstrapModal(Header, SingleCurveBody, {
+            // title: `${d.preferred_name} (${d.chemical_casrn}): ${d.readout_endpoint}`,
+            title: jsonData.preferred_name + `: ` + jsonData.endpoint_name,
+            protocol_id: jsonData.protocol_id,
+            readout_id:
+                flag == 'pod_med'
+                    ? jsonData.endpoint_name + '_' + jsonData.protocol_id
+                    : 'Mortality@120' + '_' + jsonData.protocol_id,
+            casrn: jsonData.casrn,
+        });
     };
+    let med_result, min_med_result, max_med_result;
+    let result;
+
+    if (flag == 'pod_med') {
+        (med_result = jsonData.med_pod_med
+            ? printFloat(Math.pow(10, jsonData.med_pod_med) * 1000000)
+            : '-'),
+            (min_med_result = jsonData.min_pod_med
+                ? printFloat(Math.pow(10, jsonData.min_pod_med) * 1000000)
+                : ''),
+            (max_med_result = jsonData.max_pod_med
+                ? printFloat(Math.pow(10, jsonData.max_pod_med) * 1000000)
+                : '');
+    } else {
+        (med_result = jsonData.mort_med_pod_med
+            ? printFloat(Math.pow(10, jsonData.mort_med_pod_med) * 1000000)
+            : '-'),
+            (min_med_result = jsonData.mort_min_pod_med
+                ? printFloat(Math.pow(10, jsonData.mort_min_pod_med) * 1000000)
+                : ''),
+            (max_med_result = jsonData.mort_max_pod_med
+                ? printFloat(Math.pow(10, jsonData.mort_max_pod_med) * 1000000)
+                : '');
+    }
+    return (
+        <button className="btn btn-link" onClick={showModal} style={{ textAlign: 'left' }}>
+            {med_result}
+            <br />({min_med_result} – {max_med_result})
+        </button>
+    );
+};
 
 class SelectivityTable extends React.Component {
     _renderRow(d) {
         return (
-            <tr key={d.chemical_casrn}>
-                <td>{d.chemical_name}</td>
-                <td>{d.chemical_casrn}</td>
-                <td>{d.chemical_category}</td>
-                <td>{renderBmdModal(d.minimimumNonViability)}</td>
-                <td>{renderBmdModal(d.minimimumViability)}</td>
-                <td>{showSelectivityValue(d)}</td>
+            <tr key={d.casrn}>
+                <td>{d.preferred_name}</td>
+                <td>{d.casrn}</td>
+                <td>{d.use_category1}</td>
+                <td>{renderMedPodModal(d, 'pod_med')}</td>
+                <td>{renderMedPodModal(d, 'mort_pod_med')}</td>
+                <td>{d.n_values}</td>
+                <td>{printFloat(Math.pow(10, d.mean_pod) * 1000000)}</td>
+                <td>{d.malformation}</td>
+                <td>{printFloat(d.mean_selectivity)}</td>
+
             </tr>
         );
     }
@@ -60,40 +79,35 @@ class SelectivityTable extends React.Component {
         if (this.props.data.length === 0) {
             return null;
         }
+        // console.log(this.props.data);
 
-        let selectives = _.chain(this.props.data)
-                .filter((d) => d.maximumSelectivity > 0)
-                .sortBy((d) => -d.maximumSelectivity)
-                .value(),
-            noNonViabilityBmd = this.props.data.filter((d) => d.maximumSelectivity === null);
-
+        let medData, pod_medData, mort_pod_medData;
+        medData = _.sortBy(this.props.data.bmd_activity_selectivity, 'med_pod_med');
         return (
             <div>
-                <table ref="table" className="table table-condensed table-hover">
+                <table id="IA_table01" ref="table" className="table table-condensed table-hover">
                     <thead>
                         <tr>
                             <th style={{ width: '20%' }}>Chemical</th>
-                            <th style={{ width: '15%' }}>CASRN</th>
-                            <th style={{ width: '17%' }}>Category</th>
-                            <th style={{ width: '16%' }}>Minimum nonviability BMC</th>
-                            <th style={{ width: '16%' }}>Minimum viability BMC</th>
-                            <th style={{ width: '16%' }}>Selectivity ratio</th>
+                            <th style={{ width: '20%' }}>CASRN</th>
+                            <th style={{ width: '20%' }}>Category</th>
+                            <th style={{ width: '20%' }}>
+                                Non-Mortality BMC
+                                <br />
+                                (Min – Max)
+                            </th>
+                            <th style={{ width: '20%' }}>
+                                Mortality BMC
+                                <br />
+                                (Min – Max)
+                            </th>
+                            <th style={{ width: '20%' }}>Number of BMC</th>
+                            <th style={{ width: '20%' }}>Malformation BMC</th>
+                            <th style={{ width: '20%' }}>Malformation</th>
+                            <th style={{ width: '20%' }}>Selectivity</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        {selectives.map(this._renderRow)}
-                        {noNonViabilityBmd.map(this._renderRow)}
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colSpan="6">
-                                *&nbsp;Chemical is a known developmental neurotoxicant from
-                                literature
-                                <br />
-                                <sup>†</sup>&nbsp;{SELECTIVITY_FOOTNOTE}
-                            </td>
-                        </tr>
-                    </tfoot>
+                    <tbody>{medData.map(this._renderRow)}</tbody>
                 </table>
             </div>
         );
