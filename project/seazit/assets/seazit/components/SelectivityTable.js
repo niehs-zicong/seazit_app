@@ -26,7 +26,6 @@ let renderMedPodModal = function(jsonData, flag) {
         });
     };
     let med_result, min_med_result, max_med_result;
-    let result;
 
     if (flag == 'pod_med') {
         (med_result = jsonData.med_pod_med
@@ -57,19 +56,29 @@ let renderMedPodModal = function(jsonData, flag) {
     );
 };
 
+
 class SelectivityTable extends React.Component {
     _renderRow(d) {
+        console.log("SelectivityTable data")
+        console.log(d)
+
         return (
             <tr key={d.casrn}>
                 <td>{d.preferred_name}</td>
                 <td>{d.casrn}</td>
                 <td>{d.use_category1}</td>
-                <td>{renderMedPodModal(d, 'pod_med')}</td>
-                <td>{renderMedPodModal(d, 'mort_pod_med')}</td>
-                <td>{d.n_values}</td>
-                <td>{printFloat(Math.pow(10, d.mean_pod) * 1000000)}</td>
                 <td>{d.malformation}</td>
+                <td>{d.Ontology_term}</td>
+                <td>
+                  <a href={ 'https://www.ebi.ac.uk/ols/ontologies/zp/terms?iri=http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2F' + 'ZP_0003211' }
+                      target="_blank">
+                       ZP_0003211
+                  </a>
+                </td>
+                <td>{printFloat(Math.pow(10, d.mean_pod) * 1000000)}</td>
                 <td>{printFloat(d.mean_selectivity)}</td>
+                <td>{d.n_values}</td>
+                <td>{renderMedPodModal(d, 'mort_pod_med')}</td>
 
             </tr>
         );
@@ -79,10 +88,7 @@ class SelectivityTable extends React.Component {
         if (this.props.data.length === 0) {
             return null;
         }
-        // console.log(this.props.data);
-
-        let medData, pod_medData, mort_pod_medData;
-        medData = _.sortBy(this.props.data.bmd_activity_selectivity, 'med_pod_med');
+        let medData = this.props.data;
         return (
             <div>
                 <table id="IA_table01" ref="table" className="table table-condensed table-hover">
@@ -91,20 +97,17 @@ class SelectivityTable extends React.Component {
                             <th style={{ width: '20%' }}>Chemical</th>
                             <th style={{ width: '20%' }}>CASRN</th>
                             <th style={{ width: '20%' }}>Category</th>
-                            <th style={{ width: '20%' }}>
-                                Non-Mortality BMC
-                                <br />
-                                (Min – Max)
-                            </th>
+                            <th style={{ width: '20%' }}>Malformation</th>
+                            <th style={{ width: '20%' }}>Ontology term</th>
+                            <th style={{ width: '20%' }}>Ontology ID</th>
+                            <th style={{ width: '20%' }}>Malformation BMC</th>
+                            <th style={{ width: '20%' }}>Selectivity</th>
+                            <th style={{ width: '20%' }}>Number of curves evaluated</th>
                             <th style={{ width: '20%' }}>
                                 Mortality BMC
                                 <br />
                                 (Min – Max)
                             </th>
-                            <th style={{ width: '20%' }}>Number of BMC</th>
-                            <th style={{ width: '20%' }}>Malformation BMC</th>
-                            <th style={{ width: '20%' }}>Malformation</th>
-                            <th style={{ width: '20%' }}>Selectivity</th>
                         </tr>
                     </thead>
                     <tbody>{medData.map(this._renderRow)}</tbody>

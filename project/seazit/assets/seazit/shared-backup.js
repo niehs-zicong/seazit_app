@@ -2,7 +2,6 @@ import _ from 'lodash';
 import * as d3 from 'd3';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ReactTooltip from "react-tooltip";
 
 const AXIS_LINEAR = 1,
     AXIS_LOG10 = 2,
@@ -63,7 +62,6 @@ const AXIS_LINEAR = 1,
 
         });
     },
-
     data_exportToJsonFile = function(jsonData) {
         let filename = 'jsonData.csv';
 
@@ -101,18 +99,6 @@ const AXIS_LINEAR = 1,
             </div>
         );
     },
-
-//     ("#test1 option").tooltip({
-//   placement: 'right',
-//   trigger: 'hover',
-//   container: 'body'
-// }),
-    SelectSingleWidget = {
-          placement: 'right',
-          trigger: 'hover',
-          container: 'body'
-    },
-
     renderSelectSingleWidget = function(name, label, options, values, handleChange) {
         console.log("zw options")
         console.log(options)
@@ -122,32 +108,19 @@ const AXIS_LINEAR = 1,
                 <label>Select one {label}:</label>
                 <select
                     name={name}
-                    className="row form-control"
+                    className="form-control"
                     onChange={handleChange}
                     size={Math.min(options.length, 11)}
                     value={values}
                 >
                     {options.map((d) => {
                         return (
-                            <React.Fragment>
-                            <option data-tip={d} data-for={d.label}
-                                key={d.key} value={d.key}>
+                            <option title={d.description} key={d.key} value={d.key}>
                                 {d.label}
                             </option>
-                            </React.Fragment>
                         );
                     })}
-
-            </select>
-                    {options.map((d) => {
-                        let  description =  (d.description) ? d.description: 'no description';
-                        return (
-                            <ReactTooltip id={d.label} place="top" effect="solid">
-                            {description}
-                          </ReactTooltip>
-
-                        );
-                    })}
+                </select>
             </div>
         );
     },

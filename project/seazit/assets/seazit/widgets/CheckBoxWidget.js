@@ -22,17 +22,18 @@ class CheckBoxWidget extends BaseWidget {
                 <label>Selectivity:</label>
                     {/*{this.props.stateHolder.state.selectivityList.map((d, index) => {*/}
                     {state.selectivityList.map((d, index) => {
-
                     return (
-                        <div key={index}>
-                            <input
-                                type="checkbox"
-                                name={d.name}
-                                defaultChecked={d.isChecked}
-                                onChange={this.handleCheckboxInputChange}
-                                // value={state.selectivityNames}
-                            />
-                            <label>{d.name}</label>
+                        <div className="checkbox" key={index}>
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    name={d.name}
+                                    defaultChecked={d.isChecked}
+                                    onChange={this.handleCheckboxInputChange}
+                                    // value={state.selectivityNames}
+                                />
+                                {d.name}
+                            </label>
                         </div>
                     );
                 })}

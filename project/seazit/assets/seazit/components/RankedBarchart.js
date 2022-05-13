@@ -34,11 +34,12 @@ let renderPlot = function(el, data, opts) {
     }
 
     // let pod_medData, mort_pod_medData ;
-    let medData, pod_medData, mort_pod_medData;
-    medData = _.sortBy(data.bmd_activity_selectivity, 'med_pod_med');
+    let medData = data
+        , pod_medData, mort_pod_medData;
+
+
     pod_medData = _.filter(medData, (d) => d.med_pod_med !== null);
     mort_pod_medData = _.filter(medData, (d) => d.mort_med_pod_med !== null);
-
     // set dimensions and margins
     let elWidth = Math.max(Math.floor($(el).innerWidth()), 800),
         margin = { top: 40, right: 100, bottom: 25, left: 300 },
@@ -361,6 +362,7 @@ class RankedBarChart extends React.Component {
     }
 
     _renderPlot(props) {
+
         renderPlot(this.refs.bmd_svg, props.data, {
             isSelective: props.visualization === BMDVIZ_SELECTIVITY,
             selectedAxis: props.selectedAxis,
