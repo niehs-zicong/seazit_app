@@ -3,6 +3,8 @@ import * as d3 from 'd3';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactTooltip from "react-tooltip";
+import Tooltip from "@material-ui/core/Tooltip";
+
 
 const AXIS_LINEAR = 1,
     AXIS_LOG10 = 2,
@@ -102,17 +104,6 @@ const AXIS_LINEAR = 1,
         );
     },
 
-//     ("#test1 option").tooltip({
-//   placement: 'right',
-//   trigger: 'hover',
-//   container: 'body'
-// }),
-    SelectSingleWidget = {
-          placement: 'right',
-          trigger: 'hover',
-          container: 'body'
-    },
-
     renderSelectSingleWidget = function(name, label, options, values, handleChange) {
         console.log("zw options")
         console.log(options)
@@ -128,29 +119,34 @@ const AXIS_LINEAR = 1,
                     value={values}
                 >
                     {options.map((d) => {
+                        if (d.description)
+                        {
                         return (
-                            <React.Fragment>
-                            <option data-tip={d} data-for={d.label}
-                                key={d.key} value={d.key}>
+                          <Tooltip  title={d.description}  placement="top"
+                          >
+                            <option
+                                     key={d.key} value={d.key}>
                                 {d.label}
                             </option>
-                            </React.Fragment>
+                          </Tooltip>
                         );
-                    })}
+                        } else
+                        {
+                            return (
+                            <option
+                                     key={d.key} value={d.key}>
+                                {d.label}
+                            </option>
+                            )
+                        }
 
+
+                    })}
             </select>
-                    {options.map((d) => {
-                        let  description =  (d.description) ? d.description: 'no description';
-                        return (
-                            <ReactTooltip id={d.label} place="top" effect="solid">
-                            {description}
-                          </ReactTooltip>
-
-                        );
-                    })}
             </div>
         );
     },
+
     renderSelectMultiOptgroupWidget = function(name, label, options, values, handleChange) {
         let size = 10;
         return (

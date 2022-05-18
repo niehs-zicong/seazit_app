@@ -2,6 +2,8 @@ import _ from 'lodash';
 import * as d3 from 'd3';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import ReactTooltip from "react-tooltip";
+
 
 const AXIS_LINEAR = 1,
     AXIS_LOG10 = 2,
@@ -62,6 +64,7 @@ const AXIS_LINEAR = 1,
 
         });
     },
+
     data_exportToJsonFile = function(jsonData) {
         let filename = 'jsonData.csv';
 
@@ -99,6 +102,7 @@ const AXIS_LINEAR = 1,
             </div>
         );
     },
+
     renderSelectSingleWidget = function(name, label, options, values, handleChange) {
         console.log("zw options")
         console.log(options)
@@ -108,22 +112,39 @@ const AXIS_LINEAR = 1,
                 <label>Select one {label}:</label>
                 <select
                     name={name}
-                    className="form-control"
+                    className="row form-control"
                     onChange={handleChange}
                     size={Math.min(options.length, 11)}
                     value={values}
                 >
                     {options.map((d) => {
                         return (
-                            <option title={d.description} key={d.key} value={d.key}>
+                            <option data-tip data-for={d.key}
+                                key={d.key} value={d.key}>
                                 {d.label}
                             </option>
                         );
                     })}
-                </select>
+            </select>
+
+                    {options.map((d) => {
+                        // console.log(d.description)
+                        if (d.description)
+                        {
+                        return (
+                            <ReactTooltip id={d.key}  place="top" effect="solid">
+                            {d.description}
+                          </ReactTooltip>
+                        );
+                        }
+                    })}
             </div>
         );
     },
+
+
+
+
     renderSelectMultiOptgroupWidget = function(name, label, options, values, handleChange) {
         let size = 10;
         return (
