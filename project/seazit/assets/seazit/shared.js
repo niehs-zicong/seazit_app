@@ -2,6 +2,9 @@ import _ from 'lodash';
 import * as d3 from 'd3';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import ReactTooltip from "react-tooltip";
+import Tooltip from "@material-ui/core/Tooltip";
+
 
 const AXIS_LINEAR = 1,
     AXIS_LOG10 = 2,
@@ -57,9 +60,12 @@ const AXIS_LINEAR = 1,
                 Seazit_chemical_info: d.Seazit_chemical_info,
                 Seazit_ui_panel: d.Seazit_ui_panel,
             });
+            console.log("d");
             console.log(d);
+
         });
     },
+
     data_exportToJsonFile = function(jsonData) {
         let filename = 'jsonData.csv';
 
@@ -97,29 +103,50 @@ const AXIS_LINEAR = 1,
             </div>
         );
     },
+
     renderSelectSingleWidget = function(name, label, options, values, handleChange) {
-        // console.log(options)
+        console.log("zw options")
+        console.log(options)
+
         return (
             <div>
                 <label>Select one {label}:</label>
                 <select
                     name={name}
-                    className="form-control"
+                    className="row form-control"
                     onChange={handleChange}
                     size={Math.min(options.length, 11)}
                     value={values}
                 >
                     {options.map((d) => {
+                        if (d.description)
+                        {
                         return (
-                            <option title={d.description} key={d.key} value={d.key}>
+                          <Tooltip  title={d.description}  placement="top"
+                          >
+                            <option
+                                     key={d.key} value={d.key}>
                                 {d.label}
                             </option>
+                          </Tooltip>
                         );
+                        } else
+                        {
+                            return (
+                            <option
+                                     key={d.key} value={d.key}>
+                                {d.label}
+                            </option>
+                            )
+                        }
+
+
                     })}
-                </select>
+            </select>
             </div>
         );
     },
+
     renderSelectMultiOptgroupWidget = function(name, label, options, values, handleChange) {
         let size = 10;
         return (

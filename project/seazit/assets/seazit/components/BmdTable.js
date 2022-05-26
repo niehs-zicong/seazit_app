@@ -80,8 +80,9 @@ class BmdTable extends React.Component {
         }
         // console.log(this.props.data);
 
-        let medData, pod_medData, mort_pod_medData;
-        medData = _.sortBy(this.props.data.bmd_activity_selectivity, 'med_pod_med');
+        // let medData, pod_medData, mort_pod_medData;
+        let medData = this.props.data;
+
         return (
             <div>
                 <table id="IA_table01" ref="table" className="table table-condensed table-hover">
