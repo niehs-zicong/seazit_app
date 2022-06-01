@@ -569,7 +569,6 @@ class Seazit_readout_result(models.Model):
     def bmds_responses(cls, protocol_ids, readout_ids):
 
         cols = (
-
             "protocol_id",
             "endpoint_name",
             "casrn",
@@ -598,6 +597,8 @@ class Seazit_readout_result(models.Model):
             "f_max_dev_call",
             "final_dev_call",
             "malformation",
+            "combin_ontology",
+            "combin_ontology_id",
             "endpoint_name_protocol",
             "lab_anonymous_code",
             "test_condition",
@@ -697,6 +698,8 @@ class Seazit_readout_result(models.Model):
             "f_max_dev_call",
             "final_dev_call",
             "malformation",
+            "combin_ontology",
+            "combin_ontology_id",
             "endpoint_name_protocol",
             "lab_anonymous_code",
             "test_condition",
@@ -862,7 +865,11 @@ class Seazit_bmc_activate_selectivity_result(models.Model):
     n_rep = models.IntegerField(blank=True, null=True)
     f_max_dev_call = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     final_dev_call = models.TextField(blank=True, null=True)
+
     malformation = models.TextField(blank=True, null=True)
+    combin_ontology = models.TextField(blank=True, null=True)
+    combin_ontology_id = models.TextField(blank=True, null=True)
+
     endpoint_name_protocol = models.TextField(blank=True, null=True)
     lab_anonymous_code = models.TextField(blank=True, null=True)
     test_condition = models.TextField(blank=True, null=True)

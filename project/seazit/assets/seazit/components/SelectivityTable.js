@@ -6,6 +6,7 @@ import BootstrapModal from 'utils/BootstrapModal';
 import { Header, SingleCurveBody } from './DoseResponseModal';
 
 import { printFloat } from '../shared';
+import { forEach } from 'underscore';
 
 let renderMedPodModal = function(jsonData, flag) {
     if (!jsonData) {
@@ -56,30 +57,45 @@ let renderMedPodModal = function(jsonData, flag) {
     );
 };
 
-
 class SelectivityTable extends React.Component {
-    _renderRow(d) {
-        console.log("SelectivityTable data")
-        console.log(d)
+    _renderHyperLinkModel(d) {
+        console.log(d);
+        let jsonData2 = ['ZP:1', 'ZP:2', 'ZP:3'];
+    }
 
+    _renderRow(d) {
         return (
             <tr key={d.casrn}>
                 <td>{d.preferred_name}</td>
                 <td>{d.casrn}</td>
                 <td>{d.use_category1}</td>
                 <td>{d.malformation}</td>
-                <td>{d.Ontology_term}</td>
                 <td>
-                  <a href={ 'https://www.ebi.ac.uk/ols/ontologies/zp/terms?iri=http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2F' + 'ZP_0003211' }
-                      target="_blank">
-                       ZP_0003211
-                  </a>
+                    {d.combin_ontology.map((value, index) => {
+                        return <li key={`index-${index}`}>{value}</li>;
+                    })}
+                </td>
+                <td>
+                    {d.combin_ontology_id.map((value, index) => {
+                        return (
+                            <li key={`index-${index}`}>
+                                <a
+                                    href={`https://www.ebi.ac.uk/ols/ontologies/zp/terms?iri=http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2F${value
+                                        .toString()
+                                        .split(':')
+                                        .join('_')}`}
+                                    target="_blank"
+                                >
+                                    {value}
+                                </a>
+                            </li>
+                        );
+                    })}
                 </td>
                 <td>{printFloat(Math.pow(10, d.mean_pod) * 1000000)}</td>
                 <td>{printFloat(d.mean_selectivity)}</td>
                 <td>{d.n_values}</td>
                 <td>{renderMedPodModal(d, 'mort_pod_med')}</td>
-
             </tr>
         );
     }
