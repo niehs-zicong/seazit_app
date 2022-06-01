@@ -58,11 +58,6 @@ let renderMedPodModal = function(jsonData, flag) {
 };
 
 class SelectivityTable extends React.Component {
-    _renderHyperLinkModel(d) {
-        console.log(d);
-        let jsonData2 = ['ZP:1', 'ZP:2', 'ZP:3'];
-    }
-
     _renderRow(d) {
         return (
             <tr key={d.casrn}>
