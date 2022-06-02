@@ -66,26 +66,32 @@ class SelectivityTable extends React.Component {
                 <td>{d.use_category1}</td>
                 <td>{d.malformation}</td>
                 <td>
-                    {d.combin_ontology.map((value, index) => {
-                        return <li key={`index-${index}`}>{value}</li>;
-                    })}
+                    <ul>
+                        {d.combin_ontology.map((value, index) => {
+                            return <li key={`index-${index}`}>{value}</li>;
+                        })}
+                    </ul>
                 </td>
                 <td>
-                    {d.combin_ontology_id.map((value, index) => {
-                        return (
-                            <li key={`index-${index}`}>
-                                <a
-                                    href={`https://www.ebi.ac.uk/ols/ontologies/zp/terms?iri=http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2F${value
-                                        .toString()
-                                        .split(':')
-                                        .join('_')}`}
-                                    target="_blank"
-                                >
-                                    {value}
-                                </a>
-                            </li>
-                        );
-                    })}
+                    {/*<ul style="list-style-type:none;">*/}
+                    <ul>
+                        {d.combin_ontology_id.map((value, index) => {
+                            return (
+                                // <li key={`index-${index}`}>
+                                <li key={index}>
+                                    <a
+                                        href={`https://www.ebi.ac.uk/ols/ontologies/zp/terms?iri=http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2F${value
+                                            .toString()
+                                            .split(':')
+                                            .join('_')}`}
+                                        target="_blank"
+                                    >
+                                        {value}
+                                    </a>
+                                </li>
+                            );
+                        })}
+                    </ul>
                 </td>
                 <td>{printFloat(Math.pow(10, d.mean_pod) * 1000000)}</td>
                 <td>{printFloat(d.mean_selectivity)}</td>

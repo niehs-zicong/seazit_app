@@ -45,12 +45,7 @@ class RankedBarchartHandler extends React.Component {
             console.log('data');
             console.log(url);
             console.log(data);
-
-            // this.updateData(data, this.props.collapse);
             this.setState({ data });
-            // console.log(this.state.data)
-
-            // this.updateData(data, this.props.collapse);
         });
     }
 
@@ -157,18 +152,7 @@ class RankedBarchartHandler extends React.Component {
         if (nextProps.url !== this.props.url) {
             this.fetchBmdData(nextProps.url);
         }
-        // if (nextProps.collapse !== this.props.collapse) {
-        //     this.updateData(this.state.data, nextProps.collapse);
-        // }
     }
-    //
-    // componentDidMount() {
-    //     this.loadBmd();
-    // }
-    //
-    // componentDidUpdate() {
-    //     this.loadBmd();
-    // }
 
     render() {
         if (!this.state.data) {
@@ -182,10 +166,6 @@ class RankedBarchartHandler extends React.Component {
                     : 'selected chemicals',
             plotData,
             tableData;
-
-        // console.log(this.state.data.bmd_activity_selectivity)
-        // console.log(this.props.selectivityList)
-
         if (this.props.visualization === BMDVIZ_ACTIVITY) {
             plotData = _.sortBy(this.state.data.bmd_activity_selectivity, 'med_pod_med');
             tableData = plotData;
@@ -200,8 +180,6 @@ class RankedBarchartHandler extends React.Component {
             plotData = this.state.data.bmd_activity_selectivity.filter((i) =>
                 selectivityCheckedArray.includes(i.final_dev_call)
             );
-            console.log(plotData);
-
             plotData = _.sortBy(plotData, 'mean_selectivity').reverse();
             tableData = plotData;
         }
