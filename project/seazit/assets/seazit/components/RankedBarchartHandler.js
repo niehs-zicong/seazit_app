@@ -183,6 +183,9 @@ class RankedBarchartHandler extends React.Component {
             plotData,
             tableData;
 
+        // console.log(this.state.data.bmd_activity_selectivity)
+        // console.log(this.props.selectivityList)
+
         if (this.props.visualization === BMDVIZ_ACTIVITY) {
             plotData = _.sortBy(this.state.data.bmd_activity_selectivity, 'med_pod_med');
             tableData = plotData;
@@ -192,10 +195,13 @@ class RankedBarchartHandler extends React.Component {
                 .map('name')
                 .uniq()
                 .value();
-            // console.log(this.state.data)
+            // data is fillter by final_dev_call, If final_dev_call is in selectivityCheckedArray, data will pass
+
             plotData = this.state.data.bmd_activity_selectivity.filter((i) =>
                 selectivityCheckedArray.includes(i.final_dev_call)
             );
+            console.log(plotData);
+
             plotData = _.sortBy(plotData, 'mean_selectivity').reverse();
             tableData = plotData;
         }
