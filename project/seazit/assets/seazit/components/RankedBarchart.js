@@ -248,7 +248,6 @@ let renderPlot = function(el, data, opts) {
         .attr('y', (d) => y(d.preferred_name))
         .attr('height', y.bandwidth())
         .style('fill', (d) => CATEGORY_COLORS[d.use_category1]);
-    // .style('fill', '#d62976');
 
     // append category label
     svg.selectAll('.category-text')
