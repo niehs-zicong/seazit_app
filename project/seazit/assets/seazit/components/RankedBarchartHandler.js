@@ -29,7 +29,6 @@ class RankedBarchartHandler extends React.Component {
         // console.log(props.stateHolder.state)
         // this.parseJSONToCSVStr = this.parseJSONToCSVStr.bind(this);
         this.state = { data: null };
-
     }
 
     fetchBmdData(url) {
@@ -43,15 +42,10 @@ class RankedBarchartHandler extends React.Component {
                 return;
             }
             // console.log(this.state.data)
-            // console.log("data")
-            // console.log(url)
-            // console.log(data)
-
-            // this.updateData(data, this.props.collapse);
+            console.log('data');
+            console.log(url);
+            console.log(data);
             this.setState({ data });
-            // console.log(this.state.data)
-
-            // this.updateData(data, this.props.collapse);
         });
     }
 
@@ -158,18 +152,7 @@ class RankedBarchartHandler extends React.Component {
         if (nextProps.url !== this.props.url) {
             this.fetchBmdData(nextProps.url);
         }
-        // if (nextProps.collapse !== this.props.collapse) {
-        //     this.updateData(this.state.data, nextProps.collapse);
-        // }
     }
-    //
-    // componentDidMount() {
-    //     this.loadBmd();
-    // }
-    //
-    // componentDidUpdate() {
-    //     this.loadBmd();
-    // }
 
     render() {
         if (!this.state.data) {
@@ -177,11 +160,14 @@ class RankedBarchartHandler extends React.Component {
         }
         // let url = getBmdsUrl(this.state.assays, this.state.readouts);
         let chartName = this.props.visualization === BMDVIZ_ACTIVITY ? 'activity' : 'selectivity',
-             tableName = this.props.visualization === BMDVIZ_ACTIVITY ? 'all chemicals' : 'selected chemicals',
-             plotData, tableData;
-
+            tableName =
+                this.props.visualization === BMDVIZ_ACTIVITY
+                    ? 'all chemicals'
+                    : 'selected chemicals',
+            plotData,
+            tableData;
         if (this.props.visualization === BMDVIZ_ACTIVITY) {
-            plotData =  _.sortBy(this.state.data.bmd_activity_selectivity, 'med_pod_med');
+            plotData = _.sortBy(this.state.data.bmd_activity_selectivity, 'med_pod_med');
             tableData = plotData;
         } else {
             let selectivityCheckedArray = _.chain(this.props.selectivityList)
@@ -189,17 +175,15 @@ class RankedBarchartHandler extends React.Component {
                 .map('name')
                 .uniq()
                 .value();
-            // console.log(this.state.data)
-            plotData =
-                    this.state.data.bmd_activity_selectivity
-                        .filter( i => selectivityCheckedArray.includes( i.final_dev_call ))
-            ;
-            plotData =  _.sortBy(plotData, 'mean_selectivity')
-                                 .reverse();
-            tableData = plotData;
-         }
-         console.log(plotData)
+            // data is fillter by final_dev_call, If final_dev_call is in selectivityCheckedArray, data will pass
 
+            plotData = this.state.data.bmd_activity_selectivity.filter((i) =>
+                selectivityCheckedArray.includes(i.final_dev_call)
+            );
+            plotData = _.sortBy(plotData, 'mean_selectivity').reverse();
+            tableData = plotData;
+        }
+        console.log(plotData);
 
         return (
             <div>
