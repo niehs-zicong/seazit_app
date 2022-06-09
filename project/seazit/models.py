@@ -669,7 +669,6 @@ class Seazit_readout_result(models.Model):
                 ).values(*cols)
 
         cols = (
-
             "protocol_id",
             "endpoint_name",
             "casrn",
@@ -681,7 +680,6 @@ class Seazit_readout_result(models.Model):
             "max_pod_med",
             "med_hitconf",
             "n_values",
-
             "mort_min_pod_med",
             "mort_med_pod_med",
             "mort_max_pod_med",

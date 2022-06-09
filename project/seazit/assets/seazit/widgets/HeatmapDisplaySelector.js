@@ -13,7 +13,7 @@ class HeatmapDisplaySelector extends BaseWidget {
         let state = this.props.stateHolder.state;
         return (
             <div>
-                <label>Select heatmap data display: </label>
+                <label>Select heatmap display type: </label>
                 <div className="radio">
                     <label>
                         <input

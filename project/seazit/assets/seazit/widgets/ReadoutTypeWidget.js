@@ -13,17 +13,17 @@ class ReadoutTypeWidget extends BaseWidget {
         let state = this.props.stateHolder.state;
         return (
             <div>
-                <label>Filter endpoints by:</label>
+                <label>Filter ontology groupings:</label>
                 <div className="radio">
                     <label>
                         <input
                             type="radio"
                             name="readoutType"
                             onChange={this.handleRadioChange}
-                            value={READOUT_TYPE_CATEGORY}
-                            checked={state.readoutType === READOUT_TYPE_CATEGORY}
+                            value={READOUT_TYPE_READOUT}
+                            checked={state.readoutType === READOUT_TYPE_READOUT}
                         />
-                        by Category
+                        by Granular
                     </label>
 
                     <span style={{ paddingLeft: '0.5em', paddingRight: '0.5em' }}>|</span>
@@ -36,7 +36,7 @@ class ReadoutTypeWidget extends BaseWidget {
                             value={READOUT_TYPE_READOUT}
                             checked={state.readoutType === READOUT_TYPE_READOUT}
                         />
-                        by Readout
+                        by General
                     </label>
                 </div>
             </div>

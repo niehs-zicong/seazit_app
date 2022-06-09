@@ -2,7 +2,6 @@ import _ from 'lodash';
 import * as d3 from 'd3';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ReactTooltip from "react-tooltip";
 import Tooltip from "@material-ui/core/Tooltip";
 
 
@@ -32,6 +31,10 @@ const AXIS_LINEAR = 1,
     CHEMLIST_80 = 1,
     CHEMLIST_91 = 2,
     CHEMLIST_ALL = 3,
+    ConcentrationResponseTab = 1,
+    BMCTab = 2,
+    IntegrativeAnalysesTab = 3,
+
     COLLAPSE_BY_CHEMICAL = 'COLLAPSE_BY_CHEMICAL',
     COLLAPSE_BY_READOUT = 'COLLAPSE_BY_READOUT',
     NO_COLLAPSE = 'NO_COLLAPSE',
@@ -94,9 +97,13 @@ const AXIS_LINEAR = 1,
                 >
                     {options.map((d) => {
                         return (
-                            <option title={d.description} key={d.key} value={d.key}>
+                          <Tooltip  title={d.protocol_name_plot}  placement="top">
+                            <option
+                                     key={d.key} value={d.key}>
                                 {d.label}
                             </option>
+                          </Tooltip>
+
                         );
                     })}
                 </select>
@@ -139,8 +146,6 @@ const AXIS_LINEAR = 1,
                             </option>
                             )
                         }
-
-
                     })}
             </select>
             </div>
@@ -255,6 +260,9 @@ export {
     CATEGORY_COLORS,
     CHEMFILTER_CATEGORY,
     CHEMFILTER_CHEMICIAL,
+    ConcentrationResponseTab,
+    BMCTab,
+    IntegrativeAnalysesTab,
     CHEMLIST_80,
     CHEMLIST_91,
     CHEMLIST_ALL,

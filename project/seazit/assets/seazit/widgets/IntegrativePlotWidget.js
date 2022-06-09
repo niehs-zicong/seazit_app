@@ -1,7 +1,7 @@
 import React from 'react';
 import BaseWidget from './BaseWidget';
 
-import { INTVIZ_BOXPLOT, INTVIZ_ASSAY_PCA, INTVIZ_CHEMICAL_PCA, INTVIZ_HEATMAP } from '../shared';
+import { INTVIZ_BOXPLOT, INTVIZ_HEATMAP } from '../shared';
 
 class IntegrativePlotWidget extends BaseWidget {
     /*
@@ -23,7 +23,7 @@ class IntegrativePlotWidget extends BaseWidget {
                             value={INTVIZ_HEATMAP}
                             checked={state.visualization === INTVIZ_HEATMAP}
                         />
-                        Heatmap
+                        Heatmap with activity calls
                     </label>
                 </div>
                 <div className="radio">
@@ -35,33 +35,10 @@ class IntegrativePlotWidget extends BaseWidget {
                             value={INTVIZ_BOXPLOT}
                             checked={state.visualization === INTVIZ_BOXPLOT}
                         />
-                        Boxplot
+                        Devtox heatmap with BMC and selectivity
                     </label>
                 </div>
-                <div className="radio">
-                    <label>
-                        <input
-                            type="radio"
-                            name="visualization"
-                            onChange={this.handleRadioChange}
-                            value={INTVIZ_ASSAY_PCA}
-                            checked={state.visualization === INTVIZ_ASSAY_PCA}
-                        />
-                        Principal Component Analysis (Assay)
-                    </label>
-                </div>
-                <div className="radio">
-                    <label>
-                        <input
-                            type="radio"
-                            name="visualization"
-                            onChange={this.handleRadioChange}
-                            value={INTVIZ_CHEMICAL_PCA}
-                            checked={state.visualization === INTVIZ_CHEMICAL_PCA}
-                        />
-                        Principal Component Analysis (Chemical)
-                    </label>
-                </div>
+
             </div>
         );
     }

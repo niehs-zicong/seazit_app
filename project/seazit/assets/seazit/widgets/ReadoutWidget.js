@@ -48,7 +48,7 @@ class ReadoutWidget extends BaseWidget {
                 'dataset',
                 options,
                 state.assays,
-                this.handleSelectMultiChange
+                this.handleSelectMultiChange,
             );
         } else {
             return renderSelectSingleWidget(
@@ -56,7 +56,8 @@ class ReadoutWidget extends BaseWidget {
                 'dataset',
                 options,
                 state.assay,
-                this.handleSelectChange
+                this.handleSelectChange,
+
             );
         }
     }

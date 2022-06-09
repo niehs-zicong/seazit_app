@@ -67,17 +67,24 @@ class SelectivityTable extends React.Component {
                 <td>{d.malformation}</td>
                 <td>
                     <ul>
-                        {d.combin_ontology.map((value, index) => {
+                        {/*{d.combin_ontology.map((value, index) => {*/}
+                        {/*    return <li key={`index-${index}`}>{value}</li>;*/}
+                        {/*})}*/}
+                        {/* I do this below instead of above because there is map error*/}
+                        {/* ref: https://bobbyhadz.com/blog/react-typeerror-cannot-read-property-map-of-null*/}
+                      {Array.isArray(d.combin_ontology)
+                        ? d.combin_ontology.map((value, index) => {
                             return <li key={`index-${index}`}>{value}</li>;
-                        })}
+                        })
+                        : null}
                     </ul>
                 </td>
+
                 <td>
-                    {/*<ul style="list-style-type:none;">*/}
                     <ul>
-                        {d.combin_ontology_id.map((value, index) => {
-                            return (
-                                // <li key={`index-${index}`}>
+                      {Array.isArray(d.combin_ontology_id)
+                        ? d.combin_ontology_id.map((value, index) => {
+                                return (
                                 <li key={index}>
                                     <a
                                         href={`https://www.ebi.ac.uk/ols/ontologies/zp/terms?iri=http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2F${value
@@ -90,7 +97,8 @@ class SelectivityTable extends React.Component {
                                     </a>
                                 </li>
                             );
-                        })}
+                        })
+                        : null}
                     </ul>
                 </td>
                 <td>{printFloat(Math.pow(10, d.mean_pod) * 1000000)}</td>
