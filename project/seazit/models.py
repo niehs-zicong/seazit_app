@@ -614,59 +614,7 @@ class Seazit_readout_result(models.Model):
                      bmd_activity_selectivity = list(bmdActivitySelectivity))
 
     @classmethod
-    def bmds_responses_backup(cls, protocol_ids, readout_ids):
-
-        cols = (
-                "protocol_id",
-                "endpoint_name",
-                "casrn",
-                "preferred_name",
-                "use_category1",
-                "dtxsid",
-                "min_pod_med",
-                "med_pod_med",
-                "max_pod_med",
-                "med_hitconf",
-                "n_values",
-                "mort_min_pod_med",
-                "mort_med_pod_med",
-
-                "mort_max_pod_med",
-                "mort_med_hitconf",
-                "mort_n_values",
-        )
-
-        bmcMinMaxVwOutput =Seazit_bmc_min_max.objects.filter(
-                protocol_id__in=protocol_ids , endpoint_name__in=readout_ids
-                ).values(*cols)
-
-        cols = (
-
-            "protocol_id",
-            "endpoint_name",
-            "casrn",
-            "dtxsid",
-            "preferred_name",
-            "min_lowest_conc",
-            "max_highest_conc",
-            "mean_pod",
-            "mean_selectivity",
-            "med_mort_hit_confidence",
-            "n_rep_max_dev_call",
-            "n_rep",
-            "f_max_dev_call",
-            "final_dev_call",
-            "malformation",
-            "endpoint_name_protocol",
-            "lab_anonymous_code",
-            "test_condition",
-            "protocol_name_long",
-            "protocol_name_plot",
-
-        )
-        bmcSelectivity =Seazit_bmc_selectivity_result.objects.filter(
-                protocol_id__in=protocol_ids , endpoint_name__in=readout_ids
-                ).values(*cols)
+    def bmds_responses2(cls, protocol_ids, readout_ids):
 
         cols = (
             "protocol_id",
@@ -680,6 +628,7 @@ class Seazit_readout_result(models.Model):
             "max_pod_med",
             "med_hitconf",
             "n_values",
+
             "mort_min_pod_med",
             "mort_med_pod_med",
             "mort_max_pod_med",
@@ -704,13 +653,68 @@ class Seazit_readout_result(models.Model):
             "protocol_name_long",
             "protocol_name_plot",
         )
+        print (protocol_ids)
+        print (readout_ids)
+
         bmdActivitySelectivity =Seazit_bmc_activate_selectivity_result.objects.filter(
                 protocol_id__in=protocol_ids , endpoint_name__in=readout_ids
                 ).values(*cols)
 
-
-        return dict( bmc_activity = list(bmcMinMaxVwOutput), bmc_selectivity=list(bmcSelectivity),
+        return dict(
                      bmd_activity_selectivity = list(bmdActivitySelectivity))
+
+
+    @classmethod
+    def bmds_responses3(cls, protocol_ids, readout_ids, chemical_ids):
+
+        cols = (
+            "protocol_id",
+            "endpoint_name",
+            "casrn",
+            "preferred_name",
+            "use_category1",
+            "dtxsid",
+            "min_pod_med",
+            "med_pod_med",
+            "max_pod_med",
+            "med_hitconf",
+            "n_values",
+
+            "mort_min_pod_med",
+            "mort_med_pod_med",
+            "mort_max_pod_med",
+            "mort_med_hitconf",
+            "mort_n_values",
+
+            "min_lowest_conc",
+            "max_highest_conc",
+            "mean_pod",
+            "mean_selectivity",
+            "med_mort_hit_confidence",
+            "n_rep_max_dev_call",
+            "n_rep",
+            "f_max_dev_call",
+            "final_dev_call",
+            "malformation",
+            "combin_ontology",
+            "combin_ontology_id",
+            "endpoint_name_protocol",
+            "lab_anonymous_code",
+            "test_condition",
+            "protocol_name_long",
+            "protocol_name_plot",
+        )
+        print (protocol_ids)
+        print (readout_ids)
+        print (chemical_ids)
+
+        bmdActivitySelectivity =Seazit_bmc_activate_selectivity_result.objects.filter(
+                protocol_id__in=protocol_ids , endpoint_name__in=readout_ids, casrn__in=chemical_ids
+                ).values(*cols)
+
+        return dict(
+                     bmd_activity_selectivity = list(bmdActivitySelectivity))
+
 
 class Seazit_bmc_readout_result(models.Model):
 
@@ -924,35 +928,4 @@ class Seazit_ui_panel(models.Model):
         qs = (
             cls.objects.all().values_list(*cols)
         )
-        return pd.DataFrame(list(qs),columns=cols)
-
-    @classmethod
-    def get_flat2(cls):
-        cols = (
-            # "endpointDescription__endpoint_id",
-            # "endpointDescription__protocol_source",
-            # "endpointDescription__endpoint_name",
-            # "endpointDescription__hour_post_fertilization",
-            # "endpointDescription__endpoint_description",
-            "protocol_name",
-            "seazit_protocol_id",
-            "endpoint_name",
-            "endpoint_name_only",
-            "study_phase",
-            "test_condition",
-            "protocol_name_long",
-            "protocol_name_plot",
-            "endpoint_name_protocol",
-        )
-        qs = (
-            # cls.objects.all()
-            # cls.objects.all().values_list(*cols)
-            # cls.objects.all().select_related("endpointDescription").values_list(*cols)
-            cls.objects.select_related("endpointDescription").all()
-            # cls.objects.all().prefetch_related('position__positionstats_set', 'playerstats_set')
-            # cls.objects.prefetch_related('endpointDescription')
-        )
-        print (qs)
-        print (list(qs))
-
         return pd.DataFrame(list(qs),columns=cols)

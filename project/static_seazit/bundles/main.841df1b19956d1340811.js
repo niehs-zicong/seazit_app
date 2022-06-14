@@ -2582,7 +2582,7 @@ webpackJsonp(
                 g = function(e, t, n) {
                     return 0 === e.length || 0 === t.length || 0 === n.length
                         ? null
-                        : '/seazit/api/seazit_cr_readout_result/drs/?format=json&protocol_ids=' +
+                        : '/seazit/api/seazit_result/drs/?format=json&protocol_ids=' +
                               e.join(',') +
                               '&readouts=' +
                               t.join(',') +
@@ -2592,7 +2592,7 @@ webpackJsonp(
                 E = function(e, t) {
                     return 0 === e.length || 0 === t.length
                         ? null
-                        : '/seazit/api/seazit_cr_readout_result/bmds/?format=json&protocol_ids=' +
+                        : '/seazit/api/seazit_result/bmds/?format=json&protocol_ids=' +
                               e +
                               '&readouts=' +
                               t;

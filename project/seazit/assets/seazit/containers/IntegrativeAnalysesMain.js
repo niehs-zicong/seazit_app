@@ -283,7 +283,9 @@ class IntegrativeAnalysesMain extends React.Component {
             isHeatmap = this.state.visualization === INTVIZ_HEATMAP;
 
         // let url = getBmdsUrl(this.state.assay, this.state.readouts);
-        let url = '/seazit/api/seazit_cr_readout_result/bmds/?format=json&protocol_ids=3&readouts=Axis__curvature_of_body_axis+Mort@120';
+        // let url = '/seazit/api/seazit_result/ias/?format=json&protocol_ids=1,2&readouts=Abnormal_heartbeat+Mort@120_1,MalformedAny+Mort@24_2&casrns=67-68-5,79-94-7';
+        // let url = '/seazit/api/seazit_result/ias/?format=json&protocol_ids=1,2&readouts=Abnormal_heartbeat+Mort@120_1,MalformedAny+Mort@24_2';
+        let url = ' /seazit/api/seazit_result/ias/?format=json&protocol_ids=1,5&readouts=Abnormal_heartbeat+Mort@120,Yolk_opacity+Mort@120'
         return (
             <div className="row-fluid">
                 <div className="col-md-12">
