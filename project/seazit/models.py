@@ -459,7 +459,7 @@ class Seazit_readout_result(models.Model):
         db_table = 'mvw_seazit_readout_result'
 
     @classmethod
-    def dose_responses(cls, protocol_ids, readout_ids, chemical_ids):
+    def concentration_responses(cls, protocol_ids, readout_ids, chemical_ids):
         cols = (
                 "input_chembase",
                 "substance_name_by_lab",
@@ -580,13 +580,11 @@ class Seazit_readout_result(models.Model):
             "max_pod_med",
             "med_hitconf",
             "n_values",
-
             "mort_min_pod_med",
             "mort_med_pod_med",
             "mort_max_pod_med",
             "mort_med_hitconf",
             "mort_n_values",
-
             "min_lowest_conc",
             "max_highest_conc",
             "mean_pod",
@@ -605,7 +603,7 @@ class Seazit_readout_result(models.Model):
             "protocol_name_long",
             "protocol_name_plot",
         )
-        bmdActivitySelectivity =Seazit_bmc_activate_selectivity_result.objects.filter(
+        bmdActivitySelectivity =Seazit_bmc_result.objects.filter(
                 protocol_id__in=protocol_ids , endpoint_name__in=readout_ids
                 ).values(*cols)
 
@@ -613,8 +611,9 @@ class Seazit_readout_result(models.Model):
         return dict(
                      bmd_activity_selectivity = list(bmdActivitySelectivity))
 
+
     @classmethod
-    def bmds_responses2(cls, protocol_ids, readout_ids):
+    def integrative_responses(cls, protocol_ids, readout_ids, chemical_ids):
 
         cols = (
             "protocol_id",
@@ -645,70 +644,33 @@ class Seazit_readout_result(models.Model):
             "f_max_dev_call",
             "final_dev_call",
             "malformation",
+            "endpoint_name_protocol",
+
             "combin_ontology",
             "combin_ontology_id",
-            "endpoint_name_protocol",
+            "protocol_source",
             "lab_anonymous_code",
+            "study_phase",
+
             "test_condition",
             "protocol_name_long",
             "protocol_name_plot",
-        )
-        print (protocol_ids)
-        print (readout_ids)
 
-        bmdActivitySelectivity =Seazit_bmc_activate_selectivity_result.objects.filter(
-                protocol_id__in=protocol_ids , endpoint_name__in=readout_ids
-                ).values(*cols)
+            "proposed_ontology_label",
+            "ontology_id_number",
+            "recording_name",
+            "developmental_defect_catergories",
+            "defects_mapped_to_body_region",
+            "developmental_defect_grouping_granular",
+            "developmental_defect_grouping_general",
+            "seazit_recording_id",
 
-        return dict(
-                     bmd_activity_selectivity = list(bmdActivitySelectivity))
-
-
-    @classmethod
-    def bmds_responses3(cls, protocol_ids, readout_ids, chemical_ids):
-
-        cols = (
-            "protocol_id",
-            "endpoint_name",
-            "casrn",
-            "preferred_name",
-            "use_category1",
-            "dtxsid",
-            "min_pod_med",
-            "med_pod_med",
-            "max_pod_med",
-            "med_hitconf",
-            "n_values",
-
-            "mort_min_pod_med",
-            "mort_med_pod_med",
-            "mort_max_pod_med",
-            "mort_med_hitconf",
-            "mort_n_values",
-
-            "min_lowest_conc",
-            "max_highest_conc",
-            "mean_pod",
-            "mean_selectivity",
-            "med_mort_hit_confidence",
-            "n_rep_max_dev_call",
-            "n_rep",
-            "f_max_dev_call",
-            "final_dev_call",
-            "malformation",
-            "combin_ontology",
-            "combin_ontology_id",
-            "endpoint_name_protocol",
-            "lab_anonymous_code",
-            "test_condition",
-            "protocol_name_long",
-            "protocol_name_plot",
         )
         print (protocol_ids)
         print (readout_ids)
         print (chemical_ids)
 
-        bmdActivitySelectivity =Seazit_bmc_activate_selectivity_result.objects.filter(
+        bmdActivitySelectivity =Seazit_integrative_result.objects.filter(
                 protocol_id__in=protocol_ids , endpoint_name__in=readout_ids, casrn__in=chemical_ids
                 ).values(*cols)
 
@@ -837,7 +799,7 @@ class Seazit_bmc_min_max(models.Model):
 
 
 
-class Seazit_bmc_activate_selectivity_result(models.Model):
+class Seazit_bmc_result(models.Model):
 
 
     protocol_id = models.IntegerField(blank=True, null=True)
@@ -873,6 +835,8 @@ class Seazit_bmc_activate_selectivity_result(models.Model):
     combin_ontology_id = models.TextField(blank=True, null=True)
 
     endpoint_name_protocol = models.TextField(blank=True, null=True)
+    protocol_source = models.TextField(blank=True, null=True)
+
     lab_anonymous_code = models.TextField(blank=True, null=True)
     test_condition = models.TextField(blank=True, null=True)
     protocol_name_long = models.TextField(blank=True, null=True)
@@ -881,7 +845,7 @@ class Seazit_bmc_activate_selectivity_result(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'mvw_seazit_bmc_activate_selectivity_result'
+        db_table = 'mvw_seazit_bmc_result'
 
 
 
@@ -929,3 +893,55 @@ class Seazit_ui_panel(models.Model):
             cls.objects.all().values_list(*cols)
         )
         return pd.DataFrame(list(qs),columns=cols)
+
+class Seazit_integrative_result(models.Model):
+    protocol_id = models.IntegerField(blank=True, null=True)
+    endpoint_name = models.TextField(blank=True, null=True)
+    casrn = models.TextField(blank=True, null=True)
+    preferred_name = models.TextField(blank=True, null=True)
+    use_category1 = models.TextField(blank=True, null=True)
+    dtxsid = models.TextField(blank=True, null=True)
+    min_pod_med = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    med_pod_med = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    max_pod_med = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    med_hitconf = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    n_values = models.BigIntegerField(blank=True, null=True)
+    mort_min_pod_med = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    mort_med_pod_med = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    mort_max_pod_med = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    mort_med_hitconf = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    mort_n_values = models.BigIntegerField(blank=True, null=True)
+    min_lowest_conc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    max_highest_conc = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    mean_pod = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    mean_selectivity = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    med_mort_hit_confidence = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    n_rep_max_dev_call = models.IntegerField(blank=True, null=True)
+    n_rep = models.IntegerField(blank=True, null=True)
+    f_max_dev_call = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    final_dev_call = models.TextField(blank=True, null=True)
+    malformation = models.TextField(blank=True, null=True)
+    endpoint_name_protocol = models.TextField(blank=True, null=True)
+    combin_ontology = models.TextField(blank=True, null=True)
+    combin_ontology_id = models.TextField(blank=True, null=True)
+    protocol_source = models.TextField(blank=True, null=True)
+    lab_anonymous_code = models.TextField(blank=True, null=True)
+    study_phase = models.TextField(blank=True, null=True)
+    test_condition = models.TextField(blank=True, null=True)
+    protocol_name_long = models.TextField(blank=True, null=True)
+    protocol_name_plot = models.TextField(blank=True, null=True)
+
+    proposed_ontology_label = models.TextField(blank=True, null=True)
+    ontology_id_number = models.TextField(blank=True, null=True)
+    recording_name = models.TextField(blank=True, null=True)
+    developmental_defect_catergories = models.TextField(blank=True, null=True)
+    defects_mapped_to_body_region = models.TextField(blank=True, null=True)
+    developmental_defect_grouping_granular = models.TextField(blank=True, null=True)
+    developmental_defect_grouping_general = models.TextField(blank=True, null=True)
+    seazit_recording_id = models.IntegerField(blank=True, null=True)
+
+
+    class Meta:
+        managed = False
+        db_table = 'mvw_seazit_integrative_result'
+

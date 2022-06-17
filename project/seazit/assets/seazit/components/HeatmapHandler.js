@@ -147,55 +147,6 @@ class HeatmapHandler extends React.Component {
             ),
             // readout_ids = this.props.readouts.map((d) => parseInt(d)),
             data;
-
-        switch (this.props.readoutType) {
-            case READOUT_TYPE_READOUT: {
-
-                data = _.chain(this.state.data.bmd_activity_selectivity)
-                    .map((d) => {
-                        return {
-                            casrn: d.casrn,
-                            combin_ontology: d.combin_ontology,
-                            combin_ontology_id: d.combin_ontology_id,
-                            dtxsid: d.dtxsid,
-                            endpoint_name: d.endpoint_name,
-                            endpoint_name_protocol: d.endpoint_name_protocol,
-                            f_max_dev_call: d.f_max_dev_call,
-                            final_dev_call: d.final_dev_call,
-                            lab_anonymous_code: d.lab_anonymous_code,
-                            malformation: d.malformation,
-
-                            max_highest_conc: d.max_highest_conc,
-                            max_pod_med: d.max_pod_med,
-                            mean_pod: d.mean_pod,
-                            mean_selectivity: d.mean_selectivity,
-
-                            med_hitconf: d.med_hitconf,
-                            med_mort_hit_confidence: d.med_mort_hit_confidence,
-                            med_pod_med: d.med_pod_med,
-                            min_lowest_conc: d.min_lowest_conc,
-                            min_pod_med:  d.min_pod_med  ,
-                            mort_max_pod_med:  d.mort_max_pod_med  ,
-                            mort_med_hitconf:  d.mort_med_hitconf  ,
-                            mort_med_pod_med:  d.mort_med_pod_med  ,
-                            mort_min_pod_med:  d.mort_min_pod_med   ,
-                            mort_n_values:  d.mort_n_values  ,
-                            n_rep:  d.n_rep  ,
-                            n_rep_max_dev_call: d.n_rep_max_dev_call   ,
-                            n_values:  d.n_values  ,
-                            preferred_name:  d.preferred_name   ,
-                            protocol_id:   d.protocol_id ,
-                            protocol_name_long:  d.protocol_name_long  ,
-                            protocol_name_plot:   d.protocol_name_plot ,
-                            test_condition:   d.test_condition  ,
-                            use_category1:  d.use_category1  ,
-                        };
-                    })
-                    .sortBy('med_pod_med')
-                    .value();
-                break;
-            }
-            case READOUT_TYPE_CATEGORY: {
             data = _.chain(this.state.data.bmd_activity_selectivity)
                     .map((d) => {
                         return {
@@ -238,12 +189,6 @@ class HeatmapHandler extends React.Component {
                     })
                     .sortBy('med_pod_med')
                     .value();
-                break;
-            }
-            default: {
-                throw 'Unknown readoutType';
-            }
-        }
 
         return {
             data,
@@ -275,10 +220,10 @@ class HeatmapHandler extends React.Component {
 }
 
 HeatmapHandler.propTypes = {
-    bmdType: PropTypes.string.isRequired,
+    // bmdType: PropTypes.string.isRequired,
     casrns: PropTypes.array.isRequired,
     heatmapDisplay: PropTypes.number.isRequired,
-    readoutType: PropTypes.number.isRequired,
+    // readoutType: PropTypes.number.isRequired,
     readouts: PropTypes.array.isRequired,
     readoutCategories: PropTypes.array.isRequired,
     url: PropTypes.string.isRequired,

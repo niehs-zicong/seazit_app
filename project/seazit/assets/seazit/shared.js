@@ -14,6 +14,9 @@ const AXIS_LINEAR = 1,
         1: 'curvep',
         2: 'hill',
     },
+    integrative_Granular = 1,
+    integrative_General = 2,
+
     CATEGORY_COLORS = {
         Insecticide: '#d62976',
         Fungicide: '#f9d70b',
@@ -39,9 +42,11 @@ const AXIS_LINEAR = 1,
     COLLAPSE_BY_READOUT = 'COLLAPSE_BY_READOUT',
     NO_COLLAPSE = 'NO_COLLAPSE',
     URL_CHEMXLSX = '/static_seazit/resources/seazit/NTP%20Chemical%20Library.xlsx',
-    URL_METADATA = '/seazit/api/seazit_cr_protocol/metadata/?format=json',
-    URL_CONCRESPMATRIX = '/seazit/api/seazit_result/drs/',
-    URL_BMD = '/seazit/api/seazit_result/bmds/',
+    URL_METADATA = '/seazit/api/seazit_metadata/metadata/?format=json',
+    // ConcentrationResponse URL
+    URL_CONCRESPMATRIX = '/seazit/api/seazit_result/crResult/',
+    // BMC by lab URL
+    URL_BMD = '/seazit/api/seazit_result/bmcByLabResult/',
     INTVIZ_OBAMA = 1,
     INTVIZ_BOXPLOT = 2,
     INTVIZ_ASSAY_PCA = 3,
@@ -53,6 +58,9 @@ const AXIS_LINEAR = 1,
     HEATMAP_BMC = 2,
     READOUT_TYPE_READOUT = 1,
     READOUT_TYPE_CATEGORY = 2,
+
+
+
     SELECTIVITY_FOOTNOTE =
         'Selectivity is estimated and true value may be higher; viability BMC could not be calculated and was therefore estimated to equal the maximum tested dose.',
     loadMetadata = function(component) {
@@ -257,6 +265,8 @@ export {
     BMD_CURVEP,
     BMD_HILL,
     BMD_CW,
+    integrative_Granular,
+    integrative_General,
     CATEGORY_COLORS,
     CHEMFILTER_CATEGORY,
     CHEMFILTER_CHEMICIAL,

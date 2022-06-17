@@ -36,8 +36,8 @@ class DoseResponseMain extends React.Component {
 
             // ChemicalSelectorWidget
             chemList: CHEMLIST_80,
-            // chemicalFilterBy: CHEMFILTER_CATEGORY,
-            chemicalFilterBy: CHEMFILTER_CHEMICIAL,
+            chemicalFilterBy: CHEMFILTER_CATEGORY,
+            // chemicalFilterBy: CHEMFILTER_CHEMICIAL,
 
             chemicals: [],
             categories: [],

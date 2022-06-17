@@ -99,7 +99,7 @@ class BmdBoxplot extends PlotlyWrapper {
     }
 
     _updateData(bmdType) {
-        let url = `/neurotox/api/${bmdType}/bmds/?format=tsv`,
+        let url = `/neurotox/api/${bmdType}/bmcByLabResult/?format=tsv`,
             cleanRow = function(row) {
                 return {
                     id: +row.id,

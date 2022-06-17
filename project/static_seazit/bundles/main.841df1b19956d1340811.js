@@ -2478,7 +2478,7 @@ webpackJsonp(
                     'Vehicle Control': '#ee7621',
                 },
                 h = function(e) {
-                    i.json('/seazit/api/seazit_cr_protocol/metadata/?format=json', function(t) {
+                    i.json('/seazit/api/seazit_metadata/metadata/?format=json', function(t) {
                         e.setState({
                             metadataLoaded: !0,
                             protocol_data: t.protocol_data,
@@ -2592,7 +2592,7 @@ webpackJsonp(
                 E = function(e, t) {
                     return 0 === e.length || 0 === t.length
                         ? null
-                        : '/seazit/api/seazit_result/bmds/?format=json&protocol_ids=' +
+                        : '/seazit/api/seazit_result/bmcByLabResult/?format=json&protocol_ids=' +
                               e +
                               '&readouts=' +
                               t;
