@@ -233,7 +233,7 @@ class Seazit_readout_resultViewSet(CachedReadOnlyViewSet):
     serializer_class = serializers.Seazit_readout_resultSerializer
 
     @list_route(methods=["get"], renderer_classes=plotly_renderers)
-    def drs(self, request, *args, **kwargs):
+    def crResult(self, request, *args, **kwargs):
 
         protocol_ids = self.request.GET.get("protocol_ids", None)
         # readouts contains plus sign (+), it will replace by white space in Django,
@@ -249,16 +249,16 @@ class Seazit_readout_resultViewSet(CachedReadOnlyViewSet):
 
         protocol_ids = protocol_ids.split(",")
         readout_ids = readouts.split(",")
-        carsns = casrns.split(",")
-        if len(readout_ids) * len(carsns) > 100:
+        carsns_ids = casrns.split(",")
+        if len(readout_ids) * len(carsns_ids) > 100:
 
             raise ValidationError(
                 "Too many dose-response curves selected; please reduce the number of selected readouts and/or chemicals"  # noqa: E501
             )
-        return Response(models.Seazit_readout_result.dose_responses(protocol_ids, readout_ids, carsns))
+        return Response(models.Seazit_readout_result.concentration_responses(protocol_ids, readout_ids, carsns_ids))
 
     @list_route(methods=["get"], renderer_classes=plotly_renderers)
-    def bmds(self, request, *args, **kwargs):
+    def bmcByLabResult(self, request, *args, **kwargs):
         protocol_ids = self.request.GET.get("protocol_ids", None)
         # readouts contains plus sign (+), it will replace by white space in Django,
         # So I reaplace whitespace back to +
@@ -271,6 +271,32 @@ class Seazit_readout_resultViewSet(CachedReadOnlyViewSet):
         protocol_ids = protocol_ids.split(",")
         readout_ids = readouts.split(",")
         return Response(models.Seazit_readout_result.bmds_responses(protocol_ids, readout_ids))
+
+
+
+    @list_route(methods=["get"], renderer_classes=plotly_renderers)
+    def integrativeResult(self, request, *args, **kwargs):
+
+        protocol_ids = self.request.GET.get("protocol_ids", None)
+        # readouts contains plus sign (+), it will replace by white space in Django,
+        # So I reaplace whitespace back to +
+        readouts = self.request.GET.get("readouts", None).replace(" ", "+")
+        casrns = self.request.GET.get("casrns", None)
+        if protocol_ids is None:
+             raise ValidationError("requires `protocol_ids` argument.")
+        if readouts is None:
+            raise ValidationError("requires `readouts` argument.")
+        if casrns is None:
+            raise ValidationError("requires `casrns` argument.")
+
+        protocol_ids = protocol_ids.split(",")
+        readout_ids = readouts.split(",")
+        carsns_ids = casrns.split(",")
+
+
+        return Response(models.Seazit_readout_result.integrative_responses(protocol_ids, readout_ids, carsns_ids))
+
+
 
 class Seazit_bmc_readout_resultViewSet(CachedReadOnlyViewSet):
     """

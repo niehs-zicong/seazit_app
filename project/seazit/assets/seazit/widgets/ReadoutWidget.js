@@ -30,6 +30,8 @@ class ReadoutWidget extends BaseWidget {
                     label: r.protocol_name_long,
                     protocol_name: r.protocol_name,
                     // description: r.endpoint_description,
+                    description: r.protocol_name_plot,
+
                     protocol_type: r.protocol_type,
                     protocol_source: r.protocol_source,
                     seazit_protocol_id: r.seazit_protocol_id,
@@ -48,7 +50,7 @@ class ReadoutWidget extends BaseWidget {
                 'dataset',
                 options,
                 state.assays,
-                this.handleSelectMultiChange
+                this.handleSelectMultiChange,
             );
         } else {
             return renderSelectSingleWidget(
@@ -56,7 +58,8 @@ class ReadoutWidget extends BaseWidget {
                 'dataset',
                 options,
                 state.assay,
-                this.handleSelectChange
+                this.handleSelectChange,
+
             );
         }
     }

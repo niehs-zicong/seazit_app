@@ -48,9 +48,6 @@ class BaseWidget extends React.Component {
         let d = {};
         d[e.target.name] = parseFloat(e.target.value);
         this.props.stateHolder.setState(d);
-        // console.log("d")
-        // console.log(d)
-        // console.log(this.props.stateHolder)
     }
 
    handleCheckboxInputChange(e) {

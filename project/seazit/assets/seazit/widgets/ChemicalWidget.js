@@ -72,6 +72,7 @@ class ChemicalWidget extends BaseWidget {
     }
 
     _renderFilterBy(state) {
+
         return (
             <div>
                 <label>Filter chemicals by: </label>
@@ -133,13 +134,6 @@ class ChemicalWidget extends BaseWidget {
                 state.chemicals,
                 this.handleSelectMultiChange
             );
-            // return renderSelectMultiWidget(
-            //     'chemicals',
-            //     'chemical',
-            //     opts,
-            //     state.chemicals,
-            //     this.handleCategoryChange
-            // )
         } else {
             opts = _.chain(state.Seazit_chemical_info)
                 .groupBy('use_category1')

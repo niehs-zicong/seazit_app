@@ -167,7 +167,51 @@ class RankedBarchartHandler extends React.Component {
             plotData,
             tableData;
         if (this.props.visualization === BMDVIZ_ACTIVITY) {
-            plotData = _.sortBy(this.state.data.bmd_activity_selectivity, 'med_pod_med');
+
+            plotData = _.chain(this.state.data.bmd_activity_selectivity)
+                    .map((d) => {
+                        return {
+                            casrn: d.casrn,
+                            combin_ontology: d.combin_ontology,
+                            combin_ontology_id: d.combin_ontology_id,
+                            dtxsid: d.dtxsid,
+                            endpoint_name: d.endpoint_name,
+                            endpoint_name_protocol: d.endpoint_name_protocol,
+                            f_max_dev_call: d.f_max_dev_call,
+                            final_dev_call: d.final_dev_call,
+                            lab_anonymous_code: d.lab_anonymous_code,
+                            malformation: d.malformation,
+
+                            max_highest_conc: d.max_highest_conc,
+                            max_pod_med: d.max_pod_med,
+                            mean_pod: d.mean_pod,
+                            mean_selectivity: d.mean_selectivity,
+
+                            med_hitconf: d.med_hitconf,
+                            med_mort_hit_confidence: d.med_mort_hit_confidence,
+                            med_pod_med: d.med_pod_med,
+                            min_lowest_conc: d.min_lowest_conc,
+                            min_pod_med:  d.min_pod_med  ,
+                            mort_max_pod_med:  d.mort_max_pod_med  ,
+                            mort_med_hitconf:  d.mort_med_hitconf  ,
+                            mort_med_pod_med:  d.mort_med_pod_med  ,
+                            mort_min_pod_med:  d.mort_min_pod_med   ,
+                            mort_n_values:  d.mort_n_values  ,
+                            n_rep:  d.n_rep  ,
+                            n_rep_max_dev_call: d.n_rep_max_dev_call   ,
+                            n_values:  d.n_values  ,
+                            preferred_name:  d.preferred_name   ,
+                            protocol_id:   d.protocol_id ,
+                            protocol_name_long:  d.protocol_name_long  ,
+                            protocol_name_plot:   d.protocol_name_plot ,
+                            test_condition:   d.test_condition  ,
+                            use_category1:  d.use_category1  ,
+                        };
+                    })
+                    .sortBy('med_pod_med')
+                    .value();
+
+            // plotData = _.sortBy(this.state.data.bmd_activity_selectivity, 'med_pod_med');
             tableData = plotData;
         } else {
             let selectivityCheckedArray = _.chain(this.props.selectivityList)
@@ -177,10 +221,49 @@ class RankedBarchartHandler extends React.Component {
                 .value();
             // data is fillter by final_dev_call, If final_dev_call is in selectivityCheckedArray, data will pass
 
-            plotData = this.state.data.bmd_activity_selectivity.filter((i) =>
-                selectivityCheckedArray.includes(i.final_dev_call)
-            );
-            plotData = _.sortBy(plotData, 'mean_selectivity').reverse();
+            plotData = _.chain(this.state.data.bmd_activity_selectivity)
+                    .filter((i) => selectivityCheckedArray.includes(i.final_dev_call))
+                    .map((d) => {
+                        return {
+                            casrn: d.casrn,
+                            combin_ontology: d.combin_ontology,
+                            combin_ontology_id: d.combin_ontology_id,
+                            dtxsid: d.dtxsid,
+                            endpoint_name: d.endpoint_name,
+                            endpoint_name_protocol: d.endpoint_name_protocol,
+                            f_max_dev_call: d.f_max_dev_call,
+                            final_dev_call: d.final_dev_call,
+                            lab_anonymous_code: d.lab_anonymous_code,
+                            malformation: d.malformation,
+                            max_highest_conc: d.max_highest_conc,
+                            max_pod_med: d.max_pod_med,
+                            mean_pod: d.mean_pod,
+                            mean_selectivity: d.mean_selectivity,
+                            med_hitconf: d.med_hitconf,
+                            med_mort_hit_confidence: d.med_mort_hit_confidence,
+                            med_pod_med: d.med_pod_med,
+                            min_lowest_conc: d.min_lowest_conc,
+                            min_pod_med:  d.min_pod_med  ,
+                            mort_max_pod_med:  d.mort_max_pod_med  ,
+                            mort_med_hitconf:  d.mort_med_hitconf  ,
+                            mort_med_pod_med:  d.mort_med_pod_med  ,
+                            mort_min_pod_med:  d.mort_min_pod_med   ,
+                            mort_n_values:  d.mort_n_values  ,
+                            n_rep:  d.n_rep  ,
+                            n_rep_max_dev_call: d.n_rep_max_dev_call   ,
+                            n_values:  d.n_values  ,
+                            preferred_name:  d.preferred_name   ,
+                            protocol_id:   d.protocol_id ,
+                            protocol_name_long:  d.protocol_name_long  ,
+                            protocol_name_plot:   d.protocol_name_plot ,
+                            test_condition:   d.test_condition  ,
+                            use_category1:  d.use_category1  ,
+                        };
+                    })
+                    .sortBy('mean_selectivity')
+                    .reverse()
+                    .value();
+
             tableData = plotData;
         }
         console.log(plotData);

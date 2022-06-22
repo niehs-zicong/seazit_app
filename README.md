@@ -11,8 +11,6 @@ Read the docs (SEAZIT coming soon): https://sandbox-staging.ntp.niehs.nih.gov/do
 Deploy see: https://gitlab.niehs.nih.gov/ods/deploy-seazit/-/blob/master/readme.md
 
 For local development command:
-conda activate seazit 
-python manage.py runserver
-conda activate seazit 
-npm start
+conda activate seazit  &&  python manage.py runserver
+conda activate seazit  && npm start
 

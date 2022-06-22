@@ -26,101 +26,40 @@ class HeatmapHandler extends React.Component {
         };
     }
 
-    _updateData(bmdType) {
-        let url = `/neurotox/api/${bmdType}/bmds/?format=tsv`,
-            cleanRow = function(row) {
-                return {
-                    id: +row.id,
-                    bmd: row.bmd ? +row.bmd : null,
-                    is_active: row.is_active === 'True',
-                    substance_id: +row.substance_id,
-                    chemical_casrn: row.chemical_casrn,
-                    chemical_name: row.chemical_name,
-                    provider: row.protocol_provider,
-                    provider_category: `${row.protocol_provider}: ${row.readout_category}`,
-                    readout_endpoint: row.readout_endpoint,
-                    readout_id: +row.readout_id,
-                };
-            },
-            formatData = (error, data) => {
-                // TODO - domain hard-coded to make constant for CurveP & Hill
-                let domain = [1e-5, 1e3],
-                    scale = d3
-                        .scaleLog()
-                        .range([1, 0])
-                        .domain(domain),
-                    // zicong-10-7 .
-                    // continuousColorScale, d3.interpolateViridis(scale(d)' function
-                    // is the one covert number to color. d is the input .
-                    continuousColorScale = function(d) {
-                        return d3.interpolateViridis(scale(d));
-                    };
-
+    _updateData(url) {
+        d3.json(url, (error, data) => {
+            if (error) {
+                let err = error.target.responseText.replace('["', '').replace('"]', '');
                 this.setState({
-                    data,
-                    scale,
-                    continuousColorScale,
+                    data: [],
+                    error: err,
                 });
-            };
-
-        d3.tsv(url, cleanRow, formatData);
+                return;
+            }
+            // console.log(this.state.data)
+            console.log('data');
+            console.log(url);
+            console.log(data);
+            this.setState({ data });
+        });
     }
+
 
     componentWillMount() {
-        this._updateData(this.props.bmdType);
+        this._updateData(this.props.url);
     }
 
-    shouldComponentUpdate(nextProps, nextState) {
-        if (nextProps.bmdType !== this.props.bmdType) {
-            this._updateData(nextProps.bmdType);
+    componentWillUpdate(nextProps) {
+        if (nextProps.url !== this.props.url) {
+            this._updateData(nextProps.url);
         }
-        return true;
     }
 
-    _data_exportToCSVFile = (jsonData) => {
-        if (jsonData.length == 0) {
-            return '';
+    componentWillUpdate(nextProps) {
+        if (nextProps.url !== this.props.url) {
+            this._updateData(nextProps.url);
         }
-        var yMap = _.groupBy(jsonData, 'y'),
-            xMap = _.groupBy(jsonData, 'x'),
-            header = ' ,' + Object.keys(xMap),
-            str = '';
-
-        for (var i in yMap) {
-            var line = '';
-            if (line == '') line += `"${yMap[i][0]['y']}"`;
-            for (var j in yMap[i]) {
-                if (line != '') line += ',';
-                line += yMap[i][j]['bmd'];
-            }
-            str += line + '\r\n';
-        }
-        header += '\r\n';
-        str = header + str;
-
-        let csvStr = encodeURIComponent(str);
-
-        var today = new Date();
-        var filename =
-            today.getFullYear() +
-            '-' +
-            (today.getMonth() + 1) +
-            '-' +
-            today.getDate() +
-            '-' +
-            today.getHours() +
-            '-' +
-            today.getMinutes() +
-            '-' +
-            today.getSeconds() +
-            '.csv';
-
-        let dataUri = 'data:text/csv;charset=utf-8,' + csvStr;
-        let linkElement = document.createElement('a');
-        linkElement.setAttribute('href', dataUri);
-        linkElement.setAttribute('download', filename);
-        linkElement.click();
-    };
+    }
 
     _getFilteredData() {
         let getFillFunction = function(heatmapDisplay, continuousColorScale) {
@@ -139,10 +78,6 @@ class HeatmapHandler extends React.Component {
                     case HEATMAP_BMC:
                         // return colorscale if it exist, otherwise, white
                         return function(data) {
-                            // the scale color is coverted from data.bmd,
-                            // if null, white.
-                            //                             console.log('ZW fill 2')
-                            //                             console.log(data)
                             return data.bmd ? continuousColorScale(data.bmd) : 'white';
                         };
                     default:
@@ -204,131 +139,95 @@ class HeatmapHandler extends React.Component {
                 this.props.heatmapDisplay,
                 this.state.continuousColorScale
             ),
-            hoverTextFunction = getHoverTextFunction(this.props.heatmapDisplay),
+            // hoverTextFunction = getHoverTextFunction(this.props.heatmapDisplay),
             legendData = getLegendData(
                 this.props.heatmapDisplay,
                 this.state.scale,
                 this.state.continuousColorScale
             ),
-            readout_ids = this.props.readouts.map((d) => parseInt(d)),
+            // readout_ids = this.props.readouts.map((d) => parseInt(d)),
             data;
+            data = _.chain(this.state.data.bmd_activity_selectivity)
+                    .map((d) => {
+                        return {
+                            casrn: d.casrn,
+                            combin_ontology: d.combin_ontology,
+                            combin_ontology_id: d.combin_ontology_id,
+                            dtxsid: d.dtxsid,
+                            endpoint_name: d.endpoint_name,
+                            endpoint_name_protocol: d.endpoint_name_protocol,
+                            f_max_dev_call: d.f_max_dev_call,
+                            final_dev_call: d.final_dev_call,
+                            lab_anonymous_code: d.lab_anonymous_code,
+                            malformation: d.malformation,
 
-        switch (this.props.readoutType) {
-            case READOUT_TYPE_READOUT: {
-                data = _.chain(this.state.data)
-                    .filter((d) => _.includes(this.props.casrns, d.chemical_casrn))
-                    .filter((d) => _.includes(readout_ids, d.readout_id))
-                    .map((d) => {
-                        return {
-                            bmd: d.bmd,
-                            x: `${d.provider}: ${d.readout_endpoint}`,
-                            x_key: d.readout_id,
-                            y: d.chemical_name,
-                            y_key: d.chemical_casrn,
-                            fill: fillFunction(d),
-                            hover_text: hoverTextFunction(d),
-                            chemical_casrn: d.chemical_casrn,
-                            readout_id: d.readout_id,
-                            title: `${d.chemical_name}: ${d.readout_endpoint}`,
+                            max_highest_conc: d.max_highest_conc,
+                            max_pod_med: d.max_pod_med,
+                            mean_pod: d.mean_pod,
+                            mean_selectivity: d.mean_selectivity,
+
+                            med_hitconf: d.med_hitconf,
+                            med_mort_hit_confidence: d.med_mort_hit_confidence,
+                            med_pod_med: d.med_pod_med,
+                            min_lowest_conc: d.min_lowest_conc,
+                            min_pod_med:  d.min_pod_med  ,
+                            mort_max_pod_med:  d.mort_max_pod_med  ,
+                            mort_med_hitconf:  d.mort_med_hitconf  ,
+                            mort_med_pod_med:  d.mort_med_pod_med  ,
+                            mort_min_pod_med:  d.mort_min_pod_med   ,
+                            mort_n_values:  d.mort_n_values  ,
+                            n_rep:  d.n_rep  ,
+                            n_rep_max_dev_call: d.n_rep_max_dev_call   ,
+                            n_values:  d.n_values  ,
+                            preferred_name:  d.preferred_name   ,
+                            protocol_id:   d.protocol_id ,
+                            protocol_name_long:  d.protocol_name_long  ,
+                            protocol_name_plot:   d.protocol_name_plot ,
+                            test_condition:   d.test_condition  ,
+                            use_category1:  d.use_category1  ,
                         };
                     })
+                    .sortBy('med_pod_med')
                     .value();
-                // console.log('data compare 1')
-                // console.log(data)
-                break;
-            }
-            case READOUT_TYPE_CATEGORY: {
-                data = _.chain(this.state.data)
-                    .filter((d) => _.includes(this.props.casrns, d.chemical_casrn))
-                    .filter((d) => _.includes(this.props.readoutCategories, d.provider_category))
-                    .each((d) => (d._key = `${d.chemical_casrn}-${d.provider_category}`))
-                    .groupBy('_key')
-                    .values()
-                    .map((arr) => {
-                        let d = _.chain(arr)
-                            .filter((d) => d.bmd > 0)
-                            .min((d) => d.bmd)
-                            .value();
-                        if (!_.isObject(d)) {
-                            // if no bmd exists; just pick first
-                            d = arr[0];
-                        }
-                        d.readouts = _.sortBy(arr, 'bmd');
-                        return d;
-                    })
-                    .map((d) => {
-                        return {
-                            bmd: d.bmd,
-                            x: d.provider_category,
-                            x_key: d.readout_id, // changeme
-                            y: d.chemical_name,
-                            y_key: d.chemical_casrn,
-                            fill: fillFunction(d),
-                            hover_text: hoverTextFunction(d),
-                            chemical_casrn: d.chemical_casrn,
-                            readout_id: d.readout_id,
-                            title: `${d.chemical_name}: ${d.readout_endpoint}`,
-                            readouts: d.readouts,
-                        };
-                    })
-                    .value();
-                break;
-            }
-            default: {
-                throw 'Unknown readoutType';
-            }
-        }
 
         return {
             data,
             legendData,
         };
-    }
-    786;
+    };
 
     render() {
         if (!this.state.data) {
             return <Loading />;
         }
-        let d = this._getFilteredData();
+        let d;
+        d = this._getFilteredData();
+        console.log(d)
+
 
         // this is result, with color name is fill data.
-        if (d.data.length === 0) {
+        // if (d.data.length === 0) {
+        if (d.length === 0) {
             return renderNoDataAlert();
         }
-        //        console.log(d.data)
 
         return (
             <div>
-                <h2>
-                    Download buttons: &nbsp;&nbsp;&nbsp;&nbsp;
-                    <button
-                        onClick={() => this._data_exportToCSVFile(d.data)}
-                        class="btn btn-primary"
-                    >
-                        Export data CSV
-                    </button>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <button
-                        onClick={() => svg_download_form('IA_heatmap01')}
-                        class="btn btn-primary"
-                    >
-                        Export plot
-                    </button>
-                </h2>
-                <Heatmap data={d.data} legendData={d.legendData} />
+                <Heatmap data={d.data} legendData={"zw"} />
             </div>
         );
     }
 }
 
 HeatmapHandler.propTypes = {
-    bmdType: PropTypes.string.isRequired,
+    // bmdType: PropTypes.string.isRequired,
     casrns: PropTypes.array.isRequired,
     heatmapDisplay: PropTypes.number.isRequired,
-    readoutType: PropTypes.number.isRequired,
+    // readoutType: PropTypes.number.isRequired,
     readouts: PropTypes.array.isRequired,
     readoutCategories: PropTypes.array.isRequired,
+    url: PropTypes.string.isRequired,
+
 };
 
 export default HeatmapHandler;
