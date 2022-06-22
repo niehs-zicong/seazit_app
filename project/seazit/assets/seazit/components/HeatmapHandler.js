@@ -26,7 +26,7 @@ class HeatmapHandler extends React.Component {
         };
     }
 
-    _updateData(url) {
+    fetchIntegrativeData(url) {
         d3.json(url, (error, data) => {
             if (error) {
                 let err = error.target.responseText.replace('["', '').replace('"]', '');
@@ -36,28 +36,24 @@ class HeatmapHandler extends React.Component {
                 });
                 return;
             }
-            // console.log(this.state.data)
-            console.log('data');
-            console.log(url);
-            console.log(data);
             this.setState({ data });
         });
     }
 
 
     componentWillMount() {
-        this._updateData(this.props.url);
+        this.fetchIntegrativeData(this.props.url);
     }
 
     componentWillUpdate(nextProps) {
         if (nextProps.url !== this.props.url) {
-            this._updateData(nextProps.url);
+            this.fetchIntegrativeData(nextProps.url);
         }
     }
 
     componentWillUpdate(nextProps) {
         if (nextProps.url !== this.props.url) {
-            this._updateData(nextProps.url);
+            this.fetchIntegrativeData(nextProps.url);
         }
     }
 
@@ -203,7 +199,6 @@ class HeatmapHandler extends React.Component {
         let d;
         d = this._getFilteredData();
         console.log(d)
-
 
         // this is result, with color name is fill data.
         // if (d.data.length === 0) {

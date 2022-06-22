@@ -2448,7 +2448,7 @@ webpackJsonp(
                 return e && e.__esModule ? e : { default: e };
             }
             Object.defineProperty(t, '__esModule', { value: !0 }),
-                (t.data_exportToJsonFile = t.renderNoSelected = t.renderNoDataAlert = t.printFloat = t.insertIntoDom = t.renderSelectMultiOptgroupWidget = t.renderSelectSingleWidget = t.renderSelectMultiWidget = t.loadMetadata = t.getBmdsUrl = t.getDoseResponsesUrl = t.URL_CHEMXLSX = t.SELECTIVITY_FOOTNOTE = t.READOUT_TYPE_CATEGORY = t.READOUT_TYPE_READOUT = t.BMDVIZ_SELECTIVITY = t.BMDVIZ_ACTIVITY = t.INTVIZ_HEATMAP = t.INTVIZ_CHEMICAL_PCA = t.INTVIZ_ASSAY_PCA = t.INTVIZ_BOXPLOT = t.INTVIZ_OBAMA = t.HEATMAP_BMC = t.HEATMAP_ACTIVITY = t.NO_COLLAPSE = t.COLLAPSE_BY_READOUT = t.COLLAPSE_BY_CHEMICAL = t.CHEMLIST_ALL = t.CHEMLIST_91 = t.CHEMLIST_80 = t.CHEMFILTER_CHEMICIAL = t.CHEMFILTER_CATEGORY = t.CATEGORY_COLORS = t.BMD_CW = t.BMD_HILL = t.BMD_CURVEP = t.AXIS_SQRT = t.AXIS_LOG10 = t.AXIS_LINEAR = void 0);
+                (t.data_exportToJsonFile = t.renderNoSelected = t.renderNoDataAlert = t.printFloat = t.insertIntoDom = t.renderSelectMultiOptgroupWidget = t.renderSelectSingleWidget = t.renderSelectMultiWidget = t.loadMetadata = t.getBmdsUrl = t.getDoseResponsesUrl = t.URL_CHEMXLSX = t.SELECTIVITY_FOOTNOTE = t.READOUT_TYPE_CATEGORY = t.READOUT_TYPE_READOUT = t.BMDVIZ_SELECTIVITY = t.BMDVIZ_ACTIVITY = t.INTVIZ_HEATMAP = t.INTVIZ_CHEMICAL_PCA = t.INTVIZ_ASSAY_PCA = t.INTVIZ_DevtoxHEATMAP = t.INTVIZ_OBAMA = t.HEATMAP_BMC = t.HEATMAP_ACTIVITY = t.NO_COLLAPSE = t.COLLAPSE_BY_READOUT = t.COLLAPSE_BY_CHEMICAL = t.CHEMLIST_ALL = t.CHEMLIST_91 = t.CHEMLIST_80 = t.CHEMFILTER_CHEMICIAL = t.CHEMFILTER_CATEGORY = t.CATEGORY_COLORS = t.BMD_CW = t.BMD_HILL = t.BMD_CURVEP = t.AXIS_SQRT = t.AXIS_LOG10 = t.AXIS_LINEAR = void 0);
             var r = n(55),
                 o = a(r),
                 l = n(77),
@@ -2674,7 +2674,7 @@ webpackJsonp(
                 (t.HEATMAP_ACTIVITY = 1),
                 (t.HEATMAP_BMC = 2),
                 (t.INTVIZ_OBAMA = 1),
-                (t.INTVIZ_BOXPLOT = 2),
+                (t.INTVIZ_DevtoxHEATMAP = 2),
                 (t.INTVIZ_ASSAY_PCA = 3),
                 (t.INTVIZ_CHEMICAL_PCA = 4),
                 (t.INTVIZ_HEATMAP = 5),

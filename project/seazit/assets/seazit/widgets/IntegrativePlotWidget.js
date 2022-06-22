@@ -1,7 +1,7 @@
 import React from 'react';
 import BaseWidget from './BaseWidget';
 
-import { INTVIZ_BOXPLOT, INTVIZ_HEATMAP } from '../shared';
+import { INTVIZ_DevtoxHEATMAP, INTVIZ_HEATMAP } from '../shared';
 
 class IntegrativePlotWidget extends BaseWidget {
     /*
@@ -32,8 +32,8 @@ class IntegrativePlotWidget extends BaseWidget {
                             type="radio"
                             name="visualization"
                             onChange={this.handleRadioChange}
-                            value={INTVIZ_BOXPLOT}
-                            checked={state.visualization === INTVIZ_BOXPLOT}
+                            value={INTVIZ_DevtoxHEATMAP}
+                            checked={state.visualization === INTVIZ_DevtoxHEATMAP}
                         />
                         Devtox heatmap with BMC and selectivity
                     </label>

@@ -23,7 +23,7 @@ import CheckBoxWidget from "../widgets/CheckBoxWidget";
 import {
     BMD_HILL,
     HEATMAP_ACTIVITY,
-    INTVIZ_BOXPLOT,
+    INTVIZ_DevtoxHEATMAP,
     INTVIZ_ASSAY_PCA,
     INTVIZ_CHEMICAL_PCA,
     INTVIZ_HEATMAP,
@@ -211,50 +211,24 @@ class IntegrativeAnalysesMain extends React.Component {
             hasReadoutCategories = this.state.readoutCategories.length > 0,
             readoutType,
             viz = this.state.visualization,
-            requiresFilters = [INTVIZ_HEATMAP, INTVIZ_BOXPLOT];
-
-        let filtersRequired =
-            _.includes(requiresFilters, viz) &&
-            (!hasChems ||
-                (readoutType == READOUT_TYPE_READOUT && !hasReadouts) ||
-                    (readoutType == READOUT_TYPE_CATEGORY && !hasReadoutCategories));
-
-        if (filtersRequired) {
-            return renderNoSelected({
-                // hasReadouts: readoutType == READOUT_TYPE_READOUT ? hasReadouts : undefined,
-                // hasReadoutCategories:
-                //     readoutType == READOUT_TYPE_CATEGORY ? hasReadoutCategories : undefined,
-                // hasChems,
-            });
-        }
+            requiresFilters = [INTVIZ_HEATMAP, INTVIZ_DevtoxHEATMAP];
+        //
+        // let filtersRequired =
+        //     _.includes(requiresFilters, viz) &&
+        //     (!hasChems ||
+        //         (readoutType == READOUT_TYPE_READOUT && !hasReadouts) ||
+        //             (readoutType == READOUT_TYPE_CATEGORY && !hasReadoutCategories));
+        //
+        // if (filtersRequired) {
+        //     return renderNoSelected({
+        //         // hasReadouts: readoutType == READOUT_TYPE_READOUT ? hasReadouts : undefined,
+        //         // hasReadoutCategories:
+        //         //     readoutType == READOUT_TYPE_CATEGORY ? hasReadoutCategories : undefined,
+        //         // hasChems,
+        //     });
+        // }
 
         switch (viz) {
-            case INTVIZ_ASSAY_PCA: {
-                return (
-                    <div>
-                        <BmdAssayPca bmdType={BMD_CW[this.state.bmdType]} />
-                        <p className="help-block">
-                            <b>Interactivity note:</b> This 3D scatterplot is interactive. Hover
-                            over items to view details. Click and drag the mouse to rotate the
-                            image. Use your mouse wheel to scroll in/out. Click an item in the
-                            legend to show/hide.
-                        </p>
-                    </div>
-                );
-            }
-            case INTVIZ_CHEMICAL_PCA: {
-                return (
-                    <div>
-                        <BmdChemicalPca bmdType={BMD_CW[this.state.bmdType]} />
-                        <p className="help-block">
-                            <b>Interactivity note:</b> This 3D scatterplot is interactive. Hover
-                            over items to view details. Click and drag the mouse to rotate the
-                            image. Use your mouse wheel to scroll in/out. Click an item in the
-                            legend to show/hide.
-                        </p>
-                    </div>
-                );
-            }
             case INTVIZ_HEATMAP: {
                 return (
                     <div>
@@ -274,33 +248,16 @@ class IntegrativeAnalysesMain extends React.Component {
                     </div>
                 );
             }
-            case INTVIZ_BOXPLOT: {
+            case INTVIZ_DevtoxHEATMAP: {
                 return (
                     <div>
-                        {
-                            <h2>
-                                Download buttons: &nbsp;&nbsp;&nbsp;&nbsp;
-                                <button
-                                    onClick={() => svg_download_form('IA_Boxplot01')}
-                                    class="btn btn-primary"
-                                >
-                                    Export data
-                                </button>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <button
-                                    onClick={() => svg_download_form('IA_Boxplot01')}
-                                    class="btn btn-primary"
-                                >
-                                    Export plot
-                                </button>
-                            </h2>
-                        }
                         <BmdBoxplot
                             bmdType={BMD_CW[this.state.bmdType]}
                             casrns={this.state.chemicals}
                             // readoutType={this.state.readoutType}
                             readouts={this.state.readouts}
                             readoutCategories={this.state.readoutCategories}
+                            url={url}
                         />
                     </div>
                 );
@@ -318,12 +275,9 @@ class IntegrativeAnalysesMain extends React.Component {
 
         let isPca = _.includes([INTVIZ_ASSAY_PCA, INTVIZ_CHEMICAL_PCA], this.state.visualization),
             isHeatmap = this.state.visualization === INTVIZ_HEATMAP;
-
-        // let url = getBmdsUrl(this.state.assay, this.state.readouts);
-        // let url = '/seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=1,2&readouts=Abnormal_heartbeat+Mort@120_1,MalformedAny+Mort@24_2&casrns=67-68-5,79-94-7';
-        // let url = '/seazit/api/seazit_result/bmcByLabResult/?format=json&protocol_ids=1,2&readouts=Abnormal_heartbeat+Mort@120_1,MalformedAny+Mort@24_2';
-        let url = '/seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=1,5&readouts=Abnormal_heartbeat+Mort@120,Yolk_opacity+Mort@120&casrns=51-52-5,115-86-6,2078-54-8,71751-41-2,56-35-9,3380-34-5,36734-19-7,26787-78-0,53-70-3,127-07-1,43121-43-3,108-46-3,84-74-2,95-76-1,5598-15-2,2921-88-2,56-53-1,67-68-5,137-30-4,58-89-9,116-06-3,58-08-2,330-55-2,80-05-7,76738-62-0,298-02-2,99-66-1,69806-50-4,75-07-0,50-35-1,95737-68-1,83-79-4,85509-19-9,13674-87-8,1912-24-9,1069-66-5,50-78-2,79-94-7,87-86-5,129-00-0'
-        // let url2 = getIntegrativeUrl(this.state.assays, this.state.readouts, this.state.chemicals);
+        console.log(this.state)
+        // let url = '/seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=1,5&readouts=Abnormal_heartbeat+Mort@120,Yolk_opacity+Mort@120&casrns=51-52-5,115-86-6,2078-54-8,71751-41-2,56-35-9,3380-34-5,36734-19-7,26787-78-0,53-70-3,127-07-1,43121-43-3,108-46-3,84-74-2,95-76-1,5598-15-2,2921-88-2,56-53-1,67-68-5,137-30-4,58-89-9,116-06-3,58-08-2,330-55-2,80-05-7,76738-62-0,298-02-2,99-66-1,69806-50-4,75-07-0,50-35-1,95737-68-1,83-79-4,85509-19-9,13674-87-8,1912-24-9,1069-66-5,50-78-2,79-94-7,87-86-5,129-00-0'
+        let url = getIntegrativeUrl(this.state.assays, this.state.readouts, this.state.chemicals);
         console.log(url)
         return (
             <div className="row-fluid">

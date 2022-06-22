@@ -232,6 +232,24 @@ class Seazit_readout_resultViewSet(CachedReadOnlyViewSet):
     queryset = models.Seazit_readout_result.objects.all()
     serializer_class = serializers.Seazit_readout_resultSerializer
 
+
+    @list_route(methods=["get"], renderer_classes=plotly_renderers)
+    def bmcByLabResult(self, request, *args, **kwargs):
+        protocol_ids = self.request.GET.get("protocol_ids", None)
+        # readouts contains plus sign (+), it will replace by white space in Django,
+        # So I reaplace whitespace back to +
+        readouts = self.request.GET.get("readouts", None).replace(" ", "+")
+        if protocol_ids is None:
+             raise ValidationError("requires `protocol_ids` argument.")
+        if readouts is None:
+            raise ValidationError("requires `readouts` argument.")
+
+        protocol_ids = protocol_ids.split(",")
+        readout_ids = readouts.split(",")
+        return Response(models.Seazit_readout_result.bmds_responses(protocol_ids, readout_ids))
+
+
+
     @list_route(methods=["get"], renderer_classes=plotly_renderers)
     def crResult(self, request, *args, **kwargs):
 
@@ -256,22 +274,6 @@ class Seazit_readout_resultViewSet(CachedReadOnlyViewSet):
                 "Too many dose-response curves selected; please reduce the number of selected readouts and/or chemicals"  # noqa: E501
             )
         return Response(models.Seazit_readout_result.concentration_responses(protocol_ids, readout_ids, carsns_ids))
-
-    @list_route(methods=["get"], renderer_classes=plotly_renderers)
-    def bmcByLabResult(self, request, *args, **kwargs):
-        protocol_ids = self.request.GET.get("protocol_ids", None)
-        # readouts contains plus sign (+), it will replace by white space in Django,
-        # So I reaplace whitespace back to +
-        readouts = self.request.GET.get("readouts", None).replace(" ", "+")
-        if protocol_ids is None:
-             raise ValidationError("requires `protocol_ids` argument.")
-        if readouts is None:
-            raise ValidationError("requires `readouts` argument.")
-
-        protocol_ids = protocol_ids.split(",")
-        readout_ids = readouts.split(",")
-        return Response(models.Seazit_readout_result.bmds_responses(protocol_ids, readout_ids))
-
 
 
     @list_route(methods=["get"], renderer_classes=plotly_renderers)

@@ -120,7 +120,8 @@ class ReadoutWidget extends BaseWidget {
                     return {
                         // key: `${r.endpoint_name} | ${r.seazit_protocol_id}`,
                         // key: r.endpoint_name.toString(),
-                        key: r.endpoint_name.toString(),
+                        // key: r.endpoint_name.toString(),
+                        key: r.endpoint_name_protocol.toString(),
                         category: r.protocol_name_plot,
                         label: r.endpoint_name,
                         description: r.endpoint_description,

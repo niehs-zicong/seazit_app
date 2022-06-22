@@ -50,7 +50,7 @@ const AXIS_LINEAR = 1,
     URL_INTEGRATIVE = '/seazit/api/seazit_result/integrativeResult/',
 
     INTVIZ_OBAMA = 1,
-    INTVIZ_BOXPLOT = 2,
+    INTVIZ_DevtoxHEATMAP = 2,
     INTVIZ_ASSAY_PCA = 3,
     INTVIZ_CHEMICAL_PCA = 4,
     INTVIZ_HEATMAP = 5,
@@ -93,6 +93,7 @@ const AXIS_LINEAR = 1,
     renderSelectMultiWidget = function(name, label, options, values, handleChange) {
         let size = Math.min(options.length, 11);
         console.log(options);
+        console.log(values);
 
         return (
             <div>
@@ -109,8 +110,7 @@ const AXIS_LINEAR = 1,
                         if (d.description)
                         {
                         return (
-                          <Tooltip  title={d.description}  placement="top"
-                          >
+                          <Tooltip  title={d.description}  placement="top">
                             <option
                                      key={d.key} value={d.key}>
                                 {d.label}
@@ -308,7 +308,7 @@ export {
     HEATMAP_ACTIVITY,
     HEATMAP_BMC,
     INTVIZ_OBAMA,
-    INTVIZ_BOXPLOT,
+    INTVIZ_DevtoxHEATMAP,
     INTVIZ_ASSAY_PCA,
     INTVIZ_CHEMICAL_PCA,
     INTVIZ_HEATMAP,

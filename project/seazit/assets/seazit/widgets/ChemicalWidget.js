@@ -127,7 +127,6 @@ class ChemicalWidget extends BaseWidget {
                 .value();
 
             return renderSelectMultiOptgroupWidget(
-                // return renderSelectMultiWidget(
                 'chemicals',
                 'chemical',
                 opts,

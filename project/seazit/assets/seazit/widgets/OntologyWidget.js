@@ -25,54 +25,7 @@ class OntologyWidget extends BaseWidget {
 
     constructor(props) {
         super(props);
-        this.handleGranularChange = this.handleGranularChange.bind(this);
-        this.handleGeneralChange = this.handleGeneralChange.bind(this);
     }
-    handleGranularChange(e) {
-        let d = {},
-            state = this.props.stateHolder.state,
-            value = parseInt(e.target.value);
-        d[e.target.name] = $(e.target).val();
-
-        // d[e.target.name] = value;
-        //
-        // // also update chemicals based on chemfilters
-        // d['chemicals'] = this._getSelectedChemicals(state.tbl_substances, state.categories, value);
-
-        this.props.stateHolder.setState(d);
-    }
-
-    handleGeneralChange(e) {
-        let d = {},
-            vals = $(e.target).val(),
-            state = this.props.stateHolder.state;
-        d[e.target.name] = $(e.target).val();
-        // d[e.target.name] = vals;
-        // // also update chemicals based on chemfilters
-        // // d['casrn'] =  _.chain(state.Seazit_chemical_info)
-        // d['chemicals'] = _.chain(state.Seazit_chemical_info)
-        //     .filter((r) => {
-        //         return _.includes(vals, r.use_category1);
-        //     })
-        //     .map('casrn')
-        //     .uniq()
-        //     .value();
-        this.props.stateHolder.setState(d);
-
-    }
-
-    handleOntologyChange(e) {
-        let d = {},
-            state = this.props.stateHolder.state,
-            value = parseInt(e.target.value);
-
-        d[e.target.name] = value;
-
-        d['chemicals'] = this._getSelectedChemicals(state.tbl_substances, state.categories, value);
-
-        this.props.stateHolder.setState(d);
-    }
-
 
     _renderFilterBy(state) {
         return (
@@ -127,7 +80,7 @@ class OntologyWidget extends BaseWidget {
             console.log(opts)
 
             return renderSelectMultiWidget(
-                'General',
+                'ontologyDefectGrouping',
                 'Granular',
                 opts,
                 state.ontologyDefectGrouping,
@@ -151,7 +104,7 @@ class OntologyWidget extends BaseWidget {
             console.log(opts)
 
             return renderSelectMultiWidget(
-                'General',
+                'ontologyDefectGrouping',
                 'General',
                 opts,
                 state.ontologyDefectGrouping,

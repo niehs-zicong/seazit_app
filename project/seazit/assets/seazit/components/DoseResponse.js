@@ -85,9 +85,6 @@ class DoseResponse extends React.Component {
     }
 
     fetchDoseResponseData(url) {
-        // //console.log('bmc url ');
-        // //console.log(url);
-
         d3.json(url, (error, data) => {
             if (error) {
                 let err = error.target.responseText.replace('["', '').replace('"]', '');
