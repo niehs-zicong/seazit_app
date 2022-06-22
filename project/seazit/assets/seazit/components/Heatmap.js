@@ -220,9 +220,9 @@ let renderPlot = function(el, data, legendData) {
         .attr('width', width)
         .attr('height', height);
 
-            console.log(xasix)
-          console.log(yasix)
-          console.log(domain)
+          //   console.log(xasix)
+          // console.log(yasix)
+          // console.log(domain)
 
     // draw y-axis
     let yScale = d3

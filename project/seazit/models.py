@@ -205,6 +205,27 @@ class SeazitOntology(models.Model):
         managed = False
         db_table = 'seazit_ontology'
 
+    @classmethod
+    def get_ontology(cls):
+        cols = (
+
+            "proposed_ontology_label",
+            "ontology_id_number",
+            "protocol_source",
+            "recording_name",
+            "hour_post_fertilization",
+            "developmental_defect_catergories",
+            "defects_mapped_to_body_region",
+            "developmental_defect_grouping_granular",
+            "developmental_defect_grouping_general",
+            "seazit_recording_id",
+        )
+        qs = (
+            cls.objects.all().values_list(*cols)
+        )
+        return pd.DataFrame(list(qs),columns=cols)
+
+
 
 class SeazitPlateScreen(models.Model):
     plate_map_name = models.TextField(blank=True, null=True)
@@ -254,6 +275,8 @@ class SeazitProtocol(models.Model):
             "protocol_data": pd.DataFrame(list(qs), columns=cols).to_dict(orient="records"),
             "Seazit_chemical_info": Seazit_chemical_info.get_chemicals().to_dict(orient="records"),
             "Seazit_ui_panel": Seazit_ui_panel.get_flat().to_dict(orient="records"),
+            "Seazit_ontology": SeazitOntology.get_ontology().to_dict(orient="records"),
+
         }
 
     class Meta:

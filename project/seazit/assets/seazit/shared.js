@@ -47,6 +47,8 @@ const AXIS_LINEAR = 1,
     URL_CONCRESPMATRIX = '/seazit/api/seazit_result/crResult/',
     // BMC by lab URL
     URL_BMD = '/seazit/api/seazit_result/bmcByLabResult/',
+    URL_INTEGRATIVE = '/seazit/api/seazit_result/integrativeResult/',
+
     INTVIZ_OBAMA = 1,
     INTVIZ_BOXPLOT = 2,
     INTVIZ_ASSAY_PCA = 3,
@@ -70,10 +72,10 @@ const AXIS_LINEAR = 1,
                 protocol_data: d.protocol_data,
                 Seazit_chemical_info: d.Seazit_chemical_info,
                 Seazit_ui_panel: d.Seazit_ui_panel,
+                Seazit_ontology:d.Seazit_ontology,
             });
             console.log("d");
             console.log(d);
-
         });
     },
 
@@ -104,15 +106,26 @@ const AXIS_LINEAR = 1,
                     value={values}
                 >
                     {options.map((d) => {
+                        if (d.description)
+                        {
                         return (
-                          <Tooltip  title={d.protocol_name_plot}  placement="top">
+                          <Tooltip  title={d.description}  placement="top"
+                          >
                             <option
                                      key={d.key} value={d.key}>
                                 {d.label}
                             </option>
                           </Tooltip>
-
                         );
+                        } else
+                        {
+                            return (
+                            <option
+                                     key={d.key} value={d.key}>
+                                {d.label}
+                            </option>
+                            )
+                        }
                     })}
                 </select>
             </div>
@@ -213,6 +226,19 @@ const AXIS_LINEAR = 1,
         // return url, ro is the readout_id
         return `${URL_BMD}?format=json&protocol_ids=${id}&readouts=${ro}`;
     },
+
+    getIntegrativeUrl = function(protocol_ids, readout_ids, casrns) {
+        if (protocol_ids.length === 0 || readout_ids.length === 0 || casrns.length === 0) {
+            return null;
+        }
+        let ids = protocol_ids.join(','),
+            ro = readout_ids.join(','),
+            chems = casrns.join(',');
+        // return url, ro is the readout_id
+        // console.log(ids, ro, chems);
+        return `${URL_INTEGRATIVE}?format=json&protocol_ids=${ids}&readouts=${ro}&casrns=${chems}`;
+    },
+
     printFloat = function(v) {
         if (v <= 0) {
             return '-';
@@ -294,6 +320,7 @@ export {
     URL_CHEMXLSX,
     getDoseResponsesUrl,
     getBmdsUrl,
+    getIntegrativeUrl,
     loadMetadata,
     renderSelectMultiWidget,
     renderSelectSingleWidget,
