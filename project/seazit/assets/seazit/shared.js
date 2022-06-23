@@ -92,9 +92,6 @@ const AXIS_LINEAR = 1,
     },
     renderSelectMultiWidget = function(name, label, options, values, handleChange) {
         let size = Math.min(options.length, 11);
-        console.log(options);
-        console.log(values);
-
         return (
             <div>
                 <label>Select {label}(s):</label>

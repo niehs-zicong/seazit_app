@@ -4,15 +4,12 @@ import React from 'react';
 import BaseWidget from './BaseWidget';
 
 import {
-    CHEMFILTER_CATEGORY,
-    CHEMFILTER_CHEMICIAL,
     renderSelectMultiWidget,
     renderSelectMultiOptgroupWidget,
     integrative_Granular,
     integrative_General
 } from '../shared';
 import PropTypes from "prop-types";
-import ReadoutWidget from "./ReadoutWidget";
 
 class OntologyWidget extends BaseWidget {
     /*
@@ -35,10 +32,10 @@ class OntologyWidget extends BaseWidget {
                     <label>
                         <input
                             type="radio"
-                            name="ontologyGroup"
+                            name="ontologyType"
                             onChange={this.handleRadioChange}
                             value={integrative_Granular}
-                            checked={state.ontologyGroup === integrative_Granular}
+                            checked={state.ontologyType === integrative_Granular}
                         />
                         Granular
                     </label>
@@ -48,10 +45,10 @@ class OntologyWidget extends BaseWidget {
                     <label>
                         <input
                             type="radio"
-                            name="ontologyGroup"
+                            name="ontologyType"
                             onChange={this.handleRadioChange}
                             value={integrative_General}
-                            checked={state.ontologyGroup === integrative_General}
+                            checked={state.ontologyType === integrative_General}
                         />
                         General
                     </label>
@@ -63,7 +60,7 @@ class OntologyWidget extends BaseWidget {
 
     _renderSelector(state) {
         let opts;
-        if (state.ontologyGroup === integrative_Granular) {
+        if (state.ontologyType === integrative_Granular) {
             opts = _.chain(state.Seazit_ontology)
                 .map((r) => {
                 return {
@@ -76,14 +73,11 @@ class OntologyWidget extends BaseWidget {
             .sortBy('developmental_defect_grouping_granular')
             .value()
             ;
-            console.log("opts")
-            console.log(opts)
-
             return renderSelectMultiWidget(
-                'ontologyDefectGrouping',
+                'ontologyGroup',
                 'Granular',
                 opts,
-                state.ontologyDefectGrouping,
+                state.ontologyGroup,
                 this.handleGranularChange
             );
         } else {
@@ -104,10 +98,10 @@ class OntologyWidget extends BaseWidget {
             console.log(opts)
 
             return renderSelectMultiWidget(
-                'ontologyDefectGrouping',
+                'ontologyGroup',
                 'General',
                 opts,
-                state.ontologyDefectGrouping,
+                state.ontologyGroup,
                 this.handleGeneralChange
             );
         }
@@ -115,8 +109,6 @@ class OntologyWidget extends BaseWidget {
 
     render() {
         let state = this.props.stateHolder.state;
-        console.log(state)
-
         return (
             <div className="clearfix">
                 {this._renderFilterBy(state)}
@@ -126,7 +118,7 @@ class OntologyWidget extends BaseWidget {
     }
 }
 
-ReadoutWidget.propTypes = {
+OntologyWidget.propTypes = {
     stateHolder: PropTypes.instanceOf(React.Component).isRequired,
     // hideViability: PropTypes.bool.isRequired,
     // hideNonViability: PropTypes.bool.isRequired,

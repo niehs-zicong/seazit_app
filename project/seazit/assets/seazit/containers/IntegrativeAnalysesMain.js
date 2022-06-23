@@ -56,18 +56,15 @@ class IntegrativeAnalysesMain extends React.Component {
             // HelpButtonWidget
             showHelpText: false,
 
-            // BmdWidget
-            bmdType: BMD_HILL,
-
-            // BmdWidget
-            ontologyGroup: integrative_Granular,
+            // ontologyWidget
+            ontologyType: integrative_Granular,
+            ontologyGroup:[],
 
             // ChemicalSelectorWidget
             chemList: CHEMLIST_80,
             chemicalFilterBy: CHEMFILTER_CATEGORY,
             chemicals: [],
             categories: [],
-            ontologyDefectGrouping:[],
             // ReadoutTypeWidget
             readoutType: READOUT_TYPE_CATEGORY,
 
@@ -83,6 +80,7 @@ class IntegrativeAnalysesMain extends React.Component {
 
             // HeatmapDisplaySelector
             heatmapDisplay: HEATMAP_ACTIVITY,
+
 
             selectivityList: [
                 {
@@ -108,7 +106,6 @@ class IntegrativeAnalysesMain extends React.Component {
                 }
             ],
         };
-                console.log(this.state)
 
     }
 
@@ -233,12 +230,13 @@ class IntegrativeAnalysesMain extends React.Component {
                 return (
                     <div>
                         <HeatmapHandler
-                            // bmdType={BMD_CW[this.state.bmdType]}
                             casrns={this.state.chemicals}
                             heatmapDisplay={this.state.heatmapDisplay}
-                            // readoutType={this.state.readoutType}
                             readouts={this.state.readouts}
-                            readoutCategories={this.state.readoutCategories}
+                            viz = {this.state.visualization}
+                            ontologyType = {this.state.ontologyType}
+                            ontologyGroup = {this.state.ontologyGroup}
+                            selectivityList={this.state.selectivityList}
                             url={url}
                         />
                         <p className="help-block">
@@ -248,17 +246,25 @@ class IntegrativeAnalysesMain extends React.Component {
                     </div>
                 );
             }
-            case INTVIZ_DevtoxHEATMAP: {
+
+
+           case INTVIZ_DevtoxHEATMAP: {
                 return (
                     <div>
-                        <BmdBoxplot
-                            bmdType={BMD_CW[this.state.bmdType]}
+                        <HeatmapHandler
                             casrns={this.state.chemicals}
-                            // readoutType={this.state.readoutType}
+                            heatmapDisplay={this.state.heatmapDisplay}
                             readouts={this.state.readouts}
-                            readoutCategories={this.state.readoutCategories}
+                            viz = {this.state.visualization}
+                            ontologyType = {this.state.ontologyType}
+                            ontologyGroup = {this.state.ontologyGroup}
+                            selectivityList={this.state.selectivityList}
                             url={url}
                         />
+                        <p className="help-block">
+                            <b>Interactivity note:</b> This heatmap is interactive. Click a cell to
+                            view individual dose-response curves associated with it.
+                        </p>
                     </div>
                 );
             }

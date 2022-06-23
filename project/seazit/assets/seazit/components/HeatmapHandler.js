@@ -3,18 +3,20 @@ import PropTypes from 'prop-types';
 import * as d3 from 'd3';
 import _ from 'lodash';
 import Loading from 'utils/Loading';
-import heatmap from './heatmap';
 import { svg_download_form, data_exportToJsonFile } from '../shared';
-
+import Heatmap from './Heatmap';
+import DevtoxHeatmap from './DevtoxHeatmap';
 import {
     READOUT_TYPE_READOUT,
     READOUT_TYPE_CATEGORY,
     HEATMAP_ACTIVITY,
     HEATMAP_BMC,
+    INTVIZ_DevtoxHEATMAP,
+    INTVIZ_HEATMAP,
     printFloat,
     renderNoDataAlert,
 } from '../shared';
-import Heatmap from './Heatmap';
+
 
 class HeatmapHandler extends React.Component {
     constructor(props) {
@@ -37,6 +39,10 @@ class HeatmapHandler extends React.Component {
                 return;
             }
             this.setState({ data });
+        console.log("aaaaa")
+
+        console.log(this.state)
+        console.log(this.props)
         });
     }
 
@@ -192,6 +198,60 @@ class HeatmapHandler extends React.Component {
         };
     };
 
+    _renderHeatmap(d) {
+            console.log(this.state)
+            console.log(this.props)
+
+        let
+            // hasChems = this.props.chemicals.length > 0,
+            // hasReadouts = this.props.readouts.length > 0,
+            // hasReadoutCategories = this.props.readoutCategories.length > 0,
+            readoutType,
+            viz = this.props.viz,
+            // viz = 5,
+
+            requiresFilters = [INTVIZ_HEATMAP, INTVIZ_DevtoxHEATMAP];
+        //
+        // let filtersRequired =
+        //     _.includes(requiresFilters, viz) &&
+        //     (!hasChems ||
+        //         (readoutType == READOUT_TYPE_READOUT && !hasReadouts) ||
+        //             (readoutType == READOUT_TYPE_CATEGORY && !hasReadoutCategories));
+        //
+        // if (filtersRequired) {
+        //     return renderNoSelected({
+        //         // hasReadouts: readoutType == READOUT_TYPE_READOUT ? hasReadouts : undefined,
+        //         // hasReadoutCategories:
+        //         //     readoutType == READOUT_TYPE_CATEGORY ? hasReadoutCategories : undefined,
+        //         // hasChems,
+        //     });
+        // }
+
+        switch (viz) {
+            case INTVIZ_HEATMAP: {
+                return (
+                    <div>
+                        <Heatmap data={d.data} legendData={"zw"} />
+                    </div>
+                );
+            }
+
+
+           case INTVIZ_DevtoxHEATMAP: {
+                return (
+                    <div>
+                        <DevtoxHeatmap data={d.data} legendData={"zw"} />
+                    </div>
+                );
+            }
+            default: {
+                throw 'Unknown visualization type';
+            }
+        }
+    }
+
+
+
     render() {
         if (!this.state.data) {
             return <Loading />;
@@ -208,19 +268,21 @@ class HeatmapHandler extends React.Component {
 
         return (
             <div>
-                <Heatmap data={d.data} legendData={"zw"} />
+                {this._renderHeatmap(d)}
+                {/*<Heatmap data={d.data} legendData={"zw"} />*/}
             </div>
         );
     }
 }
 
 HeatmapHandler.propTypes = {
-    // bmdType: PropTypes.string.isRequired,
     casrns: PropTypes.array.isRequired,
     heatmapDisplay: PropTypes.number.isRequired,
-    // readoutType: PropTypes.number.isRequired,
     readouts: PropTypes.array.isRequired,
-    readoutCategories: PropTypes.array.isRequired,
+    viz: PropTypes.number.isRequired,
+    ontologyType: PropTypes.number.isRequired,
+    ontologyGroup: PropTypes.array.isRequired,
+    selectivityList: PropTypes.array.isRequired,
     url: PropTypes.string.isRequired,
 
 };
