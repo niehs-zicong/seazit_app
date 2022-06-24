@@ -119,11 +119,9 @@ let renderPlot = function(el, data, legendData) {
       // width = 450 - margin.left - margin.right,
       // height = 450 - margin.top - margin.bottom,
     // xasix is column, yasix is row
-     xKeys= d3.map(data, function(d){return (d.protocol_name_plot + d.use_category1 );})
-         .keys(),
+     xKeys= d3.map(data, function(d){return (d.protocol_name_plot + d.use_category1 );}).keys(),
     //, yasix is row
-       yKeys = d3.map(data, function(d){return (d.preferred_name);})
-        .keys(),
+       yKeys = d3.map(data, function(d){return (d.preferred_name);}).keys(),
        domain = d3.set(data.map(function(d) { return d.mean_selectivity })).values(),
        num = Math.sqrt(data.length),
 
@@ -203,10 +201,8 @@ let renderPlot = function(el, data, legendData) {
         console.log(data)
     console.log("zicong function")
 
-    // console.log(x)
-    // console.log(y)
-    console.log(xKeys)
-    console.log(yKeys)
+    console.log(x)
+    console.log(y)
 
 
         let xScale = d3
@@ -216,17 +212,6 @@ let renderPlot = function(el, data, legendData) {
     let yScale = d3.scaleBand()
         .domain(yKeys)
         .range([0, chartHeight]);
-
-      //     // X scale
-      //  xScale = d3.scalePoint()
-      //   .range([0, chartWidth])
-      //   .domain(xKeys)
-      //
-      // // Y scale
-      //  yScale = d3.scalePoint()
-      //   .range([0, chartHeight])
-      //   .domain(yKeys)
-
 
       // Create one 'g' element for each cell of the correlogram
        var cor = svg.selectAll(".cor")
@@ -240,11 +225,14 @@ let renderPlot = function(el, data, legendData) {
                 `translate(${xScale(d.protocol_name_plot + d.use_category1) + xScale.bandwidth() / 2}, ${yScale(d.preferred_name) +
                     yScale.bandwidth() / 2})`
             )
-           return (
-                `translate(${xScale(d.protocol_name_plot + d.use_category1)}, ${yScale(d.preferred_name) 
-                    })`
-            )
           })
+
+        // .attr(
+        //     'transform',
+        //     (d) =>
+        //         `translate(${x(d.protocol_name_plot + d.use_category1 ) + x.bandwidth() / 2}, ${y(d.preferred_name) +
+        //             y.bandwidth() / 2})`
+        //     )
        ;
 
       // Up right part: add circles

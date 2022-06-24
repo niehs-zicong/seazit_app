@@ -582,9 +582,6 @@ class Seazit_readout_result(models.Model):
                 "protocol_name_plot",
                 "endpoint_name_protocol",
         )
-        print (protocol_ids)
-        print (readout_ids)
-        print (chemical_ids)
         analysisbmcoutput =Seazit_bmc_readout_result.objects.filter(
                 protocol_id__in=protocol_ids , endpoint_name_protocol__in=readout_ids, casrn__in=chemical_ids
                 ).values(*cols)
@@ -629,9 +626,9 @@ class Seazit_readout_result(models.Model):
             "protocol_name_long",
             "protocol_name_plot",
         )
-        print (protocol_ids)
-
-        print (readout_ids)
+        # print (protocol_ids)
+        #
+        # print (readout_ids)
         bmdActivitySelectivity =Seazit_bmc_result.objects.filter(
                 protocol_id__in=protocol_ids , endpoint_name_protocol__in=readout_ids
                 ).values(*cols)
@@ -695,9 +692,9 @@ class Seazit_readout_result(models.Model):
             "seazit_recording_id",
 
         )
-        print (protocol_ids)
-        print (readout_ids)
-        print (chemical_ids)
+        # print (protocol_ids)
+        # print (readout_ids)
+        # print (chemical_ids)
 
         bmdActivitySelectivity =Seazit_integrative_result.objects.filter(
                 protocol_id__in=protocol_ids , endpoint_name_protocol__in=readout_ids, casrn__in=chemical_ids
