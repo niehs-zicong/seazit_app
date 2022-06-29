@@ -21,14 +21,12 @@ import ReadoutTypeWidget from '../widgets/ReadoutTypeWidget';
 import CheckBoxWidget from "../widgets/CheckBoxWidget";
 
 import {
-    BMD_HILL,
     HEATMAP_ACTIVITY,
     INTVIZ_DevtoxHEATMAP,
     INTVIZ_ASSAY_PCA,
     INTVIZ_CHEMICAL_PCA,
     INTVIZ_HEATMAP,
     CHEMFILTER_CATEGORY,
-    CHEMLIST_80,
     READOUT_TYPE_CATEGORY,
     READOUT_TYPE_READOUT,
     IntegrativeAnalysesTab,
@@ -37,13 +35,7 @@ import {
     loadMetadata,
     renderNoSelected,
     getIntegrativeUrl,
-    svg_download_form, getDoseResponsesUrl,
 } from '../shared';
-
-let BMD_CW = {
-    1: 'curvep',
-    2: 'hill',
-};
 
 class IntegrativeAnalysesMain extends React.Component {
     constructor(props) {
@@ -61,7 +53,6 @@ class IntegrativeAnalysesMain extends React.Component {
             ontologyGroup:[],
 
             // ChemicalSelectorWidget
-            chemList: CHEMLIST_80,
             chemicalFilterBy: CHEMFILTER_CATEGORY,
             chemicals: [],
             categories: [],
@@ -80,7 +71,7 @@ class IntegrativeAnalysesMain extends React.Component {
 
             // HeatmapDisplaySelector
             heatmapDisplay: HEATMAP_ACTIVITY,
-
+            tabFlag: IntegrativeAnalysesTab,
 
             selectivityList: [
                 {
@@ -148,11 +139,7 @@ class IntegrativeAnalysesMain extends React.Component {
                         displayed.
                     </li>
                     <li>
-                        <b>Boxplot:</b> Each boxplot represents all BMCs for a given readout or
-                        endpoint category, and all selected chemicals. The box in the boxplot
-                        highlights the median (solid line), 25th, and 75th percentiles. Upper and
-                        lower tails are the 5th and 95th percentile. The mean is shown as a dotted
-                        line within each box.
+                        <b>XXX:</b>
                     </li>
                 </ol>
                 <p>
@@ -186,7 +173,6 @@ class IntegrativeAnalysesMain extends React.Component {
                     hideNonViability={false}
                     multiAssaySelector={true}
                     multiReadoutSelector={true}
-                    tabName={IntegrativeAnalysesTab}
                 />
             );
         }
@@ -204,7 +190,6 @@ class IntegrativeAnalysesMain extends React.Component {
 
     _renderMainBody(url) {
         let hasChems = this.state.chemicals.length > 0,
-            hasReadouts = this.state.readouts.length > 0,
             hasReadoutCategories = this.state.readoutCategories.length > 0,
             readoutType,
             viz = this.state.visualization,
@@ -282,8 +267,10 @@ class IntegrativeAnalysesMain extends React.Component {
         let isPca = _.includes([INTVIZ_ASSAY_PCA, INTVIZ_CHEMICAL_PCA], this.state.visualization),
             isHeatmap = this.state.visualization === INTVIZ_HEATMAP;
         console.log(this.state)
-        let url = getIntegrativeUrl(this.state.assays, this.state.readouts, this.state.chemicals);
-        url = '/seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=2,3,4&readouts=Mortality@24_2,Mortality@120_2,MalformedAny+Mort@120_2,AXIS+Mort@120_2,BRN_+Mort@120_2,CRAN+Mort@120_2,necrosis+Mort@120_3,notochord_defect+Mort@120_3,scoliosis+Mort@120_3,tail_bending+Mort@120_3,Mortality@24_4,Mortality@120_4,MalformedAny+Mort@120_4&casrns=51-52-5,115-86-6,2078-54-8,71751-41-2,56-35-9,36734-19-7,26787-78-0,53-70-3,127-07-1,43121-43-3,108-46-3,84-74-2,95-76-1,5598-15-2,2921-88-2,56-53-1,137-30-4,58-89-9,116-06-3,58-08-2,330-55-2,80-05-7,76738-62-0,298-02-2,99-66-1,69806-50-4,75-07-0,50-35-1,95737-68-1,83-79-4,85509-19-9,13674-87-8,1912-24-9,1069-66-5,50-78-2,79-94-7,129-00-0'
+        // let url = getIntegrativeUrl(this.state.assays, this.state.chemicals, this.state.ontologyType, this.state.ontologyGroup);
+        let url = getIntegrativeUrl(this.state.assays, this.state.chemicals);
+
+        // url = '/seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=2,3,4&readouts=Mortality@24_2,Mortality@120_2,MalformedAny+Mort@120_2,AXIS+Mort@120_2,BRN_+Mort@120_2,CRAN+Mort@120_2,necrosis+Mort@120_3,notochord_defect+Mort@120_3,scoliosis+Mort@120_3,tail_bending+Mort@120_3,Mortality@24_4,Mortality@120_4,MalformedAny+Mort@120_4&casrns=51-52-5,115-86-6,2078-54-8,71751-41-2,56-35-9,36734-19-7,26787-78-0,53-70-3,127-07-1,43121-43-3,108-46-3,84-74-2,95-76-1,5598-15-2,2921-88-2,56-53-1,137-30-4,58-89-9,116-06-3,58-08-2,330-55-2,80-05-7,76738-62-0,298-02-2,99-66-1,69806-50-4,75-07-0,50-35-1,95737-68-1,83-79-4,85509-19-9,13674-87-8,1912-24-9,1069-66-5,50-78-2,79-94-7,129-00-0'
         console.log(url)
         return (
             <div className="row-fluid">
@@ -298,9 +285,6 @@ class IntegrativeAnalysesMain extends React.Component {
                 </div>
                 <div className="col-md-3">
                     <IntegrativePlotWidget stateHolder={this} />
-                    {/*{isHeatmap*/}
-                    {/*    ? [<hr key="0" />, <HeatmapDisplaySelector key="1" stateHolder={this} />]*/}
-                    {/*    : null}*/}
                     <hr />
                     <ReadoutWidget
                     stateHolder={this}
@@ -308,15 +292,19 @@ class IntegrativeAnalysesMain extends React.Component {
                     hideNonViability={false}
                     multiAssaySelector={true}
                     multiReadoutSelector={true}
-                    tabName={IntegrativeAnalysesTab}
                     />
                     <hr />
-                    <ChemicalWidget stateHolder={this} />
-                    <hr />
-                    <CheckBoxWidget stateHolder={this} />
-                    <hr />
-                    <OntologyWidget stateHolder={this} />
+                    {this.state.visualization === INTVIZ_DevtoxHEATMAP ?
+                        (
+                            <div>
+                                <OntologyWidget stateHolder={this} />
+                                    <hr />
+                            </div>
+                        ) : null}
 
+                    <ChemicalWidget stateHolder={this} />
+                    {/*<hr />*/}
+                    {/*<CheckBoxWidget stateHolder={this} />*/}
                 </div>
 
                 <div className="col-md-9">

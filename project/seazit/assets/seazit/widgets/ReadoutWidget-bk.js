@@ -8,9 +8,6 @@ import {
     renderSelectMultiWidget,
     renderSelectSingleWidget,
     renderSelectMultiOptgroupWidget,
-    ConcentrationResponseTab,
-    BMCTab,
-    IntegrativeAnalysesTab,
 } from '../shared';
 
 class ReadoutWidget extends BaseWidget {
@@ -22,101 +19,6 @@ class ReadoutWidget extends BaseWidget {
         super(props);
     }
 
-
-    _renderSingleDatasetSelector(state) {
-        let options = _.chain(state.protocol_data)
-            .map((r) => {
-                return {
-                    key: r.seazit_protocol_id,
-                    label: r.protocol_name_long,
-                    protocol_name: r.protocol_name,
-                    description: r.protocol_name_plot,
-                    protocol_type: r.protocol_type,
-                    protocol_source: r.protocol_source,
-                    seazit_protocol_id: r.seazit_protocol_id,
-                    lab_anonymous_code: r.lab_anonymous_code,
-                    study_phase: r.study_phase,
-                    test_condition: r.test_condition,
-                    protocol_name_long: r.protocol_name_long,
-                    protocol_name_plot: r.protocol_name_plot,
-                };
-            })
-            .sortBy('seazit_protocol_id')
-            .value();
-
-            return renderSelectSingleWidget(
-                'assay',
-                'dataset',
-                options,
-                state.assay,
-                this.handleSelectChange,
-            );
-
-    }
-
-    _renderSingleEndpointSelector(state) {
-        let assays =  [state.assay];
-        let opts = _.chain(state.Seazit_ui_panel)
-            .filter((r) => {
-                return _.includes(assays, r.seazit_protocol_id.toString());
-            })
-            .map((r) => {
-                    return {
-                        key: r.endpoint_name_protocol.toString(),
-                        category: r.protocol_name_plot,
-                        label: r.endpoint_name,
-                        description: r.endpoint_description,
-                        protocol_name: r.protocol_name,
-                        seazit_protocol_id: r.seazit_protocol_id.toString(),
-                        study_phase: r.study_phase,
-                        test_condition: r.test_condition,
-                        protocol_name_long: r.protocol_name_long,
-                        protocol_name_plot: r.protocol_name_plot,
-                        endpoint_name_protocol: r.endpoint_name_protocol,
-                    };
-                })
-                .sortBy('label')
-                .sortBy('category')
-                .groupBy('category')
-                .value();
-                   Object.values(opts).forEach((val) => {
-                val.forEach(function(item, index) {
-                    if (
-                        item.key == 'Mortality@120' ||
-                        item.key == 'Mortality@24' ||
-                        item.key.includes('@24')
-                    ) {
-                        delete val[index];
-                    }
-                });
-            });
-
-            let endpointCases = ['MalformedAny+Mort@120'];
-            Object.values(opts).forEach((val) => {
-                val.forEach(function(item, i) {
-                    if (endpointCases.includes(item.label)) {
-                        val.splice(i, 1);
-                        val.unshift(item);
-                    }
-                });
-            });
-            if (_.keys(opts).length === 0) {
-                return null;
-            }
-            // single selections.
-            opts = Object.values(opts)[0];
-            return renderSelectSingleWidget(
-                'readouts',
-                'endpoint',
-                opts,
-                state.readouts,
-                this.handleSelectChange
-            );
-    }
-
-
-
-
     _renderAssaySelector(state) {
         let options = _.chain(state.protocol_data)
             .map((r) => {
@@ -124,7 +26,9 @@ class ReadoutWidget extends BaseWidget {
                     key: r.seazit_protocol_id,
                     label: r.protocol_name_long,
                     protocol_name: r.protocol_name,
+                    // description: r.endpoint_description,
                     description: r.protocol_name_plot,
+
                     protocol_type: r.protocol_type,
                     protocol_source: r.protocol_source,
                     seazit_protocol_id: r.seazit_protocol_id,
@@ -270,39 +174,12 @@ class ReadoutWidget extends BaseWidget {
     render() {
         let state = this.props.stateHolder.state;
         console.log(state)
-        switch (state.tabFlag)
-            {
-                case ConcentrationResponseTab:
-                    return(
-                        <div>
-
-                            {this._renderAssaySelector(state)}
-                            {this._renderReadoutSelector(state)}
-                        </div>
-                    )
-            };
-        switch (state.tabFlag)
-            {
-                case BMCTab:
-                    return(
-                        <div>
-                            {this._renderSingleDatasetSelector(state)}
-                            {this._renderSingleEndpointSelector(state)}
-
-                        </div>
-                    )
-            };
-        switch (state.tabFlag)
-            {
-                case IntegrativeAnalysesTab:
-                    return(
-                        <div>
-
-                            {this._renderAssaySelector(state)}
-
-                        </div>
-                    )
-            };
+        return (
+            <div>
+                {this._renderAssaySelector(state)}
+                {this._renderReadoutSelector(state)}
+            </div>
+        );
     }
 }
 

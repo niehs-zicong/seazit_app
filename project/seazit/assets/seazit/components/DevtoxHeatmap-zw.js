@@ -119,9 +119,9 @@ let renderPlot = function(el, data, legendData) {
       // width = 450 - margin.left - margin.right,
       // height = 450 - margin.top - margin.bottom,
     // xasix is column, yasix is row
-     xKeys= d3.map(data, function(d){return (d.protocol_name_plot + d.use_category1 );}).keys(),
+     xKeys= d3.map(data, function(d){return (d.x);}).keys(),
     //, yasix is row
-       yKeys = d3.map(data, function(d){return (d.preferred_name);}).keys(),
+       yKeys = d3.map(data, function(d){return (d.y);}).keys(),
        domain = d3.set(data.map(function(d) { return d.mean_selectivity })).values(),
        num = Math.sqrt(data.length),
 
@@ -222,7 +222,7 @@ let renderPlot = function(el, data, legendData) {
           .attr("transform", function(d) {
             // return "translate(" + ${x(d.protocol_name_plot + d.use_category1)} + "," + ${y(d.preferred_name)} + ")";
             return (
-                `translate(${xScale(d.protocol_name_plot + d.use_category1) + xScale.bandwidth() / 2}, ${yScale(d.preferred_name) +
+                `translate(${xScale(d.x) + xScale.bandwidth() / 2}, ${yScale(d.y) +
                     yScale.bandwidth() / 2})`
             )
           })

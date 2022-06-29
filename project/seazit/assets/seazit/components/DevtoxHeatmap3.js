@@ -119,195 +119,137 @@ let renderPlot = function(el, data, legendData) {
       // width = 450 - margin.left - margin.right,
       // height = 450 - margin.top - margin.bottom,
     // xasix is column, yasix is row
-     xasix= d3.map(data, function(d){return (d.protocol_name_plot + d.use_category1 );}).keys(),
-
+     xKeys= d3.map(data, function(d){return (d.protocol_name_plot + d.use_category1 );})
+         .keys(),
     //, yasix is row
-       yasix = d3.map(data, function(d){return (d.preferred_name);}).keys(),
+       yKeys = d3.map(data, function(d){return (d.preferred_name);})
+        .keys(),
+       domain = d3.set(data.map(function(d) { return d.mean_selectivity })).values(),
+       selectivityDomain = d3.extent(_.map(data, 'mean_selectivity')),
+       num = Math.sqrt(data.length),
 
-    width = xasix.length * cellSize + margin.axisLeft + margin.left + margin.right + margin.legend,
-    height = yasix.length * cellSize + margin.axisTop + margin.top + margin.bottom,
-
-
+    width = xKeys.length * cellSize + margin.axisLeft + margin.left + margin.right + margin.legend,
+    height = yKeys.length * cellSize + margin.axisTop + margin.top + margin.bottom,
+      // width = 450 - margin.left - margin.right,
+      // height = 450 - margin.top - margin.bottom,
 
       // List of all variables and number of them
-       domain = d3.set(data.map(function(d) { return d.mean_selectivity })).values(),
-       num = Math.sqrt(data.length),
 
         chartHeight = height - (margin.top + margin.bottom + margin.axisTop),
         chartWidth = width - (margin.left + margin.right + margin.axisLeft + margin.legend),
-
+          // chartHeight = 450 - margin.top - margin.bottom,
+          // chartWidth = 450 - margin.left - margin.right,
           // Build color scale
      selectivityColor = d3.scaleSequential()
         .interpolator(d3.interpolateInferno)
         .domain([-1,1]),
 
-        // how we get this 900,  check cellSize = 30.  30*30 = 900.
         square = d3
             .symbol()
             .type(d3.symbolSquare)
             .size(900),
-            // .size(1600),
-
-
-        // Create the svg area
-         svg = d3
-             .select(el)
+            // Create the svg area
+         svg = d3.select(el)
           .append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
           .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-      // Create a color scale
-      var color = d3.scaleLinear()
-        .domain([-1, 0, 1])
-        .range(["#B22222", "#fff", "#000080"]);
 
-      // Create a size scale for bubbles on top right. Watch out: must be a rootscale!
-      var size = d3.scaleSqrt()
-        .domain([-1, 1])
-        .range([0, 9]);
-      // X scale
-      // var x = d3.scalePoint()
-      //   .range([0, width])
-      //   .domain(domain)
-      //
-      // // Y scale
-      // var y = d3.scalePoint()
-      //   .range([0, height])
-      //   .domain(domain)
+        console.log(domain)
+        console.log(selectivityDomain)
 
-
-     let axisLayer = svg
-        .append('g')
-        .classed('axisLayer', true)
-        .attr('width', width)
-        .attr('height', height);
-
-          //   console.log(xasix)
-          // console.log(yasix)
-          // console.log(domain)
-
-
-    // draw y-axis
+        // draw y-axis
     let yScale = d3
          .scaleBand()
-        .domain(yasix)
-        .range([0, chartHeight]);
-
-    let yAxis = d3.axisLeft(yScale).tickSizeOuter(0);
-
-    axisLayer
-        .append('g')
-        .attr(
-            'transform',
-            `translate(${margin.left + margin.axisLeft}, ${margin.top + margin.axisTop})`
-        )
-        .attr('class', 'axis y')
-        .call(yAxis)
-        .selectAll('text')
-        .style('cursor', 'pointer')
-        // .on('click', handleYLabelClick)
+        .range([chartHeight, 0])
+        .domain(yKeys)
+        .padding(0.05)
         ;
-
-    // draw x-axis
 
     let xScale = d3
         .scaleBand()
-        .domain(xasix)
-        .range([0, chartWidth]);
-
-    let xAxis = d3.axisTop(xScale).tickSizeOuter(0);
-
-    axisLayer
-        .append('g')
-        .attr(
-            'transform',
-            `translate(${margin.left + margin.axisLeft}, ${margin.top + margin.axisTop})`
-        )
-        .attr('class', 'axis x')
-        .call(xAxis)
-        .selectAll('text')
-        .attr('dx', '.8em')
-        .attr('dy', '.55em')
-        .attr('transform', 'rotate(-65)')
-        .style('text-anchor', 'start')
-        .style('cursor', 'pointer')
-        // .on('click', handleXLabelClick)
+        .range([0, chartWidth])
+        .domain(xKeys)
+        .padding(0.05)
         ;
-            console.log("zw  data")
-
-    console.log(data)
-    let chartLayer = svg
-        .append('g')
-        .classed('chartLayer', true)
-        .attr('width', chartWidth)
-        .attr('height', chartHeight)
-        .attr(
-            'transform',
-            `translate(${margin.left + margin.axisLeft}, ${margin.top + margin.axisTop})`
-        );
-
-        // plot bounding box
-    chartLayer
-        .append('rect')
-        .attr('x', xScale.range()[0])
-        .attr('y', yScale.range()[0])
-        .attr('width', xScale.range()[1])
-        .attr('height', yScale.range()[1])
-        .attr('mask', 'url(#stripeMask)')
-        .attr('fill', '#ccc');
-
-    chartLayer
-        .append('rect')
-        .attr('x', xScale.range()[0])
-        .attr('y', yScale.range()[0])
-        .attr('width', xScale.range()[1])
-        .attr('height', yScale.range()[1])
-        .attr('fill', 'transparent')
-        .style('stroke', 'black')
-        .style('stroke-width', 2);
 
 
+    // let xScale = d3
+    //     .scaleBand()
+    //     .domain(xKeys)
+    //     .range([0, chartWidth]);
+    // let yScale = d3.scaleBand()
+    //     .domain(yKeys)
+    //     .range([0, chartHeight]);
 
-    chartLayer
-        .selectAll('.square')
+
+      svg.append("g")
+        .style("font-size", 15)
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisTop(xScale).tickSizeOuter(0))
+        // .attr('dx', '.8em')
+        // .attr('dy', '.55em')
+        // .attr('transform', 'rotate(-65)')
+        // .select(".domain").remove()
+
+      svg.append("g")
+        .style("font-size", 15)
+        .call(d3.axisLeft(yScale).tickSizeOuter(0))
+        // .select(".domain").remove()
+
+      // Create a color scale
+      var colorRange = d3.extent(_.map(data, 'mean_selectivity'));
+      // [-0.20605, 3.1549] is min and max for allset data from table.
+      // var colorRange = [-0.20605, 3.1549];
+
+      console.log(colorRange)
+      var color = d3.scaleLinear()
+        // .domain([-1, 0, 1])
+        .domain(colorRange)
+        // .range(["#B22222", "#fff", "#000080"]);
+        .range(['red', 'blue']);
+
+            // Create a size scale for bubbles on top right. Watch out: must be a rootscale!
+      var size = d3.scaleSqrt()
+        .domain([0, 1])
+        .range([0, 9]);
+
+      console.log("data")
+      console.log(data)
+
+      // Create one 'g' element for each cell of the correlogram
+       var cor = svg.selectAll(".cor")
         .data(data)
         .enter()
-        .append('path')
-        .attr('class', 'square')
-        .attr('d', square)
-        // .attr('fill', (d) => d.fill)
-        // .attr('fill', (d) =>  selectivityColor(d.mean_selectivity))
-        .style('fill', (d) =>  selectivityColor(d.mean_selectivity))
-        .attr(
-            'transform',
-            (d) =>
-                `translate(${xScale(d.protocol_name_plot + d.use_category1 ) + xScale.bandwidth() / 2}, ${yScale(d.preferred_name) +
+        .append("g")
+          .attr("class", "cor")
+          .attr("transform", function(d) {
+            // return "translate(" + ${x(d.protocol_name_plot + d.use_category1)} + "," + ${y(d.preferred_name)} + ")";
+            return (
+                `translate(${xScale(d.protocol_name_plot + d.use_category1) + xScale.bandwidth() / 2}, ${yScale(d.preferred_name) +
                     yScale.bandwidth() / 2})`
             )
-        .style('stroke', 'black')
-        .style('stroke-width', '0.8')
-        .style('cursor', 'pointer')
-            ;
+           return (
+                `translate(${xScale(d.protocol_name_plot + d.use_category1)}, ${yScale(d.preferred_name) 
+                    })`
+            )
+          })
+       ;
 
-
-      // chartLayer = svg
-      //   .append('g')
-
-
-      //   .classed('chartLayer', true)
-      //   .attr('width', chartWidth)
-      //   .attr('height', chartHeight)
-      //   .attr(
-      //       'transform',
-      //       `translate(${margin.left + margin.axisLeft}, ${margin.top + margin.axisTop})`
-      //   );
+      // Up right part: add circles
+       cor.append("circle")
+          .attr("r", function(d){ return size(Math.abs(d.mean_selectivity)) })
+          .style("fill", function(d){
+              return color(d.mean_selectivity);
+          })
+          .style("opacity", 0.8)
 
 
 };
 
-class Heatmap extends Component {
+class DevtoxHeatmap extends Component {
     constructor(props) {
         super(props);
         this.handleResize = this.handleResize.bind(this);
@@ -354,7 +296,7 @@ class Heatmap extends Component {
     }
 }
 
-Heatmap.propTypes = {
+DevtoxHeatmap.propTypes = {
     data: PropTypes.arrayOf(
         PropTypes.shape({
             x: PropTypes.string,
@@ -379,4 +321,4 @@ Heatmap.propTypes = {
     }).isRequired,
 };
 
-export default Heatmap;
+export default DevtoxHeatmap;

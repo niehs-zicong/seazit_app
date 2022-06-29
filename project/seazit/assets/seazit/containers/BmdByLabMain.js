@@ -22,6 +22,7 @@ import {
     BMDVIZ_SELECTIVITY,
     loadMetadata,
     renderNoSelected,
+    BMCTab,
 } from '../shared';
 
 class BmdByLabMain extends React.Component {
@@ -76,6 +77,7 @@ class BmdByLabMain extends React.Component {
             readouts: [],
 
             visualization: BMDVIZ_ACTIVITY,
+            tabFlag: BMCTab,
         };
     }
 
@@ -170,7 +172,6 @@ class BmdByLabMain extends React.Component {
                         hideNonViability={false}
                         multiAssaySelector={false}
                         multiReadoutSelector={false}
-                        tabName={'BmdByLabMain'}
                     />
                     <hr />
                     <BmdByLabPlotWidget stateHolder={this} />

@@ -224,7 +224,18 @@ const AXIS_LINEAR = 1,
         return `${URL_BMD}?format=json&protocol_ids=${id}&readouts=${ro}`;
     },
 
-    getIntegrativeUrl = function(protocol_ids, readout_ids, casrns) {
+    getIntegrativeUrl = function(protocol_ids, casrns) {
+        if (protocol_ids.length === 0  || casrns.length === 0) {
+            return null;
+        }
+        let ids = protocol_ids.join(','),
+            chems = casrns.join(',');
+        // return url, ro is the readout_id
+        // console.log(ids, ro, chems);
+        return `${URL_INTEGRATIVE}?format=json&protocol_ids=${ids}&casrns=${chems}`;
+    },
+
+        getIntegrativeUrl2 = function(protocol_ids, readout_ids, casrns) {
         if (protocol_ids.length === 0 || readout_ids.length === 0 || casrns.length === 0) {
             return null;
         }

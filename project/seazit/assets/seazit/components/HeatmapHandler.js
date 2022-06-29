@@ -148,8 +148,7 @@ class HeatmapHandler extends React.Component {
                 this.state.continuousColorScale
             ),
             // readout_ids = this.props.readouts.map((d) => parseInt(d)),
-            data;
-            data = _.chain(this.state.data.bmd_activity_selectivity)
+            data = _.chain(this.state.data.integrative_activity_selectivity)
                     .map((d) => {
                         return {
                             casrn: d.casrn,
@@ -162,12 +161,10 @@ class HeatmapHandler extends React.Component {
                             final_dev_call: d.final_dev_call,
                             lab_anonymous_code: d.lab_anonymous_code,
                             malformation: d.malformation,
-
                             max_highest_conc: d.max_highest_conc,
                             max_pod_med: d.max_pod_med,
                             mean_pod: d.mean_pod,
                             mean_selectivity: d.mean_selectivity,
-
                             med_hitconf: d.med_hitconf,
                             med_mort_hit_confidence: d.med_mort_hit_confidence,
                             med_pod_med: d.med_pod_med,
@@ -187,6 +184,8 @@ class HeatmapHandler extends React.Component {
                             protocol_name_plot:   d.protocol_name_plot ,
                             test_condition:   d.test_condition  ,
                             use_category1:  d.use_category1  ,
+                            x: d.protocol_name_plot + "-" + d.use_category1,
+                            y: d.preferred_name,
                         };
                     })
                     .sortBy('med_pod_med')

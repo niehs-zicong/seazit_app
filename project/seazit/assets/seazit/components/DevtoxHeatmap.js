@@ -42,9 +42,9 @@ let addStripMask = function(svg) {
 
 let renderPlot = function(el, data, legendData) {
     $(el).empty();
-    console.log(data)
     // let margin = {top: 80, right: 25, bottom: 30, left: 40},
-    let margin = {
+    let
+        margin = {
             top: 10,
             left: 10,
             bottom: 40,
@@ -119,31 +119,27 @@ let renderPlot = function(el, data, legendData) {
       // width = 450 - margin.left - margin.right,
       // height = 450 - margin.top - margin.bottom,
     // xasix is column, yasix is row
-     xKeys= d3.map(data, function(d){return (d.protocol_name_plot + d.use_category1 );})
+     xKeys= d3.map(data, function(d){return d.x ;})
          .keys(),
     //, yasix is row
-       yKeys = d3.map(data, function(d){return (d.preferred_name);})
+       yKeys = d3.map(data, function(d){return d.y;})
         .keys(),
        domain = d3.set(data.map(function(d) { return d.mean_selectivity })).values(),
+       selectivityDomain = d3.extent(_.map(data, 'mean_selectivity')),
        num = Math.sqrt(data.length),
 
     width = xKeys.length * cellSize + margin.axisLeft + margin.left + margin.right + margin.legend,
     height = yKeys.length * cellSize + margin.axisTop + margin.top + margin.bottom,
-
       // List of all variables and number of them
 
         chartHeight = height - (margin.top + margin.bottom + margin.axisTop),
         chartWidth = width - (margin.left + margin.right + margin.axisLeft + margin.legend),
-
+          // chartHeight = 450 - margin.top - margin.bottom,
+          // chartWidth = 450 - margin.left - margin.right,
           // Build color scale
      selectivityColor = d3.scaleSequential()
         .interpolator(d3.interpolateInferno)
         .domain([-1,1]),
-
-        square = d3
-            .symbol()
-            .type(d3.symbolSquare)
-            .size(900),
             // Create the svg area
          svg = d3.select(el)
           .append("svg")
@@ -153,79 +149,73 @@ let renderPlot = function(el, data, legendData) {
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
-          // Build X , Y scales and axis:
-     var  xAxis = d3.scaleBand()
-        .range([ 0, width ])
+        console.log(domain)
+        console.log(selectivityDomain)
+
+        // draw y-axis
+    let yScale = d3
+         .scaleBand()
+        .range([chartHeight, 0])
+        .domain(yKeys)
+        .padding(0.05)
+        ;
+
+    let xScale = d3
+        .scaleBand()
+        .range([0, chartWidth])
         .domain(xKeys)
-        .padding(0.05);
+        .padding(0.05)
+        ;
+
+
+    // let xScale = d3
+    //     .scaleBand()
+    //     .domain(xKeys)
+    //     .range([0, chartWidth]);
+    // let yScale = d3.scaleBand()
+    //     .domain(yKeys)
+    //     .range([0, chartHeight]);
+
 
       svg.append("g")
         .style("font-size", 15)
-        // .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(xAxis).tickSizeOuter(0))
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisTop(xScale).tickSizeOuter(0))
         // .attr('dx', '.8em')
         // .attr('dy', '.55em')
         // .attr('transform', 'rotate(-65)')
         // .select(".domain").remove()
 
-      var yAxis = d3.scaleBand()
-        .range([ height, 0 ])
-        .domain(yKeys)
-        .padding(0.05);
-
       svg.append("g")
         .style("font-size", 15)
-        .call(d3.axisLeft(yAxis).tickSizeOuter(0))
+        .call(d3.axisLeft(yScale).tickSizeOuter(0))
         // .select(".domain").remove()
 
       // Create a color scale
-      var color = d3.scaleLinear()
-        .domain([-1, 0, 1])
-        .range(["#B22222", "#fff", "#000080"]);
+      var colorRange = d3.extent(_.map(data, 'mean_selectivity'));
+      // [-0.20605, 3.1549] is min and max for allset data from table.
+      // var colorRange = [-0.20605, 3.1549];
 
+      console.log(colorRange)
+      var color = d3.scaleLinear()
+        // .domain([-1, 0, 1])
+        .domain(colorRange)
+        // .range(["#B22222", "#fff", "#000080"]);
+        .range(['red', 'blue']);
 
             // Create a size scale for bubbles on top right. Watch out: must be a rootscale!
       var size = d3.scaleSqrt()
         .domain([0, 1])
         .range([0, 9]);
 
-      // X scale
-      var x = d3.scalePoint()
-        .range([0, width])
-        .domain(domain)
+      console.log("data")
+      console.log(data)
 
-      // Y scale
-      var y = d3.scalePoint()
-        .range([0, height])
-        .domain(domain)
-
-        console.log("zw  data")
-        console.log(data)
-    console.log("zicong function")
-
-    // console.log(x)
-    // console.log(y)
-    console.log(xKeys)
-    console.log(yKeys)
-
-
-        let xScale = d3
-        .scaleBand()
-        .domain(xKeys)
-        .range([0, chartWidth]);
-    let yScale = d3.scaleBand()
-        .domain(yKeys)
-        .range([0, chartHeight]);
-
-      //     // X scale
-      //  xScale = d3.scalePoint()
-      //   .range([0, chartWidth])
-      //   .domain(xKeys)
-      //
-      // // Y scale
-      //  yScale = d3.scalePoint()
-      //   .range([0, chartHeight])
-      //   .domain(yKeys)
+     let square = d3
+            .symbol()
+            .type(d3.symbolSquare)
+            .size(900);
+            // .size(1600),
 
 
       // Create one 'g' element for each cell of the correlogram
@@ -235,14 +225,9 @@ let renderPlot = function(el, data, legendData) {
         .append("g")
           .attr("class", "cor")
           .attr("transform", function(d) {
-            // return "translate(" + ${x(d.protocol_name_plot + d.use_category1)} + "," + ${y(d.preferred_name)} + ")";
             return (
-                `translate(${xScale(d.protocol_name_plot + d.use_category1) + xScale.bandwidth() / 2}, ${yScale(d.preferred_name) +
+                `translate(${xScale(d.x) + xScale.bandwidth() / 2}, ${yScale(d.y) +
                     yScale.bandwidth() / 2})`
-            )
-           return (
-                `translate(${xScale(d.protocol_name_plot + d.use_category1)}, ${yScale(d.preferred_name) 
-                    })`
             )
           })
        ;
