@@ -11,6 +11,7 @@ import styles from './graph.css';
 // import styles from './ResponseFigure.css';
 
 import { getLog10AxisFunction } from 'utils/d3';
+import Heatmap from "./Heatmap";
 
 let addStripMask = function(svg) {
     // add strip mask to top of d3-selected svg
@@ -40,7 +41,7 @@ let addStripMask = function(svg) {
         .style('fill', 'url(#maskStripePattern)');
 };
 
-let renderPlot = function(el, data, legendData) {
+let renderPlot = function(el, data) {
     $(el).empty();
     // let margin = {top: 80, right: 25, bottom: 30, left: 40},
     let
@@ -149,8 +150,8 @@ let renderPlot = function(el, data, legendData) {
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
-        console.log(domain)
-        console.log(selectivityDomain)
+        //console.log(domain)
+        //console.log(selectivityDomain)
 
         // draw y-axis
     let yScale = d3
@@ -196,7 +197,7 @@ let renderPlot = function(el, data, legendData) {
       // [-0.20605, 3.1549] is min and max for allset data from table.
       // var colorRange = [-0.20605, 3.1549];
 
-      console.log(colorRange)
+      //console.log(colorRange)
       var color = d3.scaleLinear()
         // .domain([-1, 0, 1])
         .domain(colorRange)
@@ -208,8 +209,8 @@ let renderPlot = function(el, data, legendData) {
         .domain([0, 1])
         .range([0, 9]);
 
-      console.log("data")
-      console.log(data)
+      //console.log("data")
+      //console.log(data)
 
      let square = d3
             .symbol()
@@ -264,7 +265,7 @@ class DevtoxHeatmap extends Component {
         this.unrenderPlot();
         // this is bootstrap plot svg
 
-        renderPlot(this.refs.svg, this.props.data, this.props.legendData);
+        renderPlot(this.refs.svg, this.props.data);
 
         window.addEventListener('resize', this.handleResize);
     }
@@ -289,9 +290,8 @@ class DevtoxHeatmap extends Component {
         return <div id="IA_heatmap01" className="row-fluid" ref="svg" />;
     }
 }
-
 DevtoxHeatmap.propTypes = {
-    data: PropTypes.arrayOf(
+   data: PropTypes.arrayOf(
         PropTypes.shape({
             x: PropTypes.string,
             y: PropTypes.string,
@@ -299,20 +299,6 @@ DevtoxHeatmap.propTypes = {
             hover_text: PropTypes.string,
         })
     ).isRequired,
-    legendData: PropTypes.shape({
-        type: PropTypes.oneOf(['discrete', 'continuous']).isRequired,
-        values: PropTypes.arrayOf(
-            PropTypes.shape({
-                label: PropTypes.string,
-                fill: PropTypes.string,
-                chemical_casrn: PropTypes.string,
-                readout_id: PropTypes.number,
-                title: PropTypes.string,
-            })
-        ),
-        colorScaleFunction: PropTypes.func,
-        legendScale: PropTypes.func,
-    }).isRequired,
 };
 
 export default DevtoxHeatmap;

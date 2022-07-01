@@ -224,11 +224,11 @@ const AXIS_LINEAR = 1,
         return `${URL_BMD}?format=json&protocol_ids=${id}&readouts=${ro}`;
     },
 
-    getIntegrativeUrl = function(protocol_ids, casrns) {
-        if (protocol_ids.length === 0  || casrns.length === 0) {
+    getIntegrativeUrl = function(protocol_id, casrns) {
+        if (protocol_id.length === 0  || casrns.length === 0) {
             return null;
         }
-        let ids = protocol_ids.join(','),
+        let ids = protocol_id,
             chems = casrns.join(',');
         // return url, ro is the readout_id
         // console.log(ids, ro, chems);

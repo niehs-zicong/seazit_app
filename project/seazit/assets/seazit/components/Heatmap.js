@@ -40,9 +40,9 @@ let addStripMask = function(svg) {
         .style('fill', 'url(#maskStripePattern)');
 };
 
-let renderPlot = function(el, data, legendData) {
+let renderPlot = function(el, data) {
     $(el).empty();
-    console.log(data)
+    // console.log(data)
     // let margin = {top: 80, right: 25, bottom: 30, left: 40},
     let margin = {
             top: 10,
@@ -119,10 +119,10 @@ let renderPlot = function(el, data, legendData) {
       // width = 450 - margin.left - margin.right,
       // height = 450 - margin.top - margin.bottom,
     // xasix is column, yasix is row
-     xasix= d3.map(data, function(d){return (d.protocol_name_plot + d.use_category1 );}).keys(),
+     xasix= d3.map(data, function(d){return (d.x);}).keys(),
 
     //, yasix is row
-       yasix = d3.map(data, function(d){return (d.preferred_name);}).keys(),
+       yasix = d3.map(data, function(d){return (d.y);}).keys(),
 
     width = xasix.length * cellSize + margin.axisLeft + margin.left + margin.right + margin.legend,
     height = yasix.length * cellSize + margin.axisTop + margin.top + margin.bottom,
@@ -283,7 +283,7 @@ let renderPlot = function(el, data, legendData) {
         .attr(
             'transform',
             (d) =>
-                `translate(${xScale(d.protocol_name_plot + d.use_category1 ) + xScale.bandwidth() / 2}, ${yScale(d.preferred_name) +
+                `translate(${xScale(d.x) + xScale.bandwidth() / 2}, ${yScale(d.y) +
                     yScale.bandwidth() / 2})`
             )
         .style('stroke', 'black')
@@ -310,6 +310,9 @@ let renderPlot = function(el, data, legendData) {
 class Heatmap extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            data: null,
+        };
         this.handleResize = this.handleResize.bind(this);
     }
 
@@ -321,6 +324,22 @@ class Heatmap extends Component {
         this.refs.svg.innerHTML = '';
     }
 
+
+    _updateData(url) {
+        d3.json(url, (error, data) => {
+            if (error) {
+                let err = error.target.responseText.replace('["', '').replace('"]', '');
+                this.setState({
+                    data: [],
+                    error: err,
+                });
+                return;
+            }
+            this.setState({ data });
+        });
+    }
+
+
     renderPlot() {
         if (this.refs.svg === undefined) {
             return;
@@ -328,7 +347,7 @@ class Heatmap extends Component {
         this.unrenderPlot();
         // this is bootstrap plot svg
 
-        renderPlot(this.refs.svg, this.props.data, this.props.legendData);
+        renderPlot(this.refs.svg, this.props.data);
 
         window.addEventListener('resize', this.handleResize);
     }
@@ -349,13 +368,14 @@ class Heatmap extends Component {
         this.unrenderPlot();
     }
 
+
     render() {
         return <div id="IA_heatmap01" className="row-fluid" ref="svg" />;
     }
 }
 
 Heatmap.propTypes = {
-    data: PropTypes.arrayOf(
+   data: PropTypes.arrayOf(
         PropTypes.shape({
             x: PropTypes.string,
             y: PropTypes.string,
@@ -363,20 +383,6 @@ Heatmap.propTypes = {
             hover_text: PropTypes.string,
         })
     ).isRequired,
-    legendData: PropTypes.shape({
-        type: PropTypes.oneOf(['discrete', 'continuous']).isRequired,
-        values: PropTypes.arrayOf(
-            PropTypes.shape({
-                label: PropTypes.string,
-                fill: PropTypes.string,
-                chemical_casrn: PropTypes.string,
-                readout_id: PropTypes.number,
-                title: PropTypes.string,
-            })
-        ),
-        colorScaleFunction: PropTypes.func,
-        legendScale: PropTypes.func,
-    }).isRequired,
 };
 
 export default Heatmap;

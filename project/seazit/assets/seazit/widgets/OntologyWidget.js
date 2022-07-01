@@ -12,13 +12,6 @@ import {
 import PropTypes from "prop-types";
 
 class OntologyWidget extends BaseWidget {
-    /*
-    ChemicalWidget requires the following state properties:
-        - chemList (enum)
-        - chemicalFilterBy (enum)
-        - chemicals (list of str)
-        - categories (list of str)
-    */
 
     constructor(props) {
         super(props);
@@ -64,21 +57,35 @@ class OntologyWidget extends BaseWidget {
             opts = _.chain(state.Seazit_ontology)
                 .map((r) => {
                 return {
-                    developmental_defect_grouping_granular: r.developmental_defect_grouping_granular,
                     key: r.developmental_defect_grouping_granular,
                     label: r.developmental_defect_grouping_granular,
+                    developmental_defect_catergories:r.developmental_defect_catergories,
+                    developmental_defect_grouping_general:r.developmental_defect_grouping_general,
+                    developmental_defect_grouping_granular:r.developmental_defect_grouping_granular,
+                    hour_post_fertilization:r.hour_post_fertilization,
+                    ontology_id_number:r.ontology_id_number,
+                    proposed_ontology_label:r.proposed_ontology_label,
+                    protocol_source:r.protocol_source,
+                    recording_name:r.recording_name,
+                    seazit_recording_id:r.seazit_recording_id,
+
                 };
             })
             .uniqBy('developmental_defect_grouping_granular')
             .sortBy('developmental_defect_grouping_granular')
+            .groupBy('developmental_defect_catergories')
             .value()
             ;
-            return renderSelectMultiWidget(
+            console.log(opts)
+            if (_.keys(opts).length === 0) {
+                    return null;
+            }
+            return renderSelectMultiOptgroupWidget(
                 'ontologyGroup',
                 'Granular',
                 opts,
                 state.ontologyGroup,
-                this.handleGranularChange
+                this.handleSelectMultiChange
             );
         } else {
             opts = _.chain(state.Seazit_ontology)
@@ -86,23 +93,31 @@ class OntologyWidget extends BaseWidget {
                 return {
                     key: r.developmental_defect_grouping_general,
                     label: r.developmental_defect_grouping_general,
-                    developmental_defect_grouping_general: r.developmental_defect_grouping_general,
-                };
+                    developmental_defect_catergories:r.developmental_defect_catergories,
+                    developmental_defect_grouping_general:r.developmental_defect_grouping_general,
+                    developmental_defect_grouping_granular:r.developmental_defect_grouping_granular,
+                    hour_post_fertilization:r.hour_post_fertilization,
+                    ontology_id_number:r.ontology_id_number,
+                    proposed_ontology_label:r.proposed_ontology_label,
+                    protocol_source:r.protocol_source,
+                    recording_name:r.recording_name,
+                    seazit_recording_id:r.seazit_recording_id,                };
             })
             .uniqBy('developmental_defect_grouping_general')
             .sortBy('developmental_defect_grouping_general')
+            .groupBy('developmental_defect_catergories')
             .value()
             ;
+            if (_.keys(opts).length === 0) {
+                    return null;
+                }
 
-            console.log("opts")
-            console.log(opts)
-
-            return renderSelectMultiWidget(
+            return renderSelectMultiOptgroupWidget(
                 'ontologyGroup',
                 'General',
                 opts,
                 state.ontologyGroup,
-                this.handleGeneralChange
+                this.handleSelectMultiChange
             );
         }
     }

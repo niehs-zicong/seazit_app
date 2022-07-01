@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import * as d3 from 'd3';
 import _ from 'lodash';
 import Loading from 'utils/Loading';
-import { svg_download_form, data_exportToJsonFile } from '../shared';
+import {svg_download_form, data_exportToJsonFile} from '../shared';
 import Heatmap from './Heatmap';
 import DevtoxHeatmap from './DevtoxHeatmap';
 import {
@@ -13,18 +13,39 @@ import {
     HEATMAP_BMC,
     INTVIZ_DevtoxHEATMAP,
     INTVIZ_HEATMAP,
+    integrative_Granular,
+    integrative_General,
     printFloat,
     renderNoDataAlert,
 } from '../shared';
 
 
-class HeatmapHandler extends React.Component {
+class IntegrativePlotHandler extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             data: null,
-            scale: null,
-            continuousColorScale: null,
+
+            selectivityList: [
+                {
+                    id: 1,
+                    name: "dev tox",
+                },
+                {
+                    id: 2,
+                    name: "general tox",
+                },
+                {
+                    id: 3,
+                    name: "inconclusive",
+                },
+                {
+                    id: 4,
+                    name: "inactive",
+                }
+            ],
+
+
         };
     }
 
@@ -39,10 +60,7 @@ class HeatmapHandler extends React.Component {
                 return;
             }
             this.setState({ data });
-        console.log("aaaaa")
 
-        console.log(this.state)
-        console.log(this.props)
         });
     }
 
@@ -57,199 +75,66 @@ class HeatmapHandler extends React.Component {
         }
     }
 
-    componentWillUpdate(nextProps) {
-        if (nextProps.url !== this.props.url) {
-            this.fetchIntegrativeData(nextProps.url);
-        }
-    }
-
     _getFilteredData() {
-        let getFillFunction = function(heatmapDisplay, continuousColorScale) {
-                switch (heatmapDisplay) {
-                    case HEATMAP_ACTIVITY:
-                        return function(data) {
-                            switch (data.is_active) {
-                                case true:
-                                    return 'black';
-                                case false:
-                                    return 'white';
-                                default:
-                                    return '#C9C9C9';
-                            }
-                        };
-                    case HEATMAP_BMC:
-                        // return colorscale if it exist, otherwise, white
-                        return function(data) {
-                            return data.bmd ? continuousColorScale(data.bmd) : 'white';
-                        };
-                    default:
-                        throw 'Unknown display type.';
-                }
-            },
-            getHoverTextFunction = function(heatmapDisplay) {
-                switch (heatmapDisplay) {
-                    case HEATMAP_ACTIVITY:
-                        return function(d) {
-                            return `${d.chemical_name}<br/>
-                                ${d.readout_endpoint}<br/>
-                                ${d.is_active ? 'Active' : 'Inactive'}`;
-                        };
-                    case HEATMAP_BMC:
-                        return function(d) {
-                            return `${d.chemical_name}<br/>
-                                ${d.readout_endpoint}<br/>
-                                BMC = ${d.is_active ? `${printFloat(d.bmd)} µM` : 'None'}`;
-                        };
-                    default:
-                        throw 'Unknown display type.';
-                }
-            },
-            getLegendData = function(heatmapDisplay, scale, colorScale) {
-                switch (heatmapDisplay) {
-                    case HEATMAP_ACTIVITY:
-                        return {
-                            type: 'discrete',
-                            values: [
-                                {
-                                    label: 'active',
-                                    fill: 'black',
-                                },
-                                {
-                                    label: 'inactive',
-                                    fill: 'white',
-                                },
-                                {
-                                    label: 'untested',
-                                    fill: '#C9C9C9',
-                                },
-                            ],
-                        };
-
-                    // HEATMAP_BMC type is continuous, search that.
-                    case HEATMAP_BMC:
-                        return {
-                            type: 'continuous',
-                            legendScale: scale,
-                            colorScaleFunction: colorScale,
-                        };
-                    default:
-                        throw 'Unknown display type.';
-                }
-            };
-
-        let fillFunction = getFillFunction(
-                this.props.heatmapDisplay,
-                this.state.continuousColorScale
-            ),
-            // hoverTextFunction = getHoverTextFunction(this.props.heatmapDisplay),
-            legendData = getLegendData(
-                this.props.heatmapDisplay,
-                this.state.scale,
-                this.state.continuousColorScale
-            ),
-            // readout_ids = this.props.readouts.map((d) => parseInt(d)),
-            data = _.chain(this.state.data.integrative_activity_selectivity)
+      let  data = _.chain(this.state.data.integrative_activity_selectivity)
                     .map((d) => {
                         return {
-                            casrn: d.casrn,
-                            combin_ontology: d.combin_ontology,
-                            combin_ontology_id: d.combin_ontology_id,
-                            dtxsid: d.dtxsid,
+                            protocol_id:   d.protocol_id ,
                             endpoint_name: d.endpoint_name,
-                            endpoint_name_protocol: d.endpoint_name_protocol,
-                            f_max_dev_call: d.f_max_dev_call,
-                            final_dev_call: d.final_dev_call,
-                            lab_anonymous_code: d.lab_anonymous_code,
-                            malformation: d.malformation,
-                            max_highest_conc: d.max_highest_conc,
-                            max_pod_med: d.max_pod_med,
-                            mean_pod: d.mean_pod,
-                            mean_selectivity: d.mean_selectivity,
-                            med_hitconf: d.med_hitconf,
-                            med_mort_hit_confidence: d.med_mort_hit_confidence,
+                            casrn: d.casrn,
+                            preferred_name:  d.preferred_name,
+                            use_category1:  d.use_category1,
+                            min_pod_med: d.min_pod_med,
                             med_pod_med: d.med_pod_med,
-                            min_lowest_conc: d.min_lowest_conc,
-                            min_pod_med:  d.min_pod_med  ,
+                            max_pod_med: d.max_pod_med,
+                            med_hitconf: d.med_hitconf,
+                            n_values:  d.n_values  ,
+                            mort_min_pod_med:  d.mort_min_pod_med   ,
+                            mort_med_pod_med:  d.mort_med_pod_med  ,
                             mort_max_pod_med:  d.mort_max_pod_med  ,
                             mort_med_hitconf:  d.mort_med_hitconf  ,
-                            mort_med_pod_med:  d.mort_med_pod_med  ,
-                            mort_min_pod_med:  d.mort_min_pod_med   ,
                             mort_n_values:  d.mort_n_values  ,
-                            n_rep:  d.n_rep  ,
+                            min_lowest_conc: d.min_lowest_conc,
+                            max_highest_conc: d.max_highest_conc,
+                            mean_pod: d.mean_pod,
+                            mean_selectivity: d.mean_selectivity,
+                            med_mort_hit_confidence: d.med_mort_hit_confidence,
                             n_rep_max_dev_call: d.n_rep_max_dev_call   ,
-                            n_values:  d.n_values  ,
-                            preferred_name:  d.preferred_name   ,
-                            protocol_id:   d.protocol_id ,
+                            n_rep:  d.n_rep,
+                            f_max_dev_call: d.f_max_dev_call,
+                            final_dev_call: d.final_dev_call,
+                            malformation: d.malformation,
+                            endpoint_name_protocol: d.endpoint_name_protocol,
+                            combin_ontology: d.combin_ontology,
+                            combin_ontology_id: d.combin_ontology_id,
+                            protocol_source: d.protocol_source,
+                            lab_anonymous_code: d.lab_anonymous_code,
+                            study_phase: d.study_phase,
+                            test_condition:   d.test_condition  ,
                             protocol_name_long:  d.protocol_name_long  ,
                             protocol_name_plot:   d.protocol_name_plot ,
-                            test_condition:   d.test_condition  ,
-                            use_category1:  d.use_category1  ,
-                            x: d.protocol_name_plot + "-" + d.use_category1,
+                            proposed_ontology_label:   d.proposed_ontology_label ,
+                            ontology_id_number:   d.ontology_id_number ,
+                            recording_name:   d.recording_name ,
+                            developmental_defect_catergories:   d.developmental_defect_catergories ,
+                            defects_mapped_to_body_region:   d.defects_mapped_to_body_region ,
+                            developmental_defect_grouping_granular:   d.developmental_defect_grouping_granular ,
+                            developmental_defect_grouping_general:   d.developmental_defect_grouping_general ,
+                            seazit_recording_id:   d.seazit_recording_id ,
+                            x: d.protocol_name_plot + ": " + d.use_category1,
                             y: d.preferred_name,
                         };
                     })
                     .sortBy('med_pod_med')
                     .value();
+             let data2 = _.map(_.groupBy(data, 'x'), (value, key) => ({[key]: _.groupBy(value, 'y')}))
 
-        return {
-            data,
-            legendData,
-        };
-    };
-
-    _renderHeatmap(d) {
-            console.log(this.state)
-            console.log(this.props)
-
-        let
-            // hasChems = this.props.chemicals.length > 0,
-            // hasReadouts = this.props.readouts.length > 0,
-            // hasReadoutCategories = this.props.readoutCategories.length > 0,
-            readoutType,
-            viz = this.props.viz,
-            // viz = 5,
-
-            requiresFilters = [INTVIZ_HEATMAP, INTVIZ_DevtoxHEATMAP];
-        //
-        // let filtersRequired =
-        //     _.includes(requiresFilters, viz) &&
-        //     (!hasChems ||
-        //         (readoutType == READOUT_TYPE_READOUT && !hasReadouts) ||
-        //             (readoutType == READOUT_TYPE_CATEGORY && !hasReadoutCategories));
-        //
-        // if (filtersRequired) {
-        //     return renderNoSelected({
-        //         // hasReadouts: readoutType == READOUT_TYPE_READOUT ? hasReadouts : undefined,
-        //         // hasReadoutCategories:
-        //         //     readoutType == READOUT_TYPE_CATEGORY ? hasReadoutCategories : undefined,
-        //         // hasChems,
-        //     });
-        // }
-
-        switch (viz) {
-            case INTVIZ_HEATMAP: {
-                return (
-                    <div>
-                        <Heatmap data={d.data} legendData={"zw"} />
-                    </div>
-                );
-            }
-
-
-           case INTVIZ_DevtoxHEATMAP: {
-                return (
-                    <div>
-                        <DevtoxHeatmap data={d.data} legendData={"zw"} />
-                    </div>
-                );
-            }
-            default: {
-                throw 'Unknown visualization type';
-            }
-        }
-    }
-
-
+                console.log(data)
+                console.log(data2)
+            return {
+                    data
+                };
+         };
 
     render() {
         if (!this.state.data) {
@@ -260,30 +145,28 @@ class HeatmapHandler extends React.Component {
         console.log(d)
 
         // this is result, with color name is fill data.
-        // if (d.data.length === 0) {
-        if (d.length === 0) {
+        if (d.data.length === 0) {
             return renderNoDataAlert();
         }
 
         return (
             <div>
-                {this._renderHeatmap(d)}
-                {/*<Heatmap data={d.data} legendData={"zw"} />*/}
+                {/*<Heatmap data={d.data} />*/}
             </div>
+            //    <div>
+            //     {/*<DevtoxHeatmap data={d.data} />*/}
+            // </div>
         );
     }
+
 }
 
-HeatmapHandler.propTypes = {
+IntegrativePlotHandler.propTypes = {
+    assay: PropTypes.array.isRequired,
     casrns: PropTypes.array.isRequired,
-    heatmapDisplay: PropTypes.number.isRequired,
-    readouts: PropTypes.array.isRequired,
-    viz: PropTypes.number.isRequired,
     ontologyType: PropTypes.number.isRequired,
     ontologyGroup: PropTypes.array.isRequired,
-    selectivityList: PropTypes.array.isRequired,
     url: PropTypes.string.isRequired,
-
 };
 
-export default HeatmapHandler;
+export default IntegrativePlotHandler;

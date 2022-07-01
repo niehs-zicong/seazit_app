@@ -29,16 +29,6 @@ class ChemicalWidget extends BaseWidget {
         this.handleCategoryChange = this.handleCategoryChange.bind(this);
     }
 
-    // _getSelectedChemicals(substances, categories, chemList) {
-    //     return _.chain(substances)
-    //         .filter((r) => {
-    //             return _.includes(categories, r.chemical__category_id);
-    //         })
-    //         .map('chemical__casrn')
-    //         .uniq()
-    //         .value();
-    // }
-
     handleChemlistChange(e) {
         let d = {},
             state = this.props.stateHolder.state,

@@ -53,71 +53,7 @@ class ReadoutWidget extends BaseWidget {
             );
 
     }
-
-    _renderSingleEndpointSelector(state) {
-        let assays =  [state.assay];
-        let opts = _.chain(state.Seazit_ui_panel)
-            .filter((r) => {
-                return _.includes(assays, r.seazit_protocol_id.toString());
-            })
-            .map((r) => {
-                    return {
-                        key: r.endpoint_name_protocol.toString(),
-                        category: r.protocol_name_plot,
-                        label: r.endpoint_name,
-                        description: r.endpoint_description,
-                        protocol_name: r.protocol_name,
-                        seazit_protocol_id: r.seazit_protocol_id.toString(),
-                        study_phase: r.study_phase,
-                        test_condition: r.test_condition,
-                        protocol_name_long: r.protocol_name_long,
-                        protocol_name_plot: r.protocol_name_plot,
-                        endpoint_name_protocol: r.endpoint_name_protocol,
-                    };
-                })
-                .sortBy('label')
-                .sortBy('category')
-                .groupBy('category')
-                .value();
-                   Object.values(opts).forEach((val) => {
-                val.forEach(function(item, index) {
-                    if (
-                        item.key == 'Mortality@120' ||
-                        item.key == 'Mortality@24' ||
-                        item.key.includes('@24')
-                    ) {
-                        delete val[index];
-                    }
-                });
-            });
-
-            let endpointCases = ['MalformedAny+Mort@120'];
-            Object.values(opts).forEach((val) => {
-                val.forEach(function(item, i) {
-                    if (endpointCases.includes(item.label)) {
-                        val.splice(i, 1);
-                        val.unshift(item);
-                    }
-                });
-            });
-            if (_.keys(opts).length === 0) {
-                return null;
-            }
-            // single selections.
-            opts = Object.values(opts)[0];
-            return renderSelectSingleWidget(
-                'readouts',
-                'endpoint',
-                opts,
-                state.readouts,
-                this.handleSelectChange
-            );
-    }
-
-
-
-
-    _renderAssaySelector(state) {
+    _renderMultipleDatasetSelector(state) {
         let options = _.chain(state.protocol_data)
             .map((r) => {
                 return {
@@ -137,7 +73,7 @@ class ReadoutWidget extends BaseWidget {
             })
             .sortBy('seazit_protocol_id')
             .value();
-        if (this.props.multiAssaySelector === true) {
+
             return renderSelectMultiWidget(
                 'assays',
                 'dataset',
@@ -145,31 +81,64 @@ class ReadoutWidget extends BaseWidget {
                 state.assays,
                 this.handleSelectMultiChange,
             );
-        } else {
-            return renderSelectSingleWidget(
-                'assay',
-                'dataset',
-                options,
-                state.assay,
-                this.handleSelectChange,
 
-            );
-        }
     }
 
-    _renderReadoutSelector(state) {
-        let assays = this.props.multiAssaySelector === true ? state.assays : [state.assay];
+    _renderSingleEndpointSelector(state) {
+        let assay =  [state.assay];
+        let opts = _.chain(state.Seazit_ui_panel)
+            .filter((r) => {
+                return _.includes(assay, r.seazit_protocol_id.toString());
+            })
+            .map((r) => {
+                    return {
+                        key: r.endpoint_name_protocol.toString(),
+                        category: r.protocol_name_plot,
+                        label: r.endpoint_name,
+                        description: r.endpoint_description,
+                        protocol_name: r.protocol_name,
+                        seazit_protocol_id: r.seazit_protocol_id.toString(),
+                        study_phase: r.study_phase,
+                        test_condition: r.test_condition,
+                        protocol_name_long: r.protocol_name_long,
+                        protocol_name_plot: r.protocol_name_plot,
+                        endpoint_name_protocol: r.endpoint_name_protocol,
+                    };
+                })
+            .filter((r) => {
+                return r.key !== 'Mortality@120' && r.key !== 'Mortality@24' && !(r.key.includes('@24'))
+            })
+                .sortBy('label')
+                .sortBy( function( r ) { return r.label !== 'MalformedAny+Mort@120'; } )
+                .sortBy('category')
+                .groupBy('category')
+                .value();
+
+            if (_.keys(opts).length === 0) {
+                return null;
+            }
+            opts = Object.values(opts)[0];
+
+            // single selections.
+            return renderSelectSingleWidget(
+                'readouts',
+                'endpoint',
+                opts,
+                state.readouts,
+                this.handleSelectChange
+            );
+    }
+
+
+    _renderMultipleEndpointSelector(state) {
+        let assays =  state.assays;
+
         let opts = _.chain(state.Seazit_ui_panel)
             .filter((r) => {
                 return _.includes(assays, r.seazit_protocol_id.toString());
             })
-            .value();
-        if (this.props.multiReadoutSelector) {
-            opts = _.chain(opts)
-                .map((r) => {
+            .map((r) => {
                     return {
-                        // key: `${r.endpoint_name} | ${r.seazit_protocol_id}`,
-                        // key: r.endpoint_name.toString(),
                         key: r.endpoint_name_protocol.toString(),
                         category: r.protocol_name_plot,
                         label: r.endpoint_name,
@@ -184,22 +153,13 @@ class ReadoutWidget extends BaseWidget {
                     };
                 })
                 .sortBy('label')
+                .sortBy( function( r ) { return r.label !== 'Mortality@24' && r.label !==  'Mortality@120' && r.label !==  'MalformedAny+Mort@120'; } )
                 .sortBy('category')
                 .groupBy('category')
                 .value();
-            let endpointCases = ['MalformedAny+Mort@120', 'Mortality@120', 'Mortality@24'];
-            Object.values(opts).forEach((val) => {
-                val.forEach(function(item, i) {
-                    if (endpointCases.includes(item.label)) {
-                        val.splice(i, 1);
-                        val.unshift(item);
-                    }
-                });
-            });
             if (_.keys(opts).length === 0) {
                 return null;
             }
-
             return renderSelectMultiOptgroupWidget(
                 'readouts',
                 'endpoint',
@@ -207,77 +167,19 @@ class ReadoutWidget extends BaseWidget {
                 state.readouts,
                 this.handleSelectMultiChange
             );
-        } else {
-            opts = _.chain(opts)
-                .map((r) => {
-                    return {
-                        // key: `${r.endpoint_name} | ${r.seazit_protocol_id}`,
-                        // key: r.endpoint_name.toString(),
-                        // key: r.endpoint_name.toString(),
-                        key: r.endpoint_name_protocol.toString(),
-                        category: r.protocol_name_plot,
-                        label: r.endpoint_name,
-                        description: r.endpoint_description,
-                        protocol_name: r.protocol_name,
-                        seazit_protocol_id: r.seazit_protocol_id.toString(),
-                        study_phase: r.study_phase,
-                        test_condition: r.test_condition,
-                        protocol_name_long: r.protocol_name_long,
-                        protocol_name_plot: r.protocol_name_plot,
-                        endpoint_name_protocol: r.endpoint_name_protocol,
-                    };
-                })
-                .sortBy('label')
-                .sortBy('category')
-                .groupBy('category')
-                .value();
-            Object.values(opts).forEach((val) => {
-                val.forEach(function(item, index) {
-                    if (
-                        item.key == 'Mortality@120' ||
-                        item.key == 'Mortality@24' ||
-                        item.key.includes('@24')
-                    ) {
-                        delete val[index];
-                    }
-                });
-            });
-
-            let endpointCases = ['MalformedAny+Mort@120'];
-            Object.values(opts).forEach((val) => {
-                val.forEach(function(item, i) {
-                    if (endpointCases.includes(item.label)) {
-                        val.splice(i, 1);
-                        val.unshift(item);
-                    }
-                });
-            });
-            if (_.keys(opts).length === 0) {
-                return null;
-            }
-            // single selections.
-            opts = Object.values(opts)[0];
-            return renderSelectSingleWidget(
-                'readouts',
-                'endpoint',
-                opts,
-                state.readouts,
-                this.handleSelectChange
-            );
-        }
     }
+
 
     render() {
         let state = this.props.stateHolder.state;
-        console.log(state)
         switch (state.tabFlag)
             {
                 case ConcentrationResponseTab:
                     return(
                         <div>
+                            {this._renderMultipleDatasetSelector(state)}
+                            {this._renderMultipleEndpointSelector(state)}
 
-                            {this._renderAssaySelector(state)}
-                            {this._renderReadoutSelector(state)}
                         </div>
                     )
             };
@@ -297,9 +199,7 @@ class ReadoutWidget extends BaseWidget {
                 case IntegrativeAnalysesTab:
                     return(
                         <div>
-
-                            {this._renderAssaySelector(state)}
-
+                            {this._renderSingleDatasetSelector(state)}
                         </div>
                     )
             };

@@ -18,8 +18,6 @@ class BaseWidget extends React.Component {
         this.handleIntegerInputChange = this.handleIntegerInputChange.bind(this);
         this.handleFloatInputChange = this.handleFloatInputChange.bind(this);
         this.handleCheckboxInputChange = this.handleCheckboxInputChange.bind(this);
-        this.handleGranularChange = this.handleGranularChange.bind(this);
-        this.handleGeneralChange = this.handleGeneralChange.bind(this);
     }
 
     handleRadioChange(e) {
@@ -67,18 +65,6 @@ class BaseWidget extends React.Component {
       }
 
 
-      handleGranularChange(e) {
-        let d = {};
-        d[e.target.name] = $(e.target).val();
-        this.props.stateHolder.setState(d);
-    }
-
-    handleGeneralChange(e) {
-        let d = {};
-        d[e.target.name] = $(e.target).val();
-        this.props.stateHolder.setState(d);
-
-    }
       ;
 }
 
