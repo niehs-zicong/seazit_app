@@ -40,9 +40,10 @@ let addStripMask = function(svg) {
         .style('fill', 'url(#maskStripePattern)');
 };
 
-let renderPlot = function(el, data) {
+let renderPlot = function(el, data, legendData) {
     $(el).empty();
-    // console.log(data)
+    console.log("HEATMAP")
+    console.log(data)
     // let margin = {top: 80, right: 25, bottom: 30, left: 40},
     let margin = {
             top: 10,
@@ -55,31 +56,76 @@ let renderPlot = function(el, data) {
         },
         cellSize = 30,
      handleCellClick = function(d) {
-        if (d.readouts && d.readouts.length > 1) {
+        console.log("handleCellClick")
+
+        // console.log(d)
+         // new BootstrapModal(Header, SingleCurveBody, {
+         //        // title: `${d.preferred_name} (${d.chemical_casrn}): ${d.readout_endpoint}`,
+         //        title: d.preferred_name + `: ` + d.endpoint_name,
+         //        protocol_id: d.protocol_id,
+         //        readout_id: d.endpoint_name + '_' + d.protocol_id,
+         //        casrn: d.casrn,
+         //    });
             new BootstrapModal(Header, MultipleCurveBody, {
                 title: d.x,
                 readout_ids: _.map(d.readouts, 'readout_id'),
                 casrns: [d.chemical_casrn],
             });
-        } else {
-            new BootstrapModal(Header, SingleCurveBody, {
-                title: d.title,
-                readout_id: d.readout_id,
-                casrn: d.chemical_casrn,
-            });
-        }
+
+
+        // if (d.readouts && d.readouts.length > 1) {
+        //     new BootstrapModal(Header, MultipleCurveBody, {
+        //         title: d.x,
+        //         readout_ids: _.map(d.readouts, 'readout_id'),
+        //         casrns: [d.chemical_casrn],
+        //     });
+        // } else {
+        //      new BootstrapModal(Header, SingleCurveBody, {
+        //         title: d.preferred_name + `: ` + d.endpoint_name,
+        //         protocol_id: d.protocol_id,
+        //         readout_id: d.endpoint_name + '_' + d.protocol_id,
+        //         casrn: d.casrn,
+        //     });
+        // }
     },
 
-     handleMouseOver = function(d) {
+    handleMouseOver = function(d) {
         tooltip
             .html(d.mean_selectivity ? d.mean_selectivity : 0)
             .style('left', d3.event.pageX + 'px')
             .style('top', d3.event.pageY + 20 + 'px')
             .style('opacity', 1.0);
     },
-     handleMouseOut = function(d) {
+    handleMouseOut = function(d) {
         tooltip.style('opacity', 0.0);
     },
+
+    handleXLabelClick = function(label) {
+        let cells = xMap[label],
+            casrns = _.map(cells, 'y_key'),
+            readout_ids = [cells[0].x_key];
+
+        new BootstrapModal(Header, MultipleCurveBody, {
+            title: label,
+            readout_ids,
+            casrns,
+        });
+    },
+            // draw y-axis
+     handleYLabelClick = function(label) {
+        let cells = yMap[label],
+            casrns = [cells[0].y_key],
+            readout_ids = _.map(cells, 'x_key');
+
+        new BootstrapModal(Header, MultipleCurveBody, {
+            title: label,
+            readout_ids,
+            casrns,
+        });
+    },
+
+
+
 
          // create a tooltip
    tooltip = d3.select(el)
@@ -91,29 +137,6 @@ let renderPlot = function(el, data) {
     .style("border-width", "2px")
     .style("border-radius", "5px")
     .style("padding", "5px"),
-
-  // Three function that change the tooltip when user hover / move / leave a cell
-   mouseover = function(d) {
-    tooltip
-      .style("opacity", 1)
-    d3.select(this)
-      .style("stroke", "black")
-      .style("opacity", 1)
-  },
-   mousemove = function(d) {
-    tooltip
-      .html("The exact value of<br>this cell is: " + d.mean_selectivity)
-      .style("left", (d3.mouse(this)[0]+70) + "px")
-      .style("top", (d3.mouse(this)[1]) + "px")
-  },
-   mouseleave = function(d) {
-    tooltip
-      .style("opacity", 0)
-    d3.select(this)
-      .style("stroke", "none")
-      .style("opacity", 0.8)
-  },
-
 
 
       // width = 450 - margin.left - margin.right,
@@ -136,11 +159,6 @@ let renderPlot = function(el, data) {
         chartHeight = height - (margin.top + margin.bottom + margin.axisTop),
         chartWidth = width - (margin.left + margin.right + margin.axisLeft + margin.legend),
 
-          // Build color scale
-     selectivityColor = d3.scaleSequential()
-        .interpolator(d3.interpolateInferno)
-        .domain([-1,1]),
-
         // how we get this 900,  check cellSize = 30.  30*30 = 900.
         square = d3
             .symbol()
@@ -157,25 +175,6 @@ let renderPlot = function(el, data) {
             .attr("height", height + margin.top + margin.bottom)
           .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-      // Create a color scale
-      var color = d3.scaleLinear()
-        .domain([-1, 0, 1])
-        .range(["#B22222", "#fff", "#000080"]);
-
-      // Create a size scale for bubbles on top right. Watch out: must be a rootscale!
-      var size = d3.scaleSqrt()
-        .domain([-1, 1])
-        .range([0, 9]);
-      // X scale
-      // var x = d3.scalePoint()
-      //   .range([0, width])
-      //   .domain(domain)
-      //
-      // // Y scale
-      // var y = d3.scalePoint()
-      //   .range([0, height])
-      //   .domain(domain)
 
 
      let axisLayer = svg
@@ -207,7 +206,7 @@ let renderPlot = function(el, data) {
         .call(yAxis)
         .selectAll('text')
         .style('cursor', 'pointer')
-        // .on('click', handleYLabelClick)
+        .on('click', handleYLabelClick)
         ;
 
     // draw x-axis
@@ -233,11 +232,9 @@ let renderPlot = function(el, data) {
         .attr('transform', 'rotate(-65)')
         .style('text-anchor', 'start')
         .style('cursor', 'pointer')
-        // .on('click', handleXLabelClick)
+        .on('click', handleXLabelClick)
         ;
-            console.log("zw  data")
 
-    console.log(data)
     let chartLayer = svg
         .append('g')
         .classed('chartLayer', true)
@@ -277,9 +274,7 @@ let renderPlot = function(el, data) {
         .append('path')
         .attr('class', 'square')
         .attr('d', square)
-        // .attr('fill', (d) => d.fill)
-        // .attr('fill', (d) =>  selectivityColor(d.mean_selectivity))
-        .style('fill', (d) =>  selectivityColor(d.mean_selectivity))
+        .attr('fill', (d) => d.fill)
         .attr(
             'transform',
             (d) =>
@@ -289,22 +284,164 @@ let renderPlot = function(el, data) {
         .style('stroke', 'black')
         .style('stroke-width', '0.8')
         .style('cursor', 'pointer')
-            ;
+        .on('mouseover', handleMouseOver)
+        .on('mouseout', handleMouseOut)
+        .on('click', handleCellClick);
 
+    console.log("legendData")
 
-      // chartLayer = svg
-      //   .append('g')
+    console.log(legendData)
+    // draw legend, this legend length, size is fixed.
+    // 2 cases, discrete = activity,  continuous = BMC, different legned form.
+    let legendLayer = svg
+        .append('g')
+        .classed('legendLayer', true)
+        .attr('transform', `translate(${width - margin.legend},${margin.top})`);
 
+    switch (legendData.type) {
+        case 'discrete': {
+            legendLayer
+                .selectAll('text')
+                .data(legendData.values)
+                .enter()
+                .append('text')
+                .attr('class', styles.legendText)
+                .attr('x', 35)
+                .attr('y', (d, i) => i * 20 + margin.axisTop + 10)
+                .text((d) => d.label);
 
-      //   .classed('chartLayer', true)
-      //   .attr('width', chartWidth)
-      //   .attr('height', chartHeight)
-      //   .attr(
-      //       'transform',
-      //       `translate(${margin.left + margin.axisLeft}, ${margin.top + margin.axisTop})`
-      //   );
+            let ds = legendLayer
+                .selectAll('path')
+                .data(legendData.values)
+                .enter()
+                .append('rect')
+                .attr('width', 15)
+                .attr('height', 15)
+                .attr('fill', (d) => d.fill)
+                .attr('transform', (d, i) => `translate(15, ${i * 20 + margin.axisTop})`)
+                .style('stroke', 'black')
+                .style('stroke-width', '1');
 
+            // hard-coded - todo: fix
+            // legendLayer.append(() => ds._groups[0][2].cloneNode()).attr('fill', 'transparent');
 
+            // d3.select(ds._groups[0][2])
+            //     .attr('mask', 'url(#stripeMask)')
+            //     .attr('fill', '#ccc');
+            break;
+        }
+        case 'continuous': {
+            let { colorScaleFunction, legendScale } = legendData,
+                legendHeight = 200,
+                legend = legendLayer
+                    .append('defs')
+                    .append('linearGradient')
+                    .attr('id', 'gradient')
+                    .attr('x1', '0%')
+                    .attr('y1', '100%')
+                    .attr('x2', '0%')
+                    .attr('y2', '0%')
+                    .attr('spreadMethod', 'pad');
+
+            legendScale.ticks().map((d, i) => {
+                legend
+                    .append('stop')
+                    .attr('offset', `${i}%`)
+                    .attr('stop-color', colorScaleFunction(d))
+                    .attr('stop-opacity', 1);
+            });
+
+            legendLayer
+                .append('rect')
+                .attr('width', 30)
+                .attr('height', legendHeight)
+                .style('fill', 'url(#gradient)')
+                .style('stroke', 'black')
+                .attr('transform', `translate(20,${margin.top + margin.axisTop})`);
+
+            legendLayer
+                .append('g')
+                .attr('class', 'axis y')
+                .attr('transform', `translate(50,${margin.top + margin.axisTop})`)
+                .call(
+                    getLog10AxisFunction(d3.axisRight, legendScale.copy().range([legendHeight, 0]))
+                );
+
+            legendLayer
+                .append('text')
+                .attr('class', styles.legendText)
+                .attr('x', 0)
+                .attr('y', 0)
+                .attr('transform', `translate(15, ${margin.top + margin.axisTop - 10})`)
+                .text('BMC (µM)');
+            legendLayer
+                .append('text')
+                .attr('class', styles.legendText)
+                .attr('x', 0)
+                .attr('y', 0)
+                .attr(
+                    'transform',
+                    `translate(50,${margin.top + margin.axisTop + legendHeight + 25})`
+                )
+                .text('Not active (no BMC)');
+
+            legendLayer
+                .append('rect')
+                .attr('x', 0)
+                .attr('y', 0)
+                .attr('width', 25)
+                .attr('height', 25)
+                .attr(
+                    'transform',
+                    `translate(20,${margin.top + margin.axisTop + legendHeight + 10})`
+                )
+                .attr('fill', 'white')
+                .style('stroke', 'black')
+                .style('stroke-width', '1');
+
+            legendLayer
+                .append('rect')
+                .attr('x', 0)
+                .attr('y', 0)
+                .attr('width', 25)
+                .attr('height', 25)
+                .attr(
+                    'transform',
+                    `translate(20,${margin.top + margin.axisTop + legendHeight + 40})`
+                )
+                .attr('mask', 'url(#stripeMask)')
+                .attr('fill', '#ccc');
+
+            legendLayer
+                .append('rect')
+                .attr('x', 0)
+                .attr('y', 0)
+                .attr('width', 25)
+                .attr('height', 25)
+                .attr(
+                    'transform',
+                    `translate(20,${margin.top + margin.axisTop + legendHeight + 40})`
+                )
+                .attr('fill', 'transparent')
+                .style('stroke', 'black')
+                .style('stroke-width', '1');
+
+            legendLayer
+                .append('text')
+                .attr('class', styles.legendText)
+                .attr('x', 0)
+                .attr('y', 0)
+                .attr(
+                    'transform',
+                    `translate(50,${margin.top + margin.axisTop + legendHeight + 55})`
+                )
+                .text('Not tested');
+            break;
+        }
+
+        default:
+            break;
+    }
 };
 
 class Heatmap extends Component {
@@ -325,21 +462,6 @@ class Heatmap extends Component {
     }
 
 
-    _updateData(url) {
-        d3.json(url, (error, data) => {
-            if (error) {
-                let err = error.target.responseText.replace('["', '').replace('"]', '');
-                this.setState({
-                    data: [],
-                    error: err,
-                });
-                return;
-            }
-            this.setState({ data });
-        });
-    }
-
-
     renderPlot() {
         if (this.refs.svg === undefined) {
             return;
@@ -347,7 +469,7 @@ class Heatmap extends Component {
         this.unrenderPlot();
         // this is bootstrap plot svg
 
-        renderPlot(this.refs.svg, this.props.data);
+        renderPlot(this.refs.svg, this.props.data, this.props.legendData);
 
         window.addEventListener('resize', this.handleResize);
     }
@@ -375,7 +497,7 @@ class Heatmap extends Component {
 }
 
 Heatmap.propTypes = {
-   data: PropTypes.arrayOf(
+    data: PropTypes.arrayOf(
         PropTypes.shape({
             x: PropTypes.string,
             y: PropTypes.string,
@@ -383,6 +505,20 @@ Heatmap.propTypes = {
             hover_text: PropTypes.string,
         })
     ).isRequired,
+    legendData: PropTypes.shape({
+        type: PropTypes.oneOf(['discrete', 'continuous']).isRequired,
+        values: PropTypes.arrayOf(
+            PropTypes.shape({
+                label: PropTypes.string,
+                fill: PropTypes.string,
+                chemical_casrn: PropTypes.string,
+                readout_id: PropTypes.number,
+                title: PropTypes.string,
+            })
+        ),
+        colorScaleFunction: PropTypes.func,
+        legendScale: PropTypes.func,
+    }).isRequired,
 };
 
 export default Heatmap;

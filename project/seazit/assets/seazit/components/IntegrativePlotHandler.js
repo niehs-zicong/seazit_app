@@ -25,26 +25,8 @@ class IntegrativePlotHandler extends React.Component {
         super(props);
         this.state = {
             data: null,
-
-            selectivityList: [
-                {
-                    id: 1,
-                    name: "dev tox",
-                },
-                {
-                    id: 2,
-                    name: "general tox",
-                },
-                {
-                    id: 3,
-                    name: "inconclusive",
-                },
-                {
-                    id: 4,
-                    name: "inactive",
-                }
-            ],
-
+            scale: null,
+            continuousColorScale: null,
 
         };
     }
@@ -59,7 +41,20 @@ class IntegrativePlotHandler extends React.Component {
                 });
                 return;
             }
-            this.setState({ data });
+            let domain = [1e-5, 1e3],
+                scale = d3
+                    .scaleLog()
+                    .range([1, 0])
+                    .domain(domain),
+                continuousColorScale = function(d) {
+                    return d3.interpolateViridis(scale(d));
+                };
+
+            this.setState({
+                data,
+                scale,
+                continuousColorScale,
+                });
 
         });
     }
@@ -76,11 +71,91 @@ class IntegrativePlotHandler extends React.Component {
     }
 
     _getFilteredData() {
+
+        let getFillFunction = function(visualization, continuousColorScale) {
+                switch (visualization) {
+                    case INTVIZ_HEATMAP:
+                        return function(data) {
+                            switch (data.final_dev_call) {
+                                case 'dev tox':
+                                    return '#d62976';
+                                case 'general tox':
+                                    return '#f9d70b';
+                                case 'inconclusive':
+                                    return '#3BD6C6';
+                                case 'inactive':
+                                    return '#FFFFFF';
+                                default:
+                                    return '#C9C9C9';
+                            }
+                        };
+                    case INTVIZ_DevtoxHEATMAP:
+                        return function(data) {
+                            return data.mean_pod ? continuousColorScale(Math.pow(10, data.mean_pod) * 1000000) : 'white';
+                        };
+                    default:
+                        throw 'Unknown display type.';
+                }
+            };
+       let  getLegendData = function(visualization, scale, colorScale) {
+                switch (visualization) {
+                    case INTVIZ_HEATMAP:
+                        return {
+                            type: 'discrete',
+                            values: [
+                                {
+                                    label: 'dev tox',
+                                    fill: '#d62976',
+                                },
+                                {
+                                    label: 'general tox',
+                                    fill: '#f9d70b',
+                                },
+                                {
+                                    label: 'inconclusive',
+                                    fill: '#3BD6C6',
+                                },
+                                {
+                                    label: 'inactive',
+                                    fill:'#FFFFFF',
+                                },
+                                {
+                                    label: 'untested',
+                                    fill: '#C9C9C9',
+                                },
+
+                            ],
+                        };
+
+                    // HEATMAP_BMC type is continuous, search that.
+                    case INTVIZ_DevtoxHEATMAP:
+                        return {
+                            type: 'continuous',
+                            legendScale: scale,
+                            colorScaleFunction: colorScale,
+                        };
+                    default:
+                        throw 'Unknown display type.';
+                }
+            };
+
+
+         let fillFunction = getFillFunction(
+                this.props.visualization,
+                 this.state.continuousColorScale
+
+            ),
+         legendData = getLegendData(
+                this.props.visualization,
+                this.state.scale,
+                this.state.continuousColorScale
+            );
+
+
         let data = this.state.data.integrative_activity_selectivity,
             ontologyGroup = this.props.ontologyGroup,
             ontologyType = this.props.ontologyType;
-            console.log(this.state.data.integrative_activity_selectivity)
-            console.log(ontologyGroup)
+
         switch (ontologyType) {
             case integrative_Granular: {
                 data = _.chain(data)
@@ -131,6 +206,7 @@ class IntegrativePlotHandler extends React.Component {
                             seazit_recording_id:   d.seazit_recording_id ,
                             x: d.protocol_name_plot + ": " + d.developmental_defect_grouping_granular,
                             y: d.preferred_name,
+                            fill:  fillFunction(d),
                         };
                     })
                     .sortBy('med_pod_med')
@@ -193,11 +269,14 @@ class IntegrativePlotHandler extends React.Component {
                     break;
                     };
         }
-     let data2 = _.map(_.groupBy(data, 'x'), (value, key) => ({[key]: _.groupBy(value, 'y')}))
+     // let data2 = _.map(_.groupBy(data, 'x'), (value, key) => ({[key]: _.groupBy(value, 'y')}))
+       console.log("plot data")
+         console.log(this.state.data.integrative_activity_selectivity)
         console.log(data)
-        console.log(data2)
+        // console.log(data2)
             return {
-                    data
+                    data,
+                    legendData,
                 };
          };
 
@@ -215,20 +294,33 @@ class IntegrativePlotHandler extends React.Component {
             return renderNoDataAlert();
         }
 
-        return (
+        if (this.props.visualization == INTVIZ_HEATMAP )
+        {
+            return (
             <div>
-                {/*<Heatmap data={d.data} />*/}
+                <Heatmap data={d.data}
+                     legendData={d.legendData}
+                />
             </div>
-            //    <div>
-            //     {/*<DevtoxHeatmap data={d.data} />*/}
-            // </div>
         );
+        }
+           else
+        {
+            return (
+               <div>
+                <DevtoxHeatmap data={d.data}
+                     legendData={d.legendData}
+                />
+             </div>
+        );
+        }
+
     }
 
 }
 
 IntegrativePlotHandler.propTypes = {
-    assay: PropTypes.array.isRequired,
+    assays: PropTypes.array.isRequired,
     casrns: PropTypes.array.isRequired,
     ontologyType: PropTypes.number.isRequired,
     ontologyGroup: PropTypes.array.isRequired,

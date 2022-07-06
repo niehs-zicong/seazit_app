@@ -280,9 +280,6 @@ class Seazit_readout_resultViewSet(CachedReadOnlyViewSet):
     def integrativeResult(self, request, *args, **kwargs):
 
         protocol_ids = self.request.GET.get("protocol_ids", None)
-        # readouts contains plus sign (+), it will replace by white space in Django,
-        # So I reaplace whitespace back to +
-        # readouts = self.request.GET.get("readouts", None).replace(" ", "+")
         casrns = self.request.GET.get("casrns", None)
         if protocol_ids is None:
              raise ValidationError("requires `protocol_ids` argument.")

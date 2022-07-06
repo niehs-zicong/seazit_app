@@ -82,6 +82,8 @@ let renderPlot = function(el, data) {
         tooltip.style('opacity', 0.0);
     },
 
+
+
          // create a tooltip
    tooltip = d3.select(el)
     .append("div")
@@ -115,7 +117,22 @@ let renderPlot = function(el, data) {
       .style("opacity", 0.8)
   },
 
-
+   continuousColorScale = function(d) {
+            let scale = d3
+                        .scaleLog()
+                        .range([1, 0])
+                        .domain([1e-5, 1e3]);
+            let scale2 = d3
+                        .scaleLog()
+                        .range([1, 0])
+                        // .domain([-0.2, 3.1549]);
+                        .domain([1e-5, 1e3]);
+            let scale3 = d3
+                        .scaleBand()
+                        .range([1, 0])
+                        .domain([1e-5, 1e3]);
+            return d3.interpolateViridis(scale(d));
+  },
 
       // width = 450 - margin.left - margin.right,
       // height = 450 - margin.top - margin.bottom,

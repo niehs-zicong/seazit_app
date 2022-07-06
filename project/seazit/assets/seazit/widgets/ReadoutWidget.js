@@ -199,7 +199,7 @@ class ReadoutWidget extends BaseWidget {
                 case IntegrativeAnalysesTab:
                     return(
                         <div>
-                            {this._renderSingleDatasetSelector(state)}
+                            {this._renderMultipleDatasetSelector(state)}
                         </div>
                     )
             };

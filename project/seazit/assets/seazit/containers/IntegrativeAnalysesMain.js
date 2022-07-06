@@ -49,24 +49,21 @@ class IntegrativeAnalysesMain extends React.Component {
 
             // HelpButtonWidget
             showHelpText: false,
+            assays: [],
 
             // ontologyWidget
-            ontologyType: integrative_General,
+            ontologyType: integrative_Granular,
             ontologyGroup:[],
 
             // ChemicalSelectorWidget
             chemicalFilterBy: CHEMFILTER_CATEGORY,
             chemicals: [],
             categories: [],
-            // ReadoutTypeWidget
-            readoutType: READOUT_TYPE_CATEGORY,
 
             // ReadoutSelectorWidget
-            assay: [],
-            readouts: [],
+            readoutType: READOUT_TYPE_CATEGORY,
 
-            // ReadoutCategoryWidget
-            readoutCategories: [],
+            readouts: [],
 
             // IntegrativePlotWidget
             visualization: INTVIZ_HEATMAP,
@@ -141,15 +138,13 @@ class IntegrativeAnalysesMain extends React.Component {
 
 
     _renderMainBody(url) {
-        let hasChems = this.state.chemicals.length > 0,
-            hasReadoutCategories = this.state.readoutCategories.length > 0,
-            requiresFilters = [INTVIZ_HEATMAP, INTVIZ_DevtoxHEATMAP];
-        //
-
+        // let hasChems = this.state.chemicals.length > 0,
+        //     hasReadoutCategories = this.state.readoutCategories.length > 0,
+        //     requiresFilters = [INTVIZ_HEATMAP, INTVIZ_DevtoxHEATMAP];
             return (
                     <div>
                         <IntegrativePlotHandler
-                            assay = {this.state.assay}
+                            assay = {this.state.assays}
                             casrns={this.state.chemicals}
                             visualization={this.state.visualization}
                             ontologyType={this.state.ontologyType}
@@ -171,10 +166,9 @@ class IntegrativeAnalysesMain extends React.Component {
 
         console.log(this.state)
         // let url = getIntegrativeUrl(this.state.assays, this.state.chemicals, this.state.ontologyType, this.state.ontologyGroup);
-        let url = getIntegrativeUrl(this.state.assay, this.state.chemicals);
-        // let url = '/seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=6&casrns=71751-41-2,3380-34-5,53-70-3,84-74-2,95-76-1,5598-15-2,2921-88-2,67-68-5,58-89-9,116-06-3,80-05-7,298-02-2,75-07-0,95737-68-1,83-79-4,87-86-5,129-00-0'
+        let url = getIntegrativeUrl(this.state.assays, this.state.chemicals);
+        // let url = "/seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=1,2,3&casrns=84-74-2,330-55-2,80-05-7,69806-50-4,75-07-0,1912-24-9";
         console.log("url")
-
         console.log(url)
         return (
             <div className="row-fluid">
@@ -191,11 +185,11 @@ class IntegrativeAnalysesMain extends React.Component {
                     <IntegrativePlotWidget stateHolder={this} />
                     <hr />
                     <ReadoutWidget
-                    stateHolder={this}
-                    hideViability={false}
-                    hideNonViability={false}
-                    multiAssaySelector={true}
-                    multiReadoutSelector={true}
+                        stateHolder={this}
+                        hideViability={false}
+                        hideNonViability={false}
+                        multiAssaySelector={true}
+                        multiReadoutSelector={true}
                     />
                     <hr />
                     <div>
