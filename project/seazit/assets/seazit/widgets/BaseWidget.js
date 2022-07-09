@@ -61,7 +61,6 @@ class BaseWidget extends React.Component {
           }
           );
        this.props.stateHolder.setState(list);
-       // console.log(this.props.stateHolder.state)
       }
 
 

@@ -99,7 +99,6 @@ class ChemicalWidget extends BaseWidget {
         let opts;
 
         if (state.chemicalFilterBy === CHEMFILTER_CHEMICIAL) {
-            // console.log(state.Seazit_chemical_info)
             opts = _.chain(state.Seazit_chemical_info)
                 .groupBy('preferred_name')
                 .values()

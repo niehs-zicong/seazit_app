@@ -68,15 +68,14 @@ class OntologyWidget extends BaseWidget {
                     protocol_source:r.protocol_source,
                     recording_name:r.recording_name,
                     seazit_recording_id:r.seazit_recording_id,
-
                 };
             })
+            .reject((r) => r.key === null)
             .uniqBy('developmental_defect_grouping_granular')
             .sortBy('developmental_defect_grouping_granular')
             .groupBy('developmental_defect_catergories')
             .value()
             ;
-            console.log(opts)
             if (_.keys(opts).length === 0) {
                     return null;
             }
@@ -103,15 +102,15 @@ class OntologyWidget extends BaseWidget {
                     recording_name:r.recording_name,
                     seazit_recording_id:r.seazit_recording_id,                };
             })
+            .reject((r) => r.key === null)
             .uniqBy('developmental_defect_grouping_general')
             .sortBy('developmental_defect_grouping_general')
             .groupBy('developmental_defect_catergories')
-            .value()
-            ;
+            .value();
+
             if (_.keys(opts).length === 0) {
                     return null;
                 }
-            console.log(opts)
 
             return renderSelectMultiOptgroupWidget(
                 'ontologyGroup',

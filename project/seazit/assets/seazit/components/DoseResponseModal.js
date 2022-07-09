@@ -17,17 +17,11 @@ Header.propTypes = {
 
 class SingleCurveBody extends React.Component {
     render() {
-        // url is the input to locate data.
-        // So if we need to compare, we may need to query data
-        // for two urls
-        // console.log(this.props);
         let url = getDoseResponsesUrl(
             [this.props.protocol_id],
             [this.props.readout_id],
             [this.props.casrn]
         );
-        // console.log('SingleCurveBody');
-        // console.log(url);
         return <DoseResponse url={url} cols={1} height={400} collapse={NO_COLLAPSE} />;
     }
 }

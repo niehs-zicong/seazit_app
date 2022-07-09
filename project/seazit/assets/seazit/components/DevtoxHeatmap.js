@@ -41,7 +41,7 @@ let addStripMask = function(svg) {
         .style('fill', 'url(#maskStripePattern)');
 };
 
-let renderPlot = function(el, data) {
+let renderPlot = function(el, data,legendData) {
     $(el).empty();
     // let margin = {top: 80, right: 25, bottom: 30, left: 40},
     let
@@ -229,13 +229,6 @@ let renderPlot = function(el, data) {
       //console.log("data")
       //console.log(data)
 
-     let square = d3
-            .symbol()
-            .type(d3.symbolSquare)
-            .size(900);
-            // .size(1600),
-
-
       // Create one 'g' element for each cell of the correlogram
        var cor = svg.selectAll(".cor")
         .data(data)
@@ -257,6 +250,151 @@ let renderPlot = function(el, data) {
               return color(d.mean_selectivity);
           })
           .style("opacity", 0.8)
+
+
+        let legendLayer = svg
+        .append('g')
+        .classed('legendLayer', true)
+        .attr('transform', `translate(${width - margin.legend},${margin.top})`);
+
+    switch (legendData.type) {
+        case 'discrete': {
+            legendLayer
+                .selectAll('text')
+                .data(legendData.values)
+                .enter()
+                .append('text')
+                .attr('class', styles.legendText)
+                .attr('x', 35)
+                .attr('y', (d, i) => i * 20 + margin.axisTop + 10)
+                .text((d) => d.label);
+
+            let ds = legendLayer
+                .selectAll('path')
+                .data(legendData.values)
+                .enter()
+                .append('rect')
+                .attr('width', 15)
+                .attr('height', 15)
+                .attr('fill', (d) => d.fill)
+                .attr('transform', (d, i) => `translate(15, ${i * 20 + margin.axisTop})`)
+                .style('stroke', 'black')
+                .style('stroke-width', '1');
+            break;
+        }
+        case 'continuous': {
+            let { colorScaleFunction, legendScale } = legendData,
+                legendHeight = 200,
+                legend = legendLayer
+                    .append('defs')
+                    .append('linearGradient')
+                    .attr('id', 'gradient')
+                    .attr('x1', '0%')
+                    .attr('y1', '100%')
+                    .attr('x2', '0%')
+                    .attr('y2', '0%')
+                    .attr('spreadMethod', 'pad');
+
+            legendScale.ticks().map((d, i) => {
+                legend
+                    .append('stop')
+                    .attr('offset', `${i}%`)
+                    .attr('stop-color', colorScaleFunction(d))
+                    .attr('stop-opacity', 1);
+            });
+
+            legendLayer
+                .append('rect')
+                .attr('width', 30)
+                .attr('height', legendHeight)
+                .style('fill', 'url(#gradient)')
+                .style('stroke', 'black')
+                .attr('transform', `translate(20,${margin.top + margin.axisTop})`);
+
+            legendLayer
+                .append('g')
+                .attr('class', 'axis y')
+                .attr('transform', `translate(50,${margin.top + margin.axisTop})`)
+                .call(
+                    getLog10AxisFunction(d3.axisRight, legendScale.copy().range([legendHeight, 0]))
+                );
+
+            legendLayer
+                .append('text')
+                .attr('class', styles.legendText)
+                .attr('x', 0)
+                .attr('y', 0)
+                .attr('transform', `translate(15, ${margin.top + margin.axisTop - 10})`)
+                .text('BMC (µM)');
+            legendLayer
+                .append('text')
+                .attr('class', styles.legendText)
+                .attr('x', 0)
+                .attr('y', 0)
+                .attr(
+                    'transform',
+                    `translate(50,${margin.top + margin.axisTop + legendHeight + 25})`
+                )
+                .text('XXX');
+
+            legendLayer
+                .append('rect')
+                .attr('x', 0)
+                .attr('y', 0)
+                .attr('width', 25)
+                .attr('height', 25)
+                .attr(
+                    'transform',
+                    `translate(20,${margin.top + margin.axisTop + legendHeight + 10})`
+                )
+                .attr('fill', 'white')
+                .style('stroke', 'black')
+                .style('stroke-width', '1');
+
+            legendLayer
+                .append('rect')
+                .attr('x', 0)
+                .attr('y', 0)
+                .attr('width', 25)
+                .attr('height', 25)
+                .attr(
+                    'transform',
+                    `translate(20,${margin.top + margin.axisTop + legendHeight + 40})`
+                )
+                .attr('mask', 'url(#stripeMask)')
+                .attr('fill', '#ccc');
+
+            legendLayer
+                .append('rect')
+                .attr('x', 0)
+                .attr('y', 0)
+                .attr('width', 25)
+                .attr('height', 25)
+                .attr(
+                    'transform',
+                    `translate(20,${margin.top + margin.axisTop + legendHeight + 40})`
+                )
+                .attr('fill', 'transparent')
+                .style('stroke', 'black')
+                .style('stroke-width', '1');
+
+            legendLayer
+                .append('text')
+                .attr('class', styles.legendText)
+                .attr('x', 0)
+                .attr('y', 0)
+                .attr(
+                    'transform',
+                    `translate(50,${margin.top + margin.axisTop + legendHeight + 55})`
+                )
+                .text('YYY');
+            break;
+        }
+
+        default:
+            break;
+    }
+
 
 
 };
@@ -282,7 +420,7 @@ class DevtoxHeatmap extends Component {
         this.unrenderPlot();
         // this is bootstrap plot svg
 
-        renderPlot(this.refs.svg, this.props.data);
+        renderPlot(this.refs.svg, this.props.data,  this.props.legendData);
 
         window.addEventListener('resize', this.handleResize);
     }
@@ -316,6 +454,25 @@ DevtoxHeatmap.propTypes = {
             hover_text: PropTypes.string,
         })
     ).isRequired,
+    legendData: PropTypes.shape({
+        type: PropTypes.oneOf(['discrete', 'continuous']).isRequired,
+        values: PropTypes.arrayOf(
+            PropTypes.shape({
+                label: PropTypes.string,
+                fill: PropTypes.string,
+                chemical_casrn: PropTypes.string,
+                readout_id: PropTypes.number,
+                title: PropTypes.string,
+            })
+        ),
+        colorScaleFunction: PropTypes.func,
+        legendScale: PropTypes.func,
+    }).isRequired,
+
+
+
+
+
 };
 
 export default DevtoxHeatmap;

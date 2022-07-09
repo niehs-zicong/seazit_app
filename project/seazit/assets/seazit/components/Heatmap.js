@@ -42,8 +42,8 @@ let addStripMask = function(svg) {
 
 let renderPlot = function(el, data, legendData) {
     $(el).empty();
-    console.log("HEATMAP")
-    console.log(data)
+    // console.log("HEATMAP")
+    // console.log(data)
     // let margin = {top: 80, right: 25, bottom: 30, left: 40},
     let margin = {
             top: 10,
@@ -56,20 +56,21 @@ let renderPlot = function(el, data, legendData) {
         },
         cellSize = 30,
      handleCellClick = function(d) {
-        console.log("handleCellClick")
-
+        // console.log("handleCellClick")
         // console.log(d)
-         // new BootstrapModal(Header, SingleCurveBody, {
-         //        // title: `${d.preferred_name} (${d.chemical_casrn}): ${d.readout_endpoint}`,
-         //        title: d.preferred_name + `: ` + d.endpoint_name,
-         //        protocol_id: d.protocol_id,
-         //        readout_id: d.endpoint_name + '_' + d.protocol_id,
-         //        casrn: d.casrn,
-         //    });
+         new BootstrapModal(Header, SingleCurveBody, {
+                // title: `${d.preferred_name} (${d.chemical_casrn}): ${d.readout_endpoint}`,
+                title: d.preferred_name + `: ` + d.endpoint_name,
+                protocol_id: d.protocol_id,
+                readout_id: d.endpoint_name + '_' + d.protocol_id,
+                casrn: d.casrn,
+            });
             new BootstrapModal(Header, MultipleCurveBody, {
-                title: d.x,
+                title: d.preferred_name + `: ` + d.endpoint_name,
+                // title: d.x,
+                protocol_id: d.protocol_id,
                 readout_ids: _.map(d.readouts, 'readout_id'),
-                casrns: [d.chemical_casrn],
+                casrns: [d.casrn],
             });
 
 
@@ -86,7 +87,7 @@ let renderPlot = function(el, data, legendData) {
         //         readout_id: d.endpoint_name + '_' + d.protocol_id,
         //         casrn: d.casrn,
         //     });
-        // }
+        // };
     },
 
     handleMouseOver = function(d) {
@@ -123,8 +124,6 @@ let renderPlot = function(el, data, legendData) {
             casrns,
         });
     },
-
-
 
 
          // create a tooltip
@@ -288,9 +287,6 @@ let renderPlot = function(el, data, legendData) {
         .on('mouseout', handleMouseOut)
         .on('click', handleCellClick);
 
-    console.log("legendData")
-
-    console.log(legendData)
     // draw legend, this legend length, size is fixed.
     // 2 cases, discrete = activity,  continuous = BMC, different legned form.
     let legendLayer = svg
@@ -321,13 +317,6 @@ let renderPlot = function(el, data, legendData) {
                 .attr('transform', (d, i) => `translate(15, ${i * 20 + margin.axisTop})`)
                 .style('stroke', 'black')
                 .style('stroke-width', '1');
-
-            // hard-coded - todo: fix
-            // legendLayer.append(() => ds._groups[0][2].cloneNode()).attr('fill', 'transparent');
-
-            // d3.select(ds._groups[0][2])
-            //     .attr('mask', 'url(#stripeMask)')
-            //     .attr('fill', '#ccc');
             break;
         }
         case 'continuous': {

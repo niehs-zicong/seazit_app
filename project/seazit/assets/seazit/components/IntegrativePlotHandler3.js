@@ -29,38 +29,6 @@ class IntegrativePlotHandler extends React.Component {
             data: null,
             scale: null,
             continuousColorScale: null,
-            selectivityList: [
-                {
-                    id: 1,
-                    name: "dev tox",
-                    isChecked: true,
-                    color: '#d62976',
-
-                },
-                {
-                    id: 2,
-                    name: "general tox",
-                    isChecked: false,
-                    color: '#d62976',
-
-                },
-                {
-                    id: 3,
-                    name: "inconclusive",
-                    isChecked: false,
-                    color: '#d62976',
-
-                },
-                {
-                    id: 4,
-                    name: "inactive",
-                    isChecked: false,
-                    color: '#d62976',
-                }
-            ],
-            selectivityOrder: [
-                   "dev tox","general tox","inconclusive","inactive"],
-
         };
     }
 
@@ -176,11 +144,19 @@ class IntegrativePlotHandler extends React.Component {
 
         let data = this.state.data.integrative_activity_selectivity,
             ontologyGroup = this.props.ontologyGroup,
-            // ontologyType = this.props.ontologyType,
-            ontologyGroupName = (this.props.ontologyType == integrative_Granular) ? 'developmental_defect_grouping_granular': 'developmental_defect_grouping_general';
+            ontologyType = this.props.ontologyType;
+        let ontologyGroupName = integrative_Granular ? 'developmental_defect_grouping_granular': 'developmental_defect_grouping_general';
 
-        data = _.chain(data)
-                    .filter((i) => ontologyGroup.includes(i[ontologyGroupName]))
+
+        switch (ontologyType) {
+
+
+
+
+
+            case integrative_Granular: {
+                data = _.chain(data)
+                    .filter((i) => ontologyGroup.includes(i.developmental_defect_grouping_granular))
                     .map((d) => {
                         return {
                             protocol_id:   d.protocol_id ,
@@ -225,63 +201,109 @@ class IntegrativePlotHandler extends React.Component {
                             developmental_defect_grouping_granular: d.developmental_defect_grouping_granular,
                             developmental_defect_grouping_general:   d.developmental_defect_grouping_general ,
                             seazit_recording_id:   d.seazit_recording_id ,
-                            x: d.protocol_name_plot + ": " + d[ontologyGroupName],
+                            x: d.protocol_name_plot + ": " + d.developmental_defect_grouping_granular,
                             y: d.preferred_name,
                             fill:  fillFunction(d),
-                            fill2:  null,
-                            xy: d.protocol_name_plot + "+" + d[ontologyGroupName] + '+' + d.preferred_name,
-
                         };
                     })
                     .sortBy('med_pod_med')
                     .value();
+
+                    let endpoints = _.chain(data)
+                            .map('endpoint_name')
+                            .uniq()
+                            .value();
+                    console.log("all endpoints in filtered data ")
+                    console.log(endpoints)
+
+                 let data2 = _.map(_.groupBy(data, 'x'), (value, key) => ({[key]: _.groupBy(value, 'y')}))
                    console.log("plot data")
                     console.log(data)
+                    console.log(data2)
+                    break;
+                    };
+            case integrative_General: {
+                data = _.chain(data)
+                    .filter((i) => ontologyGroup.includes(i.developmental_defect_grouping_general))
+                    .map((d) => {
+                        return {
+                            protocol_id:   d.protocol_id ,
+                            endpoint_name: d.endpoint_name,
+                            casrn: d.casrn,
+                            preferred_name:  d.preferred_name,
+                            use_category1:  d.use_category1,
+                            min_pod_med: d.min_pod_med,
+                            med_pod_med: d.med_pod_med,
+                            max_pod_med: d.max_pod_med,
+                            med_hitconf: d.med_hitconf,
+                            n_values:  d.n_values  ,
+                            mort_min_pod_med:  d.mort_min_pod_med   ,
+                            mort_med_pod_med:  d.mort_med_pod_med  ,
+                            mort_max_pod_med:  d.mort_max_pod_med  ,
+                            mort_med_hitconf:  d.mort_med_hitconf  ,
+                            mort_n_values:  d.mort_n_values  ,
+                            min_lowest_conc: d.min_lowest_conc,
+                            max_highest_conc: d.max_highest_conc,
+                            mean_pod: d.mean_pod,
+                            mean_selectivity: d.mean_selectivity,
+                            med_mort_hit_confidence: d.med_mort_hit_confidence,
+                            n_rep_max_dev_call: d.n_rep_max_dev_call   ,
+                            n_rep:  d.n_rep,
+                            f_max_dev_call: d.f_max_dev_call,
+                            final_dev_call: d.final_dev_call,
+                            malformation: d.malformation,
+                            endpoint_name_protocol: d.endpoint_name_protocol,
+                            combin_ontology: d.combin_ontology,
+                            combin_ontology_id: d.combin_ontology_id,
+                            protocol_source: d.protocol_source,
+                            lab_anonymous_code: d.lab_anonymous_code,
+                            study_phase: d.study_phase,
+                            test_condition:   d.test_condition  ,
+                            protocol_name_long:  d.protocol_name_long  ,
+                            protocol_name_plot:   d.protocol_name_plot ,
+                            proposed_ontology_label:   d.proposed_ontology_label ,
+                            ontology_id_number:   d.ontology_id_number ,
+                            recording_name:   d.recording_name ,
+                            developmental_defect_catergories:   d.developmental_defect_catergories ,
+                            defects_mapped_to_body_region:   d.defects_mapped_to_body_region ,
+                            developmental_defect_grouping_granular:   d.developmental_defect_grouping_granular ,
+                            developmental_defect_grouping_general:   d.developmental_defect_grouping_general ,
+                            seazit_recording_id:   d.seazit_recording_id ,
+                            x: d.protocol_name_plot + ": " + d.developmental_defect_grouping_general,
+                            y: d.preferred_name,
+                            fill:  fillFunction(d),
+                        };
+                    })
+                    // .sortBy('med_pod_med')
+                    .value();
 
-              let data2 = _.groupBy(data, function(d){
-                    return d.x + '+' + d.y;
-                });
-            Object.values(data2).forEach(
-            (valA) => {
-            let endpointsList = _.chain(valA)
-                .map('endpoint_name')
-                .uniq()
-                .value();
 
-            let final_dev_call = _.chain(valA)
-                .map('final_dev_call')
-                .uniq()
-                .filter((d) => _.includes(this.state.selectivityOrder, d))
-                .sort( ( a, b ) => this.state.selectivityOrder.indexOf( a ) - this.state.selectivityOrder.indexOf( b ))
-                .value();
+                    // let endpoints = _.chain(data)
+                    //         .map('endpoint_name')
+                    //         .uniq()
+                    //         .value();
+                    //
+                    // console.log("endpoints")
+                    // console.log(endpoints)
 
+                     let data2 = _.map(_.groupBy(data, 'x'), (value, key) => ({[key]: _.groupBy(value, 'y')}))
+                     // let data3 = _.map(_.groupBy(data, 'x'), (value, key) => ({[key]: _.groupBy(value, 'y')}))
+                       var data3 = _.groupBy(data, function(d){
+                            return d.x + '+' + d.y;
+                        });
+                   console.log("plot data")
+                    console.log(data)
+                    // console.log(data2)
+                    console.log(data3)
+                        Object.entries(data3).forEach(
+                    ([key, value]) =>
+                        {
 
-            let topFinal = final_dev_call[0]
-            console.log(topFinal)
-            let maxValue = _.chain(valA)
-                .filter((d) => d.final_dev_call == topFinal)
-                .map('mean_pod')
-                .uniq()
-                .max()
-                .value();
-                console.log(maxValue)
-                Object.values(valA).forEach(
-                (valB)=> {
-                	if (valB.final_dev_call == topFinal || valB.mean_pod == maxValue)
-                  {
-                  valB.fill2 = fillFunction(valB)
-                  } else {
-                  valB.fill2 = '#C9C9C9'
-                    }
-                  valB.endPointList = endpointsList;
-                }
-                )
-            }
-                    )
-
-            console.log("data2")
-            console.log(data2)
-
+                        }
+                );
+                    break;
+                    };
+        }
 
             return {
                     data,
