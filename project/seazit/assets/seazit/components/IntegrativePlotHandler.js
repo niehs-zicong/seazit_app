@@ -227,8 +227,7 @@ class IntegrativePlotHandler extends React.Component {
                             seazit_recording_id:   d.seazit_recording_id ,
                             x: d.protocol_name_plot + ": " + d[ontologyGroupName],
                             y: d.preferred_name,
-                            fill:  fillFunction(d),
-                            fill2:  null,
+                            fill:  null,
                             xy: d.protocol_name_plot + "+" + d[ontologyGroupName] + '+' + d.preferred_name,
 
                         };
@@ -238,50 +237,56 @@ class IntegrativePlotHandler extends React.Component {
                    console.log("plot data")
                     console.log(data)
 
-              let data2 = _.groupBy(data, function(d){
-                    return d.x + '+' + d.y;
-                });
-            Object.values(data2).forEach(
-            (valA) => {
-            let endpointsList = _.chain(valA)
-                .map('endpoint_name')
-                .uniq()
-                .value();
+        let   selectivityOrder =[ "dev tox","general tox","inconclusive","inactive"];
 
-            let final_dev_call = _.chain(valA)
-                .map('final_dev_call')
-                .uniq()
-                .filter((d) => _.includes(this.state.selectivityOrder, d))
-                .sort( ( a, b ) => this.state.selectivityOrder.indexOf( a ) - this.state.selectivityOrder.indexOf( b ))
-                .value();
+        let groups = _.chain(data)
+                        .map('xy')
+                        .uniq()
+                        .value();
+        let data3 = [];
+        for (const xy of groups) {
+          let result = _.filter(data, {xy:xy})
+            let endpoints = _.chain(result)
+                        .map('endpoint_name')
+                        .uniq()
+                        .value();
+          let topFinal = _.chain(result)
+                        .map('final_dev_call')
+                        .uniq()
+                        .filter((d) => _.includes(selectivityOrder, d))
+                        .sort( ( a, b ) => selectivityOrder.indexOf( a ) - selectivityOrder.indexOf( b ))
+                        .first()
+                        .value()
+                        ;
+            let maxValue = _.chain(result)
+                        .filter((d) => d.final_dev_call == topFinal)
+                        .map('mean_pod')
+                        .uniq()
+                        .max()
+                        .value();
 
 
-            let topFinal = final_dev_call[0]
-            console.log(topFinal)
-            let maxValue = _.chain(valA)
-                .filter((d) => d.final_dev_call == topFinal)
-                .map('mean_pod')
-                .uniq()
-                .max()
-                .value();
-                console.log(maxValue)
-                Object.values(valA).forEach(
-                (valB)=> {
-                	if (valB.final_dev_call == topFinal || valB.mean_pod == maxValue)
-                  {
-                  valB.fill2 = fillFunction(valB)
-                  } else {
-                  valB.fill2 = '#C9C9C9'
-                    }
-                  valB.endPointList = endpointsList;
-                }
-                )
-            }
-                    )
-
-            console.log("data2")
-            console.log(data2)
-
+            Object.values(result).forEach(
+                        (val)=> {
+                            if (val.final_dev_call == topFinal || val.mean_pod == maxValue)
+                          {
+                          val.fill = fillFunction(val)
+                          }
+                         val.endPointList = endpoints
+                        }
+                        )
+                data3 = _.chain(data3).push(result)
+                                .flatten()
+                                 .value();
+                console.log("result2")
+              console.log(topFinal)
+              console.log(maxValue)
+              console.log(result)
+          }
+          console.log(data3)
+            // data = data3
+            // data = _.reject(data3, ((i) => i.fill == null));
+          console.log(data)
 
             return {
                     data,

@@ -42,8 +42,8 @@ let addStripMask = function(svg) {
 
 let renderPlot = function(el, data, legendData) {
     $(el).empty();
-    // console.log("HEATMAP")
-    // console.log(data)
+    console.log("HEATMAP")
+    console.log(data)
     // let margin = {top: 80, right: 25, bottom: 30, left: 40},
     let margin = {
             top: 10,
@@ -273,7 +273,7 @@ let renderPlot = function(el, data, legendData) {
         .append('path')
         .attr('class', 'square')
         .attr('d', square)
-        .attr('fill', (d) => d.fill)
+        .attr('fill', (d) => (d.fill)? d.fill : 'transparent')
         .attr(
             'transform',
             (d) =>
