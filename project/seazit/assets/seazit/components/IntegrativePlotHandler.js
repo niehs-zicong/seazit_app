@@ -178,8 +178,10 @@ class IntegrativePlotHandler extends React.Component {
             ontologyGroup = this.props.ontologyGroup,
             // ontologyType = this.props.ontologyType,
             ontologyGroupName = (this.props.ontologyType == integrative_Granular) ? 'developmental_defect_grouping_granular': 'developmental_defect_grouping_general';
+                   console.log("plot data")
+                    console.log(this.state.data.integrative_activity_selectivity)
 
-        data = _.chain(data)
+            data = _.chain(data)
                     .filter((i) => ontologyGroup.includes(i[ontologyGroupName]))
                     .map((d) => {
                         return {
@@ -228,28 +230,30 @@ class IntegrativePlotHandler extends React.Component {
                             x: d.protocol_name_plot + ": " + d[ontologyGroupName],
                             y: d.preferred_name,
                             fill:  null,
+                            fillFlag: false,
                             xy: d.protocol_name_plot + "+" + d[ontologyGroupName] + '+' + d.preferred_name,
 
                         };
                     })
                     .sortBy('med_pod_med')
                     .value();
-                   console.log("plot data")
-                    console.log(data)
+                   console.log(data)
 
-        let   selectivityOrder =[ "dev tox","general tox","inconclusive","inactive"];
+       let   selectivityOrder =[ "dev tox","general tox","inconclusive","inactive"];
 
         let groups = _.chain(data)
                         .map('xy')
                         .uniq()
                         .value();
-        let data3 = [];
         for (const xy of groups) {
           let result = _.filter(data, {xy:xy})
+            console.log("result")
+            console.log(xy)
             let endpoints = _.chain(result)
                         .map('endpoint_name')
                         .uniq()
                         .value();
+            //find top level selectivityOrder function.
           let topFinal = _.chain(result)
                         .map('final_dev_call')
                         .uniq()
@@ -258,47 +262,57 @@ class IntegrativePlotHandler extends React.Component {
                         .first()
                         .value()
                         ;
+            result  = _.filter(result,(i) => i.final_dev_call === topFinal);
             let maxValue = _.chain(result)
-                        .filter((d) => d.final_dev_call == topFinal)
                         .map('mean_pod')
                         .uniq()
                         .max()
                         .value();
-
-
             Object.values(result).forEach(
-                        (val)=> {
-                            if (val.final_dev_call == topFinal || val.mean_pod == maxValue)
+                    (val)=> {
+                        if (val.mean_pod == maxValue)
                           {
-                          val.fill = fillFunction(val)
+                            val.fill = fillFunction(val)
+                            val.endPointList = endpoints
+                            val.fillFlag = true
                           }
-                         val.endPointList = endpoints
                         }
                         )
-                data3 = _.chain(data3).push(result)
-                                .flatten()
-                                 .value();
-                console.log("result2")
-              console.log(topFinal)
-              console.log(maxValue)
-              console.log(result)
-          }
-          console.log(data3)
-            // data = data3
-            // data = _.reject(data3, ((i) => i.fill == null));
-          console.log(data)
+            console.log(result)
 
-            return {
+            result  = _.filter(result,(i) => i.fillFlag === true);
+            console.log(result)
+
+          }
+         console.log(data)
+        if (this.props.visualization == INTVIZ_HEATMAP )
+            {
+               data  = _.chain(data)
+                            .filter((i) => i.fillFlag === true)
+                            .keyBy('xy')
+                            .values()
+                            .value();
+                console.log(data)
+
+                return {
                     data,
                     legendData,
                 };
+            }
+               else
+            {
+                return {
+                    data,
+                    legendData,
+                };
+
+            };
          };
 
     render() {
         if (!this.state.data) {
             return <Loading />;
         }
-        console.log(this.props)
         let d;
         d = this._getFilteredData();
         // console.log(d)

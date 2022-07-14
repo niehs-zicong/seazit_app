@@ -49,7 +49,13 @@ class MultipleCurveBody extends React.Component {
     }
 
     render() {
-        let url = getDoseResponsesUrl(this.props.readout_ids, this.props.casrns);
+        let url = getDoseResponsesUrl(
+            [this.props.protocol_id],
+            [this.props.readout_ids],
+            [this.props.casrns]
+                    );
+        console.log(url)
+        console.log(this.props)
         return (
             <div className="row-fluid">
                 <div className="col-sm-2">
@@ -69,6 +75,7 @@ class MultipleCurveBody extends React.Component {
 }
 
 MultipleCurveBody.propTypes = {
+    protocol_id: PropTypes.number.isRequired,
     readout_ids: PropTypes.array.isRequired,
     casrns: PropTypes.array.isRequired,
 };

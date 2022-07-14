@@ -56,50 +56,27 @@ let renderPlot = function(el, data, legendData) {
         },
         cellSize = 30,
      handleCellClick = function(d) {
-        // console.log("handleCellClick")
-        // console.log(d)
-         new BootstrapModal(Header, SingleCurveBody, {
-                // title: `${d.preferred_name} (${d.chemical_casrn}): ${d.readout_endpoint}`,
-                title: d.preferred_name + `: ` + d.endpoint_name,
+        console.log("handleCellClick")
+        console.log(d)
+
+
+        if (d.endPointList && d.endPointList.length > 1) {
+            new BootstrapModal(Header, MultipleCurveBody, {
+                title: d.xy,
+                protocol_id: d.protocol_id,
+                readout_ids: _.map(d.endPointList, function(x){ return x + '_' + d.protocol_id; }),
+                casrns: [d.casrn],
+            });
+        } else {
+             new BootstrapModal(Header, SingleCurveBody, {
+                title: d.xy,
                 protocol_id: d.protocol_id,
                 readout_id: d.endpoint_name + '_' + d.protocol_id,
                 casrn: d.casrn,
             });
-            new BootstrapModal(Header, MultipleCurveBody, {
-                title: d.preferred_name + `: ` + d.endpoint_name,
-                // title: d.x,
-                protocol_id: d.protocol_id,
-                readout_ids: _.map(d.readouts, 'readout_id'),
-                casrns: [d.casrn],
-            });
-
-
-        // if (d.readouts && d.readouts.length > 1) {
-        //     new BootstrapModal(Header, MultipleCurveBody, {
-        //         title: d.x,
-        //         readout_ids: _.map(d.readouts, 'readout_id'),
-        //         casrns: [d.chemical_casrn],
-        //     });
-        // } else {
-        //      new BootstrapModal(Header, SingleCurveBody, {
-        //         title: d.preferred_name + `: ` + d.endpoint_name,
-        //         protocol_id: d.protocol_id,
-        //         readout_id: d.endpoint_name + '_' + d.protocol_id,
-        //         casrn: d.casrn,
-        //     });
-        // };
+        };
     },
 
-    handleMouseOver = function(d) {
-        tooltip
-            .html(d.mean_selectivity ? d.mean_selectivity : 0)
-            .style('left', d3.event.pageX + 'px')
-            .style('top', d3.event.pageY + 20 + 'px')
-            .style('opacity', 1.0);
-    },
-    handleMouseOut = function(d) {
-        tooltip.style('opacity', 0.0);
-    },
 
     handleXLabelClick = function(label) {
         let cells = xMap[label],
@@ -124,19 +101,6 @@ let renderPlot = function(el, data, legendData) {
             casrns,
         });
     },
-
-
-         // create a tooltip
-   tooltip = d3.select(el)
-    .append("div")
-    .style("opacity", 0)
-    .attr("class", "tooltip")
-    .style("background-color", "white")
-    .style("border", "solid")
-    .style("border-width", "2px")
-    .style("border-radius", "5px")
-    .style("padding", "5px"),
-
 
       // width = 450 - margin.left - margin.right,
       // height = 450 - margin.top - margin.bottom,
@@ -265,6 +229,23 @@ let renderPlot = function(el, data, legendData) {
         .style('stroke-width', 2);
 
 
+  var handleMouseOver = function(d) {
+        console.log(d)
+        tooltip
+            .html(d.mean_selectivity ? d.mean_selectivity : 0)
+            .style('left', d3.event.pageX + 'px')
+            .style('top', d3.event.pageY + 20 + 'px')
+            .style('opacity', 1.0);
+    };
+    var handleMouseOut = function(d) {
+        tooltip.style('opacity', 0.0);
+    };
+    // add a tooltip
+    var tooltip = d3
+        .select('body')
+        .append('div')
+        .attr('class', 'tooltip')
+        .style('opacity', 0.0);
 
     chartLayer
         .selectAll('.square')
@@ -273,7 +254,8 @@ let renderPlot = function(el, data, legendData) {
         .append('path')
         .attr('class', 'square')
         .attr('d', square)
-        .attr('fill', (d) => (d.fill)? d.fill : 'transparent')
+        .attr('fill', (d) => d.fill)
+        // .attr('fill', (d) => (d.fill)? d.fill : 'transparent')
         .attr(
             'transform',
             (d) =>

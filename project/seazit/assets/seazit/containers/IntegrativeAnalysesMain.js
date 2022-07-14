@@ -165,9 +165,7 @@ class IntegrativeAnalysesMain extends React.Component {
         }
 
         console.log(this.state)
-        // let url = getIntegrativeUrl(this.state.assays, this.state.chemicals, this.state.ontologyType, this.state.ontologyGroup);
         // let url = getIntegrativeUrl(this.state.assays, this.state.chemicals);
-        // let url = "/seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=1&casrns=95-76-1"
         // let url = "/seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=1,2&casrns=95-76-1"
         let url = "/seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=1,2&casrns=95-76-1,56-35-9"
 
