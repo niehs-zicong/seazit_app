@@ -42,8 +42,8 @@ let addStripMask = function(svg) {
 
 let renderPlot = function(el, data, legendData) {
     $(el).empty();
-    console.log("HEATMAP")
-    console.log(data)
+    // console.log("HEATMAP")
+    // console.log(data)
     // let margin = {top: 80, right: 25, bottom: 30, left: 40},
     let margin = {
             top: 10,
@@ -56,9 +56,8 @@ let renderPlot = function(el, data, legendData) {
         },
         cellSize = 30,
      handleCellClick = function(d) {
-        console.log("handleCellClick")
-        console.log(d)
-
+        // console.log("handleCellClick")
+        // console.log(d)
 
         if (d.endPointList && d.endPointList.length > 1) {
             new BootstrapModal(Header, MultipleCurveBody, {
@@ -102,6 +101,18 @@ let renderPlot = function(el, data, legendData) {
         });
     },
 
+      handleMouseOver = function(d) {
+            // console.log(d)
+            tooltip
+                .html(d.mean_pod ? d.mean_pod : 0)
+                .style('left', d3.event.pageX + 'px')
+                .style('top', d3.event.pageY + 20 + 'px')
+                .style('opacity', 1.0);
+        },
+         handleMouseOut = function(d) {
+            tooltip.style('opacity', 0.0);
+        },
+
       // width = 450 - margin.left - margin.right,
       // height = 450 - margin.top - margin.bottom,
     // xasix is column, yasix is row
@@ -110,15 +121,9 @@ let renderPlot = function(el, data, legendData) {
     //, yasix is row
        yasix = d3.map(data, function(d){return (d.y);}).keys(),
 
-    width = xasix.length * cellSize + margin.axisLeft + margin.left + margin.right + margin.legend,
-    height = yasix.length * cellSize + margin.axisTop + margin.top + margin.bottom,
 
-
-
-      // List of all variables and number of them
-       domain = d3.set(data.map(function(d) { return d.mean_selectivity })).values(),
-       num = Math.sqrt(data.length),
-
+        width = xasix.length * cellSize + margin.axisLeft + margin.left + margin.right + margin.legend,
+        height = yasix.length * cellSize + margin.axisTop + margin.top + margin.bottom,
         chartHeight = height - (margin.top + margin.bottom + margin.axisTop),
         chartWidth = width - (margin.left + margin.right + margin.axisLeft + margin.legend),
 
@@ -127,8 +132,6 @@ let renderPlot = function(el, data, legendData) {
             .symbol()
             .type(d3.symbolSquare)
             .size(900),
-            // .size(1600),
-
 
         // Create the svg area
          svg = d3
@@ -140,23 +143,30 @@ let renderPlot = function(el, data, legendData) {
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
+    // add a tooltip
+    var tooltip = d3
+        .select('body')
+        .append('div')
+        .attr('class', 'tooltip')
+        .style('opacity', 0.0);
+
+
      let axisLayer = svg
         .append('g')
         .classed('axisLayer', true)
         .attr('width', width)
         .attr('height', height);
 
-          //   console.log(xasix)
-          // console.log(yasix)
-          // console.log(domain)
-
-
-    // draw y-axis
+    // draw xy-axis
+    let xScale = d3
+        .scaleBand()
+        .domain(xasix)
+        .range([0, chartWidth]);
     let yScale = d3
          .scaleBand()
         .domain(yasix)
         .range([0, chartHeight]);
-
+    let xAxis = d3.axisTop(xScale).tickSizeOuter(0);
     let yAxis = d3.axisLeft(yScale).tickSizeOuter(0);
 
     axisLayer
@@ -172,14 +182,6 @@ let renderPlot = function(el, data, legendData) {
         .on('click', handleYLabelClick)
         ;
 
-    // draw x-axis
-
-    let xScale = d3
-        .scaleBand()
-        .domain(xasix)
-        .range([0, chartWidth]);
-
-    let xAxis = d3.axisTop(xScale).tickSizeOuter(0);
 
     axisLayer
         .append('g')
@@ -229,23 +231,7 @@ let renderPlot = function(el, data, legendData) {
         .style('stroke-width', 2);
 
 
-  var handleMouseOver = function(d) {
-        console.log(d)
-        tooltip
-            .html(d.mean_selectivity ? d.mean_selectivity : 0)
-            .style('left', d3.event.pageX + 'px')
-            .style('top', d3.event.pageY + 20 + 'px')
-            .style('opacity', 1.0);
-    };
-    var handleMouseOut = function(d) {
-        tooltip.style('opacity', 0.0);
-    };
-    // add a tooltip
-    var tooltip = d3
-        .select('body')
-        .append('div')
-        .attr('class', 'tooltip')
-        .style('opacity', 0.0);
+
 
     chartLayer
         .selectAll('.square')

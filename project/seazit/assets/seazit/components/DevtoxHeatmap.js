@@ -82,73 +82,25 @@ let renderPlot = function(el, data,legendData) {
         tooltip.style('opacity', 0.0);
     },
 
-
-
-         // create a tooltip
-   tooltip = d3.select(el)
-    .append("div")
-    .style("opacity", 0)
-    .attr("class", "tooltip")
-    .style("background-color", "white")
-    .style("border", "solid")
-    .style("border-width", "2px")
-    .style("border-radius", "5px")
-    .style("padding", "5px"),
-
-  // Three function that change the tooltip when user hover / move / leave a cell
-   mouseover = function(d) {
-    tooltip
-      .style("opacity", 1)
-    d3.select(this)
-      .style("stroke", "black")
-      .style("opacity", 1)
-  },
-   mousemove = function(d) {
-    tooltip
-      .html("The exact value of<br>this cell is: " + d.mean_selectivity)
-      .style("left", (d3.mouse(this)[0]+70) + "px")
-      .style("top", (d3.mouse(this)[1]) + "px")
-  },
-   mouseleave = function(d) {
-    tooltip
-      .style("opacity", 0)
-    d3.select(this)
-      .style("stroke", "none")
-      .style("opacity", 0.8)
-  },
-
    continuousColorScale = function(d) {
             let scale = d3
                         .scaleLog()
+                        .domain([-0.2, 3.1549])
                         .range([1, 0])
-                        .domain([1e-5, 1e3]);
-            let scale2 = d3
-                        .scaleLog()
-                        .range([1, 0])
-                        // .domain([-0.2, 3.1549]);
-                        .domain([1e-5, 1e3]);
-            let scale3 = d3
-                        .scaleBand()
-                        .range([1, 0])
-                        .domain([1e-5, 1e3]);
+                        // .domain([1e-5, 1e3])
+                        ;
             return d3.interpolateViridis(scale(d));
   },
 
       // width = 450 - margin.left - margin.right,
       // height = 450 - margin.top - margin.bottom,
     // xasix is column, yasix is row
-     xKeys= d3.map(data, function(d){return d.x ;})
-         .keys(),
-    //, yasix is row
-       yKeys = d3.map(data, function(d){return d.y;})
-        .keys(),
-       domain = d3.set(data.map(function(d) { return d.mean_selectivity })).values(),
-       selectivityDomain = d3.extent(_.map(data, 'mean_selectivity')),
-       num = Math.sqrt(data.length),
+        xasix= d3.map(data, function(d){return d.x ;}).keys(),
+        yasix = d3.map(data, function(d){return d.y;}).keys(),
 
-    width = xKeys.length * cellSize + margin.axisLeft + margin.left + margin.right + margin.legend,
-    height = yKeys.length * cellSize + margin.axisTop + margin.top + margin.bottom,
-      // List of all variables and number of them
+        width = xasix.length * cellSize + margin.axisLeft + margin.left + margin.right + margin.legend,
+        height = yasix.length * cellSize + margin.axisTop + margin.top + margin.bottom,
+
 
         chartHeight = height - (margin.top + margin.bottom + margin.axisTop),
         chartWidth = width - (margin.left + margin.right + margin.axisLeft + margin.legend),
@@ -158,79 +110,142 @@ let renderPlot = function(el, data,legendData) {
      selectivityColor = d3.scaleSequential()
         .interpolator(d3.interpolateInferno)
         .domain([-1,1]),
-            // Create the svg area
-         svg = d3.select(el)
-          .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-          .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+              // Create a color scale
+       colorDomain = d3.extent(_.map(data, 'mean_pod')),
+       sizeDomain = d3.extent(_.map(data, 'mean_selectivity')),
 
-
-        //console.log(domain)
-        //console.log(selectivityDomain)
-
-        // draw y-axis
-    let yScale = d3
-         .scaleBand()
-        .range([chartHeight, 0])
-        .domain(yKeys)
-        .padding(0.05)
-        ;
-
-    let xScale = d3
-        .scaleBand()
-        .range([0, chartWidth])
-        .domain(xKeys)
-        .padding(0.05)
-        ;
-
-
-    // let xScale = d3
-    //     .scaleBand()
-    //     .domain(xKeys)
-    //     .range([0, chartWidth]);
-    // let yScale = d3.scaleBand()
-    //     .domain(yKeys)
-    //     .range([0, chartHeight]);
-
-
-      svg.append("g")
-        .style("font-size", 15)
-        .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisTop(xScale).tickSizeOuter(0))
-        // .attr('dx', '.8em')
-        // .attr('dy', '.55em')
-        // .attr('transform', 'rotate(-65)')
-        // .select(".domain").remove()
-
-      svg.append("g")
-        .style("font-size", 15)
-        .call(d3.axisLeft(yScale).tickSizeOuter(0))
-        // .select(".domain").remove()
-
-      // Create a color scale
-      var colorRange = d3.extent(_.map(data, 'mean_selectivity'));
       // [-0.20605, 3.1549] is min and max for allset data from table.
       // var colorRange = [-0.20605, 3.1549];
 
       //console.log(colorRange)
-      var color = d3.scaleLinear()
+       color = d3.scaleLinear()
         // .domain([-1, 0, 1])
-        .domain(colorRange)
-        // .range(["#B22222", "#fff", "#000080"]);
-        .range(['red', 'blue']);
+        .domain(colorDomain)
+        .range(["#B22222", "#fff", "#000080"]),
+        // .range(['red', 'blue']),
 
             // Create a size scale for bubbles on top right. Watch out: must be a rootscale!
-      var size = d3.scaleSqrt()
-        .domain([0, 1])
-        .range([0, 9]);
+        // The scaleSqrt scale is useful for sizing circles by area (rather than radius).
+        // domain is domain between all data
+        // range is between 0 to half of cellsize,   which is radius.
+       size = d3.scaleSqrt()
+        .domain(sizeDomain)
+        .range([0, cellSize/2]),
 
-      //console.log("data")
-      //console.log(data)
+            // Create the svg area
+         svg = d3
+           .select(el)
+          .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+          .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")"),
 
-      // Create one 'g' element for each cell of the correlogram
-       var cor = svg.selectAll(".cor")
+        // add a tooltip
+         tooltip = d3
+            .select('body')
+            .append('div')
+            .attr('class', 'tooltip')
+            .style('opacity', 0.0);
+
+    console.log("mean_selectivity")
+             console.log(sizeDomain)
+    console.log("mean_pod")
+             console.log(colorDomain)
+
+        // draw xy-axis
+     let axisLayer = svg
+        .append('g')
+        .attr("class", "axisLayer")
+        // .classed('axisLayer', true)
+        .attr('width', width)
+        .attr('height', height);
+
+
+
+
+    let xScale = d3
+        .scaleBand()
+        .domain(xasix)
+        .range([0, chartWidth]);
+    let yScale = d3
+         .scaleBand()
+        .domain(yasix)
+        .range([0, chartHeight]);
+
+    let xAxis = d3.axisTop(xScale).tickSizeOuter(0);
+    let yAxis = d3.axisLeft(yScale).tickSizeOuter(0);
+    axisLayer
+        .append('g')
+        .attr(
+            'transform',
+            `translate(${margin.left + margin.axisLeft}, ${margin.top + margin.axisTop})`
+        )
+        .attr('class', 'axis y')
+        .call(yAxis)
+        .selectAll('text')
+        .style('cursor', 'pointer')
+        ;
+    axisLayer
+        .append('g')
+        .attr(
+            'transform',
+            `translate(${margin.left + margin.axisLeft}, ${margin.top + margin.axisTop})`
+        )
+        .attr('class', 'axis x')
+        .call(xAxis)
+        .selectAll('text')
+        .attr('dx', '.8em')
+        .attr('dy', '.55em')
+        .attr('transform', 'rotate(-65)')
+        .style('text-anchor', 'start')
+        .style('cursor', 'pointer')
+        ;
+
+
+
+        // .select(".domain").remove()
+
+
+
+
+    let chartLayer = svg
+        .append('g')
+        .classed('chartLayer', true)
+        .attr('width', chartWidth)
+        .attr('height', chartHeight)
+        .attr(
+            'transform',
+            `translate(${margin.left + margin.axisLeft}, ${margin.top + margin.axisTop})`
+        );
+
+
+    //     // plot bounding box
+    chartLayer
+        .append('rect')
+        .attr('x', xScale.range()[0])
+        .attr('y', yScale.range()[0])
+        .attr('width', xScale.range()[1])
+        .attr('height', yScale.range()[1])
+        .attr('mask', 'url(#stripeMask)')
+        .attr('fill', '#ccc');
+
+    chartLayer
+        .append('rect')
+        .attr('x', xScale.range()[0])
+        .attr('y', yScale.range()[0])
+        .attr('width', xScale.range()[1])
+        .attr('height', yScale.range()[1])
+        .attr('fill', 'transparent')
+        .style('stroke', 'black')
+        .style('stroke-width', 2);
+
+
+    console.log("data")
+    console.log(data)
+
+    chartLayer
+        .selectAll(".cor")
         .data(data)
         .enter()
         .append("g")
@@ -241,21 +256,27 @@ let renderPlot = function(el, data,legendData) {
                     yScale.bandwidth() / 2})`
             )
           })
-       ;
-
-      // Up right part: add circles
-       cor.append("circle")
+           .append("circle")
           .attr("r", function(d){ return size(Math.abs(d.mean_selectivity)) })
-          .style("fill", function(d){
-              return color(d.mean_selectivity);
-          })
-          .style("opacity", 0.8)
+          // .attr('r','10px')
+          // .attr("r", function(d){ return size(Math.abs(d.mean_selectivity))  })
+          // .style("fill", function(d){
+          //     return color(d.mean_pod);
+          // })
+         .attr('fill', (d) => color(d.mean_pod))
+         // .attr('fill', (d) => continuousColorScale(d.mean_pod))
+           .style("opacity", 0.8)
+            .on('mouseover', handleMouseOver)
+            .on('mouseout', handleMouseOut)
+            .on('click', handleCellClick);
+
 
 
         let legendLayer = svg
-        .append('g')
-        .classed('legendLayer', true)
-        .attr('transform', `translate(${width - margin.legend},${margin.top})`);
+            .append('g')
+            .classed('legendLayer', true)
+            .attr('transform', `translate(${width - margin.legend},${margin.top})`);
+
 
     switch (legendData.type) {
         case 'discrete': {

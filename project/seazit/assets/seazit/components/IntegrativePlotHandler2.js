@@ -78,6 +78,7 @@ class IntegrativePlotHandler extends React.Component {
                 switch (visualization) {
                     case INTVIZ_HEATMAP:
                         return function(data) {
+
                             switch (data.final_dev_call) {
                                 case 'dev tox':
                                     return '#d62976';
@@ -94,8 +95,7 @@ class IntegrativePlotHandler extends React.Component {
                         };
                     case INTVIZ_DevtoxHEATMAP:
                         return function(data) {
-                            // return data.mean_pod ? continuousColorScale(Math.pow(10, data.mean_pod) * 1000000) : 'white';
-                            return data.mean_pod ? continuousColorScale(data.mean_pod) : 'white';
+                            return data.mean_pod ? continuousColorScale(Math.pow(10, data.mean_pod) * 1000000) : 'white';
                         };
                     default:
                         throw 'Unknown display type.';
@@ -150,7 +150,9 @@ class IntegrativePlotHandler extends React.Component {
             selectivityOrder =[ "dev tox","general tox","inconclusive","inactive"],
             ontologyGroupName = (this.props.ontologyType == integrative_Granular) ? 'developmental_defect_grouping_granular': 'developmental_defect_grouping_general';
 
+            // TODO:  missing protocol column error.
             //
+            console.log(this.state.data.integrative_activity_selectivity)
             //
             // console.log(_.chain(data)
             //             .map('protocol_name_plot')
@@ -213,9 +215,6 @@ class IntegrativePlotHandler extends React.Component {
                     })
                     .sortBy('med_pod_med')
                     .value();
-
-            console.log("data  before and after ")
-                    console.log(this.state.data.integrative_activity_selectivity)
             console.log(data)
 
         let groups = _.chain(data)
@@ -235,10 +234,10 @@ class IntegrativePlotHandler extends React.Component {
         console.log(groups3)
 
         for (const xy of groups) {
-            //
-            // console.log("result")
-            // console.log(xy)
-            // console.log(data)
+
+            console.log("result")
+            console.log(xy)
+            console.log(data)
 
           let result = _.filter(data, {xy:xy})
 
@@ -283,6 +282,16 @@ class IntegrativePlotHandler extends React.Component {
                             .keyBy('xy')
                             .values()
                             .value();
+                console.log(data)
+
+
+            let protocol_name3 = _.chain(data)
+                        .map('protocol_name_plot')
+                        .uniq()
+                        .value();
+            // console.log(protocol_name3)
+
+
                 return {
                     data,
                     legendData,
@@ -314,9 +323,6 @@ class IntegrativePlotHandler extends React.Component {
 
         if (this.props.visualization == INTVIZ_HEATMAP )
         {
-            console.log("INTVIZ_HEATMAP")
-            console.log(d.data)
-
             return (
             <div>
                 <Heatmap data={d.data}
@@ -327,8 +333,6 @@ class IntegrativePlotHandler extends React.Component {
         }
            else
         {
-             console.log("devtox_heatmap")
-            console.log(d.data)
             return (
                <div>
                 <DevtoxHeatmap data={d.data}
