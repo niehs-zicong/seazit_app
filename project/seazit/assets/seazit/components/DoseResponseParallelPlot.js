@@ -53,6 +53,7 @@ class DoseResponseParallelPlot extends React.Component {
                         curvep: _.filter(data.curvep, { key: k }),
                         hill: _.filter(data.hill, { key: k }),
                     };
+
                 })
                 .each((d, k) => {
                     let dr = d.dose_response[0];

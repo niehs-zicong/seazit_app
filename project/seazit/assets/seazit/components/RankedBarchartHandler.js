@@ -42,26 +42,10 @@ class RankedBarchartHandler extends React.Component {
                 return;
             }
             // console.log(this.state.data)
-            console.log('data');
-            console.log(url);
-            console.log(data);
             this.setState({ data });
         });
     }
 
-    // loadBmd() {
-    //     // this.state.collapsedData.map((d) => this._renderPlot(d, this.state.yrange));
-    // }
-
-    // updateData(data, collapse) {
-    //     this.setKeys(data, collapse);
-    //     let update = this.collapseData(data, collapse);
-    //     let scale = this.getColorScale(update.collapsedData, collapse);
-    //     this.setState({
-    //         ...update,
-    //         scale,
-    //     });
-    // }
 
     setDatasetKey(data) {
         data.key = `${data.endpoint_name}|${data.protocol_id}`;

@@ -4,8 +4,8 @@ import BmdBoxplot from '../components/BmdBoxplot';
 import BmdAssayPca from '../components/BmdAssayPca';
 import BmdChemicalPca from '../components/BmdChemicalPca';
 import FiveOhEight from '../components/FiveOhEight';
-import HeatmapHandler from '../components/HeatmapHandler';
 import RankedBarchart from '../components/RankedBarchart';
+import IntegrativePlotHandler from '../components/IntegrativePlotHandler';
 
 import Loading from 'utils/Loading';
 import HeatmapDisplaySelector from '../widgets/HeatmapDisplaySelector';
@@ -21,14 +21,12 @@ import ReadoutTypeWidget from '../widgets/ReadoutTypeWidget';
 import CheckBoxWidget from "../widgets/CheckBoxWidget";
 
 import {
-    BMD_HILL,
     HEATMAP_ACTIVITY,
-    INTVIZ_BOXPLOT,
+    INTVIZ_DevtoxHEATMAP,
     INTVIZ_ASSAY_PCA,
     INTVIZ_CHEMICAL_PCA,
     INTVIZ_HEATMAP,
     CHEMFILTER_CATEGORY,
-    CHEMLIST_80,
     READOUT_TYPE_CATEGORY,
     READOUT_TYPE_READOUT,
     IntegrativeAnalysesTab,
@@ -37,13 +35,9 @@ import {
     loadMetadata,
     renderNoSelected,
     getIntegrativeUrl,
-    svg_download_form, getDoseResponsesUrl,
 } from '../shared';
+import PropTypes from "prop-types";
 
-let BMD_CW = {
-    1: 'curvep',
-    2: 'hill',
-};
 
 class IntegrativeAnalysesMain extends React.Component {
     constructor(props) {
@@ -55,67 +49,39 @@ class IntegrativeAnalysesMain extends React.Component {
 
             // HelpButtonWidget
             showHelpText: false,
+            assays: [],
 
-            // BmdWidget
-            bmdType: BMD_HILL,
+            // ontologyWidget
+            ontologyType: integrative_Granular,
+            // ontologyType: integrative_General,
 
-            // BmdWidget
-            ontologyGroup: integrative_Granular,
+            // ontologyGroup:['hatching defect'],
+            ontologyGroup:[],
 
             // ChemicalSelectorWidget
-            chemList: CHEMLIST_80,
             chemicalFilterBy: CHEMFILTER_CATEGORY,
             chemicals: [],
             categories: [],
-            ontologyDefectGrouping:[],
-            // ReadoutTypeWidget
-            readoutType: READOUT_TYPE_CATEGORY,
 
             // ReadoutSelectorWidget
-            assays: [],
-            readouts: [],
+            readoutType: READOUT_TYPE_CATEGORY,
 
-            // ReadoutCategoryWidget
-            readoutCategories: [],
+            readouts: [],
 
             // IntegrativePlotWidget
             visualization: INTVIZ_HEATMAP,
+            // visualization: INTVIZ_DevtoxHEATMAP,
 
             // HeatmapDisplaySelector
             heatmapDisplay: HEATMAP_ACTIVITY,
+            tabFlag: IntegrativeAnalysesTab,
 
-            selectivityList: [
-                {
-                    id: 1,
-                    name: "dev tox",
-                    isChecked: true,
-                },
-                {
-                    id: 2,
-                    name: "general tox",
-                    isChecked: false,
-
-                },
-                {
-                    id: 3,
-                    name: "inconclusive",
-                    isChecked: false,
-                },
-                {
-                    id: 4,
-                    name: "inactive",
-                    isChecked: false,
-                }
-            ],
         };
-                console.log(this.state)
 
     }
 
     componentWillMount() {
         loadMetadata(this);
-        console.log(this.state)
-
     }
 
     _renderHelpText() {
@@ -151,11 +117,7 @@ class IntegrativeAnalysesMain extends React.Component {
                         displayed.
                     </li>
                     <li>
-                        <b>Boxplot:</b> Each boxplot represents all BMCs for a given readout or
-                        endpoint category, and all selected chemicals. The box in the boxplot
-                        highlights the median (solid line), 25th, and 75th percentiles. Upper and
-                        lower tails are the 5th and 95th percentile. The mean is shown as a dotted
-                        line within each box.
+                        <b>XXX:</b>
                     </li>
                 </ol>
                 <p>
@@ -177,94 +139,20 @@ class IntegrativeAnalysesMain extends React.Component {
         );
     }
 
-    _renderReadoutChemicalSelectors() {
-        let widget;
-        if (this.state.readoutType === READOUT_TYPE_CATEGORY) {
-            widget = <ReadoutCategoryWidget stateHolder={this} />;
-        } else {
-            widget = (
-                <ReadoutWidget
-                    stateHolder={this}
-                    hideViability={false}
-                    hideNonViability={false}
-                    multiAssaySelector={true}
-                    multiReadoutSelector={true}
-                    tabName={IntegrativeAnalysesTab}
-                />
-            );
-        }
 
-        return (
-            <div>
-                <ReadoutTypeWidget stateHolder={this} />
-                {widget}
-                <hr />
-                <ChemicalWidget stateHolder={this} />
-                <hr />
-            </div>
-        );
-    }
 
     _renderMainBody(url) {
-        let hasChems = this.state.chemicals.length > 0,
-            hasReadouts = this.state.readouts.length > 0,
-            hasReadoutCategories = this.state.readoutCategories.length > 0,
-            readoutType,
-            viz = this.state.visualization,
-            requiresFilters = [INTVIZ_HEATMAP, INTVIZ_BOXPLOT];
-
-        let filtersRequired =
-            _.includes(requiresFilters, viz) &&
-            (!hasChems ||
-                (readoutType == READOUT_TYPE_READOUT && !hasReadouts) ||
-                    (readoutType == READOUT_TYPE_CATEGORY && !hasReadoutCategories));
-
-        if (filtersRequired) {
-            return renderNoSelected({
-                // hasReadouts: readoutType == READOUT_TYPE_READOUT ? hasReadouts : undefined,
-                // hasReadoutCategories:
-                //     readoutType == READOUT_TYPE_CATEGORY ? hasReadoutCategories : undefined,
-                // hasChems,
-            });
-        }
-
-        switch (viz) {
-            case INTVIZ_ASSAY_PCA: {
-                return (
+        // let hasChems = this.state.chemicals.length > 0,
+        //     hasReadoutCategories = this.state.readoutCategories.length > 0,
+        //     requiresFilters = [INTVIZ_HEATMAP, INTVIZ_DevtoxHEATMAP];
+            return (
                     <div>
-                        <BmdAssayPca bmdType={BMD_CW[this.state.bmdType]} />
-                        <p className="help-block">
-                            <b>Interactivity note:</b> This 3D scatterplot is interactive. Hover
-                            over items to view details. Click and drag the mouse to rotate the
-                            image. Use your mouse wheel to scroll in/out. Click an item in the
-                            legend to show/hide.
-                        </p>
-                    </div>
-                );
-            }
-            case INTVIZ_CHEMICAL_PCA: {
-                return (
-                    <div>
-                        <BmdChemicalPca bmdType={BMD_CW[this.state.bmdType]} />
-                        <p className="help-block">
-                            <b>Interactivity note:</b> This 3D scatterplot is interactive. Hover
-                            over items to view details. Click and drag the mouse to rotate the
-                            image. Use your mouse wheel to scroll in/out. Click an item in the
-                            legend to show/hide.
-                        </p>
-                    </div>
-                );
-            }
-            case INTVIZ_HEATMAP: {
-                return (
-                    <div>
-                        <HeatmapHandler
-                            // bmdType={BMD_CW[this.state.bmdType]}
+                        <IntegrativePlotHandler
+                            assay = {this.state.assays}
                             casrns={this.state.chemicals}
-                            heatmapDisplay={this.state.heatmapDisplay}
-                            // readoutType={this.state.readoutType}
-                            readouts={this.state.readouts}
-                            readoutCategories={this.state.readoutCategories}
+                            visualization={this.state.visualization}
+                            ontologyType={this.state.ontologyType}
+                            ontologyGroup={this.state.ontologyGroup}
                             url={url}
                         />
                         <p className="help-block">
@@ -272,43 +160,7 @@ class IntegrativeAnalysesMain extends React.Component {
                             view individual dose-response curves associated with it.
                         </p>
                     </div>
-                );
-            }
-            case INTVIZ_BOXPLOT: {
-                return (
-                    <div>
-                        {
-                            <h2>
-                                Download buttons: &nbsp;&nbsp;&nbsp;&nbsp;
-                                <button
-                                    onClick={() => svg_download_form('IA_Boxplot01')}
-                                    class="btn btn-primary"
-                                >
-                                    Export data
-                                </button>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <button
-                                    onClick={() => svg_download_form('IA_Boxplot01')}
-                                    class="btn btn-primary"
-                                >
-                                    Export plot
-                                </button>
-                            </h2>
-                        }
-                        <BmdBoxplot
-                            bmdType={BMD_CW[this.state.bmdType]}
-                            casrns={this.state.chemicals}
-                            // readoutType={this.state.readoutType}
-                            readouts={this.state.readouts}
-                            readoutCategories={this.state.readoutCategories}
-                        />
-                    </div>
-                );
-            }
-            default: {
-                throw 'Unknown visualization type';
-            }
-        }
+            );
     }
 
     render() {
@@ -316,14 +168,16 @@ class IntegrativeAnalysesMain extends React.Component {
             return <Loading />;
         }
 
-        let isPca = _.includes([INTVIZ_ASSAY_PCA, INTVIZ_CHEMICAL_PCA], this.state.visualization),
-            isHeatmap = this.state.visualization === INTVIZ_HEATMAP;
+        console.log(this.state)
+        let url = getIntegrativeUrl(this.state.assays, this.state.chemicals);
+        //heatmap test
+        // let url = "/seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=1,2&casrns=95-76-1,56-35-9"
+        // fill  missing data in model.py.
+        // corr map test
+        // let url = " /seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=5,6&casrns=115-86-6,71751-41-2,56-35-9,36734-19-7,53-70-3,43121-43-3,84-74-2,5598-15-2,2921-88-2,137-30-4,58-89-9,116-06-3,330-55-2,80-05-7,76738-62-0,298-02-2,69806-50-4,75-07-0,95737-68-1,83-79-4,85509-19-9,13674-87-8,1912-24-9,79-94-7,129-00-0 "
+        // let url = " /seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=5,6&casrns=115-86-6,71751-41-2,56-35-9"
 
-        // let url = getBmdsUrl(this.state.assay, this.state.readouts);
-        // let url = '/seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=1,2&readouts=Abnormal_heartbeat+Mort@120_1,MalformedAny+Mort@24_2&casrns=67-68-5,79-94-7';
-        // let url = '/seazit/api/seazit_result/bmcByLabResult/?format=json&protocol_ids=1,2&readouts=Abnormal_heartbeat+Mort@120_1,MalformedAny+Mort@24_2';
-        let url = '/seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=1,5&readouts=Abnormal_heartbeat+Mort@120,Yolk_opacity+Mort@120&casrns=51-52-5,115-86-6,2078-54-8,71751-41-2,56-35-9,3380-34-5,36734-19-7,26787-78-0,53-70-3,127-07-1,43121-43-3,108-46-3,84-74-2,95-76-1,5598-15-2,2921-88-2,56-53-1,67-68-5,137-30-4,58-89-9,116-06-3,58-08-2,330-55-2,80-05-7,76738-62-0,298-02-2,99-66-1,69806-50-4,75-07-0,50-35-1,95737-68-1,83-79-4,85509-19-9,13674-87-8,1912-24-9,1069-66-5,50-78-2,79-94-7,87-86-5,129-00-0'
-        // let url2 = getIntegrativeUrl(this.state.assays, this.state.readouts, this.state.chemicals);
+        console.log("url")
         console.log(url)
         return (
             <div className="row-fluid">
@@ -338,31 +192,27 @@ class IntegrativeAnalysesMain extends React.Component {
                 </div>
                 <div className="col-md-3">
                     <IntegrativePlotWidget stateHolder={this} />
-                    {/*{isHeatmap*/}
-                    {/*    ? [<hr key="0" />, <HeatmapDisplaySelector key="1" stateHolder={this} />]*/}
-                    {/*    : null}*/}
                     <hr />
                     <ReadoutWidget
-                    stateHolder={this}
-                    hideViability={false}
-                    hideNonViability={false}
-                    multiAssaySelector={true}
-                    multiReadoutSelector={true}
-                    tabName={IntegrativeAnalysesTab}
+                        stateHolder={this}
+                        hideViability={false}
+                        hideNonViability={false}
+                        multiAssaySelector={true}
+                        multiReadoutSelector={true}
                     />
                     <hr />
+                    <div>
+                        <OntologyWidget stateHolder={this} />
+                            <hr />
+                    </div>
                     <ChemicalWidget stateHolder={this} />
-                    <hr />
-                    <CheckBoxWidget stateHolder={this} />
-                    <hr />
-                    <OntologyWidget stateHolder={this} />
-
                 </div>
 
                 <div className="col-md-9">
                     {this._renderHelpText()}
                     {this._renderMainBody(url)}
                 </div>
+
             </div>
         );
     }

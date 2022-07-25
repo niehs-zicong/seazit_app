@@ -626,8 +626,11 @@ class Seazit_readout_result(models.Model):
             "protocol_name_long",
             "protocol_name_plot",
         )
+        # print (protocol_ids)
+        #
+        # print (readout_ids)
         bmdActivitySelectivity =Seazit_bmc_result.objects.filter(
-                protocol_id__in=protocol_ids , endpoint_name__in=readout_ids
+                protocol_id__in=protocol_ids , endpoint_name_protocol__in=readout_ids
                 ).values(*cols)
 
 
@@ -636,7 +639,7 @@ class Seazit_readout_result(models.Model):
 
 
     @classmethod
-    def integrative_responses(cls, protocol_ids, readout_ids, chemical_ids):
+    def integrative_responses(cls, protocol_ids, chemical_ids):
 
         cols = (
             "protocol_id",
@@ -689,16 +692,13 @@ class Seazit_readout_result(models.Model):
             "seazit_recording_id",
 
         )
-        print (protocol_ids)
-        print (readout_ids)
-        print (chemical_ids)
 
-        bmdActivitySelectivity =Seazit_integrative_result.objects.filter(
-                protocol_id__in=protocol_ids , endpoint_name__in=readout_ids, casrn__in=chemical_ids
+        integrativeActivitySelectivity =Seazit_integrative_result.objects.filter(
+                protocol_id__in=protocol_ids ,  casrn__in=chemical_ids
                 ).values(*cols)
 
         return dict(
-                     bmd_activity_selectivity = list(bmdActivitySelectivity))
+                     integrative_activity_selectivity = list(integrativeActivitySelectivity))
 
 
 class Seazit_bmc_readout_result(models.Model):

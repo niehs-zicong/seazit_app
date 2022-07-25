@@ -49,11 +49,8 @@ const AXIS_LINEAR = 1,
     URL_BMD = '/seazit/api/seazit_result/bmcByLabResult/',
     URL_INTEGRATIVE = '/seazit/api/seazit_result/integrativeResult/',
 
-    INTVIZ_OBAMA = 1,
-    INTVIZ_BOXPLOT = 2,
-    INTVIZ_ASSAY_PCA = 3,
-    INTVIZ_CHEMICAL_PCA = 4,
-    INTVIZ_HEATMAP = 5,
+    INTVIZ_HEATMAP = 1,
+    INTVIZ_DevtoxHEATMAP = 2,
     BMDVIZ_ACTIVITY = 1,
     BMDVIZ_SELECTIVITY = 2,
     HEATMAP_ACTIVITY = 1,
@@ -92,8 +89,6 @@ const AXIS_LINEAR = 1,
     },
     renderSelectMultiWidget = function(name, label, options, values, handleChange) {
         let size = Math.min(options.length, 11);
-        console.log(options);
-
         return (
             <div>
                 <label>Select {label}(s):</label>
@@ -109,8 +104,7 @@ const AXIS_LINEAR = 1,
                         if (d.description)
                         {
                         return (
-                          <Tooltip  title={d.description}  placement="top"
-                          >
+                          <Tooltip  title={d.description}  placement="top">
                             <option
                                      key={d.key} value={d.key}>
                                 {d.label}
@@ -227,17 +221,17 @@ const AXIS_LINEAR = 1,
         return `${URL_BMD}?format=json&protocol_ids=${id}&readouts=${ro}`;
     },
 
-    getIntegrativeUrl = function(protocol_ids, readout_ids, casrns) {
-        if (protocol_ids.length === 0 || readout_ids.length === 0 || casrns.length === 0) {
+    getIntegrativeUrl = function(protocol_ids, casrns) {
+        if (protocol_ids.length === 0  || casrns.length === 0) {
             return null;
         }
         let ids = protocol_ids.join(','),
-            ro = readout_ids.join(','),
             chems = casrns.join(',');
         // return url, ro is the readout_id
         // console.log(ids, ro, chems);
-        return `${URL_INTEGRATIVE}?format=json&protocol_ids=${ids}&readouts=${ro}&casrns=${chems}`;
+        return `${URL_INTEGRATIVE}?format=json&protocol_ids=${ids}&casrns=${chems}`;
     },
+
 
     printFloat = function(v) {
         if (v <= 0) {
@@ -307,10 +301,7 @@ export {
     NO_COLLAPSE,
     HEATMAP_ACTIVITY,
     HEATMAP_BMC,
-    INTVIZ_OBAMA,
-    INTVIZ_BOXPLOT,
-    INTVIZ_ASSAY_PCA,
-    INTVIZ_CHEMICAL_PCA,
+    INTVIZ_DevtoxHEATMAP,
     INTVIZ_HEATMAP,
     BMDVIZ_ACTIVITY,
     BMDVIZ_SELECTIVITY,

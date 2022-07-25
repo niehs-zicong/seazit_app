@@ -17,6 +17,7 @@ import {
     loadMetadata,
     renderNoSelected,
     CHEMFILTER_CHEMICIAL,
+    ConcentrationResponseTab,
 } from '../shared';
 
 class DoseResponseMain extends React.Component {
@@ -52,6 +53,7 @@ class DoseResponseMain extends React.Component {
             // DoseResponseGridWidget
             vizColumns: initialCols,
             vizHeight: 350,
+            tabFlag: ConcentrationResponseTab,
         };
     }
 
@@ -103,10 +105,10 @@ class DoseResponseMain extends React.Component {
         if (!this.state.metadataLoaded) {
             return <Loading />;
         }
-        // console.log('this.state');
-        // console.log(this.state);
+        console.log('this.state');
+        console.log(this.state);
         let url = getDoseResponsesUrl(this.state.assays, this.state.readouts, this.state.chemicals);
-        // console.log(url);
+        console.log(url);
 
         return (
             <div className="row-fluid">
@@ -126,7 +128,6 @@ class DoseResponseMain extends React.Component {
                         hideNonViability={false}
                         multiAssaySelector={true}
                         multiReadoutSelector={true}
-                        tabName={'DoseResponseMain'}
                     />
                     <hr />
                     <ChemicalWidget stateHolder={this} />
