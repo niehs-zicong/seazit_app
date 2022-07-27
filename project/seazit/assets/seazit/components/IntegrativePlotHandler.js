@@ -150,13 +150,9 @@ class IntegrativePlotHandler extends React.Component {
             selectivityOrder =[ "dev tox","general tox","inconclusive","inactive"],
             ontologyGroupName = (this.props.ontologyType == integrative_Granular) ? 'developmental_defect_grouping_granular': 'developmental_defect_grouping_general';
 
-            //
-            //
-            // console.log(_.chain(data)
-            //             .map('protocol_name_plot')
-            //             .uniq()
-            //             .value())
             console.log(ontologyGroup)
+            console.log("1data")
+            console.log(data)
 
             data = _.chain(data)
                     .filter((i) => ontologyGroup.includes(i[ontologyGroupName]))
@@ -215,34 +211,45 @@ class IntegrativePlotHandler extends React.Component {
                     .value();
 
             console.log("data  before and after ")
-                    console.log(this.state.data.integrative_activity_selectivity)
+            console.log(this.state.data.integrative_activity_selectivity)
+            console.log("2data")
+
             console.log(data)
 
         let groups = _.chain(data)
                         .map('xy')
                         .uniq()
                         .value();
-                    let groups2 = _.chain(data)
-                        .map('x')
-                        .uniq()
-                        .value();
-                            let groups3 = _.chain(data)
-                        .map('y')
-                        .uniq()
-                        .value();
-        console.log(groups)
-        console.log(groups2)
-        console.log(groups3)
+        // find xgroups names, and join datasetLabname and ontologyGroup into xGroup.
+        let a = this.props.datasetLabName;
+        let b = this.props.ontologyGroup;
+        let xgroups = [];
+        a.forEach( k => {
+                b.forEach( i => {
+                xgroups.push(k + ": " + i)
+            })
+        })
+
+        let ygroups = _.chain(data)
+                .map('y')
+                .uniq()
+                .value();
+        // console.log(groups)
+        console.log(xgroups)
+        console.log(ygroups)
+
+        console.log(this.props.datasetLabName)
+        console.log(this.props.ontologyGroup)
+        console.log(this.props.assays)
+        console.log(this.props.casrns)
+        console.log("3data")
+       console.log(data)
+
 
         for (const xy of groups) {
-            //
-            // console.log("result")
-            // console.log(xy)
-            // console.log(data)
-
           let result = _.filter(data, {xy:xy})
 
-            console.log(result)
+            // console.log(result)
 
             let endpoints = _.chain(result)
                         .map('endpoint_name')
@@ -275,7 +282,37 @@ class IntegrativePlotHandler extends React.Component {
                         )
 
           }
+         console.log("4data")
+
          console.log(data)
+
+
+                for (const x of xgroups) {
+                    console.log(x)
+                for (const y of ygroups) {
+                        console.log(y)
+                     let result = _.filter(data, {x:x, y:y})
+                      // let result = _.chain(data)
+                      //                    .filter({x:x})
+                      //                    .filter({y:y});
+                     // console.log(data)
+                      console.log("result")
+                      console.log(result)
+                    if (result.length == 0){
+                        data.push({
+                            x: x,
+                            y: y,
+                            fill:  '#C9C9C9',
+                            fillFlag: true,
+                            xy: x + "+" + y,
+                        })
+                    }
+                }
+        }
+        console.log("5data")
+       console.log(data)
+
+
         if (this.props.visualization == INTVIZ_HEATMAP )
             {
                data  = _.chain(data)
@@ -283,6 +320,11 @@ class IntegrativePlotHandler extends React.Component {
                             .keyBy('xy')
                             .values()
                             .value();
+
+                        console.log("6data")
+         console.log(data)
+
+
                 return {
                     data,
                     legendData,
@@ -304,8 +346,8 @@ class IntegrativePlotHandler extends React.Component {
         }
         let d;
         d = this._getFilteredData();
-                // console.log("this.props")
-        // console.log(this.props)
+        console.log("this.props")
+        console.log(this.props)
 
         // this is result, with color name is fill data.
         if (d.data.length === 0) {
@@ -349,6 +391,7 @@ IntegrativePlotHandler.propTypes = {
     ontologyGroup: PropTypes.array.isRequired,
     visualization: PropTypes.number.isRequired,
     url: PropTypes.string.isRequired,
+    datasetLabName: PropTypes.array.isRequired,
 };
 
 export default IntegrativePlotHandler;
