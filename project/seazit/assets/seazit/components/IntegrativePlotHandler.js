@@ -248,9 +248,6 @@ class IntegrativePlotHandler extends React.Component {
 
         for (const xy of groups) {
           let result = _.filter(data, {xy:xy})
-
-            // console.log(result)
-
             let endpoints = _.chain(result)
                         .map('endpoint_name')
                         .uniq()

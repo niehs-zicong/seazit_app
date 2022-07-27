@@ -53,10 +53,9 @@ class IntegrativeAnalysesMain extends React.Component {
             datasetLabName: [],
             url: null,
             // ontologyWidget
-            // ontologyType: integrative_Granular,
-            ontologyType: integrative_General,
+            ontologyType: integrative_Granular,
+            // ontologyType: integrative_General,
 
-            // ontologyGroup:['hatching defect'],
             ontologyGroup:[],
 
             // ChemicalSelectorWidget
@@ -177,10 +176,10 @@ class IntegrativeAnalysesMain extends React.Component {
                     .value()
                     ;
 
-        // this.state.url  = getIntegrativeUrl(this.state.assays, this.state.chemicals);
+        this.state.url  = getIntegrativeUrl(this.state.assays, this.state.chemicals);
         //heatmap test
         // this.state.url = "/seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=1,2&casrns=115-86-6,13674-87-8,79-94-7"
-        this.state.url = "/seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=1,2&casrns=95-76-1,56-35-9"
+        // this.state.url = "/seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=1,2&casrns=95-76-1,56-35-9"
 
         // fill  missing data in model.py.
         // corr map test
