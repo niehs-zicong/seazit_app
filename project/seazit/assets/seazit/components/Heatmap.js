@@ -117,10 +117,9 @@ let renderPlot = function(el, data, legendData) {
       // height = 450 - margin.top - margin.bottom,
     // xasix is column, yasix is row
      xasix= d3.map(data, function(d){return (d.x);}).keys(),
+    // xasix = ['DRF_Lab A_SR-C: hatching defect',  'DRF_Lab B_S-DC: hatching defect'],
 
-    //, yasix is row
        yasix = d3.map(data, function(d){return (d.y);}).keys(),
-
 
         width = xasix.length * cellSize + margin.axisLeft + margin.left + margin.right + margin.legend,
         height = yasix.length * cellSize + margin.axisTop + margin.top + margin.bottom,
@@ -141,6 +140,7 @@ let renderPlot = function(el, data, legendData) {
             .attr("height", height + margin.top + margin.bottom)
           .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    console.log(xasix)
 
 
     // add a tooltip
