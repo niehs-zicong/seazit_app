@@ -1,18 +1,18 @@
 import $ from '$';
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import * as d3 from 'd3';
 
 import BootstrapModal from 'utils/BootstrapModal';
-import { Header, SingleCurveBody, MultipleCurveBody } from './DoseResponseModal';
+import {Header, SingleCurveBody, MultipleCurveBody} from './DoseResponseModal';
 
 import styles from './graph.css';
 // import styles from './ResponseFigure.css';
 
-import { getLog10AxisFunction } from 'utils/d3';
+import {getLog10AxisFunction} from 'utils/d3';
 
-let addStripMask = function(svg) {
+let addStripMask = function (svg) {
     // add strip mask to top of d3-selected svg
     // use url(#stripeMask) to apply
 
@@ -40,7 +40,7 @@ let addStripMask = function(svg) {
         .style('fill', 'url(#maskStripePattern)');
 };
 
-let renderPlot = function(el, data, legendData) {
+let renderPlot = function (el, data, legendData) {
     $(el).empty();
     // console.log("HEATMAP")
     // console.log(data)
@@ -55,71 +55,77 @@ let renderPlot = function(el, data, legendData) {
             legend: 150,
         },
         cellSize = 30,
-     handleCellClick = function(d) {
-        // console.log("handleCellClick")
-        // console.log(d)
-
-        if (d.endPointList && d.endPointList.length > 1) {
-            new BootstrapModal(Header, MultipleCurveBody, {
-                title: d.xy,
-                protocol_id: d.protocol_id,
-                readout_ids: _.map(d.endPointList, function(x){ return x + '_' + d.protocol_id; }),
-                casrns: [d.casrn],
-            });
-        } else {
-             new BootstrapModal(Header, SingleCurveBody, {
-                title: d.xy,
-                protocol_id: d.protocol_id,
-                readout_id: d.endpoint_name + '_' + d.protocol_id,
-                casrn: d.casrn,
-            });
-        };
-    },
-
-
-    handleXLabelClick = function(label) {
-        let cells = xMap[label],
-            casrns = _.map(cells, 'y_key'),
-            readout_ids = [cells[0].x_key];
-
-        new BootstrapModal(Header, MultipleCurveBody, {
-            title: label,
-            readout_ids,
-            casrns,
-        });
-    },
-            // draw y-axis
-     handleYLabelClick = function(label) {
-        let cells = yMap[label],
-            casrns = [cells[0].y_key],
-            readout_ids = _.map(cells, 'x_key');
-
-        new BootstrapModal(Header, MultipleCurveBody, {
-            title: label,
-            readout_ids,
-            casrns,
-        });
-    },
-
-      handleMouseOver = function(d) {
+        handleCellClick = function (d) {
+            // console.log("handleCellClick")
             // console.log(d)
+
+            if (d.endPointList && d.endPointList.length > 1) {
+                new BootstrapModal(Header, MultipleCurveBody, {
+                    title: d.title,
+                    protocol_id: d.protocol_id,
+                    readout_ids: _.map(d.endPointList, function (x) {
+                        return x + '_' + d.protocol_id;
+                    }),
+                    casrns: [d.casrn],
+                });
+            } else {
+                new BootstrapModal(Header, SingleCurveBody, {
+                    title: d.title,
+                    protocol_id: d.protocol_id,
+                    readout_id: d.endpoint_name + '_' + d.protocol_id,
+                    casrn: d.casrn,
+                });
+            }
+            ;
+        },
+
+
+        handleXLabelClick = function (label) {
+            let cells = xMap[label],
+                casrns = _.map(cells, 'y_key'),
+                readout_ids = [cells[0].x_key];
+
+            new BootstrapModal(Header, MultipleCurveBody, {
+                title: label,
+                readout_ids,
+                casrns,
+            });
+        },
+        // draw y-axis
+        handleYLabelClick = function (label) {
+            let cells = yMap[label],
+                casrns = [cells[0].y_key],
+                readout_ids = _.map(cells, 'x_key');
+
+            new BootstrapModal(Header, MultipleCurveBody, {
+                title: label,
+                readout_ids,
+                casrns,
+            });
+        },
+
+        handleMouseOver = function (d) {
             tooltip
                 .html(d.mean_pod ? d.mean_pod : 0)
                 .style('left', d3.event.pageX + 'px')
                 .style('top', d3.event.pageY + 20 + 'px')
                 .style('opacity', 1.0);
         },
-         handleMouseOut = function(d) {
+        handleMouseOut = function (d) {
             tooltip.style('opacity', 0.0);
         },
 
-      // width = 450 - margin.left - margin.right,
-      // height = 450 - margin.top - margin.bottom,
-    // xasix is column, yasix is row
-     xasix= d3.map(data, function(d){return (d.x);}).keys(),
-    // xasix = ['DRF_Lab A_SR-C: hatching defect',  'DRF_Lab B_S-DC: hatching defect'],
+        // width = 450 - margin.left - margin.right,
+        // height = 450 - margin.top - margin.bottom,
+        // xasix is column, yasix is row
+        xasix = d3.map(data, function (d) {
+            return (d.x);
+        }).keys(),
+        // xasix = ['DRF_Lab A_SR-C: hatching defect',  'DRF_Lab B_S-DC: hatching defect'],
 
-       yasix = d3.map(data, function(d){return (d.y);}).keys(),
+        yasix = d3.map(data, function (d) {
+            return (d.y);
+        }).keys(),
 
         width = xasix.length * cellSize + margin.axisLeft + margin.left + margin.right + margin.legend,
         height = yasix.length * cellSize + margin.axisTop + margin.top + margin.bottom,
@@ -133,14 +139,13 @@ let renderPlot = function(el, data, legendData) {
             .size(900),
 
         // Create the svg area
-         svg = d3
-             .select(el)
-          .append("svg")
+        svg = d3
+            .select(el)
+            .append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
-          .append("g")
+            .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-    console.log(xasix)
 
 
     // add a tooltip
@@ -151,7 +156,7 @@ let renderPlot = function(el, data, legendData) {
         .style('opacity', 0.0);
 
 
-     let axisLayer = svg
+    let axisLayer = svg
         .append('g')
         .classed('axisLayer', true)
         .attr('width', width)
@@ -163,7 +168,7 @@ let renderPlot = function(el, data, legendData) {
         .domain(xasix)
         .range([0, chartWidth]);
     let yScale = d3
-         .scaleBand()
+        .scaleBand()
         .domain(yasix)
         .range([0, chartHeight]);
     let xAxis = d3.axisTop(xScale).tickSizeOuter(0);
@@ -180,7 +185,7 @@ let renderPlot = function(el, data, legendData) {
         .selectAll('text')
         .style('cursor', 'pointer')
         .on('click', handleYLabelClick)
-        ;
+    ;
 
 
     axisLayer
@@ -198,7 +203,7 @@ let renderPlot = function(el, data, legendData) {
         .style('text-anchor', 'start')
         .style('cursor', 'pointer')
         .on('click', handleXLabelClick)
-        ;
+    ;
 
     let chartLayer = svg
         .append('g')
@@ -210,7 +215,7 @@ let renderPlot = function(el, data, legendData) {
             `translate(${margin.left + margin.axisLeft}, ${margin.top + margin.axisTop})`
         );
 
-        // plot bounding box
+    // plot bounding box
     chartLayer
         .append('rect')
         .attr('x', xScale.range()[0])
@@ -231,8 +236,6 @@ let renderPlot = function(el, data, legendData) {
         .style('stroke-width', 2);
 
 
-
-
     chartLayer
         .selectAll('.square')
         .data(data)
@@ -246,8 +249,8 @@ let renderPlot = function(el, data, legendData) {
             'transform',
             (d) =>
                 `translate(${xScale(d.x) + xScale.bandwidth() / 2}, ${yScale(d.y) +
-                    yScale.bandwidth() / 2})`
-            )
+                yScale.bandwidth() / 2})`
+        )
         .style('stroke', 'black')
         .style('stroke-width', '0.8')
         .style('cursor', 'pointer')
@@ -288,7 +291,7 @@ let renderPlot = function(el, data, legendData) {
             break;
         }
         case 'continuous': {
-            let { colorScaleFunction, legendScale } = legendData,
+            let {colorScaleFunction, legendScale} = legendData,
                 legendHeight = 200,
                 legend = legendLayer
                     .append('defs')
@@ -449,7 +452,7 @@ class Heatmap extends Component {
 
 
     render() {
-        return <div id="IA_heatmap01" className="row-fluid" ref="svg" />;
+        return <div id="IA_heatmap01" className="row-fluid" ref="svg"/>;
     }
 }
 

@@ -27,8 +27,10 @@ import {
     INTVIZ_CHEMICAL_PCA,
     INTVIZ_HEATMAP,
     CHEMFILTER_CATEGORY,
+    CHEMFILTER_CHEMICIAL,
     READOUT_TYPE_CATEGORY,
     READOUT_TYPE_READOUT,
+
     IntegrativeAnalysesTab,
     integrative_Granular,
     integrative_General,
@@ -53,13 +55,17 @@ class IntegrativeAnalysesMain extends React.Component {
             datasetLabName: [],
             url: null,
             // ontologyWidget
-            ontologyType: integrative_Granular,
-            // ontologyType: integrative_General,
+            // ontologyType: integrative_Granular,
+            ontologyType: integrative_General,
 
             ontologyGroup:[],
+            // ontologyGroup:['hatching defect', 'dead', 'yolk defects'],
+            // ontologyGroup: ['hatching defect'],
 
             // ChemicalSelectorWidget
-            chemicalFilterBy: CHEMFILTER_CATEGORY,
+            // chemicalFilterBy: CHEMFILTER_CATEGORY,
+            chemicalFilterBy: CHEMFILTER_CHEMICIAL,
+
             chemicals: [],
             categories: [],
 
@@ -69,8 +75,8 @@ class IntegrativeAnalysesMain extends React.Component {
             readouts: [],
 
             // IntegrativePlotWidget
-            visualization: INTVIZ_HEATMAP,
-            // visualization: INTVIZ_DevtoxHEATMAP,
+            // visualization: INTVIZ_HEATMAP,
+            visualization: INTVIZ_DevtoxHEATMAP,
 
             // HeatmapDisplaySelector
             heatmapDisplay: HEATMAP_ACTIVITY,
@@ -99,7 +105,7 @@ class IntegrativeAnalysesMain extends React.Component {
 
                 </p>
                 <p>
-                                        zw
+                    zw
 
                 </p>
                 <p>
@@ -140,68 +146,62 @@ class IntegrativeAnalysesMain extends React.Component {
     }
 
 
-
     _renderMainBody() {
         // let hasChems = this.state.chemicals.length > 0,
         //     hasReadoutCategories = this.state.readoutCategories.length > 0,
         //     requiresFilters = [INTVIZ_HEATMAP, INTVIZ_DevtoxHEATMAP];
-            return (
-                    <div>
-                        <IntegrativePlotHandler
-                            assays = {this.state.assays}
-                            casrns={this.state.chemicals}
-                            visualization={this.state.visualization}
-                            ontologyType={this.state.ontologyType}
-                            ontologyGroup={this.state.ontologyGroup}
-                            url={this.state.url}
-                            datasetLabName ={this.state.datasetLabName}
-                        />
-                        <p className="help-block">
-                            <b>Interactivity note:</b> This heatmap is interactive. Click a cell to
-                            view individual dose-response curves associated with it.
-                        </p>
-                    </div>
-            );
+        return (
+            <div>
+                <IntegrativePlotHandler
+                    assays={this.state.assays}
+                    casrns={this.state.chemicals}
+                    visualization={this.state.visualization}
+                    ontologyType={this.state.ontologyType}
+                    ontologyGroup={this.state.ontologyGroup}
+                    url={this.state.url}
+                    datasetLabName={this.state.datasetLabName}
+                />
+                <p className="help-block">
+                    <b>Interactivity note:</b> This heatmap is interactive. Click a cell to
+                    view individual dose-response curves associated with it.
+                </p>
+            </div>
+        );
     }
 
     render() {
         if (!this.state.metadataLoaded) {
-            return <Loading />;
+            return <Loading/>;
         }
-        console.log("zWWWWWWWWW")
-        console.log(this.state)
-        this.state.datasetLabName =_.chain(this.state.protocol_data)
-                    .filter((i) => this.state.assays.includes((i.seazit_protocol_id).toString()))
-                    .map('protocol_name_plot')
-                    .value()
-                    ;
+        this.state.datasetLabName = _.chain(this.state.protocol_data)
+            .filter((i) => this.state.assays.includes((i.seazit_protocol_id).toString()))
+            .map('protocol_name_plot')
+            .value()
+        ;
 
         this.state.url  = getIntegrativeUrl(this.state.assays, this.state.chemicals);
         //heatmap test
-        // this.state.url = "/seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=1,2&casrns=115-86-6,13674-87-8,79-94-7"
         // this.state.url = "/seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=1,2&casrns=95-76-1,56-35-9"
+        // this.state.url = "/seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=1,2, 3&casrns=95-76-1,56-35-9"
 
         // fill  missing data in model.py.
         // corr map test
-        // this.state.url = " /seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=5,6&casrns=115-86-6,71751-41-2,56-35-9,36734-19-7,53-70-3,43121-43-3,84-74-2,5598-15-2,2921-88-2,137-30-4,58-89-9,116-06-3,330-55-2,80-05-7,76738-62-0,298-02-2,69806-50-4,75-07-0,95737-68-1,83-79-4,85509-19-9,13674-87-8,1912-24-9,79-94-7,129-00-0 "
+        // this.state.url = " /seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=1,2, 3,4&casrns=115-86-6,71751-41-2,56-35-9,36734-19-7,53-70-3,43121-43-3,84-74-2,5598-15-2,2921-88-2,137-30-4,58-89-9,116-06-3,330-55-2,80-05-7,76738-62-0,298-02-2,69806-50-4,75-07-0,95737-68-1,83-79-4,85509-19-9,13674-87-8,1912-24-9,79-94-7,129-00-0 "
         // this.state.url  = " /seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=5,6&casrns=115-86-6,71751-41-2,56-35-9"
-
-        console.log("url")
-        console.log(this.state.url)
         return (
             <div className="row-fluid">
                 <div className="col-md-12">
                     <h1>
-                        Integrative analyses
-                        <HelpButtonWidget stateHolder={this} />
+                        Integrative Analyses
+                        <HelpButtonWidget stateHolder={this}/>
                     </h1>
                 </div>
                 <div className="col-md-12">
-                    <FiveOhEight />
+                    <FiveOhEight/>
                 </div>
                 <div className="col-md-3">
-                    <IntegrativePlotWidget stateHolder={this} />
-                    <hr />
+                    <IntegrativePlotWidget stateHolder={this}/>
+                    <hr/>
                     <ReadoutWidget
                         stateHolder={this}
                         hideViability={false}
@@ -209,12 +209,12 @@ class IntegrativeAnalysesMain extends React.Component {
                         multiAssaySelector={true}
                         multiReadoutSelector={true}
                     />
-                    <hr />
+                    <hr/>
                     <div>
-                        <OntologyWidget stateHolder={this} />
-                            <hr />
+                        <OntologyWidget stateHolder={this}/>
+                        <hr/>
                     </div>
-                    <ChemicalWidget stateHolder={this} />
+                    <ChemicalWidget stateHolder={this}/>
                 </div>
 
                 <div className="col-md-9">
