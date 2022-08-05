@@ -105,9 +105,6 @@ class IntegrativePlotHandler extends React.Component {
                             default:
                                 return '#000000';
                         }
-
-
-                        // return data.mean_pod ? continuousColorScale(data.mean_pod) : 'white';
                     };
                 default:
                     throw 'Unknown display type.';
@@ -231,8 +228,6 @@ class IntegrativePlotHandler extends React.Component {
 
         console.log("data  before and after ")
         console.log(this.state.data.integrative_activity_selectivity)
-        console.log("2data")
-
         console.log(data)
 
         // find xgroups names, and join datasetLabname and ontologyGroup into xGroup.
@@ -342,8 +337,6 @@ class IntegrativePlotHandler extends React.Component {
 
                             })
                         } else {
-                            console.log(x + y)
-                            console.log(result)
                             result = _.chain(result)
                                 // .filter((i) => i.final_dev_call === topFinal)
                                 // .orderBy('mean_pod')

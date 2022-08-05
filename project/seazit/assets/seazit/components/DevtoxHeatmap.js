@@ -248,7 +248,12 @@ let renderPlot = function (el, data, legendData) {
         })
         .append("circle")
         // .attr("r", function (d) {
-        //     return size(Math.abs(d.mean_selectivity))
+        //     if (d.final_dev_call == 'dev tox') {
+        //          return size(Math.abs(d.mean_selectivity));
+        //     } else {
+        //         // others 'general tox', 'inconclusive', 'inactive'
+        //         return size(Math.abs(sizeDomain[1]));
+        //     }
         // })
         .attr("r", (d) => {
             switch (d.final_dev_call) {
@@ -260,7 +265,7 @@ let renderPlot = function (el, data, legendData) {
                     break;
                 // others 'general tox', 'inconclusive', 'inactive'
                 default:
-                    return size(Math.abs(sizeDomain[1] / 10));
+                    return size(Math.abs(sizeDomain[1]));
             }
         })
         .attr('fill', (d) => d.fill)
