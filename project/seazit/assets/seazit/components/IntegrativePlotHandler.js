@@ -95,7 +95,7 @@ class IntegrativePlotHandler extends React.Component {
                     return function (data) {
                         switch (data.final_dev_call) {
                             case 'dev tox':
-                                return data.mean_pod ? continuousColorScale(Math.pow(10, data.med_pod_med) * 1000000): 'red';
+                                return data.mean_pod ? continuousColorScale(Math.pow(10, data.med_pod_med) * 1000000) : 'red';
                             case 'general tox':
                                 return '#000000';
                             case 'inconclusive':
@@ -277,8 +277,7 @@ class IntegrativePlotHandler extends React.Component {
                                 .filter((d) => _.includes(selectivityOrder, d))
                                 .sort((a, b) => selectivityOrder.indexOf(a) - selectivityOrder.indexOf(b))
                                 .first()
-                                .value()
-                            ;
+                                .value();
                             result = _.chain(result)
                                 .filter((i) => i.final_dev_call === topFinal)
                                 // .orderBy('mean_pod')
@@ -324,6 +323,17 @@ class IntegrativePlotHandler extends React.Component {
                             .map('endpoint_name')
                             .uniq()
                             .value();
+
+                        //find top level selectivityOrder function.
+                        let topFinal = _.chain(result)
+                            .map('final_dev_call')
+                            .uniq()
+                            .filter((d) => _.includes(selectivityOrder, d))
+                            .sort((a, b) => selectivityOrder.indexOf(a) - selectivityOrder.indexOf(b))
+                            .first()
+                            .value();
+
+
                         if (result.length == 0) {
                             data.push({
                                 x: x,
@@ -338,7 +348,7 @@ class IntegrativePlotHandler extends React.Component {
                             })
                         } else {
                             result = _.chain(result)
-                                // .filter((i) => i.final_dev_call === topFinal)
+                                .filter((i) => i.final_dev_call === topFinal)
                                 // .orderBy('mean_pod')
                                 .sortBy('mean_pod')
                                 .first()
