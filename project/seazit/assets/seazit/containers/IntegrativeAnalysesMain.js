@@ -55,16 +55,14 @@ class IntegrativeAnalysesMain extends React.Component {
             datasetLabName: [],
             url: null,
             // ontologyWidget
-            // ontologyType: integrative_Granular,
-            ontologyType: integrative_General,
+            ontologyType: integrative_Granular,
+            // ontologyType: integrative_General,
 
             ontologyGroup:[],
-            // ontologyGroup:['hatching defect', 'dead', 'yolk defects'],
-            // ontologyGroup: ['hatching defect'],
 
             // ChemicalSelectorWidget
-            // chemicalFilterBy: CHEMFILTER_CATEGORY,
-            chemicalFilterBy: CHEMFILTER_CHEMICIAL,
+            chemicalFilterBy: CHEMFILTER_CATEGORY,
+            // chemicalFilterBy: CHEMFILTER_CHEMICIAL,
 
             chemicals: [],
             categories: [],
@@ -75,8 +73,8 @@ class IntegrativeAnalysesMain extends React.Component {
             readouts: [],
 
             // IntegrativePlotWidget
-            // visualization: INTVIZ_HEATMAP,
-            visualization: INTVIZ_DevtoxHEATMAP,
+            visualization: INTVIZ_HEATMAP,
+            // visualization: INTVIZ_DevtoxHEATMAP,
 
             // HeatmapDisplaySelector
             heatmapDisplay: HEATMAP_ACTIVITY,

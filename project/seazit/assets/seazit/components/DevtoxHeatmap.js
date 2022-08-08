@@ -90,9 +90,6 @@ let renderPlot = function (el, data, legendData) {
         handleMouseOut = function (d) {
             tooltip.style('opacity', 0.0);
         },
-
-        // width = 450 - margin.left - margin.right,
-        // height = 450 - margin.top - margin.bottom,
         // xasix is column, yasix is row
         xasix = d3.map(data, function (d) {
             return d.x;
@@ -104,18 +101,15 @@ let renderPlot = function (el, data, legendData) {
         width = xasix.length * cellSize + margin.axisLeft + margin.left + margin.right + margin.legend,
         height = yasix.length * cellSize + margin.axisTop + margin.top + margin.bottom,
 
-
         chartHeight = height - (margin.top + margin.bottom + margin.axisTop),
         chartWidth = width - (margin.left + margin.right + margin.axisLeft + margin.legend),
-        // chartHeight = 450 - margin.top - margin.bottom,
-        // chartWidth = 450 - margin.left - margin.right,
         // Create a color scale
 
         // colorDomain = [-8, -4],
         //  sizeDomain = [0, 3.15],
 
         // [-0.20605, 3.1549] is min and max for allset data from table.
-        // var colorRange = [-0.20605, 3.1549];
+        // var colorRange = [0, 3.1549];
 
         // Create a size scale for bubbles on top right. Watch out: must be a rootscale!
         // The scaleSqrt scale is useful for sizing circles by area (rather than radius).
@@ -125,22 +119,34 @@ let renderPlot = function (el, data, legendData) {
         //   make radius linear scale.  TODO
         // sizeDomain = d3.extent(_.map(data, 'mean_selectivity')),
 
-        sizeDomain = [0, 2],
+        sizeDomain = [0, 1],
+        // sizeDomain = [0, 2],
+        // sizeDomain = [0, 3],
 
         size = d3.scaleSqrt()
             .domain(sizeDomain)
             .range([0, cellSize / 2]),
+
         // size = d3.scaleLinear()
         //     .domain(sizeDomain)
         //     .range([0, cellSize / 2]),
         // Create the svg area
+        // svg = d3
+        //     .select(el)
+        //     .append("svg")
+        //     .attr("width", width + margin.left + margin.right)
+        //     .attr("height", height + margin.top + margin.bottom)
+        //     .append("g")
+        //     .attr("transform", "translate(" + margin.left + "," + margin.top + ")"),
+
+
         svg = d3
             .select(el)
-            .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")"),
+            .append('svg')
+            .attr('width', Math.max(800, width))
+            .attr('height', Math.max(800, height)),
+
+
 
         // add a tooltip
         tooltip = d3
@@ -148,9 +154,10 @@ let renderPlot = function (el, data, legendData) {
             .append('div')
             .attr('class', 'tooltip')
             .style('opacity', 0.0);
-    console.log(data)
 
     console.log(sizeDomain)
+        // console.log(width)
+        // console.log(height)
 
     // draw xy-axis
     let axisLayer = svg
@@ -247,14 +254,6 @@ let renderPlot = function (el, data, legendData) {
             )
         })
         .append("circle")
-        // .attr("r", function (d) {
-        //     if (d.final_dev_call == 'dev tox') {
-        //          return size(Math.abs(d.mean_selectivity));
-        //     } else {
-        //         // others 'general tox', 'inconclusive', 'inactive'
-        //         return size(Math.abs(sizeDomain[1]));
-        //     }
-        // })
         .attr("r", (d) => {
             switch (d.final_dev_call) {
                 case 'dev tox':
@@ -265,7 +264,7 @@ let renderPlot = function (el, data, legendData) {
                     break;
                 // others 'general tox', 'inconclusive', 'inactive'
                 default:
-                    return size(Math.abs(sizeDomain[1]));
+                    return size(Math.abs(sizeDomain[1]/2));
             }
         })
         .attr('fill', (d) => d.fill)
@@ -359,7 +358,7 @@ let renderPlot = function (el, data, legendData) {
                     'transform',
                     `translate(50,${margin.top + margin.axisTop + legendHeight + 25})`
                 )
-                .text('XXX');
+                .text('Not dev tox');
 
             legendLayer
                 .append('rect')
@@ -371,7 +370,7 @@ let renderPlot = function (el, data, legendData) {
                     'transform',
                     `translate(20,${margin.top + margin.axisTop + legendHeight + 10})`
                 )
-                .attr('fill', 'white')
+                .attr('fill', 'black')
                 .style('stroke', 'black')
                 .style('stroke-width', '1');
 
@@ -411,7 +410,7 @@ let renderPlot = function (el, data, legendData) {
                     'transform',
                     `translate(50,${margin.top + margin.axisTop + legendHeight + 55})`
                 )
-                .text('YYY');
+                .text('No data');
             break;
         }
 

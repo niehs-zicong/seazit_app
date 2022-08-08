@@ -95,7 +95,7 @@ class IntegrativePlotHandler extends React.Component {
                     return function (data) {
                         switch (data.final_dev_call) {
                             case 'dev tox':
-                                return data.mean_pod ? continuousColorScale(Math.pow(10, data.med_pod_med) * 1000000) : 'red';
+                                return data.mean_pod ? continuousColorScale(Math.pow(10, data.mean_pod) * 1000000) : 'red';
                             case 'general tox':
                                 return '#000000';
                             case 'inconclusive':
@@ -243,8 +243,8 @@ class IntegrativePlotHandler extends React.Component {
             .map('y')
             .uniq()
             .value();
-        console.log(xgroups)
-        console.log(ygroups)
+        // console.log(xgroups)
+        // console.log(ygroups)
 
 
         switch (this.props.visualization) {
@@ -298,7 +298,6 @@ class IntegrativePlotHandler extends React.Component {
                 console.log(data)
                 data = _.chain(data)
                     .filter((i) => i.fillFlag === true)
-                    // .values()
                     .value();
 
                 console.log("4data")
@@ -312,8 +311,6 @@ class IntegrativePlotHandler extends React.Component {
             }
 
             case INTVIZ_DevtoxHEATMAP: {
-                console.log("INTVIZ_DevtoxHEATMAP")
-                console.log(data)
 
                 for (const x of xgroups) {
                     for (const y of ygroups) {
@@ -349,7 +346,6 @@ class IntegrativePlotHandler extends React.Component {
                         } else {
                             result = _.chain(result)
                                 .filter((i) => i.final_dev_call === topFinal)
-                                // .orderBy('mean_pod')
                                 .sortBy('mean_pod')
                                 .first()
                                 .forEach((value, index, array) => {
@@ -361,12 +357,11 @@ class IntegrativePlotHandler extends React.Component {
                         }
                     }
                 }
-                console.log("5data")
+                console.log("result2XXXXXXXw")
                 console.log(data)
 
                 data = _.chain(data)
                     .filter((i) => i.fillFlag === true)
-                    // .keyBy('xy')
                     .values()
                     .value();
                 console.log(data)
