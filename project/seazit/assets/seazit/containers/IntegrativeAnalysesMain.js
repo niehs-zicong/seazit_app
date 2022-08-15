@@ -150,6 +150,7 @@ class IntegrativeAnalysesMain extends React.Component {
         //     requiresFilters = [INTVIZ_HEATMAP, INTVIZ_DevtoxHEATMAP];
         return (
             <div>
+
                 <IntegrativePlotHandler
                     assays={this.state.assays}
                     casrns={this.state.chemicals}

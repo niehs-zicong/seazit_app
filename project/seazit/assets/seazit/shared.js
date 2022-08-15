@@ -77,7 +77,7 @@ const AXIS_LINEAR = 1,
     },
 
     data_exportToJsonFile = function(jsonData) {
-        let filename = 'jsonData.csv';
+        let filename = 'jsonData.json';
 
         let dataStr = JSON.stringify(jsonData);
         let dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
@@ -242,6 +242,142 @@ const AXIS_LINEAR = 1,
             return v.toFixed(2);
         }
     },
+    svg_download_form = function(id) {
+     var svg = document.getElementById(id)
+
+    var today = new Date();
+    var filename =
+        today.getFullYear() +
+        '-' +
+        (today.getMonth() + 1) +
+        '-' +
+        today.getDate() +
+        '-' +
+        today.getHours() +
+        '-' +
+        today.getMinutes() +
+        '-' +
+        today.getSeconds() +
+        '.svg';
+    var svg_xml = new XMLSerializer().serializeToString(svg);
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(svg_xml));
+    element.setAttribute('download', filename);
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+    },
+     data_exportToCSVFile  = function(jsonData, keys) {
+
+        var today = new Date();
+        var filename =
+            today.getFullYear() +
+            '-' +
+            (today.getMonth() + 1) +
+            '-' +
+            today.getDate() +
+            '-' +
+            today.getHours() +
+            '-' +
+            today.getMinutes() +
+            '-' +
+            today.getSeconds() +
+            '.csv';
+
+        if (jsonData.length == 0) {
+            return '';
+        }
+        let columnDelimiter = ',';
+        let lineDelimiter = '\n';
+
+        let csvColumnHeader = keys.join(columnDelimiter);
+        let csvStr = csvColumnHeader + lineDelimiter;
+        jsonData.forEach((item) => {
+            keys.forEach((key, index) => {
+                if (index > 0 && index < keys.length) {
+                    // if( (index > 0) && (index < keys.length-1) ) {
+                    csvStr += columnDelimiter;
+                }
+                // the reason I used replcae all function, replace all comma
+                // to . , the comma will make my csv format mass.
+                switch (key) {
+                    case 'chemical_casrn':
+                        csvStr += `"${item[key]}"`;
+
+                        break;
+                    case 'chemical_category':
+                        csvStr += `"${item[key]}"`;
+
+                        break;
+                    case 'chemical_name':
+                        csvStr += `"${item[key]}"`;
+
+                        break;
+                    case 'minimimumViability.bmd':
+                        if (item['minimimumViability'] && item['minimimumViability']['bmd']) {
+                            csvStr += item['minimimumViability']['bmd'];
+                        } else {
+                            csvStr += 'null';
+                        }
+                        break;
+                    case 'minimimumViability.bmdl':
+                        if (item['minimimumViability'] && item['minimimumViability']['bmdl']) {
+                            csvStr += item['minimimumViability']['bmdl'];
+                        } else {
+                            csvStr += 'null';
+                        }
+                        break;
+                    case 'minimimumViability.bmdu':
+                        if (item['minimimumViability'] && item['minimimumViability']['bmdu']) {
+                            csvStr += item['minimimumViability']['bmdu'];
+                        } else {
+                            csvStr += 'null';
+                        }
+                        break;
+                    case 'minimimumNonViability.bmd':
+                        if (item['minimimumNonViability'] && item['minimimumNonViability']['bmd']) {
+                            csvStr += item['minimimumNonViability']['bmd'];
+                        } else {
+                            csvStr += 'null';
+                        }
+                        break;
+                    case 'minimimumNonViability.bmdl':
+                        if (
+                            item['minimimumNonViability'] &&
+                            item['minimimumNonViability']['bmdl']
+                        ) {
+                            csvStr += item['minimimumNonViability']['bmdl'];
+                        } else {
+                            csvStr += 'null';
+                        }
+                        break;
+                    case 'minimimumNonViability.bmdu':
+                        if (
+                            item['minimimumNonViability'] &&
+                            item['minimimumNonViability']['bmdu']
+                        ) {
+                            csvStr += item['minimimumNonViability']['bmdu'];
+                        } else {
+                            csvStr += 'null';
+                        }
+                        break;
+                    default:
+                        csvStr += 'undefined';
+                }
+            });
+            csvStr += lineDelimiter;
+        });
+        csvStr = encodeURIComponent(csvStr);
+
+        let dataUri = 'data:text/csv;charset=utf-8,' + csvStr;
+        let linkElement = document.createElement('a');
+        linkElement.setAttribute('href', dataUri);
+        linkElement.setAttribute('download', filename);
+        linkElement.click();
+    },
+
     renderNoDataAlert = function() {
         return (
             <div className="alert alert-info">
@@ -321,4 +457,6 @@ export {
     renderNoDataAlert,
     renderNoSelected,
     data_exportToJsonFile,
+    svg_download_form,
+    data_exportToCSVFile,
 };

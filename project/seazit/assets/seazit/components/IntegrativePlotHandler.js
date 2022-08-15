@@ -214,12 +214,12 @@ class IntegrativePlotHandler extends React.Component {
                     developmental_defect_grouping_granular: d.developmental_defect_grouping_granular,
                     developmental_defect_grouping_general: d.developmental_defect_grouping_general,
                     seazit_recording_id: d.seazit_recording_id,
-                    x: d.protocol_name_plot + ": " + d[ontologyGroupName],
+                    x: d[ontologyGroupName] + ": " + d.protocol_name_plot,
                     y: d.preferred_name,
                     fill: null,
                     fillFlag: false,
                     ontologyGroupName: d[ontologyGroupName],
-                    title: d.protocol_name_plot + "+" + d[ontologyGroupName] + '+' + d.preferred_name,
+                    title: d[ontologyGroupName] + "+" + d.protocol_name_plot + '+' + d.preferred_name,
 
                 };
             })
@@ -231,8 +231,8 @@ class IntegrativePlotHandler extends React.Component {
         console.log(data)
 
         // find xgroups names, and join datasetLabname and ontologyGroup into xGroup.
-        let a = this.props.datasetLabName;
-        let b = this.props.ontologyGroup;
+        let a = this.props.ontologyGroup;
+        let b = this.props.datasetLabName;
         let xgroups = [];
         a.forEach(k => {
             b.forEach(i => {
@@ -243,14 +243,9 @@ class IntegrativePlotHandler extends React.Component {
             .map('y')
             .uniq()
             .value();
-        // console.log(xgroups)
-        // console.log(ygroups)
-
 
         switch (this.props.visualization) {
             case INTVIZ_HEATMAP: {
-
-
                 for (const x of xgroups) {
                     for (const y of ygroups) {
                         let result = _.filter(data, {x: x, y: y})
@@ -397,16 +392,39 @@ class IntegrativePlotHandler extends React.Component {
 
             return (
                 <div>
+                    <h2>
+                        Download buttons:
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <button onClick={() => data_exportToJsonFile(d.data)} className="btn btn-primary">
+                            Export json data
+                        </button>
+
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <button onClick={() => svg_download_form('IA_heatmap01')} className="btn btn-primary">
+                            Export plot
+                        </button>
+                    </h2>
+
                     <Heatmap data={d.data}
                              legendData={d.legendData}
                     />
                 </div>
             );
         } else {
-            console.log("devtox_heatmap")
-            console.log(d.data)
             return (
                 <div>
+                    <h2>
+                        Download buttons:
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <button onClick={() => data_exportToJsonFile(d.data)} className="btn btn-primary">
+                            Export json data
+                        </button>
+
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <button onClick={() => svg_download_form('IA_heatmap02')} className="btn btn-primary">
+                            Export SVG plot
+                        </button>
+                    </h2>
                     <DevtoxHeatmap data={d.data}
                                    legendData={d.legendData}
                     />

@@ -51,7 +51,7 @@ let renderPlot = function (el, data, legendData) {
             bottom: 40,
             right: 10,
             axisLeft: 290,
-            axisTop: 150,
+            axisTop: 290,
             legend: 150,
         },
         cellSize = 30,
@@ -105,8 +105,10 @@ let renderPlot = function (el, data, legendData) {
         },
 
         handleMouseOver = function (d) {
+        console.log(d)
             tooltip
-                .html(d.mean_pod ? d.mean_pod : 0)
+                // .html(d.mean_pod ? d.mean_pod : 0)
+                .html(`${d.endPointList.length} out of ${d.endPointList.length} endpoints are significant`)
                 .style('left', d3.event.pageX + 'px')
                 .style('top', d3.event.pageY + 20 + 'px')
                 .style('opacity', 1.0);
@@ -115,17 +117,17 @@ let renderPlot = function (el, data, legendData) {
             tooltip.style('opacity', 0.0);
         },
 
-        // width = 450 - margin.left - margin.right,
-        // height = 450 - margin.top - margin.bottom,
         // xasix is column, yasix is row
         xasix = d3.map(data, function (d) {
             return (d.x);
-        }).keys(),
-        // xasix = ['DRF_Lab A_SR-C: hatching defect',  'DRF_Lab B_S-DC: hatching defect'],
+        })
+        .keys()
+        .sort(),
 
         yasix = d3.map(data, function (d) {
             return (d.y);
-        }).keys(),
+        }).keys()
+        .sort(),
 
         width = xasix.length * cellSize + margin.axisLeft + margin.left + margin.right + margin.legend,
         height = yasix.length * cellSize + margin.axisTop + margin.top + margin.bottom,
@@ -139,17 +141,20 @@ let renderPlot = function (el, data, legendData) {
             .size(900),
 
         // Create the svg area
+
         svg = d3
             .select(el)
-            .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+            .append('svg')
+            .attr('width', Math.max(1000, width + margin.left + margin.right))
+            .attr('height', Math.max(1000, width + margin.left + margin.right))
+                    .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+
+        ,
 
 
     // add a tooltip
-    var tooltip = d3
+     tooltip = d3
         .select('body')
         .append('div')
         .attr('class', 'tooltip')
@@ -171,6 +176,7 @@ let renderPlot = function (el, data, legendData) {
         .scaleBand()
         .domain(yasix)
         .range([0, chartHeight]);
+
     let xAxis = d3.axisTop(xScale).tickSizeOuter(0);
     let yAxis = d3.axisLeft(yScale).tickSizeOuter(0);
 
@@ -452,7 +458,9 @@ class Heatmap extends Component {
 
 
     render() {
-        return <div id="IA_heatmap01" className="row-fluid" ref="svg"/>;
+        return(
+        <div id="IA_heatmap01" className="row-fluid" ref="svg"/>
+        );
     }
 }
 

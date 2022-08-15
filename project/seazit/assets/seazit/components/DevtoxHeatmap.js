@@ -12,6 +12,7 @@ import styles from './graph.css';
 
 import {getLog10AxisFunction} from 'utils/d3';
 import Heatmap from "./Heatmap";
+import {printFloat} from "../shared";
 
 let addStripMask = function (svg) {
     // add strip mask to top of d3-selected svg
@@ -51,7 +52,7 @@ let renderPlot = function (el, data, legendData) {
             bottom: 40,
             right: 10,
             axisLeft: 290,
-            axisTop: 150,
+            axisTop: 290,
             legend: 150,
         },
         cellSize = 30,
@@ -81,8 +82,13 @@ let renderPlot = function (el, data, legendData) {
 
 
         handleMouseOver = function (d) {
+                console.log(d)
+
             tooltip
-                .html(d.mean_selectivity ? d.mean_selectivity : 0)
+                // .html(d.mean_selectivity ? d.mean_selectivity : 0)
+                .html(`Potency: ${printFloat(Math.pow(10, d.mean_pod) * 1000000)} μM  \n
+                 Potency: ${printFloat(d.mean_selectivity)} μM `)
+                 // Potency: ${printFloat(d.mean_selectivity ? d.mean_selectivity : 0)} μM `)
                 .style('left', d3.event.pageX + 'px')
                 .style('top', d3.event.pageY + 20 + 'px')
                 .style('opacity', 1.0);
@@ -93,10 +99,15 @@ let renderPlot = function (el, data, legendData) {
         // xasix is column, yasix is row
         xasix = d3.map(data, function (d) {
             return d.x;
-        }).keys(),
+        }).keys()
+            .sort(),
+
+
         yasix = d3.map(data, function (d) {
             return d.y;
-        }).keys(),
+        }).keys()
+            .sort(),
+
 
         width = xasix.length * cellSize + margin.axisLeft + margin.left + margin.right + margin.legend,
         height = yasix.length * cellSize + margin.axisTop + margin.top + margin.bottom,
@@ -119,33 +130,21 @@ let renderPlot = function (el, data, legendData) {
         //   make radius linear scale.  TODO
         // sizeDomain = d3.extent(_.map(data, 'mean_selectivity')),
 
-        sizeDomain = [0, 1],
-        // sizeDomain = [0, 2],
+        // sizeDomain = [0, 3.1549],
+        sizeDomain = [0, 2],
         // sizeDomain = [0, 3],
 
         size = d3.scaleSqrt()
             .domain(sizeDomain)
             .range([0, cellSize / 2]),
 
-        // size = d3.scaleLinear()
-        //     .domain(sizeDomain)
-        //     .range([0, cellSize / 2]),
-        // Create the svg area
-        // svg = d3
-        //     .select(el)
-        //     .append("svg")
-        //     .attr("width", width + margin.left + margin.right)
-        //     .attr("height", height + margin.top + margin.bottom)
-        //     .append("g")
-        //     .attr("transform", "translate(" + margin.left + "," + margin.top + ")"),
-
-
         svg = d3
             .select(el)
             .append('svg')
-            .attr('width', Math.max(800, width))
-            .attr('height', Math.max(800, height)),
-
+            .attr('width', Math.max(1000, width + margin.left + margin.right))
+            .attr('height', Math.max(1000, width + margin.left + margin.right))
+                    .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")"),
 
 
         // add a tooltip
@@ -156,8 +155,8 @@ let renderPlot = function (el, data, legendData) {
             .style('opacity', 0.0);
 
     console.log(sizeDomain)
-        // console.log(width)
-        // console.log(height)
+    // console.log(width)
+    // console.log(height)
 
     // draw xy-axis
     let axisLayer = svg
@@ -264,7 +263,7 @@ let renderPlot = function (el, data, legendData) {
                     break;
                 // others 'general tox', 'inconclusive', 'inactive'
                 default:
-                    return size(Math.abs(sizeDomain[1]/2));
+                    return size(Math.abs(sizeDomain[1] / 20));
             }
         })
         .attr('fill', (d) => d.fill)
@@ -464,7 +463,7 @@ class DevtoxHeatmap extends Component {
     }
 
     render() {
-        return <div id="IA_heatmap01" className="row-fluid" ref="svg"/>;
+        return <div id="IA_heatmap02" className="row-fluid" ref="svg"/>;
     }
 }
 
