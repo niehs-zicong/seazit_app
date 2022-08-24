@@ -7,7 +7,7 @@ import BmdByLabPlotWidget from '../widgets/BmdByLabPlotWidget';
 // import BmdWidget from '../widgets/BmdWidget';
 import ReadoutWidget from '../widgets/ReadoutWidget';
 import SelectorSliderWidget from '../widgets/SelectorSliderWidget';
-import CheckBoxWidget from "../widgets/CheckBoxWidget";
+import BmdCheckBoxWidget from "../widgets/BmdCheckBoxWidget";
 
 // import AxisSelectorWidget from '../widgets/AxisSelectorWidget';
 import RankedBarchartHandler from '../components/RankedBarchartHandler';
@@ -44,7 +44,7 @@ class BmdByLabMain extends React.Component {
 
             // SelectorSliderWidget
             selectivityCutoff: 0.5,
-                        // CheckBoxWidget
+                        // BmdCheckBoxWidget
             selectivityList: [
                 {
                     id: 1,
@@ -179,7 +179,7 @@ class BmdByLabMain extends React.Component {
                     {/*    <SelectorSliderWidget stateHolder={this} />*/}
                     {/*) : null}*/}
                     {this.state.visualization === BMDVIZ_SELECTIVITY ? (
-                        <CheckBoxWidget stateHolder={this} />
+                        <BmdCheckBoxWidget stateHolder={this} />
                     ) : null}
                 </div>
                 <div className="col-md-9">

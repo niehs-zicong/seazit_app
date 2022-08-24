@@ -18,7 +18,7 @@ import OntologyWidget from '../widgets/OntologyWidget';
 import ReadoutWidget from '../widgets/ReadoutWidget';
 import ReadoutCategoryWidget from '../widgets/ReadoutCategoryWidget';
 import ReadoutTypeWidget from '../widgets/ReadoutTypeWidget';
-import CheckBoxWidget from "../widgets/CheckBoxWidget";
+import IntegrativeCheckBoxWidget from "../widgets/IntegrativeCheckBoxWidget";
 
 import {
     HEATMAP_ACTIVITY,
@@ -39,6 +39,7 @@ import {
     getIntegrativeUrl,
 } from '../shared';
 import PropTypes from "prop-types";
+import BmdCheckBoxWidget from "../widgets/BmdCheckBoxWidget";
 
 
 class IntegrativeAnalysesMain extends React.Component {
@@ -58,7 +59,7 @@ class IntegrativeAnalysesMain extends React.Component {
             ontologyType: integrative_Granular,
             // ontologyType: integrative_General,
 
-            ontologyGroup:[],
+            ontologyGroup: [],
             // ontologyGroup:['head defects'],
 
             // ChemicalSelectorWidget
@@ -177,7 +178,7 @@ class IntegrativeAnalysesMain extends React.Component {
             .value()
         ;
 
-        this.state.url  = getIntegrativeUrl(this.state.assays, this.state.chemicals);
+        this.state.url = getIntegrativeUrl(this.state.assays, this.state.chemicals);
         //heatmap test
         return (
             <div className="row-fluid">
@@ -192,6 +193,10 @@ class IntegrativeAnalysesMain extends React.Component {
                 </div>
                 <div className="col-md-3">
                     <IntegrativePlotWidget stateHolder={this}/>
+                                        <hr/>
+
+                    <IntegrativeCheckBoxWidget stateHolder={this}/>
+
                     <hr/>
                     <ReadoutWidget
                         stateHolder={this}
@@ -214,7 +219,8 @@ class IntegrativeAnalysesMain extends React.Component {
                 </div>
 
             </div>
-        );
+        )
+            ;
     }
 }
 
