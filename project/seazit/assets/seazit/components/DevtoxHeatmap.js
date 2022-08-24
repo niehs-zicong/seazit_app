@@ -5,7 +5,7 @@ import _ from 'lodash';
 import * as d3 from 'd3';
 
 import BootstrapModal from 'utils/BootstrapModal';
-import {Header, SingleCurveBody, MultipleCurveBody} from './DoseResponseModal';
+import {Header, SingleCurveBody, MultipleCurveBody} from './DoseResponseModel';
 
 import styles from './graph.css';
 // import styles from './ResponseFigure.css';
@@ -68,6 +68,8 @@ let renderPlot = function (el, data, legendData) {
                         return x + '_' + d.protocol_id;
                     }),
                     casrns: [d.casrn],
+                    devtoxreadout_ids: d.devtoxEndPointList,
+
                 });
             } else {
                 new BootstrapModal(Header, SingleCurveBody, {
@@ -75,6 +77,8 @@ let renderPlot = function (el, data, legendData) {
                     protocol_id: d.protocol_id,
                     readout_id: d.endpoint_name + '_' + d.protocol_id,
                     casrn: d.casrn,
+                    devtoxreadout_ids: d.devtoxEndPointList,
+
                 });
             }
             ;
@@ -82,13 +86,11 @@ let renderPlot = function (el, data, legendData) {
 
 
         handleMouseOver = function (d) {
-                console.log(d)
-
             tooltip
                 // .html(d.mean_selectivity ? d.mean_selectivity : 0)
                 .html(`Potency: ${printFloat(Math.pow(10, d.mean_pod) * 1000000)} μM  \n
-                 Potency: ${printFloat(d.mean_selectivity)} μM `)
-                 // Potency: ${printFloat(d.mean_selectivity ? d.mean_selectivity : 0)} μM `)
+                 Selectivity: ${printFloat(d.mean_selectivity)} μM `)
+                // Potency: ${printFloat(d.mean_selectivity ? d.mean_selectivity : 0)} μM `)
                 .style('left', d3.event.pageX + 'px')
                 .style('top', d3.event.pageY + 20 + 'px')
                 .style('opacity', 1.0);
@@ -143,9 +145,13 @@ let renderPlot = function (el, data, legendData) {
             .append('svg')
             .attr('width', Math.max(1000, width + margin.left + margin.right))
             .attr('height', Math.max(1000, width + margin.left + margin.right))
-                    .append("g")
+            .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")"),
 
+        star = d3
+            .symbol()
+            .type(d3.symbolStar)
+            .size(size(sizeDomain[1] / 1)),
 
         // add a tooltip
         tooltip = d3
@@ -154,9 +160,6 @@ let renderPlot = function (el, data, legendData) {
             .attr('class', 'tooltip')
             .style('opacity', 0.0);
 
-    console.log(sizeDomain)
-    // console.log(width)
-    // console.log(height)
 
     // draw xy-axis
     let axisLayer = svg
@@ -241,8 +244,8 @@ let renderPlot = function (el, data, legendData) {
         .style('stroke-width', 2);
 
     chartLayer
-        .selectAll(".cor")
-        .data(data)
+        .selectAll('path')
+        .data(data.filter(d => d.final_dev_call === 'dev tox'))
         .enter()
         .append("g")
         .attr("class", "cor")
@@ -254,23 +257,32 @@ let renderPlot = function (el, data, legendData) {
         })
         .append("circle")
         .attr("r", (d) => {
-            switch (d.final_dev_call) {
-                case 'dev tox':
-                    return size(Math.abs(d.mean_selectivity));
-                    break;
-                case null:
-                    // return size(0);
-                    break;
-                // others 'general tox', 'inconclusive', 'inactive'
-                default:
-                    return size(Math.abs(sizeDomain[1] / 20));
-            }
+            return size(Math.abs(d.mean_selectivity));
+
         })
         .attr('fill', (d) => d.fill)
         .style("opacity", 0.8)
         .on('mouseover', handleMouseOver)
         .on('mouseout', handleMouseOut)
         .on('click', handleCellClick);
+
+
+    chartLayer
+        .selectAll('path')
+        .data(data.filter(d => d.final_dev_call !== 'dev tox' && d.final_dev_call !== null))
+        .enter()
+        .append('path')
+        .attr('class', 'star')
+        .attr('d', star)
+        .attr('fill', (d) => d.fill)
+        .attr("transform", function (d) {
+            return (
+                `translate(${xScale(d.x) + xScale.bandwidth() / 2}, ${yScale(d.y) +
+                yScale.bandwidth() / 2})`
+            )
+        })
+        .style("opacity", 0.8)
+    ;
 
 
     let legendLayer = svg

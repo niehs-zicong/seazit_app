@@ -22,13 +22,17 @@ class SingleCurveBody extends React.Component {
             [this.props.readout_id],
             [this.props.casrn]
         );
+        console.log("this.props")
+        console.log(this.props)
+
         return <DoseResponse url={url} cols={1} height={400} collapse={NO_COLLAPSE} />;
     }
 }
 SingleCurveBody.propTypes = {
     protocol_id: PropTypes.number.isRequired,
     readout_id: PropTypes.string.isRequired,
-    casrn: PropTypes.string.isRequired,
+    casrn: PropTypes.array.isRequired,
+    devtoxreadout_ids: PropTypes.string.isRequired,
 };
 
 
@@ -36,11 +40,9 @@ SingleCurveBody.propTypes = {
 class MultipleCurveBody extends React.Component {
     constructor(props) {
         super(props);
-
         // take 75% of the screen width since main body is col-9 size; assume
         // each plot is ~400px for a reasonable start, make sure it's at least 1
         let initialCols = Math.max(1, Math.floor(0.75 * window.innerWidth / 400));
-
         this.state = {
             // DoseResponseGridWidget
             vizColumns: initialCols,
@@ -54,7 +56,7 @@ class MultipleCurveBody extends React.Component {
             [this.props.readout_ids],
             [this.props.casrns]
                     );
-        console.log(url)
+                console.log("this.props")
         console.log(this.props)
         return (
             <div className="row-fluid">
@@ -67,6 +69,7 @@ class MultipleCurveBody extends React.Component {
                         cols={this.state.vizColumns}
                         height={this.state.vizHeight}
                         collapse={NO_COLLAPSE}
+                        devtoxreadout_ids = {this.props.devtoxreadout_ids}
                     />
                 </div>
             </div>
@@ -78,6 +81,7 @@ MultipleCurveBody.propTypes = {
     protocol_id: PropTypes.number.isRequired,
     readout_ids: PropTypes.array.isRequired,
     casrns: PropTypes.array.isRequired,
+    devtoxreadout_ids: PropTypes.array.isRequired,
 };
 
 export { Header };

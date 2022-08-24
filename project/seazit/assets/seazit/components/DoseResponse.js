@@ -10,7 +10,6 @@ import { NO_COLLAPSE, COLLAPSE_BY_READOUT, COLLAPSE_BY_CHEMICAL, printFloat } fr
 const NO_COLLAPSE_COLORS = {
     responses: '#76B425',
     bmcoutput: '#1451a5',
-    // hill: '#A52D29',
 };
 
 class DoseResponse extends React.Component {
@@ -95,6 +94,11 @@ class DoseResponse extends React.Component {
                 return;
             }
             this.updateData(data, this.props.collapse);
+            console.log('DoseResponse')
+
+            console.log(data)
+            console.log(this.props)
+
         });
     }
 
@@ -224,9 +228,6 @@ class DoseResponse extends React.Component {
         }
     }
     setKeys(data, collapse) {
-        // console.log(data)
-        // console.log(data)
-
         _.each(data.dose_response, (d) => this.setDatasetKey(d, collapse));
         _.each(data.bmcoutput, (d) => this.setDatasetKey(d, collapse));
     }
@@ -265,7 +266,6 @@ class DoseResponse extends React.Component {
                 },
             ],
         };
-
         let layout = {
             title: d.title,
             titlefont: {
@@ -288,6 +288,7 @@ class DoseResponse extends React.Component {
             // add room for collapsed plot legends
             height: this.props.height + d.groupKeys.length * 19 + 20,
             autosize: true,
+            plot_bgcolor:(this.props.devtoxreadout_ids &&  this.props.devtoxreadout_ids.includes(d.endpoint_name)) ? '#FFFF00' : '#FFFFFF',
         };
         d.groupKeys.map((gk) => {
             let drs = d.dose_response.filter((r) => r.groupKey == gk),
@@ -314,11 +315,6 @@ class DoseResponse extends React.Component {
                     legendgroup: 'plot',
                     mode: 'line',
                     type: 'scatter',
-                    // name: this.getResponseLabels(
-                    //     drs_split[0],
-                    //     this.props.collapse,
-                    //     substance_codeCase
-                    // ),
                     text: `${this.getResponseLabels(
                         drs_split[0],
                         this.props.collapse,
@@ -372,7 +368,6 @@ class DoseResponse extends React.Component {
             // move legend to bottom of plot
             layout.legend = { orientation: 'h', y: -0.3 };
         }
-        //console.log(data)
         Plotly.newPlot(this.refs[d.key], data, layout, svgConfig);
     }
 
@@ -428,6 +423,7 @@ DoseResponse.propTypes = {
     collapse: PropTypes.string.isRequired,
     height: PropTypes.number.isRequired,
     url: PropTypes.string.isRequired,
+    devtoxreadout_ids: PropTypes.array,
 };
 
 export default DoseResponse;

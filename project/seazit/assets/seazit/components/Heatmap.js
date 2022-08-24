@@ -5,7 +5,7 @@ import _ from 'lodash';
 import * as d3 from 'd3';
 
 import BootstrapModal from 'utils/BootstrapModal';
-import {Header, SingleCurveBody, MultipleCurveBody} from './DoseResponseModal';
+import {Header, SingleCurveBody, MultipleCurveBody} from './DoseResponseModel';
 
 import styles from './graph.css';
 // import styles from './ResponseFigure.css';
@@ -42,8 +42,6 @@ let addStripMask = function (svg) {
 
 let renderPlot = function (el, data, legendData) {
     $(el).empty();
-    // console.log("HEATMAP")
-    // console.log(data)
     // let margin = {top: 80, right: 25, bottom: 30, left: 40},
     let margin = {
             top: 10,
@@ -56,8 +54,8 @@ let renderPlot = function (el, data, legendData) {
         },
         cellSize = 30,
         handleCellClick = function (d) {
-            // console.log("handleCellClick")
-            // console.log(d)
+            console.log("handleCellClick")
+            console.log(d)
 
             if (d.endPointList && d.endPointList.length > 1) {
                 new BootstrapModal(Header, MultipleCurveBody, {
@@ -66,7 +64,9 @@ let renderPlot = function (el, data, legendData) {
                     readout_ids: _.map(d.endPointList, function (x) {
                         return x + '_' + d.protocol_id;
                     }),
+                    // if button checked, we will add mortality@120 to each plot
                     casrns: [d.casrn],
+                    devtoxreadout_ids: d.devtoxEndPointList,
                 });
             } else {
                 new BootstrapModal(Header, SingleCurveBody, {
@@ -74,6 +74,8 @@ let renderPlot = function (el, data, legendData) {
                     protocol_id: d.protocol_id,
                     readout_id: d.endpoint_name + '_' + d.protocol_id,
                     casrn: d.casrn,
+                    devtoxreadout_ids: d.devtoxEndPointList,
+                    // devtoxreadout_ids: d.devtoxEndPointList+ '_' + d.protocol_id,
                 });
             }
             ;
@@ -105,10 +107,8 @@ let renderPlot = function (el, data, legendData) {
         },
 
         handleMouseOver = function (d) {
-        console.log(d)
             tooltip
-                // .html(d.mean_pod ? d.mean_pod : 0)
-                .html(`${d.endPointList.length} out of ${d.endPointList.length} endpoints are significant`)
+                .html(`${d.devtoxEndPointList.length} out of ${d.endPointList.length} endpoints are significant`)
                 .style('left', d3.event.pageX + 'px')
                 .style('top', d3.event.pageY + 20 + 'px')
                 .style('opacity', 1.0);
@@ -121,13 +121,13 @@ let renderPlot = function (el, data, legendData) {
         xasix = d3.map(data, function (d) {
             return (d.x);
         })
-        .keys()
-        .sort(),
+            .keys()
+            .sort(),
 
         yasix = d3.map(data, function (d) {
             return (d.y);
         }).keys()
-        .sort(),
+            .sort(),
 
         width = xasix.length * cellSize + margin.axisLeft + margin.left + margin.right + margin.legend,
         height = yasix.length * cellSize + margin.axisTop + margin.top + margin.bottom,
@@ -147,18 +147,16 @@ let renderPlot = function (el, data, legendData) {
             .append('svg')
             .attr('width', Math.max(1000, width + margin.left + margin.right))
             .attr('height', Math.max(1000, width + margin.left + margin.right))
-                    .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-
-        ,
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")"),
 
 
-    // add a tooltip
-     tooltip = d3
-        .select('body')
-        .append('div')
-        .attr('class', 'tooltip')
-        .style('opacity', 0.0);
+        // add a tooltip
+        tooltip = d3
+            .select('body')
+            .append('div')
+            .attr('class', 'tooltip')
+            .style('opacity', 0.0);
 
 
     let axisLayer = svg
@@ -250,7 +248,6 @@ let renderPlot = function (el, data, legendData) {
         .attr('class', 'square')
         .attr('d', square)
         .attr('fill', (d) => d.fill)
-        // .attr('fill', (d) => (d.fill)? d.fill : 'transparent')
         .attr(
             'transform',
             (d) =>
@@ -458,8 +455,8 @@ class Heatmap extends Component {
 
 
     render() {
-        return(
-        <div id="IA_heatmap01" className="row-fluid" ref="svg"/>
+        return (
+            <div id="IA_heatmap01" className="row-fluid" ref="svg"/>
         );
     }
 }
