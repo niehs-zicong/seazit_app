@@ -55,11 +55,11 @@ class IntegrativeAnalysesMain extends React.Component {
             datasetLabName: [],
             url: null,
             // ontologyWidget
-            // ontologyType: integrative_Granular,
-            ontologyType: integrative_General,
+            ontologyType: integrative_Granular,
+            // ontologyType: integrative_General,
 
-            // ontologyGroup:[],
-            ontologyGroup:['head defects'],
+            ontologyGroup:[],
+            // ontologyGroup:['head defects'],
 
             // ChemicalSelectorWidget
             chemicalFilterBy: CHEMFILTER_CATEGORY,

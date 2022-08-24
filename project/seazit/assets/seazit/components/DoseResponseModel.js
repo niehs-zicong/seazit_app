@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import DoseResponse from './DoseResponse';
 import DoseResponseGridWidget from '../widgets/DoseResponseGridWidget';
 
-import { getDoseResponsesUrl, NO_COLLAPSE } from '../shared';
+import {getDoseResponsesUrl, NO_COLLAPSE} from '../shared';
 
 class Header extends React.Component {
     render() {
@@ -22,19 +22,22 @@ class SingleCurveBody extends React.Component {
             [this.props.readout_id],
             [this.props.casrn]
         );
-        console.log("this.props")
-        console.log(this.props)
-
-        return <DoseResponse url={url} cols={1} height={400} collapse={NO_COLLAPSE} />;
+        return <DoseResponse
+            url={url}
+            cols={1}
+            height={400}
+            collapse={NO_COLLAPSE}
+            devtoxreadout_ids={this.props.devtoxreadout_ids}
+        />;
     }
 }
+
 SingleCurveBody.propTypes = {
     protocol_id: PropTypes.number.isRequired,
     readout_id: PropTypes.string.isRequired,
     casrn: PropTypes.array.isRequired,
     devtoxreadout_ids: PropTypes.string.isRequired,
 };
-
 
 
 class MultipleCurveBody extends React.Component {
@@ -55,13 +58,13 @@ class MultipleCurveBody extends React.Component {
             [this.props.protocol_id],
             [this.props.readout_ids],
             [this.props.casrns]
-                    );
-                console.log("this.props")
+        );
+        console.log("this.props")
         console.log(this.props)
         return (
             <div className="row-fluid">
                 <div className="col-sm-2">
-                    <DoseResponseGridWidget stateHolder={this} />
+                    <DoseResponseGridWidget stateHolder={this}/>
                 </div>
                 <div className="col-sm-10">
                     <DoseResponse
@@ -69,7 +72,7 @@ class MultipleCurveBody extends React.Component {
                         cols={this.state.vizColumns}
                         height={this.state.vizHeight}
                         collapse={NO_COLLAPSE}
-                        devtoxreadout_ids = {this.props.devtoxreadout_ids}
+                        devtoxreadout_ids={this.props.devtoxreadout_ids}
                     />
                 </div>
             </div>
@@ -84,6 +87,6 @@ MultipleCurveBody.propTypes = {
     devtoxreadout_ids: PropTypes.array.isRequired,
 };
 
-export { Header };
-export { SingleCurveBody };
-export { MultipleCurveBody };
+export {Header};
+export {SingleCurveBody};
+export {MultipleCurveBody};
