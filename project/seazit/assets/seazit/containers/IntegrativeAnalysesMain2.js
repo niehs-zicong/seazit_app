@@ -47,13 +47,52 @@ class IntegrativeAnalysesMain extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            // loadMetadata
+            // // loadMetadata
+            // metadataLoaded: false,
+            // metadata: null,
+            //
+            // // HelpButtonWidget
+            // showHelpText: false,
+            // assays: [],
+            //
+            // datasetLabName: [],
+            // url: null,
+            // // ontologyWidget
+            // ontologyType: integrative_Granular,
+            // // ontologyType: integrative_General,
+            //
+            // ontologyGroup: [],
+            //
+            // // ChemicalSelectorWidget
+            // chemicalFilterBy: CHEMFILTER_CATEGORY,
+            // // chemicalFilterBy: CHEMFILTER_CHEMICIAL,
+            //
+            // chemicals: [],
+            // categories: [],
+            //
+            // // ReadoutSelectorWidget
+            // readoutType: READOUT_TYPE_CATEGORY,
+            //
+            // readouts: [],
+            //
+            //
+            // // IntegrativePlotWidget
+            // visualization: INTVIZ_HEATMAP,
+            //
+            // // HeatmapDisplaySelector
+            // heatmapDisplay: HEATMAP_ACTIVITY,
+            // tabFlag: IntegrativeAnalysesTab,
+
+
+
+
             metadataLoaded: false,
             metadata: null,
 
             // HelpButtonWidget
             showHelpText: false,
-            assays: [],
+            // assays: [],
+            assays: ['1'],
 
             datasetLabName: [],
             url: null,
@@ -61,20 +100,23 @@ class IntegrativeAnalysesMain extends React.Component {
             ontologyType: integrative_Granular,
             // ontologyType: integrative_General,
 
-            ontologyGroup: [],
+            // ontologyGroup: [],
+            ontologyGroup:['craniofacial defects'],
 
             // ChemicalSelectorWidget
             chemicalFilterBy: CHEMFILTER_CATEGORY,
             // chemicalFilterBy: CHEMFILTER_CHEMICIAL,
 
             chemicals: [],
-            categories: [],
+            // categories: [],
+            categories: ['Industrial Compound'],
 
             // ReadoutSelectorWidget
             readoutType: READOUT_TYPE_CATEGORY,
 
             readouts: [],
 
+            // mortalityCheck: false,
 
             // IntegrativePlotWidget
             visualization: INTVIZ_HEATMAP,
@@ -183,8 +225,8 @@ class IntegrativeAnalysesMain extends React.Component {
             .value()
         ;
 
-        this.state.url = getIntegrativeUrl(this.state.assays, this.state.chemicals);
-        // this.state.url = '/seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=1&casrns=71751-41-2,53-70-3,84-74-2,5598-15-2,2921-88-2,58-89-9,116-06-3,330-55-2,80-05-7,298-02-2,69806-50-4,75-07-0,95737-68-1,83-79-4,1912-24-9,129-00-0 ';
+        // this.state.url = getIntegrativeUrl(this.state.assays, this.state.chemicals);
+        this.state.url = '/seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=1&casrns=71751-41-2,53-70-3,84-74-2,5598-15-2,2921-88-2,58-89-9,116-06-3,330-55-2,80-05-7,298-02-2,69806-50-4,75-07-0,95737-68-1,83-79-4,1912-24-9,129-00-0 ';
 
         //heatmap test
         return (
@@ -202,6 +244,7 @@ class IntegrativeAnalysesMain extends React.Component {
                     <IntegrativePlotWidget stateHolder={this}/>
                                         <hr/>
 
+                    {/*<IntegrativeCheckBoxWidget  stateHolder={this}/>*/}
                     {/*<hr/>*/}
                     <ReadoutWidget
                         stateHolder={this}

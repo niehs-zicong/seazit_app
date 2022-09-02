@@ -105,10 +105,7 @@ class DoseResponseMain extends React.Component {
         if (!this.state.metadataLoaded) {
             return <Loading/>;
         }
-        console.log('this.state');
-        console.log(this.state);
         let url = getDoseResponsesUrl(this.state.assays, this.state.readouts, this.state.chemicals);
-        console.log(url);
 
         return (
             <div className="row-fluid">

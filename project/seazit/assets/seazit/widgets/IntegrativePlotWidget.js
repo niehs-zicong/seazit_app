@@ -35,7 +35,7 @@ class IntegrativePlotWidget extends BaseWidget {
                             value={INTVIZ_DevtoxHEATMAP}
                             checked={state.visualization === INTVIZ_DevtoxHEATMAP}
                         />
-                        Devtox heatmap with BMC and selectivity
+                        Heatmap with BMC and selectivity
                     </label>
                 </div>
 

@@ -329,23 +329,23 @@ class IntegrativePlotHandler extends React.Component {
                         type: 'discrete',
                         values: [
                             {
-                                label: 'dev tox',
+                                label: 'selective',
                                 fill: '#d62976',
                             },
                             {
-                                label: 'general tox',
+                                label: 'toxic',
                                 fill: '#f9d70b',
                             },
                             {
-                                label: 'inconclusive',
+                                label: ' inconclusive, more tests are needed',
                                 fill: '#3BD6C6',
                             },
                             {
-                                label: 'inactive',
+                                label: 'inactive ',
                                 fill: '#FFFFFF',
                             },
                             {
-                                label: 'untested',
+                                label: 'not evaluated',
                                 fill: '#C9C9C9',
                             },
                         ],
@@ -439,9 +439,9 @@ class IntegrativePlotHandler extends React.Component {
             .sortBy('med_pod_med')
             .value();
 
-        console.log("data  before and after ")
-        console.log(this.state.data.integrative_activity_selectivity)
-        console.log(data)
+        // console.log("data  before and after ")
+        // console.log(this.state.data.integrative_activity_selectivity)
+        // console.log(data)
 
         // find xgroups names, and join datasetLabname and ontologyGroup into xGroup.
         let a = this.props.ontologyGroup;
@@ -586,8 +586,6 @@ class IntegrativePlotHandler extends React.Component {
             default:
                 throw 'Error: Unknown display type.';
         }
-
-
     };
 
     render() {

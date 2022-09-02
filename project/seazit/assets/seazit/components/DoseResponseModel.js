@@ -1,9 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import DoseResponse from './DoseResponse';
+import DoseResponse2 from './DoseResponse2';
+
 import DoseResponseGridWidget from '../widgets/DoseResponseGridWidget';
 
-import {getDoseResponsesUrl, NO_COLLAPSE} from '../shared';
+import {
+    getDoseResponsesUrl,
+    NO_COLLAPSE,
+    COLLAPSE_BY_CHEMICAL,
+    CHEMFILTER_CHEMICIAL,
+    renderSelectMultiOptgroupWidget, renderSelectMultiWidget
+} from '../shared';
+import IntegrativeCheckBoxWidget from "../widgets/IntegrativeCheckBoxWidget";
+import _ from "lodash";
 
 class Header extends React.Component {
     render() {
@@ -16,19 +26,69 @@ Header.propTypes = {
 };
 
 class SingleCurveBody extends React.Component {
+
+
+    constructor(props) {
+        super(props);
+        // take 75% of the screen width since main body is col-9 size; assume
+        // each plot is ~400px for a reasonable start, make sure it's at least 1
+        this.state = {
+            mortalityCheck: false,
+        };
+    }
+
+    _renderDoseResponse(state) {
+        if (state.mortalityCheck) {
+            return (
+                <div className="col-sm-10">
+                    <DoseResponse2
+                        url={state.url}
+                        cols={1}
+                        height={400}
+                        collapse={
+                            NO_COLLAPSE}
+                        devtoxreadout_ids={this.props.devtoxreadout_ids}
+                    />
+                </div>
+            );
+        } else {
+            return (
+                <div className="col-sm-10">
+                    <DoseResponse
+                        url={state.url}
+                        cols={1}
+                        height={400}
+                        collapse={
+                            NO_COLLAPSE}
+                        devtoxreadout_ids={this.props.devtoxreadout_ids}
+                    />
+                </div>
+            );
+        }
+    }
+
     render() {
-        let url = getDoseResponsesUrl(
+        let readout_ids = (this.state.mortalityCheck) ?
+            [this.props.readout_id].concat(['Mortality@120' + '_' + this.props.protocol_id])
+            : [this.props.readout_id];
+        let collapseFlag = (this.state.mortalityCheck) ?
+            COLLAPSE_BY_CHEMICAL
+            : NO_COLLAPSE;
+        this.state.url = getDoseResponsesUrl(
             [this.props.protocol_id],
-            [this.props.readout_id],
+            [readout_ids],
             [this.props.casrn]
         );
-        return <DoseResponse
-            url={url}
-            cols={1}
-            height={400}
-            collapse={NO_COLLAPSE}
-            devtoxreadout_ids={this.props.devtoxreadout_ids}
-        />;
+        return (
+            <div className="row-fluid">
+                <div className="col-sm-2">
+                    <IntegrativeCheckBoxWidget stateHolder={this}/>
+                </div>
+                {this._renderDoseResponse(this.state)}
+
+            </div>
+        );
+
     }
 }
 
@@ -50,31 +110,58 @@ class MultipleCurveBody extends React.Component {
             // DoseResponseGridWidget
             vizColumns: initialCols,
             vizHeight: 350,
+            mortalityCheck: false,
         };
     }
 
+
+    _renderDoseResponse(state) {
+        if (state.mortalityCheck) {
+            return (
+                <div className="col-sm-10">
+                    <DoseResponse2
+                        url={state.url}
+                        cols={state.vizColumns}
+                        height={state.vizHeight}
+                        collapse={
+                            NO_COLLAPSE}
+                        devtoxreadout_ids={this.props.devtoxreadout_ids}
+                    />
+                </div>
+            );
+        } else {
+            return (
+                <div className="col-sm-10">
+                    <DoseResponse
+                        url={state.url}
+                        cols={state.vizColumns}
+                        height={state.vizHeight}
+                        collapse={
+                            NO_COLLAPSE}
+                        devtoxreadout_ids={this.props.devtoxreadout_ids}
+                    />
+                </div>
+            );
+        }
+    }
+
+
     render() {
-        let url = getDoseResponsesUrl(
+        let readout_ids = (this.state.mortalityCheck) ?
+            this.props.readout_ids.concat(['Mortality@120' + '_' + this.props.protocol_id])
+            : [this.props.readout_ids];
+        this.state.url = getDoseResponsesUrl(
             [this.props.protocol_id],
-            [this.props.readout_ids],
+            [readout_ids],
             [this.props.casrns]
         );
-        console.log("this.props")
-        console.log(this.props)
         return (
             <div className="row-fluid">
                 <div className="col-sm-2">
                     <DoseResponseGridWidget stateHolder={this}/>
+                    <IntegrativeCheckBoxWidget stateHolder={this}/>
                 </div>
-                <div className="col-sm-10">
-                    <DoseResponse
-                        url={url}
-                        cols={this.state.vizColumns}
-                        height={this.state.vizHeight}
-                        collapse={NO_COLLAPSE}
-                        devtoxreadout_ids={this.props.devtoxreadout_ids}
-                    />
-                </div>
+                {this._renderDoseResponse(this.state)}
             </div>
         );
     }

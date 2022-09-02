@@ -13,7 +13,7 @@ const NO_COLLAPSE_COLORS = {
     bmcoutput: '#1451a5',
 };
 
-class DoseResponse extends React.Component {
+class DoseResponse2 extends React.Component {
     constructor(props) {
         super(props);
         this.colorScale = d3.scaleOrdinal(d3.schemeCategory10);
@@ -27,7 +27,9 @@ class DoseResponse extends React.Component {
     }
 
     collapseData(data, collapse) {
+        console.log(data)
         let keys = _.chain(data.dose_response)
+                 .reject((r) => r.endpoint_name == 'Mortality@120')
                 .map('key')
                 .uniq()
                 .value(),
@@ -42,6 +44,7 @@ class DoseResponse extends React.Component {
                         groupKeys,
                         dose_response: _.filter(data.dose_response, { key: k }),
                         bmcoutput: _.filter(data.bmcoutput, { key: k }),
+                         mortality120dose_response: _.filter(data.dose_response, { endpoint_name: 'Mortality@120' }),
                     };
                 })
                 .each((d, k) => {
@@ -68,8 +71,9 @@ class DoseResponse extends React.Component {
             responses,
             yrange,
             offset;
+        console.log("keys")
 
-
+        console.log(collapsedData)
         // set constant y-range for all charts. ensure 0 is within the
         // domain of values.
 
@@ -93,11 +97,11 @@ class DoseResponse extends React.Component {
                 return;
             }
             this.updateData(data, this.props.collapse);
+
         });
     }
 
     getColorScale(data, collapse) {
-
         if (_.isEmpty(data)) {
             return _.noop;
         }
@@ -107,9 +111,10 @@ class DoseResponse extends React.Component {
                 return this.colorScale.domain(_.map(data[0].dose_response, 'casrn'));
             case COLLAPSE_BY_CHEMICAL:
                 return this.colorScale.domain(_.map(data[0].dose_response, 'endpoint_name'));
-            case NO_COLLAPSE:
-                return _.noop;
-
+            // case NO_COLLAPSE:
+            //     return _.noop;
+                            case NO_COLLAPSE:
+                return this.colorScale.domain(_.map(data[0].dose_response, 'plate_name'));
             default:
                 throw 'Unknown collapse type.';
         }
@@ -133,6 +138,7 @@ class DoseResponse extends React.Component {
     }
 
     getResponseLabels(data, collapse, labelCase) {
+
         if (_.isEmpty(data)) {
             return '';
         }
@@ -146,6 +152,7 @@ class DoseResponse extends React.Component {
                 this.state.labelsDict[index1].push(index2);
             }
         }
+
         switch (collapse) {
             case COLLAPSE_BY_READOUT:
                 return `${data.preferred_name}|${data.casrn}|${data.dtxsid}`;
@@ -224,6 +231,8 @@ class DoseResponse extends React.Component {
     setKeys(data, collapse) {
         _.each(data.dose_response, (d) => this.setDatasetKey(d, collapse));
         _.each(data.bmcoutput, (d) => this.setDatasetKey(d, collapse));
+        _.each(data.mortality120dose_response, (d) => this.setDatasetKey(d, collapse));
+
     }
 
     updateData(data, collapse) {
@@ -238,6 +247,10 @@ class DoseResponse extends React.Component {
 
     _renderPlot(d, yrange) {
         //
+
+        console.log("d")
+        console.log(d)
+
         if (this.refs[d.key] === undefined) {
             return;
         }
@@ -282,25 +295,25 @@ class DoseResponse extends React.Component {
             // add room for collapsed plot legends
             height: this.props.height + d.groupKeys.length * 19 + 20,
             autosize: true,
-            // plot_bgcolor:(this.props.devtoxreadout_ids &&  this.props.devtoxreadout_ids.includes(d.endpoint_name)) ? '#FFFF00' : null,
             paper_bgcolor:(this.props.devtoxreadout_ids &&  this.props.devtoxreadout_ids.includes(d.endpoint_name)) ? '#FFFF00' : null,
-
         };
+
         d.groupKeys.map((gk) => {
             let drs = d.dose_response.filter((r) => r.groupKey == gk),
+             mor120drs = d.mortality120dose_response.filter((r) => r.groupKey == gk),
                 substance_codeCase = _.chain(drs)
                     .map('substance_code')
                     .uniq()
                     .value();
-
             this.state.labelsDict = [];
+
             d.substance_code_input_ids.map((id_flag, index) => {
-                let drs_split = drs.filter((r) => r.substance_code_input_id == id_flag),
-                    legendNames = _.chain(data)
-                        .map('name')
-                        .uniq()
+
+                let drs_split = _.chain(drs)
+                            .filter((r) => r.substance_code_input_id == id_flag)
+                        .sortBy('dose')
                         .value();
-                drs_split = _.sortBy(drs_split, 'dose');
+                let plateColor = drs_split[0].plate_name;
                 data.push({
                     x: _.map(drs_split, 'dose'),
                     y: drs_split.map((obj) => {
@@ -315,12 +328,38 @@ class DoseResponse extends React.Component {
                         substance_codeCase
                     )}<br>${this.getTextLabels(drs_split, d)}`,
                     marker: {
-                        color: this.getMarkerColor(gk, 'responses'),
+                        // color: this.getMarkerColor(drs_split[0].plate_name, 'responses'),
+                        color: this.getMarkerColor(plateColor, 'responses'),
                     },
                     opacity: 0.8,
                 });
             });
 
+        let     mor120drsKeys = _.chain(mor120drs)
+                    .map('substance_code_input_id')
+                    .uniq()
+                    .value();
+        mor120drsKeys.map((id_flag, index) => {
+                    let drs_split = _.chain(mor120drs)
+                            .filter((r) => r.substance_code_input_id == id_flag)
+                        .sortBy('dose')
+                        .value();
+                                    let plateColor2 = drs_split[0].plate_name;
+                    data.push({
+                    x: _.map(drs_split, 'dose'),
+                    y: drs_split.map((obj) => {
+                        return (obj.n_in / obj.n) * 100;
+                    }),
+                    legendgroup: 'plot',
+                    mode: 'line',
+                    type: 'scatter',
+                    text: `${drs_split[0].endpoint_name} plate_name ${drs_split[0].plate_name}`,
+                    marker: {
+                        color: this.getMarkerColor(plateColor2, 'responses'),
+                    },
+                    opacity: 0.8,
+                });
+        });
             // add trsh if exists
             if (d.bmcoutput.length > 0) {
                 d.bmcoutput
@@ -406,7 +445,7 @@ class DoseResponse extends React.Component {
     }
 }
 
-DoseResponse.propTypes = {
+DoseResponse2.propTypes = {
     cols: PropTypes.number.isRequired,
     collapse: PropTypes.string.isRequired,
     height: PropTypes.number.isRequired,
@@ -414,4 +453,4 @@ DoseResponse.propTypes = {
     devtoxreadout_ids: PropTypes.array,
 };
 
-export default DoseResponse;
+export default DoseResponse2;

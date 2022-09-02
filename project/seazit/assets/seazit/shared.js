@@ -3,6 +3,8 @@ import * as d3 from 'd3';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Tooltip from "@material-ui/core/Tooltip";
+import {Header, MultipleCurveBody, SingleCurveBody} from "./components/DoseResponseModel";
+import BootstrapModal from 'utils/BootstrapModal';
 
 
 const AXIS_LINEAR = 1,
@@ -71,8 +73,8 @@ const AXIS_LINEAR = 1,
                 Seazit_ui_panel: d.Seazit_ui_panel,
                 Seazit_ontology:d.Seazit_ontology,
             });
-            console.log("d");
-            console.log(d);
+            // console.log("d");
+            // console.log(d);
         });
     },
 
@@ -127,8 +129,6 @@ const AXIS_LINEAR = 1,
     },
 
     renderSelectSingleWidget = function(name, label, options, values, handleChange) {
-        console.log("zw options")
-        console.log(options)
 
         return (
             <div>
@@ -269,114 +269,37 @@ const AXIS_LINEAR = 1,
     element.click();
     document.body.removeChild(element);
     },
-     data_exportToCSVFile  = function(jsonData, keys) {
 
-        var today = new Date();
-        var filename =
-            today.getFullYear() +
-            '-' +
-            (today.getMonth() + 1) +
-            '-' +
-            today.getDate() +
-            '-' +
-            today.getHours() +
-            '-' +
-            today.getMinutes() +
-            '-' +
-            today.getSeconds() +
-            '.csv';
+        integrativeHandleCellClick = function (d) {
+            console.log("handleCellClick")
+            console.log(d)
+            // d.endPointList.push('mortality@120');
 
-        if (jsonData.length == 0) {
-            return '';
-        }
-        let columnDelimiter = ',';
-        let lineDelimiter = '\n';
+            if (d.endPointList && d.endPointList.length > 1) {
+                new BootstrapModal(Header, MultipleCurveBody, {
+                    title: d.title,
+                    protocol_id: d.protocol_id,
+                    readout_ids: _.map(d.endPointList, function (x) {
+                        return x + '_' + d.protocol_id;
+                    }),
+                    // if button checked, we will add mortality@120 to each plot
+                    casrns: [d.casrn],
+                    devtoxreadout_ids: d.devtoxEndPointList,
+                });
+            } else {
+                new BootstrapModal(Header, SingleCurveBody, {
+                    title: d.title,
+                    protocol_id: d.protocol_id,
+                    readout_id: d.endpoint_name + '_' + d.protocol_id,
+                    casrn: d.casrn,
+                    devtoxreadout_ids: d.devtoxEndPointList,
+                    // devtoxreadout_ids: d.devtoxEndPointList+ '_' + d.protocol_id,
+                });
+            }
+            ;
+        },
 
-        let csvColumnHeader = keys.join(columnDelimiter);
-        let csvStr = csvColumnHeader + lineDelimiter;
-        jsonData.forEach((item) => {
-            keys.forEach((key, index) => {
-                if (index > 0 && index < keys.length) {
-                    // if( (index > 0) && (index < keys.length-1) ) {
-                    csvStr += columnDelimiter;
-                }
-                // the reason I used replcae all function, replace all comma
-                // to . , the comma will make my csv format mass.
-                switch (key) {
-                    case 'chemical_casrn':
-                        csvStr += `"${item[key]}"`;
 
-                        break;
-                    case 'chemical_category':
-                        csvStr += `"${item[key]}"`;
-
-                        break;
-                    case 'chemical_name':
-                        csvStr += `"${item[key]}"`;
-
-                        break;
-                    case 'minimimumViability.bmd':
-                        if (item['minimimumViability'] && item['minimimumViability']['bmd']) {
-                            csvStr += item['minimimumViability']['bmd'];
-                        } else {
-                            csvStr += 'null';
-                        }
-                        break;
-                    case 'minimimumViability.bmdl':
-                        if (item['minimimumViability'] && item['minimimumViability']['bmdl']) {
-                            csvStr += item['minimimumViability']['bmdl'];
-                        } else {
-                            csvStr += 'null';
-                        }
-                        break;
-                    case 'minimimumViability.bmdu':
-                        if (item['minimimumViability'] && item['minimimumViability']['bmdu']) {
-                            csvStr += item['minimimumViability']['bmdu'];
-                        } else {
-                            csvStr += 'null';
-                        }
-                        break;
-                    case 'minimimumNonViability.bmd':
-                        if (item['minimimumNonViability'] && item['minimimumNonViability']['bmd']) {
-                            csvStr += item['minimimumNonViability']['bmd'];
-                        } else {
-                            csvStr += 'null';
-                        }
-                        break;
-                    case 'minimimumNonViability.bmdl':
-                        if (
-                            item['minimimumNonViability'] &&
-                            item['minimimumNonViability']['bmdl']
-                        ) {
-                            csvStr += item['minimimumNonViability']['bmdl'];
-                        } else {
-                            csvStr += 'null';
-                        }
-                        break;
-                    case 'minimimumNonViability.bmdu':
-                        if (
-                            item['minimimumNonViability'] &&
-                            item['minimimumNonViability']['bmdu']
-                        ) {
-                            csvStr += item['minimimumNonViability']['bmdu'];
-                        } else {
-                            csvStr += 'null';
-                        }
-                        break;
-                    default:
-                        csvStr += 'undefined';
-                }
-            });
-            csvStr += lineDelimiter;
-        });
-        csvStr = encodeURIComponent(csvStr);
-
-        let dataUri = 'data:text/csv;charset=utf-8,' + csvStr;
-        let linkElement = document.createElement('a');
-        linkElement.setAttribute('href', dataUri);
-        linkElement.setAttribute('download', filename);
-        linkElement.click();
-    },
 
     renderNoDataAlert = function() {
         return (
@@ -458,5 +381,5 @@ export {
     renderNoSelected,
     data_exportToJsonFile,
     svg_download_form,
-    data_exportToCSVFile,
+    integrativeHandleCellClick,
 };

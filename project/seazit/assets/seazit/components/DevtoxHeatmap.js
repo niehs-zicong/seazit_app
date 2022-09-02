@@ -8,11 +8,10 @@ import BootstrapModal from 'utils/BootstrapModal';
 import {Header, SingleCurveBody, MultipleCurveBody} from './DoseResponseModel';
 
 import styles from './graph.css';
-// import styles from './ResponseFigure.css';
 
 import {getLog10AxisFunction} from 'utils/d3';
 import Heatmap from "./Heatmap";
-import {printFloat} from "../shared";
+import {integrativeHandleCellClick, printFloat} from "../shared";
 
 let addStripMask = function (svg) {
     // add strip mask to top of d3-selected svg
@@ -56,40 +55,13 @@ let renderPlot = function (el, data, legendData) {
             legend: 150,
         },
         cellSize = 30,
-        handleCellClick = function (d) {
-            // console.log("handleCellClick")
-            // console.log(d)
-
-            if (d.endPointList && d.endPointList.length > 1) {
-                new BootstrapModal(Header, MultipleCurveBody, {
-                    title: d.title,
-                    protocol_id: d.protocol_id,
-                    readout_ids: _.map(d.endPointList, function (x) {
-                        return x + '_' + d.protocol_id;
-                    }),
-                    casrns: [d.casrn],
-                    devtoxreadout_ids: d.devtoxEndPointList,
-
-                });
-            } else {
-                new BootstrapModal(Header, SingleCurveBody, {
-                    title: d.title,
-                    protocol_id: d.protocol_id,
-                    readout_id: d.endpoint_name + '_' + d.protocol_id,
-                    casrn: d.casrn,
-                    devtoxreadout_ids: d.devtoxEndPointList,
-
-                });
-            }
-            ;
-        },
 
 
         handleMouseOver = function (d) {
             tooltip
                 // .html(d.mean_selectivity ? d.mean_selectivity : 0)
                 .html(`Potency: ${printFloat(Math.pow(10, d.mean_pod) * 1000000)} μM  \n
-                 Selectivity: ${printFloat(d.mean_selectivity)} μM `)
+                 Selectivity: ${printFloat(d.mean_selectivity)}`)
                 // Potency: ${printFloat(d.mean_selectivity ? d.mean_selectivity : 0)} μM `)
                 .style('left', d3.event.pageX + 'px')
                 .style('top', d3.event.pageY + 20 + 'px')
@@ -264,7 +236,7 @@ let renderPlot = function (el, data, legendData) {
         .style("opacity", 0.8)
         .on('mouseover', handleMouseOver)
         .on('mouseout', handleMouseOut)
-        .on('click', handleCellClick);
+        .on('click', integrativeHandleCellClick);
 
 
     chartLayer
@@ -369,7 +341,7 @@ let renderPlot = function (el, data, legendData) {
                     'transform',
                     `translate(50,${margin.top + margin.axisTop + legendHeight + 25})`
                 )
-                .text('Not dev tox');
+                .text('toxic, inactive, or inconclusive');
 
             legendLayer
                 .append('rect')
@@ -421,7 +393,7 @@ let renderPlot = function (el, data, legendData) {
                     'transform',
                     `translate(50,${margin.top + margin.axisTop + legendHeight + 55})`
                 )
-                .text('No data');
+                .text('not evaluated');
             break;
         }
 

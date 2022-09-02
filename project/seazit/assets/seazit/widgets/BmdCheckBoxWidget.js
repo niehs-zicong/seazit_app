@@ -30,9 +30,8 @@ class BmdCheckBoxWidget extends BaseWidget {
                                     name={d.name}
                                     defaultChecked={d.isChecked}
                                     onChange={this.handleCheckboxInputChange}
-                                    // value={state.selectivityNames}
                                 />
-                                {d.name}
+                                {d.label}
                             </label>
                         </div>
                     );

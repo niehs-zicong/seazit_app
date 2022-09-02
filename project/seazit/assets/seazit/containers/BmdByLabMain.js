@@ -50,22 +50,28 @@ class BmdByLabMain extends React.Component {
                     id: 1,
                     name: "dev tox",
                     isChecked: true,
+                    label: "selective",
                 },
                 {
                     id: 2,
                     name: "general tox",
                     isChecked: false,
+                    label: "toxic",
 
                 },
                 {
                     id: 3,
                     name: "inconclusive",
                     isChecked: false,
+                    label: "inconclusive, more tests are needed",
+
                 },
                 {
                     id: 4,
                     name: "inactive",
                     isChecked: false,
+                    label: "inactive",
+
                 }
             ],
 

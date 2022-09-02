@@ -6,6 +6,7 @@ import * as d3 from 'd3';
 
 import BootstrapModal from 'utils/BootstrapModal';
 import {Header, SingleCurveBody, MultipleCurveBody} from './DoseResponseModel';
+import {integrativeHandleCellClick} from '../shared';
 
 import styles from './graph.css';
 // import styles from './ResponseFigure.css';
@@ -53,34 +54,6 @@ let renderPlot = function (el, data, legendData) {
             legend: 150,
         },
         cellSize = 30,
-        handleCellClick = function (d) {
-            console.log("handleCellClick")
-            console.log(d)
-
-            if (d.endPointList && d.endPointList.length > 1) {
-                new BootstrapModal(Header, MultipleCurveBody, {
-                    title: d.title,
-                    protocol_id: d.protocol_id,
-                    readout_ids: _.map(d.endPointList, function (x) {
-                        return x + '_' + d.protocol_id;
-                    }),
-                    // if button checked, we will add mortality@120 to each plot
-                    casrns: [d.casrn],
-                    devtoxreadout_ids: d.devtoxEndPointList,
-                });
-            } else {
-                new BootstrapModal(Header, SingleCurveBody, {
-                    title: d.title,
-                    protocol_id: d.protocol_id,
-                    readout_id: d.endpoint_name + '_' + d.protocol_id,
-                    casrn: d.casrn,
-                    devtoxreadout_ids: d.devtoxEndPointList,
-                    // devtoxreadout_ids: d.devtoxEndPointList+ '_' + d.protocol_id,
-                });
-            }
-            ;
-        },
-
 
         handleXLabelClick = function (label) {
             let cells = xMap[label],
@@ -259,7 +232,7 @@ let renderPlot = function (el, data, legendData) {
         .style('cursor', 'pointer')
         .on('mouseover', handleMouseOver)
         .on('mouseout', handleMouseOut)
-        .on('click', handleCellClick);
+        .on('click', integrativeHandleCellClick);
 
     // draw legend, this legend length, size is fixed.
     // 2 cases, discrete = activity,  continuous = BMC, different legned form.

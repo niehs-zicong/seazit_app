@@ -7,6 +7,10 @@ class DoseResponseGridWidget extends BaseWidget {
         - stateHolder.state.vizColumns
         - stateHolder.state.vizHeight
     */
+    constructor(props) {
+        super(props);
+
+    }
 
     render() {
         let state = this.props.stateHolder.state;
@@ -38,6 +42,7 @@ class DoseResponseGridWidget extends BaseWidget {
                     value={state.vizHeight}
                 />
                 <span>{state.vizHeight} px selected</span>
+
             </div>
         );
     }
