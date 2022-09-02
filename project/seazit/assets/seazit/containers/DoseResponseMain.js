@@ -103,24 +103,22 @@ class DoseResponseMain extends React.Component {
 
     render() {
         if (!this.state.metadataLoaded) {
-            return <Loading />;
+            return <Loading/>;
         }
-        console.log('this.state');
-        console.log(this.state);
         let url = getDoseResponsesUrl(this.state.assays, this.state.readouts, this.state.chemicals);
-        console.log(url);
 
         return (
             <div className="row-fluid">
                 <div className="col-md-12">
                     <h1>
                         Concentration Response
-                        <HelpButtonWidget stateHolder={this} />
+                        <HelpButtonWidget stateHolder={this}/>
                     </h1>
                 </div>
                 <div className="col-md-12">
-                    <FiveOhEight />
+                    <FiveOhEight/>
                 </div>
+
                 <div className="col-md-3">
                     <ReadoutWidget
                         stateHolder={this}
@@ -129,20 +127,20 @@ class DoseResponseMain extends React.Component {
                         multiAssaySelector={true}
                         multiReadoutSelector={true}
                     />
-                    <hr />
-                    <ChemicalWidget stateHolder={this} />
-                    <hr />
-                    <PlotCollapseWidget stateHolder={this} />
-                    <hr />
-                    <DoseResponseGridWidget stateHolder={this} />
+                    <hr/>
+                    <ChemicalWidget stateHolder={this}/>
+                    <hr/>
+                    <PlotCollapseWidget stateHolder={this}/>
+                    <hr/>
+                    <DoseResponseGridWidget stateHolder={this}/>
                 </div>
                 <div className="col-md-9">
                     {this._renderHelpText()}
                     {url ? this.renderSelection(url) : this.renderNoSelection()}
                 </div>
             </div>
-        );
+    );
     }
-}
+    }
 
-export default DoseResponseMain;
+    export default DoseResponseMain;

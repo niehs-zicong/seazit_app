@@ -5,13 +5,13 @@ import _ from 'lodash';
 import * as d3 from 'd3';
 
 import BootstrapModal from 'utils/BootstrapModal';
-import {Header, SingleCurveBody, MultipleCurveBody} from './DoseResponseModal';
+import {Header, SingleCurveBody, MultipleCurveBody} from './DoseResponseModel';
 
 import styles from './graph.css';
-// import styles from './ResponseFigure.css';
 
 import {getLog10AxisFunction} from 'utils/d3';
 import Heatmap from "./Heatmap";
+import {integrativeHandleCellClick, printFloat} from "../shared";
 
 let addStripMask = function (svg) {
     // add strip mask to top of d3-selected svg
@@ -51,38 +51,18 @@ let renderPlot = function (el, data, legendData) {
             bottom: 40,
             right: 10,
             axisLeft: 290,
-            axisTop: 150,
+            axisTop: 290,
             legend: 150,
         },
         cellSize = 30,
-        handleCellClick = function (d) {
-            // console.log("handleCellClick")
-            // console.log(d)
-
-            if (d.endPointList && d.endPointList.length > 1) {
-                new BootstrapModal(Header, MultipleCurveBody, {
-                    title: d.title,
-                    protocol_id: d.protocol_id,
-                    readout_ids: _.map(d.endPointList, function (x) {
-                        return x + '_' + d.protocol_id;
-                    }),
-                    casrns: [d.casrn],
-                });
-            } else {
-                new BootstrapModal(Header, SingleCurveBody, {
-                    title: d.title,
-                    protocol_id: d.protocol_id,
-                    readout_id: d.endpoint_name + '_' + d.protocol_id,
-                    casrn: d.casrn,
-                });
-            }
-            ;
-        },
 
 
         handleMouseOver = function (d) {
             tooltip
-                .html(d.mean_selectivity ? d.mean_selectivity : 0)
+                // .html(d.mean_selectivity ? d.mean_selectivity : 0)
+                .html(`Potency: ${printFloat(Math.pow(10, d.mean_pod) * 1000000)} μM  \n
+                 Selectivity: ${printFloat(d.mean_selectivity)}`)
+                // Potency: ${printFloat(d.mean_selectivity ? d.mean_selectivity : 0)} μM `)
                 .style('left', d3.event.pageX + 'px')
                 .style('top', d3.event.pageY + 20 + 'px')
                 .style('opacity', 1.0);
@@ -90,32 +70,31 @@ let renderPlot = function (el, data, legendData) {
         handleMouseOut = function (d) {
             tooltip.style('opacity', 0.0);
         },
-
-        // width = 450 - margin.left - margin.right,
-        // height = 450 - margin.top - margin.bottom,
         // xasix is column, yasix is row
         xasix = d3.map(data, function (d) {
             return d.x;
-        }).keys(),
+        }).keys()
+            .sort(),
+
+
         yasix = d3.map(data, function (d) {
             return d.y;
-        }).keys(),
+        }).keys()
+            .sort(),
+
 
         width = xasix.length * cellSize + margin.axisLeft + margin.left + margin.right + margin.legend,
         height = yasix.length * cellSize + margin.axisTop + margin.top + margin.bottom,
 
-
         chartHeight = height - (margin.top + margin.bottom + margin.axisTop),
         chartWidth = width - (margin.left + margin.right + margin.axisLeft + margin.legend),
-        // chartHeight = 450 - margin.top - margin.bottom,
-        // chartWidth = 450 - margin.left - margin.right,
         // Create a color scale
 
         // colorDomain = [-8, -4],
         //  sizeDomain = [0, 3.15],
 
         // [-0.20605, 3.1549] is min and max for allset data from table.
-        // var colorRange = [-0.20605, 3.1549];
+        // var colorRange = [0, 3.1549];
 
         // Create a size scale for bubbles on top right. Watch out: must be a rootscale!
         // The scaleSqrt scale is useful for sizing circles by area (rather than radius).
@@ -125,22 +104,26 @@ let renderPlot = function (el, data, legendData) {
         //   make radius linear scale.  TODO
         // sizeDomain = d3.extent(_.map(data, 'mean_selectivity')),
 
+        // sizeDomain = [0, 3.1549],
         sizeDomain = [0, 2],
+        // sizeDomain = [0, 3],
 
         size = d3.scaleSqrt()
             .domain(sizeDomain)
             .range([0, cellSize / 2]),
-        // size = d3.scaleLinear()
-        //     .domain(sizeDomain)
-        //     .range([0, cellSize / 2]),
-        // Create the svg area
+
         svg = d3
             .select(el)
-            .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
+            .append('svg')
+            .attr('width', Math.max(1000, width + margin.left + margin.right))
+            .attr('height', Math.max(1000, width + margin.left + margin.right))
             .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")"),
+
+        star = d3
+            .symbol()
+            .type(d3.symbolStar)
+            .size(size(sizeDomain[1] / 1)),
 
         // add a tooltip
         tooltip = d3
@@ -148,9 +131,7 @@ let renderPlot = function (el, data, legendData) {
             .append('div')
             .attr('class', 'tooltip')
             .style('opacity', 0.0);
-    console.log(data)
 
-    console.log(sizeDomain)
 
     // draw xy-axis
     let axisLayer = svg
@@ -235,8 +216,8 @@ let renderPlot = function (el, data, legendData) {
         .style('stroke-width', 2);
 
     chartLayer
-        .selectAll(".cor")
-        .data(data)
+        .selectAll('path')
+        .data(data.filter(d => d.final_dev_call === 'dev tox'))
         .enter()
         .append("g")
         .attr("class", "cor")
@@ -247,32 +228,33 @@ let renderPlot = function (el, data, legendData) {
             )
         })
         .append("circle")
-        // .attr("r", function (d) {
-        //     if (d.final_dev_call == 'dev tox') {
-        //          return size(Math.abs(d.mean_selectivity));
-        //     } else {
-        //         // others 'general tox', 'inconclusive', 'inactive'
-        //         return size(Math.abs(sizeDomain[1]));
-        //     }
-        // })
         .attr("r", (d) => {
-            switch (d.final_dev_call) {
-                case 'dev tox':
-                    return size(Math.abs(d.mean_selectivity));
-                    break;
-                case null:
-                    // return size(0);
-                    break;
-                // others 'general tox', 'inconclusive', 'inactive'
-                default:
-                    return size(Math.abs(sizeDomain[1]));
-            }
+            return size(Math.abs(d.mean_selectivity));
+
         })
         .attr('fill', (d) => d.fill)
         .style("opacity", 0.8)
         .on('mouseover', handleMouseOver)
         .on('mouseout', handleMouseOut)
-        .on('click', handleCellClick);
+        .on('click', integrativeHandleCellClick);
+
+
+    chartLayer
+        .selectAll('path')
+        .data(data.filter(d => d.final_dev_call !== 'dev tox' && d.final_dev_call !== null))
+        .enter()
+        .append('path')
+        .attr('class', 'star')
+        .attr('d', star)
+        .attr('fill', (d) => d.fill)
+        .attr("transform", function (d) {
+            return (
+                `translate(${xScale(d.x) + xScale.bandwidth() / 2}, ${yScale(d.y) +
+                yScale.bandwidth() / 2})`
+            )
+        })
+        .style("opacity", 0.8)
+    ;
 
 
     let legendLayer = svg
@@ -359,7 +341,7 @@ let renderPlot = function (el, data, legendData) {
                     'transform',
                     `translate(50,${margin.top + margin.axisTop + legendHeight + 25})`
                 )
-                .text('XXX');
+                .text('toxic, inactive, or inconclusive');
 
             legendLayer
                 .append('rect')
@@ -371,7 +353,7 @@ let renderPlot = function (el, data, legendData) {
                     'transform',
                     `translate(20,${margin.top + margin.axisTop + legendHeight + 10})`
                 )
-                .attr('fill', 'white')
+                .attr('fill', 'black')
                 .style('stroke', 'black')
                 .style('stroke-width', '1');
 
@@ -411,7 +393,7 @@ let renderPlot = function (el, data, legendData) {
                     'transform',
                     `translate(50,${margin.top + margin.axisTop + legendHeight + 55})`
                 )
-                .text('YYY');
+                .text('not evaluated');
             break;
         }
 
@@ -465,7 +447,7 @@ class DevtoxHeatmap extends Component {
     }
 
     render() {
-        return <div id="IA_heatmap01" className="row-fluid" ref="svg"/>;
+        return <div id="IA_heatmap02" className="row-fluid" ref="svg"/>;
     }
 }
 

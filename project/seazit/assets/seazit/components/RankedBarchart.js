@@ -8,7 +8,7 @@ import ReactDOM from 'react-dom';
 import DoseResponse from './DoseResponse';
 import { getBmdsUrl, getDoseResponsesUrl, NO_COLLAPSE, svg_download_form } from '../shared';
 import BootstrapModal from 'utils/BootstrapModal';
-import { Header, SingleCurveBody } from './DoseResponseModal';
+import { Header, SingleCurveBody } from './DoseResponseModel';
 import RankedBarchartHandler from './RankedBarchartHandler';
 
 import {

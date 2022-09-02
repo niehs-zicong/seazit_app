@@ -2,6 +2,7 @@ import _ from 'lodash';
 import * as d3 from 'd3';
 import React from 'react';
 import PropTypes from 'prop-types';
+import styles from './graph.css';
 
 import Plotly from 'Plotly';
 
@@ -10,7 +11,6 @@ import { NO_COLLAPSE, COLLAPSE_BY_READOUT, COLLAPSE_BY_CHEMICAL, printFloat } fr
 const NO_COLLAPSE_COLORS = {
     responses: '#76B425',
     bmcoutput: '#1451a5',
-    // hill: '#A52D29',
 };
 
 class DoseResponse extends React.Component {
@@ -74,8 +74,6 @@ class DoseResponse extends React.Component {
         // domain of values.
 
         yrange = [0, 100];
-        // console.log('collapsedData');
-        //
         return {
             data,
             collapsedData,
@@ -99,6 +97,7 @@ class DoseResponse extends React.Component {
     }
 
     getColorScale(data, collapse) {
+
         if (_.isEmpty(data)) {
             return _.noop;
         }
@@ -110,14 +109,13 @@ class DoseResponse extends React.Component {
                 return this.colorScale.domain(_.map(data[0].dose_response, 'endpoint_name'));
             case NO_COLLAPSE:
                 return _.noop;
+
             default:
                 throw 'Unknown collapse type.';
         }
     }
 
     getMarkerColor(d, marker = null) {
-        // console.log("color")
-        // console.log(d)
         return this.state.scale(d);
     }
 
@@ -224,9 +222,6 @@ class DoseResponse extends React.Component {
         }
     }
     setKeys(data, collapse) {
-        // console.log(data)
-        // console.log(data)
-
         _.each(data.dose_response, (d) => this.setDatasetKey(d, collapse));
         _.each(data.bmcoutput, (d) => this.setDatasetKey(d, collapse));
     }
@@ -265,7 +260,6 @@ class DoseResponse extends React.Component {
                 },
             ],
         };
-
         let layout = {
             title: d.title,
             titlefont: {
@@ -288,6 +282,9 @@ class DoseResponse extends React.Component {
             // add room for collapsed plot legends
             height: this.props.height + d.groupKeys.length * 19 + 20,
             autosize: true,
+            // plot_bgcolor:(this.props.devtoxreadout_ids &&  this.props.devtoxreadout_ids.includes(d.endpoint_name)) ? '#FFFF00' : null,
+            paper_bgcolor:(this.props.devtoxreadout_ids &&  this.props.devtoxreadout_ids.includes(d.endpoint_name)) ? '#FFFF00' : null,
+
         };
         d.groupKeys.map((gk) => {
             let drs = d.dose_response.filter((r) => r.groupKey == gk),
@@ -304,8 +301,6 @@ class DoseResponse extends React.Component {
                         .uniq()
                         .value();
                 drs_split = _.sortBy(drs_split, 'dose');
-                // //console.log("drs")
-                // //console.log(drs)
                 data.push({
                     x: _.map(drs_split, 'dose'),
                     y: drs_split.map((obj) => {
@@ -314,11 +309,6 @@ class DoseResponse extends React.Component {
                     legendgroup: 'plot',
                     mode: 'line',
                     type: 'scatter',
-                    // name: this.getResponseLabels(
-                    //     drs_split[0],
-                    //     this.props.collapse,
-                    //     substance_codeCase
-                    // ),
                     text: `${this.getResponseLabels(
                         drs_split[0],
                         this.props.collapse,
@@ -326,7 +316,6 @@ class DoseResponse extends React.Component {
                     )}<br>${this.getTextLabels(drs_split, d)}`,
                     marker: {
                         color: this.getMarkerColor(gk, 'responses'),
-                        // color: this.getMarkerColor(id_flag, 'responses'),
                     },
                     opacity: 0.8,
                 });
@@ -342,11 +331,6 @@ class DoseResponse extends React.Component {
                         }
                         trsh = el.trsh;
                         let dash = gk ? { dash: 'dot' } : null;
-                        // let bmc_name = null;
-                        // bmc_name = this.getBMCLabels(el, this.props.collapse);
-                        // annotations.push(
-                        //     `${bmc_name}:${(Math.pow(10, el.pod_med) * 1000000).toFixed(2)} µM`
-                        // );
                     });
             }
         });
@@ -372,7 +356,6 @@ class DoseResponse extends React.Component {
             // move legend to bottom of plot
             layout.legend = { orientation: 'h', y: -0.3 };
         }
-        //console.log(data)
         Plotly.newPlot(this.refs[d.key], data, layout, svgConfig);
     }
 
@@ -428,6 +411,7 @@ DoseResponse.propTypes = {
     collapse: PropTypes.string.isRequired,
     height: PropTypes.number.isRequired,
     url: PropTypes.string.isRequired,
+    devtoxreadout_ids: PropTypes.array,
 };
 
 export default DoseResponse;

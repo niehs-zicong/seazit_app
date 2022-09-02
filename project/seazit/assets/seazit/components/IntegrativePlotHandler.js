@@ -61,6 +61,218 @@ class IntegrativePlotHandler extends React.Component {
     }
 
 
+    _exportCsv = function (jsonData) {
+        if (jsonData.length == 0) {
+            return '';
+        }
+        let filename = 'IntegrativeAnalysesData.csv',
+            keys = [
+                'protocol_name_long',
+                'protocol_name_plot',
+                'chemical_category',
+                'dtxsid',
+                'casrn',
+                'preferred_name',
+                'use_category1',
+                'ontologyGroupName',
+                'endPointList',
+                'combin_ontology_id',
+                'f_max_dev_call',
+                'mean_pod',
+                'mort_med_pod_med',
+                'mean_selectivity',
+                'min_lowest_conc',
+                'max_highest_conc',
+            ];
+        let columnDelimiter = ',';
+        let lineDelimiter = '\n';
+
+        let csvColumnHeader = keys.join(columnDelimiter);
+        let csvStr = csvColumnHeader + lineDelimiter;
+        jsonData.forEach((item) => {
+            keys.forEach((key, index) => {
+                if (index > 0 && index < keys.length) {
+                    csvStr += columnDelimiter;
+                }
+                // the reason I used replcae all function, replace all comma
+                // to . , the comma will make my csv format mass.
+                switch (key) {
+                    case 'protocol_name_long':
+                        csvStr += `"${item[key]}"`;
+                        break;
+                    case 'protocol_name_plot':
+                        csvStr += `"${item[key]}"`;
+                        break;
+                    case 'chemical_category':
+                        csvStr += `"${item[key]}"`;
+                        break;
+                    case 'dtxsid':
+                        csvStr += `"${item[key]}"`;
+                        break;
+                    case 'casrn':
+                        csvStr += `"${item[key]}"`;
+                        break;
+                    case 'preferred_name':
+                        csvStr += `"${item[key]}"`;
+                        break;
+                    case 'use_category1':
+                        csvStr += `"${item[key]}"`;
+                        break;
+                    case 'ontologyGroupName':
+                        csvStr += `"${item[key]}"`;
+                        break;
+                    case 'endPointList':
+                        csvStr += `"${item[key] ? item[key].length : 0}"`;
+                        break;
+                    case 'combin_ontology_id':
+                        csvStr += `"${item[key] ? item[key].length : 0}"`;
+                        break;
+                    case 'f_max_dev_call':
+                        csvStr += `"${item[key]}"`;
+                        break;
+                    case 'mean_pod':
+                        csvStr += `"${Math.pow(10, item[key]) * 1000000}"`;
+                        break;
+                    case 'mort_med_pod_med':
+                        csvStr += `"${Math.pow(10, item[key]) * 1000000}"`;
+
+                        break;
+                    case 'mean_selectivity':
+                        csvStr += `"${item[key]}"`;
+                        break;
+                    case 'min_lowest_conc':
+                        csvStr += `"${Math.pow(10, item[key]) * 1000000}"`;
+
+                        break;
+                    case 'max_highest_conc':
+                        // csvStr += `"${item[key]}"`;
+                        csvStr += `"${Math.pow(10, item[key]) * 1000000}"`;
+
+
+                        break;
+
+                    default:
+                        csvStr += '';
+                }
+            });
+            csvStr += lineDelimiter;
+        });
+        csvStr = encodeURIComponent(csvStr);
+
+        let dataUri = 'data:text/csv;charset=utf-8,' + csvStr;
+        let linkElement = document.createElement('a');
+        linkElement.setAttribute('href', dataUri);
+        linkElement.setAttribute('download', filename);
+        linkElement.click();
+    }
+    _exportCsv2 = function (jsonData) {
+        if (jsonData.length == 0) {
+            return '';
+        }
+        let filename = 'IntegrativeAnalysesData.csv',
+            keys = {
+                'protocol_name_long': 'dataset name (short)',
+                'protocol_name_plot': 'dataset name (long)',
+                'dtxsid': 'dtxsid',
+                'casrn': 'casrn',
+                'preferred_name': 'preferred_name',
+                'use_category1': 'use category level1',
+                'ontologyGroupName': 'ontology group',
+                'endPointList': 'n endpoints in the ontology group',
+                'combin_ontology_id': 'n ontology terms in the ontology group',
+                'final_dev_call': 'activity decision on ontology',
+                'mean_pod': ' ontology group bmc (um)',
+                'mort_med_pod_med': 'mortality bmc (um)',
+                'mean_selectivity': 'selectivity ',
+                'min_lowest_conc': 'lowest tested conc (um)',
+                'max_highest_conc': 'highest tested conc (um)',
+            }
+        ;
+
+
+        let columnDelimiter = ',';
+        let lineDelimiter = '\n';
+
+        let csvColumnHeader = keys.join(columnDelimiter);
+        let csvStr = csvColumnHeader + lineDelimiter;
+        jsonData.forEach((item) => {
+            keys.forEach((key, index) => {
+                if (index > 0 && index < keys.length) {
+                    csvStr += columnDelimiter;
+                }
+                // the reason I used replcae all function, replace all comma
+                // to . , the comma will make my csv format mass.
+                switch (key) {
+                    case 'protocol_name_long':
+                        csvStr += `"${item[key]}"`;
+                        break;
+                    case 'protocol_name_plot':
+                        csvStr += `"${item[key]}"`;
+                        break;
+                    case 'chemical_category':
+                        csvStr += `"${item[key]}"`;
+                        break;
+                    case 'dtxsid':
+                        csvStr += `"${item[key]}"`;
+                        break;
+                    case 'casrn':
+                        csvStr += `"${item[key]}"`;
+                        break;
+                    case 'preferred_name':
+                        csvStr += `"${item[key]}"`;
+                        break;
+                    case 'use_category1':
+                        csvStr += `"${item[key]}"`;
+                        break;
+                    case 'ontologyGroupName':
+                        csvStr += `"${item[key]}"`;
+                        break;
+                    case 'endPointList':
+                        csvStr += `"${item[key] ? item[key].length : 0}"`;
+                        break;
+                    case 'combin_ontology_id':
+                        csvStr += `"${item[key] ? item[key].length : 0}"`;
+                        break;
+                    case 'f_max_dev_call':
+                        csvStr += `"${item[key]}"`;
+                        break;
+                    case 'mean_pod':
+                        csvStr += `"${Math.pow(10, item[key]) * 1000000}"`;
+                        break;
+                    case 'mort_med_pod_med':
+                        csvStr += `"${Math.pow(10, item[key]) * 1000000}"`;
+                        break;
+                    case 'mean_selectivity':
+                        csvStr += `"${item[key]}"`;
+                        break;
+                    case 'min_lowest_conc':
+                        csvStr += `"${Math.pow(10, item[key]) * 1000000}"`;
+
+                        break;
+                    case 'max_highest_conc':
+                        // csvStr += `"${item[key]}"`;
+                        csvStr += `"${Math.pow(10, item[key]) * 1000000}"`;
+
+
+                        break;
+
+                    default:
+                        csvStr += '';
+                }
+
+            });
+            csvStr += lineDelimiter;
+        });
+        csvStr = encodeURIComponent(csvStr);
+
+        let dataUri = 'data:text/csv;charset=utf-8,' + csvStr;
+        let linkElement = document.createElement('a');
+        linkElement.setAttribute('href', dataUri);
+        linkElement.setAttribute('download', filename);
+        linkElement.click();
+    }
+
+
     componentWillMount() {
         this.fetchIntegrativeData(this.props.url);
     }
@@ -95,7 +307,7 @@ class IntegrativePlotHandler extends React.Component {
                     return function (data) {
                         switch (data.final_dev_call) {
                             case 'dev tox':
-                                return data.mean_pod ? continuousColorScale(Math.pow(10, data.med_pod_med) * 1000000): 'red';
+                                return data.mean_pod ? continuousColorScale(Math.pow(10, data.mean_pod) * 1000000) : 'red';
                             case 'general tox':
                                 return '#000000';
                             case 'inconclusive':
@@ -117,23 +329,23 @@ class IntegrativePlotHandler extends React.Component {
                         type: 'discrete',
                         values: [
                             {
-                                label: 'dev tox',
+                                label: 'selective',
                                 fill: '#d62976',
                             },
                             {
-                                label: 'general tox',
+                                label: 'toxic',
                                 fill: '#f9d70b',
                             },
                             {
-                                label: 'inconclusive',
+                                label: ' inconclusive, more tests are needed',
                                 fill: '#3BD6C6',
                             },
                             {
-                                label: 'inactive',
+                                label: 'inactive ',
                                 fill: '#FFFFFF',
                             },
                             {
-                                label: 'untested',
+                                label: 'not evaluated',
                                 fill: '#C9C9C9',
                             },
                         ],
@@ -177,6 +389,7 @@ class IntegrativePlotHandler extends React.Component {
                     casrn: d.casrn,
                     preferred_name: d.preferred_name,
                     use_category1: d.use_category1,
+                    dtxsid: d.dtxsid,
                     min_pod_med: d.min_pod_med,
                     med_pod_med: d.med_pod_med,
                     max_pod_med: d.max_pod_med,
@@ -214,25 +427,25 @@ class IntegrativePlotHandler extends React.Component {
                     developmental_defect_grouping_granular: d.developmental_defect_grouping_granular,
                     developmental_defect_grouping_general: d.developmental_defect_grouping_general,
                     seazit_recording_id: d.seazit_recording_id,
-                    x: d.protocol_name_plot + ": " + d[ontologyGroupName],
+                    x: d[ontologyGroupName] + ": " + d.protocol_name_plot,
                     y: d.preferred_name,
                     fill: null,
                     fillFlag: false,
                     ontologyGroupName: d[ontologyGroupName],
-                    title: d.protocol_name_plot + "+" + d[ontologyGroupName] + '+' + d.preferred_name,
+                    title: d[ontologyGroupName] + "+" + d.protocol_name_plot + '+' + d.preferred_name,
 
                 };
             })
             .sortBy('med_pod_med')
             .value();
 
-        console.log("data  before and after ")
-        console.log(this.state.data.integrative_activity_selectivity)
-        console.log(data)
+        // console.log("data  before and after ")
+        // console.log(this.state.data.integrative_activity_selectivity)
+        // console.log(data)
 
         // find xgroups names, and join datasetLabname and ontologyGroup into xGroup.
-        let a = this.props.datasetLabName;
-        let b = this.props.ontologyGroup;
+        let a = this.props.ontologyGroup;
+        let b = this.props.datasetLabName;
         let xgroups = [];
         a.forEach(k => {
             b.forEach(i => {
@@ -243,33 +456,23 @@ class IntegrativePlotHandler extends React.Component {
             .map('y')
             .uniq()
             .value();
-        console.log(xgroups)
-        console.log(ygroups)
-
 
         switch (this.props.visualization) {
             case INTVIZ_HEATMAP: {
-
-
                 for (const x of xgroups) {
                     for (const y of ygroups) {
                         let result = _.filter(data, {x: x, y: y})
-                        if (result.length == 0) {
-                            data.push({
-                                x: x,
-                                y: y,
-                                fill: '#C9C9C9',
-                                fillFlag: true,
-                                mean_selectivity: 0,
-                                mean_pod: 0,
-                                final_dev_call: null,
-                                titile: x + '+' + y,
-                            })
-                        } else {
-                            let endpoints = _.chain(result)
+
+                        let endpoints = _.chain(result)
                                 .map('endpoint_name')
                                 .uniq()
                                 .value();
+                            let devtoxEndpoints = _.chain(result)
+                                .filter((i) => i.final_dev_call === 'dev tox')
+                                .map('endpoint_name')
+                                .uniq()
+                                .value();
+
                             //find top level selectivityOrder function.
                             let topFinal = _.chain(result)
                                 .map('final_dev_call')
@@ -277,34 +480,40 @@ class IntegrativePlotHandler extends React.Component {
                                 .filter((d) => _.includes(selectivityOrder, d))
                                 .sort((a, b) => selectivityOrder.indexOf(a) - selectivityOrder.indexOf(b))
                                 .first()
-                                .value()
-                            ;
+                                .value();
+
+
+                        if (result.length == 0) {
+                            data.push({
+                                x: x,
+                                y: y,
+                                fill: '#C9C9C9',
+                                fillFlag: true,
+                                mean_selectivity: null,
+                                mean_pod: null,
+                                final_dev_call: null,
+                                titile: x + '+' + y,
+                            })
+                        } else {
+
                             result = _.chain(result)
                                 .filter((i) => i.final_dev_call === topFinal)
-                                // .orderBy('mean_pod')
                                 .sortBy('mean_pod')
                                 .first()
                                 .forEach((value, index, array) => {
                                     array.fill = fillFunction(array)
                                     array.endPointList = endpoints
+                                    array.devtoxEndPointList = devtoxEndpoints
                                     array.fillFlag = true
                                 })
-                                .value()
-                            ;
+                                .value();
                         }
 
                     }
                 }
-                console.log("result2XXXXXXXw")
-                console.log(data)
                 data = _.chain(data)
                     .filter((i) => i.fillFlag === true)
-                    // .values()
                     .value();
-
-                console.log("4data")
-                console.log(data)
-
                 return {
                     data,
                     legendData,
@@ -313,8 +522,6 @@ class IntegrativePlotHandler extends React.Component {
             }
 
             case INTVIZ_DevtoxHEATMAP: {
-                console.log("INTVIZ_DevtoxHEATMAP")
-                console.log(data)
 
                 for (const x of xgroups) {
                     for (const y of ygroups) {
@@ -324,42 +531,51 @@ class IntegrativePlotHandler extends React.Component {
                             .map('endpoint_name')
                             .uniq()
                             .value();
+                        let devtoxEndpoints = _.chain(result)
+                            .filter((i) => i.final_dev_call === 'dev tox')
+                            .map('endpoint_name')
+                            .uniq()
+                            .value();
+                        //find top level selectivityOrder function.
+                        let topFinal = _.chain(result)
+                            .map('final_dev_call')
+                            .uniq()
+                            .filter((d) => _.includes(selectivityOrder, d))
+                            .sort((a, b) => selectivityOrder.indexOf(a) - selectivityOrder.indexOf(b))
+                            .first()
+                            .value();
+
+
                         if (result.length == 0) {
                             data.push({
                                 x: x,
                                 y: y,
-                                fill: null,
+                                fill: '#C9C9C9',
                                 fillFlag: true,
-                                mean_selectivity: 0,
-                                mean_pod: 0,
-                                titile: x + '+' + y,
+                                mean_selectivity: null,
+                                mean_pod: null,
                                 final_dev_call: null,
-
+                                titile: x + '+' + y,
                             })
                         } else {
                             result = _.chain(result)
-                                // .filter((i) => i.final_dev_call === topFinal)
-                                // .orderBy('mean_pod')
+                                .filter((i) => i.final_dev_call === topFinal)
                                 .sortBy('mean_pod')
                                 .first()
                                 .forEach((value, index, array) => {
                                     array.fill = fillFunction(array)
                                     array.endPointList = endpoints
+                                    array.devtoxEndPointList = devtoxEndpoints
                                     array.fillFlag = true
                                 })
                                 .value();
                         }
                     }
                 }
-                console.log("5data")
-                console.log(data)
-
                 data = _.chain(data)
                     .filter((i) => i.fillFlag === true)
-                    // .keyBy('xy')
                     .values()
                     .value();
-                console.log(data)
 
                 return {
                     data,
@@ -370,8 +586,6 @@ class IntegrativePlotHandler extends React.Component {
             default:
                 throw 'Error: Unknown display type.';
         }
-
-
     };
 
     render() {
@@ -392,16 +606,38 @@ class IntegrativePlotHandler extends React.Component {
 
             return (
                 <div>
+                    <h2>
+                        Download buttons:
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <button onClick={() => this._exportCsv(d.data)} className="btn btn-primary">
+                            Export CSV
+                        </button>
+
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <button onClick={() => svg_download_form('IA_heatmap01')} className="btn btn-primary">
+                            Export SVG
+                        </button>
+                    </h2>
                     <Heatmap data={d.data}
                              legendData={d.legendData}
                     />
                 </div>
             );
         } else {
-            console.log("devtox_heatmap")
-            console.log(d.data)
             return (
                 <div>
+                    <h2>
+                        Download buttons:
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <button onClick={() => this._exportCsv(d.data)} className="btn btn-primary">
+                            Export CSV
+                        </button>
+
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <button onClick={() => svg_download_form('IA_heatmap01')} className="btn btn-primary">
+                            Export SVG
+                        </button>
+                    </h2>
                     <DevtoxHeatmap data={d.data}
                                    legendData={d.legendData}
                     />

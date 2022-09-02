@@ -5,7 +5,8 @@ import _ from 'lodash';
 import * as d3 from 'd3';
 
 import BootstrapModal from 'utils/BootstrapModal';
-import {Header, SingleCurveBody, MultipleCurveBody} from './DoseResponseModal';
+import {Header, SingleCurveBody, MultipleCurveBody} from './DoseResponseModel';
+import {integrativeHandleCellClick} from '../shared';
 
 import styles from './graph.css';
 // import styles from './ResponseFigure.css';
@@ -42,8 +43,6 @@ let addStripMask = function (svg) {
 
 let renderPlot = function (el, data, legendData) {
     $(el).empty();
-    // console.log("HEATMAP")
-    // console.log(data)
     // let margin = {top: 80, right: 25, bottom: 30, left: 40},
     let margin = {
             top: 10,
@@ -51,34 +50,10 @@ let renderPlot = function (el, data, legendData) {
             bottom: 40,
             right: 10,
             axisLeft: 290,
-            axisTop: 150,
+            axisTop: 290,
             legend: 150,
         },
         cellSize = 30,
-        handleCellClick = function (d) {
-            // console.log("handleCellClick")
-            // console.log(d)
-
-            if (d.endPointList && d.endPointList.length > 1) {
-                new BootstrapModal(Header, MultipleCurveBody, {
-                    title: d.title,
-                    protocol_id: d.protocol_id,
-                    readout_ids: _.map(d.endPointList, function (x) {
-                        return x + '_' + d.protocol_id;
-                    }),
-                    casrns: [d.casrn],
-                });
-            } else {
-                new BootstrapModal(Header, SingleCurveBody, {
-                    title: d.title,
-                    protocol_id: d.protocol_id,
-                    readout_id: d.endpoint_name + '_' + d.protocol_id,
-                    casrn: d.casrn,
-                });
-            }
-            ;
-        },
-
 
         handleXLabelClick = function (label) {
             let cells = xMap[label],
@@ -106,7 +81,7 @@ let renderPlot = function (el, data, legendData) {
 
         handleMouseOver = function (d) {
             tooltip
-                .html(d.mean_pod ? d.mean_pod : 0)
+                .html(`${d.devtoxEndPointList.length} out of ${d.endPointList.length} endpoints are significant`)
                 .style('left', d3.event.pageX + 'px')
                 .style('top', d3.event.pageY + 20 + 'px')
                 .style('opacity', 1.0);
@@ -115,17 +90,17 @@ let renderPlot = function (el, data, legendData) {
             tooltip.style('opacity', 0.0);
         },
 
-        // width = 450 - margin.left - margin.right,
-        // height = 450 - margin.top - margin.bottom,
         // xasix is column, yasix is row
         xasix = d3.map(data, function (d) {
             return (d.x);
-        }).keys(),
-        // xasix = ['DRF_Lab A_SR-C: hatching defect',  'DRF_Lab B_S-DC: hatching defect'],
+        })
+            .keys()
+            .sort(),
 
         yasix = d3.map(data, function (d) {
             return (d.y);
-        }).keys(),
+        }).keys()
+            .sort(),
 
         width = xasix.length * cellSize + margin.axisLeft + margin.left + margin.right + margin.legend,
         height = yasix.length * cellSize + margin.axisTop + margin.top + margin.bottom,
@@ -139,21 +114,22 @@ let renderPlot = function (el, data, legendData) {
             .size(900),
 
         // Create the svg area
+
         svg = d3
             .select(el)
-            .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
+            .append('svg')
+            .attr('width', Math.max(1000, width + margin.left + margin.right))
+            .attr('height', Math.max(1000, width + margin.left + margin.right))
             .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")"),
 
 
-    // add a tooltip
-    var tooltip = d3
-        .select('body')
-        .append('div')
-        .attr('class', 'tooltip')
-        .style('opacity', 0.0);
+        // add a tooltip
+        tooltip = d3
+            .select('body')
+            .append('div')
+            .attr('class', 'tooltip')
+            .style('opacity', 0.0);
 
 
     let axisLayer = svg
@@ -171,6 +147,7 @@ let renderPlot = function (el, data, legendData) {
         .scaleBand()
         .domain(yasix)
         .range([0, chartHeight]);
+
     let xAxis = d3.axisTop(xScale).tickSizeOuter(0);
     let yAxis = d3.axisLeft(yScale).tickSizeOuter(0);
 
@@ -244,7 +221,6 @@ let renderPlot = function (el, data, legendData) {
         .attr('class', 'square')
         .attr('d', square)
         .attr('fill', (d) => d.fill)
-        // .attr('fill', (d) => (d.fill)? d.fill : 'transparent')
         .attr(
             'transform',
             (d) =>
@@ -256,7 +232,7 @@ let renderPlot = function (el, data, legendData) {
         .style('cursor', 'pointer')
         .on('mouseover', handleMouseOver)
         .on('mouseout', handleMouseOut)
-        .on('click', handleCellClick);
+        .on('click', integrativeHandleCellClick);
 
     // draw legend, this legend length, size is fixed.
     // 2 cases, discrete = activity,  continuous = BMC, different legned form.
@@ -452,7 +428,9 @@ class Heatmap extends Component {
 
 
     render() {
-        return <div id="IA_heatmap01" className="row-fluid" ref="svg"/>;
+        return (
+            <div id="IA_heatmap01" className="row-fluid" ref="svg"/>
+        );
     }
 }
 

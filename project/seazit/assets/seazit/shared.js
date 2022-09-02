@@ -3,6 +3,8 @@ import * as d3 from 'd3';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Tooltip from "@material-ui/core/Tooltip";
+import {Header, MultipleCurveBody, SingleCurveBody} from "./components/DoseResponseModel";
+import BootstrapModal from 'utils/BootstrapModal';
 
 
 const AXIS_LINEAR = 1,
@@ -71,13 +73,13 @@ const AXIS_LINEAR = 1,
                 Seazit_ui_panel: d.Seazit_ui_panel,
                 Seazit_ontology:d.Seazit_ontology,
             });
-            console.log("d");
-            console.log(d);
+            // console.log("d");
+            // console.log(d);
         });
     },
 
     data_exportToJsonFile = function(jsonData) {
-        let filename = 'jsonData.csv';
+        let filename = 'jsonData.json';
 
         let dataStr = JSON.stringify(jsonData);
         let dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
@@ -127,8 +129,6 @@ const AXIS_LINEAR = 1,
     },
 
     renderSelectSingleWidget = function(name, label, options, values, handleChange) {
-        console.log("zw options")
-        console.log(options)
 
         return (
             <div>
@@ -242,6 +242,65 @@ const AXIS_LINEAR = 1,
             return v.toFixed(2);
         }
     },
+    svg_download_form = function(id) {
+     var svg = document.getElementById(id)
+
+    var today = new Date();
+    var filename =
+        today.getFullYear() +
+        '-' +
+        (today.getMonth() + 1) +
+        '-' +
+        today.getDate() +
+        '-' +
+        today.getHours() +
+        '-' +
+        today.getMinutes() +
+        '-' +
+        today.getSeconds() +
+        '.svg';
+    var svg_xml = new XMLSerializer().serializeToString(svg);
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(svg_xml));
+    element.setAttribute('download', filename);
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+    },
+
+        integrativeHandleCellClick = function (d) {
+            console.log("handleCellClick")
+            console.log(d)
+            // d.endPointList.push('mortality@120');
+
+            if (d.endPointList && d.endPointList.length > 1) {
+                new BootstrapModal(Header, MultipleCurveBody, {
+                    title: d.title,
+                    protocol_id: d.protocol_id,
+                    readout_ids: _.map(d.endPointList, function (x) {
+                        return x + '_' + d.protocol_id;
+                    }),
+                    // if button checked, we will add mortality@120 to each plot
+                    casrns: [d.casrn],
+                    devtoxreadout_ids: d.devtoxEndPointList,
+                });
+            } else {
+                new BootstrapModal(Header, SingleCurveBody, {
+                    title: d.title,
+                    protocol_id: d.protocol_id,
+                    readout_id: d.endpoint_name + '_' + d.protocol_id,
+                    casrn: d.casrn,
+                    devtoxreadout_ids: d.devtoxEndPointList,
+                    // devtoxreadout_ids: d.devtoxEndPointList+ '_' + d.protocol_id,
+                });
+            }
+            ;
+        },
+
+
+
     renderNoDataAlert = function() {
         return (
             <div className="alert alert-info">
@@ -321,4 +380,6 @@ export {
     renderNoDataAlert,
     renderNoSelected,
     data_exportToJsonFile,
+    svg_download_form,
+    integrativeHandleCellClick,
 };
