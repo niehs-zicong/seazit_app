@@ -27,7 +27,6 @@ class DoseResponse2 extends React.Component {
     }
 
     collapseData(data, collapse) {
-        console.log(data)
         let keys = _.chain(data.dose_response)
                  .reject((r) => r.endpoint_name == 'Mortality@120')
                 .map('key')
@@ -71,9 +70,8 @@ class DoseResponse2 extends React.Component {
             responses,
             yrange,
             offset;
-        console.log("keys")
-
-        console.log(collapsedData)
+        // console.log("keys")
+        // console.log(collapsedData)
         // set constant y-range for all charts. ensure 0 is within the
         // domain of values.
 
@@ -105,16 +103,13 @@ class DoseResponse2 extends React.Component {
         if (_.isEmpty(data)) {
             return _.noop;
         }
-
         switch (collapse) {
             case COLLAPSE_BY_READOUT:
                 return this.colorScale.domain(_.map(data[0].dose_response, 'casrn'));
             case COLLAPSE_BY_CHEMICAL:
                 return this.colorScale.domain(_.map(data[0].dose_response, 'endpoint_name'));
-            // case NO_COLLAPSE:
-            //     return _.noop;
-                            case NO_COLLAPSE:
-                return this.colorScale.domain(_.map(data[0].dose_response, 'plate_name'));
+                    case NO_COLLAPSE:
+                return this.colorScale.domain(_.map((data[0].dose_response).concat(data[0].mortality120dose_response), 'endpoint_name'));
             default:
                 throw 'Unknown collapse type.';
         }
@@ -159,15 +154,17 @@ class DoseResponse2 extends React.Component {
             case COLLAPSE_BY_CHEMICAL:
                 return `${data.protocol_name_plot}|${data.endpoint_name}`;
             case NO_COLLAPSE:
-                if (labelCase == 'PC') {
-                    return `PC| ${Object.values(this.state.labelsDict[index1]).length}`;
-                } else if (labelCase.length == 1) {
-                    return `plate| ${Object.values(this.state.labelsDict[index1]).length}`;
-                } else {
-                    return `dup ${Object.keys(this.state.labelsDict).length}| plate ${
-                        Object.values(this.state.labelsDict[index1]).length
-                    }`;
-                }
+                // if (labelCase == 'PC') {
+                //     return `PC| ${Object.values(this.state.labelsDict[index1]).length}`;
+                // } else if (labelCase.length == 1) {
+                //     return `plate| ${Object.values(this.state.labelsDict[index1]).length}`;
+                // } else {
+                //     return `dup ${Object.keys(this.state.labelsDict).length}| plate ${
+                //         Object.values(this.state.labelsDict[index1]).length
+                //     }`;
+                // }
+                return `${data.protocol_name_plot}|${data.endpoint_name}`;
+
             default:
                 throw 'Unknown collapse type.';
         }
@@ -236,6 +233,7 @@ class DoseResponse2 extends React.Component {
     }
 
     updateData(data, collapse) {
+
         this.setKeys(data, collapse);
         let update = this.collapseData(data, collapse);
         let scale = this.getColorScale(update.collapsedData, collapse);
@@ -246,10 +244,6 @@ class DoseResponse2 extends React.Component {
     }
 
     _renderPlot(d, yrange) {
-        //
-
-        console.log("d")
-        console.log(d)
 
         if (this.refs[d.key] === undefined) {
             return;
@@ -313,7 +307,6 @@ class DoseResponse2 extends React.Component {
                             .filter((r) => r.substance_code_input_id == id_flag)
                         .sortBy('dose')
                         .value();
-                let plateColor = drs_split[0].plate_name;
                 data.push({
                     x: _.map(drs_split, 'dose'),
                     y: drs_split.map((obj) => {
@@ -329,7 +322,9 @@ class DoseResponse2 extends React.Component {
                     )}<br>${this.getTextLabels(drs_split, d)}`,
                     marker: {
                         // color: this.getMarkerColor(drs_split[0].plate_name, 'responses'),
-                        color: this.getMarkerColor(plateColor, 'responses'),
+                        // color: this.getMarkerColor(drs_split[0].endpoint_name, 'responses'),
+                        color: this.getMarkerColor(gk, 'responses'),
+
                     },
                     opacity: 0.8,
                 });
@@ -344,7 +339,6 @@ class DoseResponse2 extends React.Component {
                             .filter((r) => r.substance_code_input_id == id_flag)
                         .sortBy('dose')
                         .value();
-                                    let plateColor2 = drs_split[0].plate_name;
                     data.push({
                     x: _.map(drs_split, 'dose'),
                     y: drs_split.map((obj) => {
@@ -353,9 +347,16 @@ class DoseResponse2 extends React.Component {
                     legendgroup: 'plot',
                     mode: 'line',
                     type: 'scatter',
-                    text: `${drs_split[0].endpoint_name} plate_name ${drs_split[0].plate_name}`,
+                    // text: `${drs_split[0].endpoint_name} plate_name ${drs_split[0].plate_name}`,
+                        text: `${this.getResponseLabels(
+                        drs_split[0],
+                        this.props.collapse,
+                        substance_codeCase
+                    )}`,
+
                     marker: {
-                        color: this.getMarkerColor(plateColor2, 'responses'),
+                        color: this.getMarkerColor(drs_split[0].endpoint_name, 'responses'),
+                                // color: this.getMarkerColor(gk, 'responses'),
                     },
                     opacity: 0.8,
                 });

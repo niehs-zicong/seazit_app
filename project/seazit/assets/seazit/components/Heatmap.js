@@ -80,11 +80,15 @@ let renderPlot = function (el, data, legendData) {
         },
 
         handleMouseOver = function (d) {
+        // console.log("handleMouseOver")
+        // console.log(d)
+        if (d.endPointList){
             tooltip
                 .html(`${d.devtoxEndPointList.length} out of ${d.endPointList.length} endpoints are significant`)
                 .style('left', d3.event.pageX + 'px')
                 .style('top', d3.event.pageY + 20 + 'px')
                 .style('opacity', 1.0);
+        }
         },
         handleMouseOut = function (d) {
             tooltip.style('opacity', 0.0);
@@ -212,7 +216,8 @@ let renderPlot = function (el, data, legendData) {
         .style('stroke', 'black')
         .style('stroke-width', 2);
 
-
+    // console.log("zwww   data")
+    // console.log(data)
     chartLayer
         .selectAll('.square')
         .data(data)

@@ -271,9 +271,7 @@ const AXIS_LINEAR = 1,
     },
 
         integrativeHandleCellClick = function (d) {
-            console.log("handleCellClick")
-            console.log(d)
-            // d.endPointList.push('mortality@120');
+        if (d.endPointList) {
 
             if (d.endPointList && d.endPointList.length > 1) {
                 new BootstrapModal(Header, MultipleCurveBody, {
@@ -297,6 +295,9 @@ const AXIS_LINEAR = 1,
                 });
             }
             ;
+        } else {
+            return
+        }
         },
 
 

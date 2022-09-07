@@ -46,7 +46,7 @@ class SingleCurveBody extends React.Component {
                         cols={1}
                         height={400}
                         collapse={
-                            NO_COLLAPSE}
+                            COLLAPSE_BY_CHEMICAL}
                         devtoxreadout_ids={this.props.devtoxreadout_ids}
                     />
                 </div>
@@ -124,7 +124,9 @@ class MultipleCurveBody extends React.Component {
                         cols={state.vizColumns}
                         height={state.vizHeight}
                         collapse={
-                            NO_COLLAPSE}
+                            // COLLAPSE_BY_CHEMICAL
+                        NO_COLLAPSE
+                        }
                         devtoxreadout_ids={this.props.devtoxreadout_ids}
                     />
                 </div>
