@@ -59,3 +59,10 @@ Add a line:
 in file:
 ~/.matplotlib/matplotlibrc
 
+
+
+
+For local development command:
+conda activate seazit  &&  python manage.py runserver
+conda activate seazit  && npm start
+

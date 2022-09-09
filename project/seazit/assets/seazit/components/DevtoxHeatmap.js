@@ -343,18 +343,18 @@ let renderPlot = function (el, data, legendData) {
                 )
                 .text('toxic, inactive, or inconclusive');
 
+            // the reason I put 25/2 into this position transform, because square size is (25, 25),
+            // make sure star is in center, make is position to be 25/2, 25/2
             legendLayer
-                .append('rect')
-                .attr('x', 0)
-                .attr('y', 0)
-                .attr('width', 25)
-                .attr('height', 25)
+                .append('path')
+                .attr('class', 'star')
+                .attr('d', star)
                 .attr(
                     'transform',
-                    `translate(20,${margin.top + margin.axisTop + legendHeight + 10})`
+                    `translate(${20 + 25 / 2},${margin.top + margin.axisTop + legendHeight + 10 + 25 / 2})`
                 )
                 .attr('fill', 'black')
-                .style('stroke', 'black')
+                .style('stroke', '#000000')
                 .style('stroke-width', '1');
 
             legendLayer

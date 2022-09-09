@@ -109,7 +109,6 @@ class DoseResponse extends React.Component {
                 return this.colorScale.domain(_.map(data[0].dose_response, 'endpoint_name'));
             case NO_COLLAPSE:
                 return _.noop;
-
             default:
                 throw 'Unknown collapse type.';
         }
@@ -282,7 +281,6 @@ class DoseResponse extends React.Component {
             // add room for collapsed plot legends
             height: this.props.height + d.groupKeys.length * 19 + 20,
             autosize: true,
-            // plot_bgcolor:(this.props.devtoxreadout_ids &&  this.props.devtoxreadout_ids.includes(d.endpoint_name)) ? '#FFFF00' : null,
             paper_bgcolor:(this.props.devtoxreadout_ids &&  this.props.devtoxreadout_ids.includes(d.endpoint_name)) ? '#FFFF00' : null,
 
         };
@@ -292,7 +290,6 @@ class DoseResponse extends React.Component {
                     .map('substance_code')
                     .uniq()
                     .value();
-
             this.state.labelsDict = [];
             d.substance_code_input_ids.map((id_flag, index) => {
                 let drs_split = drs.filter((r) => r.substance_code_input_id == id_flag),

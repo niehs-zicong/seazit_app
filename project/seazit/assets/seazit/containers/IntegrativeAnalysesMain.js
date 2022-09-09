@@ -48,20 +48,23 @@ class IntegrativeAnalysesMain extends React.Component {
         super(props);
         this.state = {
             // loadMetadata
+
             metadataLoaded: false,
             metadata: null,
 
             // HelpButtonWidget
             showHelpText: false,
             assays: [],
+            // assays: ['1'],
 
             datasetLabName: [],
             url: null,
             // ontologyWidget
             ontologyType: integrative_Granular,
             // ontologyType: integrative_General,
-
+            //
             ontologyGroup: [],
+            // ontologyGroup:['craniofacial defects'],
 
             // ChemicalSelectorWidget
             chemicalFilterBy: CHEMFILTER_CATEGORY,
@@ -69,12 +72,14 @@ class IntegrativeAnalysesMain extends React.Component {
 
             chemicals: [],
             categories: [],
+            // categories: ['Industrial Compound'],
 
             // ReadoutSelectorWidget
             readoutType: READOUT_TYPE_CATEGORY,
 
             readouts: [],
 
+            // mortalityCheck: false,
 
             // IntegrativePlotWidget
             visualization: INTVIZ_HEATMAP,
