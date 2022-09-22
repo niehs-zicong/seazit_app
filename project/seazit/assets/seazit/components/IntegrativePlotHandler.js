@@ -594,8 +594,8 @@ class IntegrativePlotHandler extends React.Component {
         }
         let d;
         d = this._getFilteredData();
-        // console.log("this.props")
-        // console.log(this.props)
+        console.log("this.props")
+        console.log(this.props)
 
         // this is result, with color name is fill data.
         if (d.data.length === 0) {
@@ -634,7 +634,7 @@ class IntegrativePlotHandler extends React.Component {
                         </button>
 
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <button onClick={() => svg_download_form('IA_heatmap01')} className="btn btn-primary">
+                        <button onClick={() => svg_download_form('IA_heatmap02')} className="btn btn-primary">
                             Export SVG
                         </button>
                     </h2>

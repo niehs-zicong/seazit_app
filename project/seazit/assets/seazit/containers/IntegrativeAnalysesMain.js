@@ -54,8 +54,8 @@ class IntegrativeAnalysesMain extends React.Component {
 
             // HelpButtonWidget
             showHelpText: false,
-            assays: [],
-            // assays: ['1'],
+            // assays: [],
+            assays: ['1', '2', '3'],
 
             datasetLabName: [],
             url: null,
@@ -63,16 +63,16 @@ class IntegrativeAnalysesMain extends React.Component {
             ontologyType: integrative_Granular,
             // ontologyType: integrative_General,
             //
-            ontologyGroup: [],
-            // ontologyGroup:['craniofacial defects'],
+            // ontologyGroup: [],
+            ontologyGroup:['craniofacial defects'],
 
             // ChemicalSelectorWidget
             chemicalFilterBy: CHEMFILTER_CATEGORY,
             // chemicalFilterBy: CHEMFILTER_CHEMICIAL,
 
+            // categories: [],
+            categories: ['Insecticide'],
             chemicals: [],
-            categories: [],
-            // categories: ['Industrial Compound'],
 
             // ReadoutSelectorWidget
             readoutType: READOUT_TYPE_CATEGORY,
@@ -188,8 +188,8 @@ class IntegrativeAnalysesMain extends React.Component {
             .value()
         ;
 
-        this.state.url = getIntegrativeUrl(this.state.assays, this.state.chemicals);
-        // this.state.url = '/seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=1&casrns=71751-41-2,53-70-3,84-74-2,5598-15-2,2921-88-2,58-89-9,116-06-3,330-55-2,80-05-7,298-02-2,69806-50-4,75-07-0,95737-68-1,83-79-4,1912-24-9,129-00-0 ';
+        // this.state.url = getIntegrativeUrl(this.state.assays, this.state.chemicals);
+        this.state.url = '/seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=1,2,3&casrns=71751-41-2,5598-15-2,2921-88-2,58-89-9,116-06-3,298-02-2,95737-68-1,83-79-4';
 
         //heatmap test
         return (

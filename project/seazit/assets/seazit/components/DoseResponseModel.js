@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import DoseResponse from './DoseResponse';
-import DoseResponse2 from './DoseResponse2';
+import DoseResponseMort120 from './DoseResponseMort120';
 
 import DoseResponseGridWidget from '../widgets/DoseResponseGridWidget';
 
@@ -41,12 +41,12 @@ class SingleCurveBody extends React.Component {
         if (state.mortalityCheck) {
             return (
                 <div className="col-sm-10">
-                    <DoseResponse2
+                    <DoseResponseMort120
                         url={state.url}
                         cols={1}
                         height={400}
                         collapse={
-                            COLLAPSE_BY_CHEMICAL}
+                            NO_COLLAPSE}
                         devtoxreadout_ids={this.props.devtoxreadout_ids}
                     />
                 </div>
@@ -119,12 +119,11 @@ class MultipleCurveBody extends React.Component {
         if (state.mortalityCheck) {
             return (
                 <div className="col-sm-10">
-                    <DoseResponse2
+                    <DoseResponseMort120
                         url={state.url}
                         cols={state.vizColumns}
                         height={state.vizHeight}
                         collapse={
-                            // COLLAPSE_BY_CHEMICAL
                         NO_COLLAPSE
                         }
                         devtoxreadout_ids={this.props.devtoxreadout_ids}

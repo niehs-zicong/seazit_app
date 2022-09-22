@@ -12,6 +12,7 @@ import styles from './graph.css';
 import {getLog10AxisFunction} from 'utils/d3';
 import Heatmap from "./Heatmap";
 import {integrativeHandleCellClick, printFloat} from "../shared";
+import Tooltip from "@material-ui/core/Tooltip";
 
 let addStripMask = function (svg) {
     // add strip mask to top of d3-selected svg
@@ -54,22 +55,25 @@ let renderPlot = function (el, data, legendData) {
             axisTop: 290,
             legend: 150,
         },
-        cellSize = 30,
-
-
-        handleMouseOver = function (d) {
+        // cellSize = 30,
+        cellSize = 50,
+        mouseover = function (d) {
             tooltip
-                // .html(d.mean_selectivity ? d.mean_selectivity : 0)
+                .style("opacity", 1)
+        },
+        mousemove = function (d) {
+            tooltip
                 .html(`Potency: ${printFloat(Math.pow(10, d.mean_pod) * 1000000)} μM  \n
                  Selectivity: ${printFloat(d.mean_selectivity)}`)
-                // Potency: ${printFloat(d.mean_selectivity ? d.mean_selectivity : 0)} μM `)
-                .style('left', d3.event.pageX + 'px')
-                .style('top', d3.event.pageY + 20 + 'px')
+                .style('left', d3.event.pageX - 300 + 'px')
+                .style('top', d3.event.pageY - 300 + 'px')
                 .style('opacity', 1.0);
         },
-        handleMouseOut = function (d) {
-            tooltip.style('opacity', 0.0);
+        mouseleave = function (d) {
+            tooltip
+                .style("opacity", 0)
         },
+
         // xasix is column, yasix is row
         xasix = d3.map(data, function (d) {
             return d.x;
@@ -102,10 +106,10 @@ let renderPlot = function (el, data, legendData) {
         // range is between 0 to half of cellsize,   which is radius.
 
         //   make radius linear scale.  TODO
-        // sizeDomain = d3.extent(_.map(data, 'mean_selectivity')),
+        sizeDomain = d3.extent(_.map(data, 'mean_selectivity')),
 
         // sizeDomain = [0, 3.1549],
-        sizeDomain = [0, 2],
+        // sizeDomain = [0, 2],
         // sizeDomain = [0, 3],
 
         size = d3.scaleSqrt()
@@ -116,22 +120,22 @@ let renderPlot = function (el, data, legendData) {
             .select(el)
             .append('svg')
             .attr('width', Math.max(1000, width + margin.left + margin.right))
-            .attr('height', Math.max(1000, width + margin.left + margin.right))
+            .attr('height', Math.max(1000, height + margin.left + margin.right))
             .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")"),
 
         star = d3
             .symbol()
             .type(d3.symbolStar)
-            .size(size(sizeDomain[1] / 1)),
+            .size(size(cellSize / 5)),
 
-        // add a tooltip
         tooltip = d3
-            .select('body')
+            .select(el)
             .append('div')
             .attr('class', 'tooltip')
             .style('opacity', 0.0);
 
+    // addStripMask(svg);
 
     // draw xy-axis
     let axisLayer = svg
@@ -161,6 +165,8 @@ let renderPlot = function (el, data, legendData) {
         )
         .attr('class', 'axis y')
         .call(yAxis)
+        .style("font-size", 15)
+
         .selectAll('text')
         .style('cursor', 'pointer')
     ;
@@ -172,6 +178,7 @@ let renderPlot = function (el, data, legendData) {
         )
         .attr('class', 'axis x')
         .call(xAxis)
+        .style("font-size", 15)
         .selectAll('text')
         .attr('dx', '.8em')
         .attr('dy', '.55em')
@@ -179,7 +186,6 @@ let renderPlot = function (el, data, legendData) {
         .style('text-anchor', 'start')
         .style('cursor', 'pointer')
     ;
-
 
     // .select(".domain").remove()
 
@@ -234,9 +240,12 @@ let renderPlot = function (el, data, legendData) {
         })
         .attr('fill', (d) => d.fill)
         .style("opacity", 0.8)
-        .on('mouseover', handleMouseOver)
-        .on('mouseout', handleMouseOut)
-        .on('click', integrativeHandleCellClick);
+        .style('cursor', 'pointer')
+        .on("mouseover", mouseover)
+        .on("mousemove", mousemove)
+        .on("mouseleave", mouseleave)
+        .on('click', integrativeHandleCellClick)
+    ;
 
 
     chartLayer
@@ -345,6 +354,8 @@ let renderPlot = function (el, data, legendData) {
 
             // the reason I put 25/2 into this position transform, because square size is (25, 25),
             // make sure star is in center, make is position to be 25/2, 25/2
+
+
             legendLayer
                 .append('path')
                 .attr('class', 'star')
