@@ -106,10 +106,10 @@ let renderPlot = function (el, data, legendData) {
         // range is between 0 to half of cellsize,   which is radius.
 
         //   make radius linear scale.  TODO
-        sizeDomain = d3.extent(_.map(data, 'mean_selectivity')),
+        // sizeDomain = d3.extent(_.map(data, 'mean_selectivity')),
 
         // sizeDomain = [0, 3.1549],
-        // sizeDomain = [0, 2],
+        sizeDomain = [0, 2],
         // sizeDomain = [0, 3],
 
         size = d3.scaleSqrt()

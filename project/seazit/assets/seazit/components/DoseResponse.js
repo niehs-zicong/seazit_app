@@ -497,10 +497,6 @@ class DoseResponse extends React.Component {
     }
 
     loadDoseResponse() {
-        console.log("this.state.collapsedData.length")
-
-        console.log(this.state.collapsedData.length)
-
         this.state.collapsedData.map((d) => this._renderPlot(d, this.state.yrange));
     }
 

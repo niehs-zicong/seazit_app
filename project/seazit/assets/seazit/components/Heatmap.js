@@ -289,16 +289,18 @@ let renderPlot = function (el, data, legendData) {
                 .append('text')
                 .attr('class', styles.legendText)
                 .attr('x', 15 + cellSize)
-                .attr('y', (d, i) => i * cellSize + margin.axisTop + (cellSize -20)/2)
-                .text((d) => d.label);
+                .attr('y', (d, i) => i * cellSize + margin.axisTop + (cellSize - 20) / 2)
+                .text((d) => d.label)
+                .style("font-size", 15)
+            ;
 
             let ds = legendLayer
                 .selectAll('path')
                 .data(legendData.values)
                 .enter()
                 .append('rect')
-                .attr('width', cellSize -20 )
-                .attr('height', cellSize - 20 )
+                .attr('width', cellSize - 20)
+                .attr('height', cellSize - 20)
                 .attr('fill', (d) => d.fill)
                 .attr('transform', (d, i) => `translate(25, ${i * cellSize + margin.axisTop})`)
                 .style('stroke', 'black')

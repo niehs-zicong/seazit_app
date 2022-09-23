@@ -27,6 +27,34 @@ class IntegrativePlotHandler extends React.Component {
             data: null,
             scale: null,
             continuousColorScale: null,
+            INTVIZ_HEATMAP_COLORS: [
+                {
+                    key: 'dev tox',
+                    label: 'selective',
+                    fill: '#d62976',
+                    // fill: 'black'
+                },
+                {
+                    key: 'general tox',
+                    label: 'toxic',
+                    fill: '#f9d70b',
+                },
+                {
+                    key: 'inconclusive',
+                    label: ' inconclusive, more tests are needed',
+                    fill: '#3BD6C6',
+                },
+                {
+                    key: 'inactive',
+                    label: 'inactive ',
+                    fill: '#FFFFFF',
+                },
+                {
+                    key: 'default',
+                    label: 'not evaluated',
+                    fill: '#C9C9C9',
+                },
+            ],
 
         };
     }
@@ -84,111 +112,23 @@ class IntegrativePlotHandler extends React.Component {
                 'min_lowest_conc',
                 'max_highest_conc',
             ];
-        let columnDelimiter = ',';
-        let lineDelimiter = '\n';
-
-        let csvColumnHeader = keys.join(columnDelimiter);
-        let csvStr = csvColumnHeader + lineDelimiter;
-        jsonData.forEach((item) => {
-            keys.forEach((key, index) => {
-                if (index > 0 && index < keys.length) {
-                    csvStr += columnDelimiter;
-                }
-                // the reason I used replcae all function, replace all comma
-                // to . , the comma will make my csv format mass.
-                switch (key) {
-                    case 'protocol_name_long':
-                        csvStr += `"${item[key]}"`;
-                        break;
-                    case 'protocol_name_plot':
-                        csvStr += `"${item[key]}"`;
-                        break;
-                    case 'chemical_category':
-                        csvStr += `"${item[key]}"`;
-                        break;
-                    case 'dtxsid':
-                        csvStr += `"${item[key]}"`;
-                        break;
-                    case 'casrn':
-                        csvStr += `"${item[key]}"`;
-                        break;
-                    case 'preferred_name':
-                        csvStr += `"${item[key]}"`;
-                        break;
-                    case 'use_category1':
-                        csvStr += `"${item[key]}"`;
-                        break;
-                    case 'ontologyGroupName':
-                        csvStr += `"${item[key]}"`;
-                        break;
-                    case 'endPointList':
-                        csvStr += `"${item[key] ? item[key].length : 0}"`;
-                        break;
-                    case 'combin_ontology_id':
-                        csvStr += `"${item[key] ? item[key].length : 0}"`;
-                        break;
-                    case 'f_max_dev_call':
-                        csvStr += `"${item[key]}"`;
-                        break;
-                    case 'mean_pod':
-                        csvStr += `"${Math.pow(10, item[key]) * 1000000}"`;
-                        break;
-                    case 'mort_med_pod_med':
-                        csvStr += `"${Math.pow(10, item[key]) * 1000000}"`;
-
-                        break;
-                    case 'mean_selectivity':
-                        csvStr += `"${item[key]}"`;
-                        break;
-                    case 'min_lowest_conc':
-                        csvStr += `"${Math.pow(10, item[key]) * 1000000}"`;
-
-                        break;
-                    case 'max_highest_conc':
-                        // csvStr += `"${item[key]}"`;
-                        csvStr += `"${Math.pow(10, item[key]) * 1000000}"`;
-
-
-                        break;
-
-                    default:
-                        csvStr += '';
-                }
-            });
-            csvStr += lineDelimiter;
-        });
-        csvStr = encodeURIComponent(csvStr);
-
-        let dataUri = 'data:text/csv;charset=utf-8,' + csvStr;
-        let linkElement = document.createElement('a');
-        linkElement.setAttribute('href', dataUri);
-        linkElement.setAttribute('download', filename);
-        linkElement.click();
-    }
-    _exportCsv2 = function (jsonData) {
-        if (jsonData.length == 0) {
-            return '';
-        }
-        let filename = 'IntegrativeAnalysesData.csv',
-            keys = {
-                'protocol_name_long': 'dataset name (short)',
-                'protocol_name_plot': 'dataset name (long)',
-                'dtxsid': 'dtxsid',
-                'casrn': 'casrn',
-                'preferred_name': 'preferred_name',
-                'use_category1': 'use category level1',
-                'ontologyGroupName': 'ontology group',
-                'endPointList': 'n endpoints in the ontology group',
-                'combin_ontology_id': 'n ontology terms in the ontology group',
-                'final_dev_call': 'activity decision on ontology',
-                'mean_pod': ' ontology group bmc (um)',
-                'mort_med_pod_med': 'mortality bmc (um)',
-                'mean_selectivity': 'selectivity ',
-                'min_lowest_conc': 'lowest tested conc (um)',
-                'max_highest_conc': 'highest tested conc (um)',
-            }
-        ;
-
+        //         keys = {
+        //     'protocol_name_long': 'dataset name (short)',
+        //     'protocol_name_plot': 'dataset name (long)',
+        //     'dtxsid': 'dtxsid',
+        //     'casrn': 'casrn',
+        //     'preferred_name': 'preferred_name',
+        //     'use_category1': 'use category level1',
+        //     'ontologyGroupName': 'ontology group',
+        //     'endPointList': 'n endpoints in the ontology group',
+        //     'combin_ontology_id': 'n ontology terms in the ontology group',
+        //     'final_dev_call': 'activity decision on ontology',
+        //     'mean_pod': ' ontology group bmc (um)',
+        //     'mort_med_pod_med': 'mortality bmc (um)',
+        //     'mean_selectivity': 'selectivity ',
+        //     'min_lowest_conc': 'lowest tested conc (um)',
+        //     'max_highest_conc': 'highest tested conc (um)',
+        // }
 
         let columnDelimiter = ',';
         let lineDelimiter = '\n';
@@ -247,19 +187,14 @@ class IntegrativePlotHandler extends React.Component {
                         break;
                     case 'min_lowest_conc':
                         csvStr += `"${Math.pow(10, item[key]) * 1000000}"`;
-
                         break;
                     case 'max_highest_conc':
-                        // csvStr += `"${item[key]}"`;
                         csvStr += `"${Math.pow(10, item[key]) * 1000000}"`;
-
-
                         break;
 
                     default:
                         csvStr += '';
                 }
-
             });
             csvStr += lineDelimiter;
         });
@@ -272,48 +207,32 @@ class IntegrativePlotHandler extends React.Component {
         linkElement.click();
     }
 
-
-    componentWillMount() {
-        this.fetchIntegrativeData(this.props.url);
-    }
-
-    componentWillUpdate(nextProps) {
-        if (nextProps.url !== this.props.url) {
-            this.fetchIntegrativeData(nextProps.url);
-        }
-    }
 
     _getFilteredData() {
 
-        let getFillFunction = function (visualization, continuousColorScale) {
+        let getFillFunction = function (visualization, continuousColorScale, colorCategory) {
             switch (visualization) {
                 case INTVIZ_HEATMAP:
                     return function (data) {
-                        switch (data.final_dev_call) {
-                            case 'dev tox':
-                                return '#d62976';
-                            case 'general tox':
-                                return '#f9d70b';
-                            case 'inconclusive':
-                                return '#3BD6C6';
-                            case 'inactive':
-                                return '#FFFFFF';
-                            default:
-                                return '#C9C9C9';
+                        var color;
+                        for (var i of colorCategory) {
+                          if (data.final_dev_call == i['key']){
+                              color = i['fill']
+                              return color;
+                          }
                         }
-
                     };
                 case INTVIZ_DevtoxHEATMAP:
                     return function (data) {
                         switch (data.final_dev_call) {
                             case 'dev tox':
                                 return data.mean_pod ? continuousColorScale(Math.pow(10, data.mean_pod) * 1000000) : 'red';
-                            case 'general tox':
-                                return '#000000';
-                            case 'inconclusive':
-                                return '#000000';
-                            case 'inactive':
-                                return '#000000';
+                            // case 'general tox':
+                            //     return '#000000';
+                            // case 'inconclusive':
+                            //     return '#000000';
+                            // case 'inactive':
+                            //     return '#000000';
                             default:
                                 return '#000000';
                         }
@@ -322,33 +241,12 @@ class IntegrativePlotHandler extends React.Component {
                     throw 'Unknown display type.';
             }
         };
-        let getLegendData = function (visualization, scale, colorScale) {
+        let getLegendData = function (visualization, scale, colorScale, colorCategory) {
             switch (visualization) {
                 case INTVIZ_HEATMAP:
                     return {
                         type: 'discrete',
-                        values: [
-                            {
-                                label: 'selective',
-                                fill: '#d62976',
-                            },
-                            {
-                                label: 'toxic',
-                                fill: '#f9d70b',
-                            },
-                            {
-                                label: ' inconclusive, more tests are needed',
-                                fill: '#3BD6C6',
-                            },
-                            {
-                                label: 'inactive ',
-                                fill: '#FFFFFF',
-                            },
-                            {
-                                label: 'not evaluated',
-                                fill: '#C9C9C9',
-                            },
-                        ],
+                        values: colorCategory,
                     };
 
                 // HEATMAP_BMC type is continuous, search that.
@@ -366,12 +264,14 @@ class IntegrativePlotHandler extends React.Component {
 
         let fillFunction = getFillFunction(
                 this.props.visualization,
-                this.state.continuousColorScale
+                this.state.continuousColorScale,
+                this.state.INTVIZ_HEATMAP_COLORS,
             ),
             legendData = getLegendData(
                 this.props.visualization,
                 this.state.scale,
-                this.state.continuousColorScale
+                this.state.continuousColorScale,
+                this.state.INTVIZ_HEATMAP_COLORS,
             );
 
 
@@ -464,23 +364,23 @@ class IntegrativePlotHandler extends React.Component {
                         let result = _.filter(data, {x: x, y: y})
 
                         let endpoints = _.chain(result)
-                                .map('endpoint_name')
-                                .uniq()
-                                .value();
-                            let devtoxEndpoints = _.chain(result)
-                                .filter((i) => i.final_dev_call === 'dev tox')
-                                .map('endpoint_name')
-                                .uniq()
-                                .value();
+                            .map('endpoint_name')
+                            .uniq()
+                            .value();
+                        let devtoxEndpoints = _.chain(result)
+                            .filter((i) => i.final_dev_call === 'dev tox')
+                            .map('endpoint_name')
+                            .uniq()
+                            .value();
 
-                            //find top level selectivityOrder function.
-                            let topFinal = _.chain(result)
-                                .map('final_dev_call')
-                                .uniq()
-                                .filter((d) => _.includes(selectivityOrder, d))
-                                .sort((a, b) => selectivityOrder.indexOf(a) - selectivityOrder.indexOf(b))
-                                .first()
-                                .value();
+                        //find top level selectivityOrder function.
+                        let topFinal = _.chain(result)
+                            .map('final_dev_call')
+                            .uniq()
+                            .filter((d) => _.includes(selectivityOrder, d))
+                            .sort((a, b) => selectivityOrder.indexOf(a) - selectivityOrder.indexOf(b))
+                            .first()
+                            .value();
 
 
                         if (result.length == 0) {
@@ -588,15 +488,24 @@ class IntegrativePlotHandler extends React.Component {
         }
     };
 
+
+    componentWillMount() {
+        this.fetchIntegrativeData(this.props.url);
+    }
+
+    componentWillUpdate(nextProps) {
+        if (nextProps.url !== this.props.url) {
+            this.fetchIntegrativeData(nextProps.url);
+        }
+    }
+
+
     render() {
         if (!this.state.data) {
             return <Loading/>;
         }
         let d;
         d = this._getFilteredData();
-        console.log("this.props")
-        console.log(this.props)
-
         // this is result, with color name is fill data.
         if (d.data.length === 0) {
             return renderNoDataAlert();
