@@ -131,10 +131,6 @@ class DoseResponse extends React.Component {
                     .sortBy('endpoint_name')
                     .sortBy('casrn')
                     .value();
-    console.log(" no COLLAPSE_WITH_Mortality120")
-                    console.log(keys)
-        console.log(groupKeys)
-        console.log(collapsedData)
         }
         ;
 
@@ -375,14 +371,6 @@ class DoseResponse extends React.Component {
                     .map('substance_code')
                     .uniq()
                     .value();
-
-            console.log("d plot")
-            console.log(d)
-                        console.log(d.substance_code_input_ids)
-
-            console.log(drs)
-            console.log("substance_codeCase")
-            console.log(substance_codeCase)
 
             this.state.labelsDict = [];
             d.substance_code_input_ids.map((id_flag, index) => {

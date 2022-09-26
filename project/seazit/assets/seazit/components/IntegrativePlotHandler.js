@@ -84,7 +84,6 @@ class IntegrativePlotHandler extends React.Component {
                 scale,
                 continuousColorScale,
             });
-
         });
     }
 

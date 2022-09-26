@@ -89,7 +89,7 @@ let renderPlot = function (el, data, legendData) {
             if (d.endPointList) {
                 tooltip
                     .html(`${d.devtoxEndPointList.length} out of ${d.endPointList.length} endpoints are significant`)
-                    .style('left', d3.event.pageX - 300 + 'px')
+                    .style('left', d3.event.pageX - 400 + 'px')
                     .style('top', d3.event.pageY - 300 + 'px')
                     .style('opacity', 1.0);
             }

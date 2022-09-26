@@ -65,7 +65,7 @@ let renderPlot = function (el, data, legendData) {
             tooltip
                 .html(`Potency: ${printFloat(Math.pow(10, d.mean_pod) * 1000000)} μM  \n
                  Selectivity: ${printFloat(d.mean_selectivity)}`)
-                .style('left', d3.event.pageX - 300 + 'px')
+                .style('left', d3.event.pageX - 400 + 'px')
                 .style('top', d3.event.pageY - 300 + 'px')
                 .style('opacity', 1.0);
         },
