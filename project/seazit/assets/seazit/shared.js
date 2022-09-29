@@ -43,6 +43,7 @@ const AXIS_LINEAR = 1,
     COLLAPSE_BY_CHEMICAL = 'COLLAPSE_BY_CHEMICAL',
     COLLAPSE_BY_READOUT = 'COLLAPSE_BY_READOUT',
     NO_COLLAPSE = 'NO_COLLAPSE',
+    COLLAPSE_WITH_Mortality120 = 'COLLAPSE_WITH_Mortality120',
     URL_CHEMXLSX = '/static_seazit/resources/seazit/NTP%20Chemical%20Library.xlsx',
     URL_METADATA = '/seazit/api/seazit_metadata/metadata/?format=json',
     // ConcentrationResponse URL
@@ -295,8 +296,6 @@ const AXIS_LINEAR = 1,
                 });
             }
             ;
-        } else {
-            return
         }
         },
 
@@ -358,6 +357,7 @@ export {
     CHEMLIST_ALL,
     COLLAPSE_BY_CHEMICAL,
     COLLAPSE_BY_READOUT,
+    COLLAPSE_WITH_Mortality120,
     NO_COLLAPSE,
     HEATMAP_ACTIVITY,
     HEATMAP_BMC,

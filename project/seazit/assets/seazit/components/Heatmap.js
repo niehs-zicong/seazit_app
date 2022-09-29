@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import * as d3 from 'd3';
+import Tooltip from "@material-ui/core/Tooltip";
 
 import BootstrapModal from 'utils/BootstrapModal';
 import {Header, SingleCurveBody, MultipleCurveBody} from './DoseResponseModel';
@@ -53,7 +54,8 @@ let renderPlot = function (el, data, legendData) {
             axisTop: 290,
             legend: 150,
         },
-        cellSize = 30,
+        // cellSize = 30,
+        cellSize = 50,
 
         handleXLabelClick = function (label) {
             let cells = xMap[label],
@@ -79,20 +81,24 @@ let renderPlot = function (el, data, legendData) {
             });
         },
 
-        handleMouseOver = function (d) {
-        // console.log("handleMouseOver")
-        // console.log(d)
-        if (d.endPointList){
+        mouseover = function (d) {
             tooltip
-                .html(`${d.devtoxEndPointList.length} out of ${d.endPointList.length} endpoints are significant`)
-                .style('left', d3.event.pageX + 'px')
-                .style('top', d3.event.pageY + 20 + 'px')
-                .style('opacity', 1.0);
-        }
+                .style("opacity", 1)
         },
-        handleMouseOut = function (d) {
-            tooltip.style('opacity', 0.0);
+        mousemove = function (d) {
+            if (d.endPointList) {
+                tooltip
+                    .html(`${d.devtoxEndPointList.length} out of ${d.endPointList.length} endpoints are significant`)
+                    .style('left', d3.event.pageX - 400 + 'px')
+                    .style('top', d3.event.pageY - 300 + 'px')
+                    .style('opacity', 1.0);
+            }
         },
+        mouseleave = function (d) {
+            tooltip
+                .style("opacity", 0)
+        },
+
 
         // xasix is column, yasix is row
         xasix = d3.map(data, function (d) {
@@ -115,7 +121,7 @@ let renderPlot = function (el, data, legendData) {
         square = d3
             .symbol()
             .type(d3.symbolSquare)
-            .size(900),
+            .size(cellSize * cellSize),
 
         // Create the svg area
 
@@ -123,17 +129,17 @@ let renderPlot = function (el, data, legendData) {
             .select(el)
             .append('svg')
             .attr('width', Math.max(1000, width + margin.left + margin.right))
-            .attr('height', Math.max(1000, width + margin.left + margin.right))
+            .attr('height', Math.max(1000, height + margin.left + margin.right))
             .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")"),
 
-
-        // add a tooltip
         tooltip = d3
-            .select('body')
+            .select(el)
             .append('div')
             .attr('class', 'tooltip')
             .style('opacity', 0.0);
+
+    // addStripMask(svg);
 
 
     let axisLayer = svg
@@ -163,6 +169,8 @@ let renderPlot = function (el, data, legendData) {
         )
         .attr('class', 'axis y')
         .call(yAxis)
+        .style("font-size", 15)
+
         .selectAll('text')
         .style('cursor', 'pointer')
         .on('click', handleYLabelClick)
@@ -177,6 +185,8 @@ let renderPlot = function (el, data, legendData) {
         )
         .attr('class', 'axis x')
         .call(xAxis)
+        .style("font-size", 15)
+
         .selectAll('text')
         .attr('dx', '.8em')
         .attr('dy', '.55em')
@@ -216,8 +226,6 @@ let renderPlot = function (el, data, legendData) {
         .style('stroke', 'black')
         .style('stroke-width', 2);
 
-    // console.log("zwww   data")
-    // console.log(data)
     chartLayer
         .selectAll('.square')
         .data(data)
@@ -235,9 +243,12 @@ let renderPlot = function (el, data, legendData) {
         .style('stroke', 'black')
         .style('stroke-width', '0.8')
         .style('cursor', 'pointer')
-        .on('mouseover', handleMouseOver)
-        .on('mouseout', handleMouseOut)
-        .on('click', integrativeHandleCellClick);
+        .on("mouseover", mouseover)
+        .on("mousemove", mousemove)
+        .on("mouseleave", mouseleave)
+        .on('click', integrativeHandleCellClick)
+    ;
+
 
     // draw legend, this legend length, size is fixed.
     // 2 cases, discrete = activity,  continuous = BMC, different legned form.
@@ -248,27 +259,53 @@ let renderPlot = function (el, data, legendData) {
 
     switch (legendData.type) {
         case 'discrete': {
+            // legendLayer
+            //     .selectAll('text')
+            //     .data(legendData.values)
+            //     .enter()
+            //     .append('text')
+            //     .attr('class', styles.legendText)
+            //     .attr('x', 35)
+            //     .attr('y', (d, i) => i * 20 + margin.axisTop + 10)
+            //     .text((d) => d.label);
+            //
+            // let ds = legendLayer
+            //     .selectAll('path')
+            //     .data(legendData.values)
+            //     .enter()
+            //     .append('rect')
+            //     .attr('width', 15)
+            //     .attr('height', 15)
+            //     .attr('fill', (d) => d.fill)
+            //     .attr('transform', (d, i) => `translate(15, ${i * 20 + margin.axisTop})`)
+            //     .style('stroke', 'black')
+            //     .style('stroke-width', '1');
+
+
             legendLayer
                 .selectAll('text')
                 .data(legendData.values)
                 .enter()
                 .append('text')
                 .attr('class', styles.legendText)
-                .attr('x', 35)
-                .attr('y', (d, i) => i * 20 + margin.axisTop + 10)
-                .text((d) => d.label);
+                .attr('x', 15 + cellSize)
+                .attr('y', (d, i) => i * cellSize + margin.axisTop + (cellSize - 20) / 2)
+                .text((d) => d.label)
+                .style("font-size", 15)
+            ;
 
             let ds = legendLayer
                 .selectAll('path')
                 .data(legendData.values)
                 .enter()
                 .append('rect')
-                .attr('width', 15)
-                .attr('height', 15)
+                .attr('width', cellSize - 20)
+                .attr('height', cellSize - 20)
                 .attr('fill', (d) => d.fill)
-                .attr('transform', (d, i) => `translate(15, ${i * 20 + margin.axisTop})`)
+                .attr('transform', (d, i) => `translate(25, ${i * cellSize + margin.axisTop})`)
                 .style('stroke', 'black')
                 .style('stroke-width', '1');
+
             break;
         }
         case 'continuous': {

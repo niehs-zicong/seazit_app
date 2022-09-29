@@ -13,7 +13,7 @@ const NO_COLLAPSE_COLORS = {
     bmcoutput: '#1451a5',
 };
 
-class DoseResponse2 extends React.Component {
+class DoseResponseMort120 extends React.Component {
     constructor(props) {
         super(props);
         this.colorScale = d3.scaleOrdinal(d3.schemeCategory10);
@@ -446,7 +446,7 @@ class DoseResponse2 extends React.Component {
     }
 }
 
-DoseResponse2.propTypes = {
+DoseResponseMort120.propTypes = {
     cols: PropTypes.number.isRequired,
     collapse: PropTypes.string.isRequired,
     height: PropTypes.number.isRequired,
@@ -454,4 +454,4 @@ DoseResponse2.propTypes = {
     devtoxreadout_ids: PropTypes.array,
 };
 
-export default DoseResponse2;
+export default DoseResponseMort120;
