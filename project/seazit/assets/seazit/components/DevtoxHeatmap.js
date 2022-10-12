@@ -12,7 +12,7 @@ import styles from './graph.css';
 import {getLog10AxisFunction} from 'utils/d3';
 import Heatmap from "./Heatmap";
 import {integrativeHandleCellClick, printFloat} from "../shared";
-import Tooltip from "@material-ui/core/Tooltip";
+
 
 let addStripMask = function (svg) {
     // add strip mask to top of d3-selected svg
@@ -44,16 +44,15 @@ let addStripMask = function (svg) {
 
 let renderPlot = function (el, data, legendData) {
     $(el).empty();
-    // let margin = {top: 80, right: 25, bottom: 30, left: 40},
     let
         margin = {
-            top: 10,
+            top: 40,
             left: 10,
             bottom: 40,
-            right: 10,
+            right: 40,
             axisLeft: 290,
-            axisTop: 290,
-            legend: 150,
+            axisTop: 390,
+            legend: 300,
         },
         // cellSize = 30,
         cellSize = 50,
@@ -64,7 +63,7 @@ let renderPlot = function (el, data, legendData) {
         mousemove = function (d) {
             tooltip
                 .html(`Potency: ${printFloat(Math.pow(10, d.mean_pod) * 1000000)} μM  \n
-                 Selectivity: ${printFloat(d.mean_selectivity)}`)
+                 Specificity: ${printFloat(d.mean_selectivity)}`)
                 .style('left', d3.event.pageX - 400 + 'px')
                 .style('top', d3.event.pageY - 300 + 'px')
                 .style('opacity', 1.0);
@@ -299,7 +298,9 @@ let renderPlot = function (el, data, legendData) {
         }
         case 'continuous': {
             let {colorScaleFunction, legendScale} = legendData,
-                legendHeight = 200,
+                // legendHeight = 200,
+                legendHeight = 300,
+
                 legend = legendLayer
                     .append('defs')
                     .append('linearGradient')
@@ -320,7 +321,7 @@ let renderPlot = function (el, data, legendData) {
 
             legendLayer
                 .append('rect')
-                .attr('width', 30)
+                .attr('width', cellSize - 20 )
                 .attr('height', legendHeight)
                 .style('fill', 'url(#gradient)')
                 .style('stroke', 'black')
@@ -329,7 +330,7 @@ let renderPlot = function (el, data, legendData) {
             legendLayer
                 .append('g')
                 .attr('class', 'axis y')
-                .attr('transform', `translate(50,${margin.top + margin.axisTop})`)
+                .attr('transform', `translate(${20 + cellSize - 20},${margin.top + margin.axisTop})`)
                 .call(
                     getLog10AxisFunction(d3.axisRight, legendScale.copy().range([legendHeight, 0]))
                 );
@@ -339,22 +340,9 @@ let renderPlot = function (el, data, legendData) {
                 .attr('class', styles.legendText)
                 .attr('x', 0)
                 .attr('y', 0)
-                .attr('transform', `translate(15, ${margin.top + margin.axisTop - 10})`)
-                .text('BMC (µM)');
-            legendLayer
-                .append('text')
-                .attr('class', styles.legendText)
-                .attr('x', 0)
-                .attr('y', 0)
-                .attr(
-                    'transform',
-                    `translate(50,${margin.top + margin.axisTop + legendHeight + 25})`
-                )
-                .text('toxic, inactive, or inconclusive');
-
-            // the reason I put 25/2 into this position transform, because square size is (25, 25),
-            // make sure star is in center, make is position to be 25/2, 25/2
-
+                .attr('transform', `translate(20, ${margin.axisTop + (cellSize - 20) / 2 })`)
+                .text("BMC (µM) of specific developmental toxicity")
+                .style("font-size", 20);
 
             legendLayer
                 .append('path')
@@ -362,18 +350,35 @@ let renderPlot = function (el, data, legendData) {
                 .attr('d', star)
                 .attr(
                     'transform',
-                    `translate(${20 + 25 / 2},${margin.top + margin.axisTop + legendHeight + 10 + 25 / 2})`
+                    `translate(${20 + 25 / 2},${margin.top + margin.axisTop + legendHeight + 10 + 25 / 2 })`
                 )
                 .attr('fill', 'black')
                 .style('stroke', '#000000')
                 .style('stroke-width', '1');
 
             legendLayer
+                .append('text')
+                .attr('class', styles.legendText)
+                .attr('x', 0)
+                .attr('y', 0)
+                .attr(
+                    'transform',
+                    `translate(${15 + cellSize},${margin.top + margin.axisTop + legendHeight + 10 + 25 / 2 +5})`
+                )
+                .text('non-specific, non-toxic, inconclusive');
+
+            // the reason I put 25/2 into this position transform, because square size is (25, 25),
+            // make sure star is in center, make is position to be 25/2, 25/2
+
+
+
+
+            legendLayer
                 .append('rect')
                 .attr('x', 0)
                 .attr('y', 0)
-                .attr('width', 25)
-                .attr('height', 25)
+                .attr('width', cellSize - 20)
+                .attr('height', cellSize - 20)
                 .attr(
                     'transform',
                     `translate(20,${margin.top + margin.axisTop + legendHeight + 40})`
@@ -385,8 +390,8 @@ let renderPlot = function (el, data, legendData) {
                 .append('rect')
                 .attr('x', 0)
                 .attr('y', 0)
-                .attr('width', 25)
-                .attr('height', 25)
+                .attr('width', cellSize  - 20)
+                .attr('height', cellSize  - 20)
                 .attr(
                     'transform',
                     `translate(20,${margin.top + margin.axisTop + legendHeight + 40})`
@@ -402,7 +407,7 @@ let renderPlot = function (el, data, legendData) {
                 .attr('y', 0)
                 .attr(
                     'transform',
-                    `translate(50,${margin.top + margin.axisTop + legendHeight + 55})`
+                    `translate(${15 + cellSize},${margin.top + margin.axisTop + legendHeight + 40 + (cellSize - 20) / 2 +5 })`
                 )
                 .text('not evaluated');
             break;

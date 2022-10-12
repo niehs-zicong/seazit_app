@@ -38,7 +38,7 @@ class IntegrativeCheckBoxWidget extends BaseWidget {
 
                 <div>
                     <div className={styles.yellowbox}></div>
-                    Background: selective
+                    Background: specific
                 </div>
 
             </div>
