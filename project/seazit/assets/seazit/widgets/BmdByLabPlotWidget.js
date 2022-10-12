@@ -37,7 +37,7 @@ class BmdByLabPlotWidget extends BaseWidget {
                             value={BMDVIZ_SELECTIVITY}
                             checked={state.visualization === BMDVIZ_SELECTIVITY}
                         />
-                        Selectivity
+                        Specificity
                     </label>
                 </div>
             </div>

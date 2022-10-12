@@ -30,13 +30,13 @@ class IntegrativePlotHandler extends React.Component {
             INTVIZ_HEATMAP_COLORS: [
                 {
                     key: 'dev tox',
-                    label: 'selective',
+                    label: 'specific',
                     fill: '#d62976',
                     // fill: 'black'
                 },
                 {
                     key: 'general tox',
-                    label: 'toxic',
+                    label: 'non-specific',
                     fill: '#f9d70b',
                 },
                 {
@@ -46,7 +46,7 @@ class IntegrativePlotHandler extends React.Component {
                 },
                 {
                     key: 'inactive',
-                    label: 'inactive ',
+                    label: 'non-toxic ',
                     fill: '#FFFFFF',
                 },
                 {

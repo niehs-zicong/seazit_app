@@ -44,17 +44,15 @@ let addStripMask = function (svg) {
 
 let renderPlot = function (el, data, legendData) {
     $(el).empty();
-    // let margin = {top: 80, right: 25, bottom: 30, left: 40},
     let margin = {
-            top: 10,
+            top: 40,
             left: 10,
             bottom: 40,
-            right: 10,
+            right: 40,
             axisLeft: 290,
-            axisTop: 290,
-            legend: 150,
+            axisTop: 390,
+            legend: 300,
         },
-        // cellSize = 30,
         cellSize = 50,
 
         handleXLabelClick = function (label) {
@@ -170,7 +168,6 @@ let renderPlot = function (el, data, legendData) {
         .attr('class', 'axis y')
         .call(yAxis)
         .style("font-size", 15)
-
         .selectAll('text')
         .style('cursor', 'pointer')
         .on('click', handleYLabelClick)
@@ -186,7 +183,6 @@ let renderPlot = function (el, data, legendData) {
         .attr('class', 'axis x')
         .call(xAxis)
         .style("font-size", 15)
-
         .selectAll('text')
         .attr('dx', '.8em')
         .attr('dy', '.55em')
@@ -259,40 +255,27 @@ let renderPlot = function (el, data, legendData) {
 
     switch (legendData.type) {
         case 'discrete': {
-            // legendLayer
-            //     .selectAll('text')
-            //     .data(legendData.values)
-            //     .enter()
-            //     .append('text')
-            //     .attr('class', styles.legendText)
-            //     .attr('x', 35)
-            //     .attr('y', (d, i) => i * 20 + margin.axisTop + 10)
-            //     .text((d) => d.label);
-            //
-            // let ds = legendLayer
-            //     .selectAll('path')
-            //     .data(legendData.values)
-            //     .enter()
-            //     .append('rect')
-            //     .attr('width', 15)
-            //     .attr('height', 15)
-            //     .attr('fill', (d) => d.fill)
-            //     .attr('transform', (d, i) => `translate(15, ${i * 20 + margin.axisTop})`)
-            //     .style('stroke', 'black')
-            //     .style('stroke-width', '1');
 
 
+            // console.log(legendData.values)
             legendLayer
                 .selectAll('text')
                 .data(legendData.values)
                 .enter()
                 .append('text')
                 .attr('class', styles.legendText)
-                .attr('x', 15 + cellSize)
-                .attr('y', (d, i) => i * cellSize + margin.axisTop + (cellSize - 20) / 2)
+                .attr('transform', (d, i) => `translate(${15 + cellSize}, ${i * cellSize + margin.axisTop + (cellSize - 20) / 2 + cellSize})`)
                 .text((d) => d.label)
-                .style("font-size", 15)
             ;
+
+            legendLayer
+                .append('text')
+                .attr('class', styles.legendText)
+                .attr('x', 0)
+                .attr('y', 0)
+                .attr('transform', (d, i) => `translate(25, ${margin.axisTop + (cellSize - 20) / 2})`)
+                .html("Developmental Toxicity Classification")
+                .style("font-size", 20);
 
             let ds = legendLayer
                 .selectAll('path')
@@ -302,7 +285,7 @@ let renderPlot = function (el, data, legendData) {
                 .attr('width', cellSize - 20)
                 .attr('height', cellSize - 20)
                 .attr('fill', (d) => d.fill)
-                .attr('transform', (d, i) => `translate(25, ${i * cellSize + margin.axisTop})`)
+                .attr('transform', (d, i) => `translate(25, ${i * cellSize + margin.axisTop + cellSize})`)
                 .style('stroke', 'black')
                 .style('stroke-width', '1');
 

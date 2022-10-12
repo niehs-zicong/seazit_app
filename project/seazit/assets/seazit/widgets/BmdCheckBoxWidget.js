@@ -19,7 +19,7 @@ class BmdCheckBoxWidget extends BaseWidget {
         let state = this.props.stateHolder.state;
         return (
             <div>
-                <label>Selectivity:</label>
+                <label>Developmental Toxicity Classification:</label>
                     {/*{this.props.stateHolder.state.selectivityList.map((d, index) => {*/}
                     {state.selectivityList.map((d, index) => {
                     return (

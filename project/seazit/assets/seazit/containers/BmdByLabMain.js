@@ -50,13 +50,13 @@ class BmdByLabMain extends React.Component {
                     id: 1,
                     name: "dev tox",
                     isChecked: true,
-                    label: "selective",
+                    label: "specific",
                 },
                 {
                     id: 2,
                     name: "general tox",
                     isChecked: false,
-                    label: "toxic",
+                    label: "non-specific",
 
                 },
                 {
@@ -70,7 +70,7 @@ class BmdByLabMain extends React.Component {
                     id: 4,
                     name: "inactive",
                     isChecked: false,
-                    label: "inactive",
+                    label: "non-toxic",
 
                 }
             ],

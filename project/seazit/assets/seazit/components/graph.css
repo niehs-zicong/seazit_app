@@ -1,5 +1,6 @@
 .legendText {
-    font-size: 0.7rem;
+    /*font-size: 0.7rem;*/
+	    font-size: 15px;
     font-weight: bold;
 }
 
