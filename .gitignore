@@ -4,7 +4,7 @@
 # javascript
 project/.happypack
 project/node_modules
-#project/static/bundles
+project/static/bundles
 project/webpack-stats.json
 **/.DS_Store
 
