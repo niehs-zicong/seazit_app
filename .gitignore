@@ -31,6 +31,7 @@ project/yarn.lock
 
 # production environment
 *.log
+seazit_app.log*
 public/
 .env
 
