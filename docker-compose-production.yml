@@ -19,10 +19,16 @@ services:
   rabbitmq:
     restart: always
     build: ./compose/rabbitmq
+    #2023
+    ports:
+      - "0.0.0.0:5671:5671"
 
   redis:
     restart: always
     build: ./compose/redis
+    #2023
+    ports:
+      - "0.0.0.0:6380:6379"
      
 
   django:
