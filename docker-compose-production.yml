@@ -18,11 +18,15 @@ services:
 
   rabbitmq:
     restart: always
-    build: ./compose/rabbitmq     
+    build: ./compose/rabbitmq 
+    ports:
+      - "0.0.0.0:5671:5671"    
 
   redis:
     restart: always
-    build: ./compose/redis   
+    build: ./compose/redis
+    ports:
+      - "0.0.0.0:6380:6379"  
      
 
   django:
@@ -44,10 +48,14 @@ services:
   rserve:
     restart: always
     build: ./compose/rserve
+    ports:
+      - "0.0.0.0:6312:6311"
 
   shiny:
     restart: always
     build: ./compose/shiny
+    ports:
+      - "0.0.0.0:3839:3838"
     volumes:
       - shiny_apps:/srv/shiny-apps
 
