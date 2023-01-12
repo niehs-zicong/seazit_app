@@ -28,7 +28,8 @@ project/main/settings/local.py
 .ipynb_checkpoints
 .vscode
 project/yarn.lock
-
+project/static_seazit/bundles/main*
+project/static_seazit/bundles/vendor*
 # production environment
 *.log
 seazit_app.log*
