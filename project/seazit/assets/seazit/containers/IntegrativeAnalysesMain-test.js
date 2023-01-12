@@ -52,7 +52,8 @@ class IntegrativeAnalysesMain extends React.Component {
 
             // HelpButtonWidget
             showHelpText: false,
-            assays: [],
+            // assays: [],
+            assays: ['1', '2', '3'],
 
             datasetLabName: [],
             url: null,
@@ -60,13 +61,15 @@ class IntegrativeAnalysesMain extends React.Component {
             ontologyType: integrative_Granular,
             // ontologyType: integrative_General,
             //
-            ontologyGroup: [],
+            // ontologyGroup: [],
+            ontologyGroup: ['craniofacial defects'],
 
             // ChemicalSelectorWidget
             chemicalFilterBy: CHEMFILTER_CATEGORY,
             // chemicalFilterBy: CHEMFILTER_CHEMICIAL,
 
-            categories: [],
+            // categories: [],
+            categories: ['Insecticide'],
 
             chemicals: [],
 
@@ -170,7 +173,9 @@ class IntegrativeAnalysesMain extends React.Component {
             .map('protocol_name_plot')
             .value();
 
-        this.state.url = getIntegrativeUrl(this.state.assays, this.state.chemicals);
+        // this.state.url = getIntegrativeUrl(this.state.assays, this.state.chemicals);
+        this.state.url =
+            '/seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=1,2,3&casrns=71751-41-2,5598-15-2,2921-88-2,58-89-9,116-06-3,298-02-2,95737-68-1,83-79-4';
 
         //heatmap test
         return (

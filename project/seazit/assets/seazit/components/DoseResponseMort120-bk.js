@@ -27,9 +27,6 @@ class DoseResponseMort120 extends React.Component {
     }
 
     collapseData(data, collapse) {
-        if (_.isEmpty(data)) {
-            return '';
-        }
         let keys = _.chain(data.dose_response)
                 .reject((r) => r.endpoint_name == 'Mortality@120')
                 .map('key')
@@ -49,24 +46,14 @@ class DoseResponseMort120 extends React.Component {
                         mortality120dose_response: _.filter(data.dose_response, {
                             endpoint_name: 'Mortality@120',
                         }),
-                        mortality120bmcoutput: _.filter(data.bmcoutput, {
-                            endpoint_name: 'Mortality@120',
-                        }),
                     };
                 })
                 .each((d, k) => {
-                    console.log(d);
-                    console.log(d.bmcoutput);
-
                     let dr = d.dose_response[0];
                     (d.title = this.getPlotTitle(dr, collapse)),
                         (d.casrn = dr.casrn),
                         (d.endpoint_name = dr.endpoint_name),
                         (d.input_ids = _.chain(d.bmcoutput)
-                            .map('input_id')
-                            .uniq()
-                            .value()),
-                        (d.mortality120input_ids = _.chain(d.mortality120bmcoutput)
                             .map('input_id')
                             .uniq()
                             .value()),
@@ -77,22 +64,23 @@ class DoseResponseMort120 extends React.Component {
                         )
                             .map('substance_code_input_id')
                             .uniq()
-                            .value()),
-                        (d.substance_code_input_ids_120 = _.chain(
-                            d.mortality120dose_response.filter((i) =>
-                                d.mortality120input_ids.includes(i.input_id)
-                            )
-                        )
-                            .map('substance_code_input_id')
-                            .uniq()
                             .value());
                 })
                 .sortBy('endpoint_name')
                 .sortBy('casrn')
-                .value();
-        console.log(collapsedData);
+                .value(),
+            responses,
+            yrange,
+            offset;
+        console.log('keys');
+        console.log(keys);
 
-        let yrange = [0, 100];
+        // console.log(collapsedData)
+        // set constant y-range for all charts. ensure 0 is within the
+        // domain of values.
+        console.log('collapsedData');
+        console.log(collapsedData);
+        yrange = [0, 100];
         return {
             data,
             collapsedData,
@@ -174,6 +162,15 @@ class DoseResponseMort120 extends React.Component {
             case COLLAPSE_BY_CHEMICAL:
                 return `${data.protocol_name_plot}|${data.endpoint_name}`;
             case NO_COLLAPSE:
+                // if (labelCase == 'PC') {
+                //     return `PC| ${Object.values(this.state.labelsDict[index1]).length}`;
+                // } else if (labelCase.length == 1) {
+                //     return `plate| ${Object.values(this.state.labelsDict[index1]).length}`;
+                // } else {
+                //     return `dup ${Object.keys(this.state.labelsDict).length}| plate ${
+                //         Object.values(this.state.labelsDict[index1]).length
+                //     }`;
+                // }
                 return `${data.protocol_name_plot}|${data.endpoint_name}`;
 
             default:
@@ -236,7 +233,6 @@ class DoseResponseMort120 extends React.Component {
                 throw 'Unknown collapse type.';
         }
     }
-
     setKeys(data, collapse) {
         _.each(data.dose_response, (d) => this.setDatasetKey(d, collapse));
         _.each(data.bmcoutput, (d) => this.setDatasetKey(d, collapse));
@@ -245,13 +241,7 @@ class DoseResponseMort120 extends React.Component {
 
     updateData(data, collapse) {
         this.setKeys(data, collapse);
-        console.log('dr120');
-
-        console.log(data);
         let update = this.collapseData(data, collapse);
-        console.log(update);
-        console.log(update.collapsedData);
-
         let scale = this.getColorScale(update.collapsedData, collapse);
         this.setState({
             ...update,
@@ -310,8 +300,11 @@ class DoseResponseMort120 extends React.Component {
                     ? '#FFFF00'
                     : null,
         };
-        console.log(d.groupKeys);
+
         d.groupKeys.map((gk) => {
+            console.log(d.dose_response);
+            console.log(d.mortality120dose_response);
+
             let drs = d.dose_response.filter((r) => r.groupKey == gk),
                 mor120drs = d.mortality120dose_response.filter((r) => r.groupKey == gk),
                 substance_codeCase = _.chain(drs)
@@ -319,15 +312,17 @@ class DoseResponseMort120 extends React.Component {
                     .uniq()
                     .value();
             this.state.labelsDict = [];
-            // console.log(drs)
-            // console.log(mor120drs)
-            console.log(d);
+            console.log(drs);
+            console.log(mor120drs);
+            console.log(d.substance_code_input_ids);
             d.substance_code_input_ids.map((id_flag, index) => {
+                console.log(id_flag);
+                console.log(index);
+
                 let drs_split = _.chain(drs)
                     .filter((r) => r.substance_code_input_id == id_flag)
                     .sortBy('dose')
                     .value();
-
                 data.push({
                     x: _.map(drs_split, 'dose'),
                     y: drs_split.map((obj) => {
@@ -348,15 +343,18 @@ class DoseResponseMort120 extends React.Component {
                 });
             });
 
-            d.substance_code_input_ids_120.map((id_flag, index) => {
-                console.log(mor120drs);
-                console.log(id_flag);
-
+            let mor120drsKeys = _.chain(mor120drs)
+                .map('substance_code_input_id')
+                .uniq()
+                .value();
+            console.log(mor120drsKeys);
+            //     let test =  mor120drs.filter((i) => d.substance_code_input_id.includes(d.substance_code_input_ids))
+            // console.log(test)
+            mor120drsKeys.map((id_flag, index) => {
                 let drs_split = _.chain(mor120drs)
                     .filter((r) => r.substance_code_input_id == id_flag)
                     .sortBy('dose')
                     .value();
-                console.log(drs_split);
                 data.push({
                     x: _.map(drs_split, 'dose'),
                     y: drs_split.map((obj) => {
@@ -365,18 +363,20 @@ class DoseResponseMort120 extends React.Component {
                     legendgroup: 'plot',
                     mode: 'line',
                     type: 'scatter',
+                    // text: `${drs_split[0].endpoint_name} plate_name ${drs_split[0].plate_name}`,
                     text: `${this.getResponseLabels(
                         drs_split[0],
                         this.props.collapse,
                         substance_codeCase
                     )}`,
+
                     marker: {
                         color: this.getMarkerColor(drs_split[0].endpoint_name, 'responses'),
+                        // color: this.getMarkerColor(gk, 'responses'),
                     },
                     opacity: 0.8,
                 });
             });
-
             // add trsh if exists
             if (d.bmcoutput.length > 0) {
                 d.bmcoutput
