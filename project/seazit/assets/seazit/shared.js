@@ -2,10 +2,9 @@ import _ from 'lodash';
 import * as d3 from 'd3';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Tooltip from "@material-ui/core/Tooltip";
-import {Header, MultipleCurveBody, SingleCurveBody} from "./components/DoseResponseModel";
+import Tooltip from '@material-ui/core/Tooltip';
+import { Header, MultipleCurveBody, SingleCurveBody } from './components/DoseResponseModel';
 import BootstrapModal from 'utils/BootstrapModal';
-
 
 const AXIS_LINEAR = 1,
     AXIS_LOG10 = 2,
@@ -18,7 +17,6 @@ const AXIS_LINEAR = 1,
     },
     integrative_Granular = 1,
     integrative_General = 2,
-
     CATEGORY_COLORS = {
         Insecticide: '#d62976',
         Fungicide: '#f9d70b',
@@ -39,7 +37,6 @@ const AXIS_LINEAR = 1,
     ConcentrationResponseTab = 1,
     BMCTab = 2,
     IntegrativeAnalysesTab = 3,
-
     COLLAPSE_BY_CHEMICAL = 'COLLAPSE_BY_CHEMICAL',
     COLLAPSE_BY_READOUT = 'COLLAPSE_BY_READOUT',
     NO_COLLAPSE = 'NO_COLLAPSE',
@@ -51,7 +48,6 @@ const AXIS_LINEAR = 1,
     // BMC by lab URL
     URL_BMD = '/seazit/api/seazit_result/bmcByLabResult/',
     URL_INTEGRATIVE = '/seazit/api/seazit_result/integrativeResult/',
-
     INTVIZ_HEATMAP = 1,
     INTVIZ_DevtoxHEATMAP = 2,
     BMDVIZ_ACTIVITY = 1,
@@ -60,9 +56,6 @@ const AXIS_LINEAR = 1,
     HEATMAP_BMC = 2,
     READOUT_TYPE_READOUT = 1,
     READOUT_TYPE_CATEGORY = 2,
-
-
-
     SELECTIVITY_FOOTNOTE =
         'Selectivity is estimated and true value may be higher; viability BMC could not be calculated and was therefore estimated to equal the maximum tested dose.',
     loadMetadata = function(component) {
@@ -72,13 +65,12 @@ const AXIS_LINEAR = 1,
                 protocol_data: d.protocol_data,
                 Seazit_chemical_info: d.Seazit_chemical_info,
                 Seazit_ui_panel: d.Seazit_ui_panel,
-                Seazit_ontology:d.Seazit_ontology,
+                Seazit_ontology: d.Seazit_ontology,
             });
             // console.log("d");
             // console.log(d);
         });
     },
-
     data_exportToJsonFile = function(jsonData) {
         let filename = 'jsonData.json';
 
@@ -104,33 +96,27 @@ const AXIS_LINEAR = 1,
                     value={values}
                 >
                     {options.map((d) => {
-                        if (d.description)
-                        {
-                        return (
-                          <Tooltip  title={d.description}  placement="top">
-                            <option
-                                     key={d.key} value={d.key}>
-                                {d.label}
-                            </option>
-                          </Tooltip>
-                        );
-                        } else
-                        {
+                        if (d.description) {
                             return (
-                            <option
-                                     key={d.key} value={d.key}>
-                                {d.label}
-                            </option>
-                            )
+                                <Tooltip title={d.description} placement="top">
+                                    <option key={d.key} value={d.key}>
+                                        {d.label}
+                                    </option>
+                                </Tooltip>
+                            );
+                        } else {
+                            return (
+                                <option key={d.key} value={d.key}>
+                                    {d.label}
+                                </option>
+                            );
                         }
                     })}
                 </select>
             </div>
         );
     },
-
     renderSelectSingleWidget = function(name, label, options, values, handleChange) {
-
         return (
             <div>
                 <label>Select one {label}:</label>
@@ -142,32 +128,26 @@ const AXIS_LINEAR = 1,
                     value={values}
                 >
                     {options.map((d) => {
-                        if (d.description)
-                        {
-                        return (
-                          <Tooltip  title={d.description}  placement="top"
-                          >
-                            <option
-                                     key={d.key} value={d.key}>
-                                {d.label}
-                            </option>
-                          </Tooltip>
-                        );
-                        } else
-                        {
+                        if (d.description) {
                             return (
-                            <option
-                                     key={d.key} value={d.key}>
-                                {d.label}
-                            </option>
-                            )
+                                <Tooltip title={d.description} placement="top">
+                                    <option key={d.key} value={d.key}>
+                                        {d.label}
+                                    </option>
+                                </Tooltip>
+                            );
+                        } else {
+                            return (
+                                <option key={d.key} value={d.key}>
+                                    {d.label}
+                                </option>
+                            );
                         }
                     })}
-            </select>
+                </select>
             </div>
         );
     },
-
     renderSelectMultiOptgroupWidget = function(name, label, options, values, handleChange) {
         let size = 10;
         return (
@@ -221,9 +201,8 @@ const AXIS_LINEAR = 1,
         // return url, ro is the readout_id
         return `${URL_BMD}?format=json&protocol_ids=${id}&readouts=${ro}`;
     },
-
     getIntegrativeUrl = function(protocol_ids, casrns) {
-        if (protocol_ids.length === 0  || casrns.length === 0) {
+        if (protocol_ids.length === 0 || casrns.length === 0) {
             return null;
         }
         let ids = protocol_ids.join(','),
@@ -232,8 +211,6 @@ const AXIS_LINEAR = 1,
         // console.log(ids, ro, chems);
         return `${URL_INTEGRATIVE}?format=json&protocol_ids=${ids}&casrns=${chems}`;
     },
-
-
     printFloat = function(v) {
         if (v <= 0) {
             return '-';
@@ -244,41 +221,42 @@ const AXIS_LINEAR = 1,
         }
     },
     svg_download_form = function(id) {
-     var svg = document.getElementById(id)
+        var svg = document.getElementById(id);
 
-    var today = new Date();
-    var filename =
-        today.getFullYear() +
-        '-' +
-        (today.getMonth() + 1) +
-        '-' +
-        today.getDate() +
-        '-' +
-        today.getHours() +
-        '-' +
-        today.getMinutes() +
-        '-' +
-        today.getSeconds() +
-        '.svg';
-    var svg_xml = new XMLSerializer().serializeToString(svg);
-    var element = document.createElement('a');
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(svg_xml));
-    element.setAttribute('download', filename);
+        var today = new Date();
+        var filename =
+            today.getFullYear() +
+            '-' +
+            (today.getMonth() + 1) +
+            '-' +
+            today.getDate() +
+            '-' +
+            today.getHours() +
+            '-' +
+            today.getMinutes() +
+            '-' +
+            today.getSeconds() +
+            '.svg';
+        var svg_xml = new XMLSerializer().serializeToString(svg);
+        var element = document.createElement('a');
+        element.setAttribute(
+            'href',
+            'data:text/plain;charset=utf-8,' + encodeURIComponent(svg_xml)
+        );
+        element.setAttribute('download', filename);
 
-    element.style.display = 'none';
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
+        element.style.display = 'none';
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
     },
-
-        integrativeHandleCellClick = function (d) {
+    integrativeHandleCellClick = function(d) {
         if (d.endPointList) {
-
             if (d.endPointList && d.endPointList.length > 1) {
                 new BootstrapModal(Header, MultipleCurveBody, {
                     title: d.title,
                     protocol_id: d.protocol_id,
-                    readout_ids: _.map(d.endPointList, function (x) {
+                    readout_ids: _.map(d.endPointList, function(x) {
                         return x + '_' + d.protocol_id;
                     }),
                     // if button checked, we will add mortality@120 to each plot
@@ -295,12 +273,8 @@ const AXIS_LINEAR = 1,
                     // devtoxreadout_ids: d.devtoxEndPointList+ '_' + d.protocol_id,
                 });
             }
-            ;
         }
-        },
-
-
-
+    },
     renderNoDataAlert = function() {
         return (
             <div className="alert alert-info">

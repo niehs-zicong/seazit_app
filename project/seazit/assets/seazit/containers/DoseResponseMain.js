@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Loading from 'utils/Loading';
-import DoseResponse from '../components/DoseResponse';
+import { DoseResponse } from '../components/DoseResponse';
 import FiveOhEight from '../components/FiveOhEight';
 import HelpButtonWidget from '../widgets/HelpButtonWidget';
 import ChemicalWidget from '../widgets/ChemicalWidget';
@@ -103,7 +103,7 @@ class DoseResponseMain extends React.Component {
 
     render() {
         if (!this.state.metadataLoaded) {
-            return <Loading/>;
+            return <Loading />;
         }
         let url = getDoseResponsesUrl(this.state.assays, this.state.readouts, this.state.chemicals);
 
@@ -112,11 +112,11 @@ class DoseResponseMain extends React.Component {
                 <div className="col-md-12">
                     <h1>
                         Concentration Response
-                        <HelpButtonWidget stateHolder={this}/>
+                        <HelpButtonWidget stateHolder={this} />
                     </h1>
                 </div>
                 <div className="col-md-12">
-                    <FiveOhEight/>
+                    <FiveOhEight />
                 </div>
 
                 <div className="col-md-3">
@@ -127,20 +127,20 @@ class DoseResponseMain extends React.Component {
                         multiAssaySelector={true}
                         multiReadoutSelector={true}
                     />
-                    <hr/>
-                    <ChemicalWidget stateHolder={this}/>
-                    <hr/>
-                    <PlotCollapseWidget stateHolder={this}/>
-                    <hr/>
-                    <DoseResponseGridWidget stateHolder={this}/>
+                    <hr />
+                    <ChemicalWidget stateHolder={this} />
+                    <hr />
+                    <PlotCollapseWidget stateHolder={this} />
+                    <hr />
+                    <DoseResponseGridWidget stateHolder={this} />
                 </div>
                 <div className="col-md-9">
                     {this._renderHelpText()}
                     {url ? this.renderSelection(url) : this.renderNoSelection()}
                 </div>
             </div>
-    );
+        );
     }
-    }
+}
 
-    export default DoseResponseMain;
+export default DoseResponseMain;

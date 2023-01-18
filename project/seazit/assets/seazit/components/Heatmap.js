@@ -15,7 +15,6 @@ import styles from './graph.css';
 import { getLog10AxisFunction } from 'utils/d3';
 import DoseResponseGridWidget from '../widgets/DoseResponseGridWidget';
 import IntegrativeCheckBoxWidget from '../widgets/IntegrativeCheckBoxWidget';
-import DoseResponseMort120 from './DoseResponseMort120';
 
 let addStripMask = function(svg) {
     // add strip mask to top of d3-selected svg
