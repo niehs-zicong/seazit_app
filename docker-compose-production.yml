@@ -19,8 +19,8 @@ services:
   rabbitmq:
     restart: always
     build: ./compose/rabbitmq 
-    ports:
-      - "0.0.0.0:5672:5672"    
+    #ports:
+      #- "0.0.0.0:5672:5672"    
 
   redis:
     restart: always
@@ -39,7 +39,7 @@ services:
       #- postgres
       - rabbitmq
       - redis
-      - rserve
+      #- rserve
     env_file: .env
     volumes:
       - static_files:/app/public
@@ -48,14 +48,14 @@ services:
   rserve:
     restart: always
     build: ./compose/rserve
-    ports:
-      - "0.0.0.0:6311:6311"
+    #ports:
+      #- "0.0.0.0:6311:6311"
 
   shiny:
     restart: always
     build: ./compose/shiny
-    ports:
-      - "0.0.0.0:3838:3838"
+    #ports:
+      #- "0.0.0.0:3838:3838"
     volumes:
       - shiny_apps:/srv/shiny-apps
 
@@ -64,7 +64,7 @@ services:
     build: ./compose/nginx
     depends_on:
       - django
-      - shiny
+      #- shiny
     ports:
       - "0.0.0.0:80:80"
       - "0.0.0.0:443:443"
