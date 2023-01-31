@@ -35,6 +35,9 @@ services:
       context: .
       dockerfile: ./compose/django/Dockerfile
     command: /usr/bin/supervisord -c /supervisord.conf --nodaemon
+    #sue Jan 30
+    ports:
+      - "0.0.0.0:5000:5000"
     depends_on:
       #- postgres
       - rabbitmq
@@ -48,14 +51,14 @@ services:
   rserve:
     restart: always
     build: ./compose/rserve
-    #ports:
-      #- "0.0.0.0:6311:6311"
+    ports:
+      - "0.0.0.0:6311:6311"
 
   shiny:
     restart: always
     build: ./compose/shiny
-    #ports:
-      #- "0.0.0.0:3838:3838"
+    ports:
+      - "0.0.0.0:3838:3838"
     volumes:
       - shiny_apps:/srv/shiny-apps
 
