@@ -31,7 +31,7 @@ services:
       dockerfile: ./compose/django/Dockerfile
     command: /usr/bin/supervisord -c /supervisord.conf --nodaemon
     ports:
-      -"0.0.0.0:5000:5000"
+      - "0.0.0.0:5000:5000"
     depends_on:
       #- postgres
       - rabbitmq
