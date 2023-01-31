@@ -36,8 +36,10 @@ services:
       context: .
       dockerfile: ./compose/django/Dockerfile-staging
     command: /usr/bin/supervisord -c /supervisord.conf --nodaemon
+    ports:
+      - "0.0.0.0:5000:5000"
     depends_on:
-      - postgres
+      #- postgres
       - rabbitmq
       - redis
       - rserve
@@ -61,7 +63,7 @@ services:
     build: ./compose/nginx
     depends_on:
       - django
-      - shiny
+      #- shiny
     ports:
       - "0.0.0.0:81:80"
       - "0.0.0.0:444:443"

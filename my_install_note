@@ -59,6 +59,11 @@ Add a line:
 in file:
 ~/.matplotlib/matplotlibrc
 
+#for production server set env:
+#COMPOSE_FILE=docker-compose-production.yml
+#for staging server:
+#COMPOSE_FILE=docker-compose-staging.yml
+
 
 
 

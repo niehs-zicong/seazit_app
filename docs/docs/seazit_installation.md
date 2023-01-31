@@ -193,6 +193,7 @@ Entity-relationship models can be automatically created using django and the dja
 update base.py: 
 
 cd /opt/anaconda3/envs/seazit/lib/python3.8/site-packages/selectable/base.py
+cd /opt/conda/envs/seazit/lib/python3.8/site-packages/selectable/
 (use nano or something edit base.py file)
 
 from django.core.urlresolvers import reverse, NoReverseMatch
