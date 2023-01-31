@@ -19,14 +19,14 @@ services:
   rabbitmq:
     restart: always
     build: ./compose/rabbitmq 
-    #ports:
-      #- "0.0.0.0:5672:5672"    
+    ports:
+      - "0.0.0.0:5672:5672"    
 
   redis:
     restart: always
     build: ./compose/redis
-    #ports:
-      #- "0.0.0.0:6379:6379"  
+    ports:
+      - "0.0.0.0:6379:6379"  
      
 
   django:
