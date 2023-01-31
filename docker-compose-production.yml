@@ -31,7 +31,7 @@ services:
       dockerfile: ./compose/django/Dockerfile
     command: /usr/bin/supervisord -c /supervisord.conf --nodaemon
     ports:
-      -5000:5000
+      -"0.0.0.0:5000:5000"
     depends_on:
       #- postgres
       - rabbitmq
@@ -60,6 +60,6 @@ services:
       #- shiny
     ports:
       - "0.0.0.0:81:80"
-      - "0.0.0.0:444:443"
+      - "0.0.0.0:443:443"
     volumes:
       - static_files:/app/public
