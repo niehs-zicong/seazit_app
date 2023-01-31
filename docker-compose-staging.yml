@@ -7,16 +7,16 @@ volumes:
   static_files: {}
 
 services:
-  postgres:
-    restart: always
-    build: ./compose/postgres
-    command: postgres -c 'config_file=/etc/postgresql/postgresql.conf'
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - postgres_backup:/backups
-    env_file: .env
-    ports:
-      - "0.0.0.0:5437:5432"
+  #postgres:
+    #restart: always
+    #build: ./compose/postgres
+    #command: postgres -c 'config_file=/etc/postgresql/postgresql.conf'
+    #volumes:
+      #- postgres_data:/var/lib/postgresql/data
+      #- postgres_backup:/backups
+    #env_file: .env
+    #ports:
+      #- "0.0.0.0:5437:5432"
 
   rabbitmq:
     restart: always
@@ -44,7 +44,7 @@ services:
     env_file: .env
     volumes:
       - static_files:/app/public
-      - postgres_backup:/backups
+      #- postgres_backup:/backups
 
   shiny:
     restart: always
