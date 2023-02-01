@@ -12,8 +12,8 @@ services:
     #restart: always
     #build: ./compose/postgres
     #volumes:
-     # - postgres_data:/var/lib/postgresql/data
-     # - postgres_backup:/backups
+    #  - postgres_data:/var/lib/postgresql/data
+    #  - postgres_backup:/backups
     #env_file: .env
 
   rabbitmq:
@@ -36,8 +36,8 @@ services:
       dockerfile: ./compose/django/Dockerfile
     command: /usr/bin/supervisord -c /supervisord.conf --nodaemon
     #sue Jan 30
-    ports:
-      - "0.0.0.0:5000:5000"
+    #ports:
+      #- "0.0.0.0:5000:5000"
     depends_on:
       #- postgres
       - rabbitmq
