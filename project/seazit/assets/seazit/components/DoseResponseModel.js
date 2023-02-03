@@ -8,7 +8,7 @@ import {
     getDoseResponsesUrl,
     NO_COLLAPSE,
     COLLAPSE_BY_CHEMICAL,
-    CHEMFILTER_CHEMICIAL,
+    COLLAPSE_WITH_Mortality120,
     renderSelectMultiOptgroupWidget,
     renderSelectMultiWidget,
 } from '../shared';
@@ -43,7 +43,7 @@ class SingleCurveBody extends React.Component {
                         url={state.url}
                         cols={1}
                         height={400}
-                        collapse={NO_COLLAPSE}
+                        collapse={COLLAPSE_WITH_Mortality120}
                         devtoxreadout_ids={this.props.devtoxreadout_ids}
                     />
                 </div>
@@ -113,7 +113,7 @@ class MultipleCurveBody extends React.Component {
                         url={state.url}
                         cols={state.vizColumns}
                         height={state.vizHeight}
-                        collapse={NO_COLLAPSE}
+                        collapse={COLLAPSE_WITH_Mortality120}
                         devtoxreadout_ids={this.props.devtoxreadout_ids}
                     />
                 </div>
