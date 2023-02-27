@@ -21,6 +21,7 @@ import {
     COLLAPSE_BY_READOUT,
     COLLAPSE_BY_CHEMICAL,
     printFloat,
+    integrative_Granular,
 } from '../shared';
 
 class RankedBarchartHandler extends React.Component {
@@ -41,15 +42,82 @@ class RankedBarchartHandler extends React.Component {
                 });
                 return;
             }
-            // console.log(this.state.data)
             this.setState({ data });
         });
     }
 
-
     setDatasetKey(data) {
         data.key = `${data.endpoint_name}|${data.protocol_id}`;
         data.chemicalKey = `${data.casrn}|${data.dtxsid}`;
+    }
+
+    filterData() {
+        let selectivityCheckedArray, data, plotData;
+
+        if (this.props.visualization === BMDVIZ_ACTIVITY) {
+            data = _.chain(this.state.data.bmd_activity_selectivity)
+                .sortBy('med_pod_med')
+                .value();
+        } else {
+            selectivityCheckedArray = _.chain(this.props.selectivityList)
+                .filter((r) => r.isChecked === true)
+                .map('name')
+                .uniq()
+                .value();
+            data = _.chain(this.state.data.bmd_activity_selectivity)
+                .filter((i) => selectivityCheckedArray.includes(i.final_dev_call))
+                .sortBy('mean_selectivity')
+                .reverse()
+                .value();
+        }
+        //
+        data.forEach((d) => {
+            (d.med_pod_med_processed = d.med_pod_med
+                ? Math.pow(10, d.med_pod_med) * 1000000
+                : null),
+                (d.min_pod_med_processed = d.min_pod_med
+                    ? Math.pow(10, d.min_pod_med) * 1000000
+                    : null),
+                (d.max_pod_med_processed = d.max_pod_med
+                    ? Math.pow(10, d.max_pod_med) * 1000000
+                    : null),
+                (d.mort_med_pod_med_processed = d.mort_med_pod_med
+                    ? Math.pow(10, d.mort_med_pod_med) * 1000000
+                    : null),
+                (d.mort_min_pod_med_processed = d.mort_min_pod_med
+                    ? Math.pow(10, d.mort_min_pod_med) * 1000000
+                    : null),
+                (d.mort_max_pod_med_processed = d.mort_max_pod_med
+                    ? Math.pow(10, d.mort_max_pod_med) * 1000000
+                    : null);
+        });
+
+        plotData = _.chain(data)
+            .groupBy('casrn')
+            .map((data) => {
+                return {
+                    casrn: data[0].casrn,
+
+                    data: data,
+                    // selectData: x,
+                    minimimumViability: _.chain(data)
+                        .min((d) => d.med_pod_med_processed)
+                        .value(),
+                    minimimumNonViability: _.chain(data)
+                        .min((d) => d.mort_med_pod_med_processed)
+                        .value(),
+                    endpoint_names: _.chain(data)
+                        .map('endpoint_name')
+                        .uniq()
+                        .value(),
+                };
+            })
+            .value();
+        console.log('data1', data, plotData);
+        return {
+            plotData: plotData,
+            tableData: data,
+        };
     }
 
     data_exportToCSVFile = function(jsonData) {
@@ -57,8 +125,6 @@ class RankedBarchartHandler extends React.Component {
             return '';
         }
         let medData = _.sortBy(jsonData.bmd_activity_selectivity, 'med_pod_med');
-        // console.log('bmd d');
-        // console.log(medData);
         let keys = [
             'preferred_name',
             'casrn',
@@ -148,110 +214,7 @@ class RankedBarchartHandler extends React.Component {
                 this.props.visualization === BMDVIZ_ACTIVITY
                     ? 'all chemicals'
                     : 'selected chemicals',
-            plotData,
-            tableData;
-        if (this.props.visualization === BMDVIZ_ACTIVITY) {
-
-            plotData = _.chain(this.state.data.bmd_activity_selectivity)
-                    .map((d) => {
-                        return {
-                            casrn: d.casrn,
-                            combin_ontology: d.combin_ontology,
-                            combin_ontology_id: d.combin_ontology_id,
-                            dtxsid: d.dtxsid,
-                            endpoint_name: d.endpoint_name,
-                            endpoint_name_protocol: d.endpoint_name_protocol,
-                            f_max_dev_call: d.f_max_dev_call,
-                            final_dev_call: d.final_dev_call,
-                            lab_anonymous_code: d.lab_anonymous_code,
-                            malformation: d.malformation,
-
-                            max_highest_conc: d.max_highest_conc,
-                            max_pod_med: d.max_pod_med,
-                            mean_pod: d.mean_pod,
-                            mean_selectivity: d.mean_selectivity,
-
-                            med_hitconf: d.med_hitconf,
-                            med_mort_hit_confidence: d.med_mort_hit_confidence,
-                            med_pod_med: d.med_pod_med,
-                            min_lowest_conc: d.min_lowest_conc,
-                            min_pod_med:  d.min_pod_med  ,
-                            mort_max_pod_med:  d.mort_max_pod_med  ,
-                            mort_med_hitconf:  d.mort_med_hitconf  ,
-                            mort_med_pod_med:  d.mort_med_pod_med  ,
-                            mort_min_pod_med:  d.mort_min_pod_med   ,
-                            mort_n_values:  d.mort_n_values  ,
-                            n_rep:  d.n_rep  ,
-                            n_rep_max_dev_call: d.n_rep_max_dev_call   ,
-                            n_values:  d.n_values  ,
-                            preferred_name:  d.preferred_name   ,
-                            protocol_id:   d.protocol_id ,
-                            protocol_name_long:  d.protocol_name_long  ,
-                            protocol_name_plot:   d.protocol_name_plot ,
-                            test_condition:   d.test_condition  ,
-                            use_category1:  d.use_category1  ,
-                        };
-                    })
-                    .sortBy('med_pod_med')
-                    .value();
-
-            // plotData = _.sortBy(this.state.data.bmd_activity_selectivity, 'med_pod_med');
-            tableData = plotData;
-        } else {
-            let selectivityCheckedArray = _.chain(this.props.selectivityList)
-                .filter((r) => r.isChecked === true)
-                .map('name')
-                .uniq()
-                .value();
-            // data is fillter by final_dev_call, If final_dev_call is in selectivityCheckedArray, data will pass
-
-            plotData = _.chain(this.state.data.bmd_activity_selectivity)
-                    .filter((i) => selectivityCheckedArray.includes(i.final_dev_call))
-                    .map((d) => {
-                        return {
-                            casrn: d.casrn,
-                            combin_ontology: d.combin_ontology,
-                            combin_ontology_id: d.combin_ontology_id,
-                            dtxsid: d.dtxsid,
-                            endpoint_name: d.endpoint_name,
-                            endpoint_name_protocol: d.endpoint_name_protocol,
-                            f_max_dev_call: d.f_max_dev_call,
-                            final_dev_call: d.final_dev_call,
-                            lab_anonymous_code: d.lab_anonymous_code,
-                            malformation: d.malformation,
-                            max_highest_conc: d.max_highest_conc,
-                            max_pod_med: d.max_pod_med,
-                            mean_pod: d.mean_pod,
-                            mean_selectivity: d.mean_selectivity,
-                            med_hitconf: d.med_hitconf,
-                            med_mort_hit_confidence: d.med_mort_hit_confidence,
-                            med_pod_med: d.med_pod_med,
-                            min_lowest_conc: d.min_lowest_conc,
-                            min_pod_med:  d.min_pod_med  ,
-                            mort_max_pod_med:  d.mort_max_pod_med  ,
-                            mort_med_hitconf:  d.mort_med_hitconf  ,
-                            mort_med_pod_med:  d.mort_med_pod_med  ,
-                            mort_min_pod_med:  d.mort_min_pod_med   ,
-                            mort_n_values:  d.mort_n_values  ,
-                            n_rep:  d.n_rep  ,
-                            n_rep_max_dev_call: d.n_rep_max_dev_call   ,
-                            n_values:  d.n_values  ,
-                            preferred_name:  d.preferred_name   ,
-                            protocol_id:   d.protocol_id ,
-                            protocol_name_long:  d.protocol_name_long  ,
-                            protocol_name_plot:   d.protocol_name_plot ,
-                            test_condition:   d.test_condition  ,
-                            use_category1:  d.use_category1  ,
-                        };
-                    })
-                    .sortBy('mean_selectivity')
-                    .reverse()
-                    .value();
-
-            tableData = plotData;
-        }
-        console.log(plotData);
-
+            { plotData, tableData } = this.filterData();
         return (
             <div>
                 <h2>

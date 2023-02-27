@@ -239,6 +239,7 @@ class Seazit_readout_resultViewSet(CachedReadOnlyViewSet):
         # readouts contains plus sign (+), it will replace by white space in Django,
         # So I reaplace whitespace back to +
         readouts = self.request.GET.get("readouts", None).replace(" ", "+")
+
         if protocol_ids is None:
              raise ValidationError("requires `protocol_ids` argument.")
         if readouts is None:
@@ -246,6 +247,7 @@ class Seazit_readout_resultViewSet(CachedReadOnlyViewSet):
 
         protocol_ids = protocol_ids.split(",")
         readout_ids = readouts.split(",")
+
         return Response(models.Seazit_readout_result.bmds_responses(protocol_ids, readout_ids))
 
 

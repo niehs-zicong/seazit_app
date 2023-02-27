@@ -8,13 +8,14 @@
 from django.db import models
 from django.db.models import F, Q
 
-
 from django.contrib.postgres.fields import ArrayField
 import matplotlib as mpl
 import numpy as np
 import pandas as pd
+
+
 # import plotly.graph_objs as go
- # import seaborn as sns
+# import seaborn as sns
 # from sklearn import decomposition
 # from sklearn.preprocessing import Imputer
 
@@ -30,10 +31,9 @@ class AnalysisBmcInput(models.Model):
     embryo_type = models.TextField(blank=True, null=True)
     protocol_id = models.IntegerField(blank=True, null=True)
     substance_id = models.IntegerField(blank=True, null=True)
-    input_id = models.IntegerField(blank=True,  primary_key=True)
+    input_id = models.IntegerField(blank=True, primary_key=True)
     screen_hours = models.IntegerField(blank=True, null=True)
     endpoint_name_only = models.TextField(blank=True, null=True)
-
 
     # def __str__(self):
     #     return self.input_id
@@ -41,8 +41,6 @@ class AnalysisBmcInput(models.Model):
     class Meta:
         managed = False
         db_table = 'analysis_bmc_input'
-
-
 
 
 class AnalysisBmcOutput(models.Model):
@@ -85,10 +83,9 @@ class AnalysisBmcOutput(models.Model):
     embryo_type = models.TextField(blank=True, null=True)
     protocol_id = models.IntegerField(blank=True, null=True)
     substance_id = models.IntegerField(blank=True, null=True)
-    input_id = models.IntegerField(blank=True,  primary_key=True)
-    screen_hours = models.IntegerField(blank=True,  primary_key=True)
+    input_id = models.IntegerField(blank=True, primary_key=True)
+    screen_hours = models.IntegerField(blank=True, primary_key=True)
     endpoint_name_only = models.TextField(blank=True, null=True)
-
 
     class Meta:
         managed = False
@@ -103,7 +100,6 @@ class AnalysisInputKey(models.Model):
     class Meta:
         managed = False
         db_table = 'analysis_input_key'
-
 
 
 class SeazitBmcMinMaxVw(models.Model):
@@ -155,10 +151,7 @@ class SeazitDose(models.Model):
         }
 
 
-
 class SeazitEndpointDescription(models.Model):
-
-
     endpoint_id = models.AutoField(primary_key=True)
     protocol_source = models.TextField(blank=True, null=True)
     endpoint_name = models.TextField(blank=True, null=True)
@@ -223,8 +216,7 @@ class SeazitOntology(models.Model):
         qs = (
             cls.objects.all().values_list(*cols)
         )
-        return pd.DataFrame(list(qs),columns=cols)
-
+        return pd.DataFrame(list(qs), columns=cols)
 
 
 class SeazitPlateScreen(models.Model):
@@ -249,7 +241,6 @@ class SeazitProtocol(models.Model):
     test_condition = models.TextField(blank=True, null=True)
     protocol_name_long = models.TextField(blank=True, null=True)
     protocol_name_plot = models.TextField(blank=True, null=True)
-
 
     # def __str__(self):
     #     return self.protocol_name
@@ -312,7 +303,6 @@ class SeazitSelectivity(models.Model):
     final_dev_call = models.TextField(blank=True, null=True)
     malformation = models.TextField(blank=True, null=True)
 
-
     class Meta:
         managed = False
         db_table = 'seazit_selectivity'
@@ -366,7 +356,7 @@ class SeazitWell(models.Model):
     plate_screen_id = models.IntegerField(blank=True, null=True)
     dose_id = models.IntegerField(blank=True, null=True)
     recording_id = models.IntegerField(blank=True, null=True)
-    substance_id = models.IntegerField(blank=True,  primary_key=True)
+    substance_id = models.IntegerField(blank=True, primary_key=True)
 
     class Meta:
         managed = False
@@ -374,7 +364,6 @@ class SeazitWell(models.Model):
 
 
 class Seazit_chemical_info(models.Model):
-
     substance_name_by_lab = models.TextField(blank=True, null=True)
     substance_type = models.IntegerField(blank=True, null=True)
     substance_lab = models.TextField(blank=True, null=True)
@@ -394,8 +383,6 @@ class Seazit_chemical_info(models.Model):
     use_category1 = models.TextField(blank=True, null=True)
     use_category2 = models.TextField(blank=True, null=True)
     compound_name = models.TextField(blank=True, null=True)
-
-
 
     # def __str__(self):
     #     return self.input_id
@@ -427,11 +414,10 @@ class Seazit_chemical_info(models.Model):
         qs = (
             cls.objects.all().values_list(*cols).distinct()
         )
-        return pd.DataFrame(list(qs),columns=cols)
+        return pd.DataFrame(list(qs), columns=cols)
+
 
 class Seazit_readout_result(models.Model):
-
-
     input_chembase = models.TextField(blank=True, null=True)
     substance_name_by_lab = models.TextField(blank=True, null=True)
     plate_name = models.TextField(blank=True, null=True)
@@ -484,113 +470,112 @@ class Seazit_readout_result(models.Model):
     @classmethod
     def concentration_responses(cls, protocol_ids, readout_ids, chemical_ids):
         cols = (
-                "input_chembase",
-                "substance_name_by_lab",
-                "plate_name",
-                "dose_id",
-                "endpoint_name",
-                "n",
-                "n_in",
-                "embryo_type",
-                "protocol_id",
-                "substance_id",
-                "input_id",
-                "endpoint_name_only",
-                "endpoint_name_protocol",
-                "dose",
-                "dose_unit",
-                "protocol_source",
-                "plate_map_name",
-                "plate_screen_time_end",
-                "plate_screen_id",
-                "hour_post_fertilization",
-                "substance_type",
-                "substance_lab",
-                "substance_code",
-                "seazit_substance_id",
-                "casrn",
-                "stock_conc_mm",
-                "supplier",
-                "lot_number",
-                "coa_purity",
-                "determined_purity",
-                "dtxsid",
-                "preferred_name",
-                "use_category1",
-                "use_category2",
-                "compound_name",
-                "lab_anonymous_code",
-                "test_condition",
-                "protocol_name_long",
-                "protocol_name_plot",
-            )
-        dr =cls.objects.filter(
-                protocol_id__in=protocol_ids , endpoint_name_protocol__in=readout_ids, casrn__in=chemical_ids
-                ).values(*cols)
-        cols = (
-                "trsh",
-                "rnge",
-                "endpoint_name",
-                "input_chembase",
-                "plate_name",
-                "lowest_conc",
-                "highest_conc",
-                "n_conc",
-                "mean_conc_spacing",
-                "max_resp_med",
-                "min_resp_med",
-                "ncorrected_med",
-                "emax_med",
-                "slope_med",
-                "auc_med",
-                "wauc_med",
-                "wauc_prev_med",
-                "ec50_med",
-                "pod_med",
-                "emax_ciu",
-                "slope_ciu",
-                "auc_ciu",
-                "wauc_ciu",
-                "wauc_prev_ciu",
-                "ec50_ciu",
-                "pod_ciu",
-                "emax_cil",
-                "slope_cil",
-                "auc_cil",
-                "wauc_cil",
-                "wauc_prev_cil",
-                "ec50_cil",
-                "pod_cil",
-                "n_curves",
-                "hit_confidence",
-                "embryo_type",
-                "protocol_id",
-                "substance_id",
-                "input_id",
-                "screen_hours",
-                "endpoint_name_only",
-                "casrn",
-                "dtxsid",
-                "preferred_name",
-                "use_category1",
-                "use_category2",
-                "compound_name",
-                "substance_code",
-                "lab_anonymous_code",
-                "test_condition",
-                "protocol_name_long",
-                "protocol_name_plot",
-                "endpoint_name_protocol",
+            "input_chembase",
+            "substance_name_by_lab",
+            "plate_name",
+            "dose_id",
+            "endpoint_name",
+            "n",
+            "n_in",
+            "embryo_type",
+            "protocol_id",
+            "substance_id",
+            "input_id",
+            "endpoint_name_only",
+            "endpoint_name_protocol",
+            "dose",
+            "dose_unit",
+            "protocol_source",
+            "plate_map_name",
+            "plate_screen_time_end",
+            "plate_screen_id",
+            "hour_post_fertilization",
+            "substance_type",
+            "substance_lab",
+            "substance_code",
+            "seazit_substance_id",
+            "casrn",
+            "stock_conc_mm",
+            "supplier",
+            "lot_number",
+            "coa_purity",
+            "determined_purity",
+            "dtxsid",
+            "preferred_name",
+            "use_category1",
+            "use_category2",
+            "compound_name",
+            "lab_anonymous_code",
+            "test_condition",
+            "protocol_name_long",
+            "protocol_name_plot",
         )
-        analysisbmcoutput =Seazit_bmc_readout_result.objects.filter(
-                protocol_id__in=protocol_ids , endpoint_name_protocol__in=readout_ids, casrn__in=chemical_ids
-                ).values(*cols)
+        dr = cls.objects.filter(
+            protocol_id__in=protocol_ids, endpoint_name_protocol__in=readout_ids, casrn__in=chemical_ids
+        ).values(*cols)
+        cols = (
+            "trsh",
+            "rnge",
+            "endpoint_name",
+            "input_chembase",
+            "plate_name",
+            "lowest_conc",
+            "highest_conc",
+            "n_conc",
+            "mean_conc_spacing",
+            "max_resp_med",
+            "min_resp_med",
+            "ncorrected_med",
+            "emax_med",
+            "slope_med",
+            "auc_med",
+            "wauc_med",
+            "wauc_prev_med",
+            "ec50_med",
+            "pod_med",
+            "emax_ciu",
+            "slope_ciu",
+            "auc_ciu",
+            "wauc_ciu",
+            "wauc_prev_ciu",
+            "ec50_ciu",
+            "pod_ciu",
+            "emax_cil",
+            "slope_cil",
+            "auc_cil",
+            "wauc_cil",
+            "wauc_prev_cil",
+            "ec50_cil",
+            "pod_cil",
+            "n_curves",
+            "hit_confidence",
+            "embryo_type",
+            "protocol_id",
+            "substance_id",
+            "input_id",
+            "screen_hours",
+            "endpoint_name_only",
+            "casrn",
+            "dtxsid",
+            "preferred_name",
+            "use_category1",
+            "use_category2",
+            "compound_name",
+            "substance_code",
+            "lab_anonymous_code",
+            "test_condition",
+            "protocol_name_long",
+            "protocol_name_plot",
+            "endpoint_name_protocol",
+        )
+        analysisbmcoutput = Seazit_bmc_readout_result.objects.filter(
+            protocol_id__in=protocol_ids, endpoint_name_protocol__in=readout_ids, casrn__in=chemical_ids
+        ).values(*cols)
 
         return dict(dose_response=list(dr), bmcoutput=list(analysisbmcoutput))
 
     @classmethod
     def bmds_responses(cls, protocol_ids, readout_ids):
-
         cols = (
             "protocol_id",
             "endpoint_name",
@@ -626,21 +611,15 @@ class Seazit_readout_result(models.Model):
             "protocol_name_long",
             "protocol_name_plot",
         )
-        # print (protocol_ids)
-        #
-        # print (readout_ids)
-        bmdActivitySelectivity =Seazit_bmc_result.objects.filter(
-                protocol_id__in=protocol_ids , endpoint_name_protocol__in=readout_ids
-                ).values(*cols)
-
+        bmdActivitySelectivity = Seazit_bmc_result.objects.filter(
+            protocol_id__in=protocol_ids, endpoint_name_protocol__in=readout_ids
+        ).values(*cols)
 
         return dict(
-                     bmd_activity_selectivity = list(bmdActivitySelectivity))
-
+            bmd_activity_selectivity=list(bmdActivitySelectivity))
 
     @classmethod
     def integrative_responses(cls, protocol_ids, chemical_ids):
-
         cols = (
             "protocol_id",
             "endpoint_name",
@@ -693,16 +672,15 @@ class Seazit_readout_result(models.Model):
 
         )
 
-        integrativeActivitySelectivity =Seazit_integrative_result.objects.filter(
-                protocol_id__in=protocol_ids ,  casrn__in=chemical_ids
-                ).values(*cols)
+        integrativeActivitySelectivity = Seazit_integrative_result.objects.filter(
+            protocol_id__in=protocol_ids, casrn__in=chemical_ids
+        ).values(*cols)
 
         return dict(
-                     integrative_activity_selectivity = list(integrativeActivitySelectivity))
+            integrative_activity_selectivity=list(integrativeActivitySelectivity))
 
 
 class Seazit_bmc_readout_result(models.Model):
-
     trsh = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     rnge = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     endpoint_name = models.TextField(blank=True, null=True)
@@ -742,8 +720,8 @@ class Seazit_bmc_readout_result(models.Model):
     embryo_type = models.TextField(blank=True, null=True)
     protocol_id = models.IntegerField(blank=True, null=True)
     substance_id = models.IntegerField(blank=True, null=True)
-    input_id = models.IntegerField(blank=True,  primary_key=True)
-    screen_hours = models.IntegerField(blank=True,  primary_key=True)
+    input_id = models.IntegerField(blank=True, primary_key=True)
+    screen_hours = models.IntegerField(blank=True, primary_key=True)
     endpoint_name_only = models.TextField(blank=True, null=True)
     casrn = models.TextField(blank=True, null=True)
     dtxsid = models.TextField(blank=True, null=True)
@@ -761,17 +739,12 @@ class Seazit_bmc_readout_result(models.Model):
 
     endpoint_name_protocol = models.TextField(blank=True, null=True)
 
-
     class Meta:
         managed = False
         db_table = 'mvw_seazit_bmc_readout_result'
 
 
-
-
 class Seazit_bmc_selectivity_result(models.Model):
-
-
     protocol_id = models.IntegerField(blank=True, null=True)
     endpoint_name = models.TextField(blank=True, null=True)
     casrn = models.TextField(blank=True, null=True)
@@ -793,10 +766,10 @@ class Seazit_bmc_selectivity_result(models.Model):
     protocol_name_long = models.TextField(blank=True, null=True)
     protocol_name_plot = models.TextField(blank=True, null=True)
 
-
     class Meta:
         managed = False
         db_table = 'mvw_seazit_bmc_selectivity_result'
+
 
 class Seazit_bmc_min_max(models.Model):
     protocol_id = models.IntegerField(blank=True, null=True)
@@ -821,10 +794,7 @@ class Seazit_bmc_min_max(models.Model):
         db_table = 'mvw_seazit_bmc_min_max'
 
 
-
 class Seazit_bmc_result(models.Model):
-
-
     protocol_id = models.IntegerField(blank=True, null=True)
     endpoint_name = models.TextField(blank=True, null=True)
     casrn = models.TextField(blank=True, null=True)
@@ -865,15 +835,12 @@ class Seazit_bmc_result(models.Model):
     protocol_name_long = models.TextField(blank=True, null=True)
     protocol_name_plot = models.TextField(blank=True, null=True)
 
-
     class Meta:
         managed = False
         db_table = 'mvw_seazit_bmc_result'
 
 
-
 class Seazit_ui_panel(models.Model):
-
     protocol_name = models.TextField(blank=True, null=True)
     protocol_source = models.TextField(blank=True, null=True)
     seazit_protocol_id = models.IntegerField(blank=True, null=True)
@@ -888,6 +855,8 @@ class Seazit_ui_panel(models.Model):
     hour_post_fertilization = models.IntegerField(blank=True, null=True)
     endpoint_description = models.TextField(blank=True, null=True)
 
+    developmental_defect_grouping_granular = models.TextField(blank=True, null=True)
+    developmental_defect_grouping_general = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -910,12 +879,14 @@ class Seazit_ui_panel(models.Model):
 
             "hour_post_fertilization",
             "endpoint_description",
-
+            "developmental_defect_grouping_granular",
+            "developmental_defect_grouping_general",
         )
         qs = (
             cls.objects.all().values_list(*cols)
         )
-        return pd.DataFrame(list(qs),columns=cols)
+        return pd.DataFrame(list(qs), columns=cols)
+
 
 class Seazit_integrative_result(models.Model):
     protocol_id = models.IntegerField(blank=True, null=True)
@@ -963,8 +934,6 @@ class Seazit_integrative_result(models.Model):
     developmental_defect_grouping_general = models.TextField(blank=True, null=True)
     seazit_recording_id = models.IntegerField(blank=True, null=True)
 
-
     class Meta:
         managed = False
         db_table = 'mvw_seazit_integrative_result'
-

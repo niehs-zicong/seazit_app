@@ -37,49 +37,47 @@ class DoseResponse extends React.Component {
             return '';
         }
         let keys, groupKeys, collapsedData, responses, yrange, offset;
-            (keys = _.chain(data.dose_response)
-                .map('key')
+        (keys = _.chain(data.dose_response)
+            .map('key')
+            .uniq()
+            .value()),
+            (groupKeys = _.chain(data.dose_response)
+                .map('groupKey')
                 .uniq()
                 .value()),
-                (groupKeys = _.chain(data.dose_response)
-                    .map('groupKey')
-                    .uniq()
-                    .value()),
-                (collapsedData = _.chain(keys)
-                    .map((k) => {
-                        return {
-                            key: k,
-                            groupKeys,
-                            dose_response: _.filter(data.dose_response, { key: k }),
-                            bmcoutput: _.filter(data.bmcoutput, { key: k }),
-                        };
-                    })
-                    .each((d, k) => {
-                        let dr = d.dose_response[0];
-                        (d.title = this.getPlotTitle(dr, collapse)),
-                            (d.casrn = dr.casrn),
-                            (d.endpoint_name = dr.endpoint_name),
-                            (d.input_ids = _.chain(d.bmcoutput)
-                                .map('input_id')
-                                .uniq()
-                                .value()),
-                            // filter with input_ids to filter bmcout into different case
-                            (d.bmcoutput = d.bmcoutput.filter((i) =>
-                                d.input_ids.includes(i.input_id)
-                            )),
-                            (d.substance_code_input_ids = _.chain(
-                                d.dose_response.filter((i) => d.input_ids.includes(i.input_id))
-                            )
-                                .map('substance_code_input_id')
-                                .uniq()
-                                .value());
-                    })
-                    .sortBy('endpoint_name')
-                    .sortBy('casrn')
-                    .value());
+            (collapsedData = _.chain(keys)
+                .map((k) => {
+                    return {
+                        key: k,
+                        groupKeys,
+                        dose_response: _.filter(data.dose_response, { key: k }),
+                        bmcoutput: _.filter(data.bmcoutput, { key: k }),
+                    };
+                })
+                .each((d, k) => {
+                    let dr = d.dose_response[0];
+                    (d.title = this.getPlotTitle(dr, collapse)),
+                        (d.casrn = dr.casrn),
+                        (d.endpoint_name = dr.endpoint_name),
+                        (d.input_ids = _.chain(d.bmcoutput)
+                            .map('input_id')
+                            .uniq()
+                            .value()),
+                        // filter with input_ids to filter bmcout into different case
+                        (d.bmcoutput = d.bmcoutput.filter((i) => d.input_ids.includes(i.input_id))),
+                        (d.substance_code_input_ids = _.chain(
+                            d.dose_response.filter((i) => d.input_ids.includes(i.input_id))
+                        )
+                            .map('substance_code_input_id')
+                            .uniq()
+                            .value());
+                })
+                .sortBy('endpoint_name')
+                .sortBy('casrn')
+                .value());
 
         yrange = [0, 100];
-
+        console.log('collapsedData', data, keys, collapsedData);
         return {
             data,
             collapsedData,
@@ -215,12 +213,8 @@ class DoseResponse extends React.Component {
 
     updateData(data, collapse) {
         this.setKeys(data, collapse);
-        console.log('dr1');
 
-        console.log(data);
         let update = this.collapseData(data, collapse);
-        console.log(update);
-        console.log(update.collapsedData);
 
         let scale = this.getColorScale(update.collapsedData, collapse);
         this.setState({
@@ -671,7 +665,7 @@ class DoseResponseMort120 extends React.Component {
 
                 data.push({
                     x: _.map(drs_split, 'dose'),
-                 y: drs_split.map((obj) => {
+                    y: drs_split.map((obj) => {
                         return ((obj.n_in / obj.n) * 100).toFixed(2);
                     }),
                     legendgroup: 'plot',

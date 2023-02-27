@@ -162,6 +162,7 @@ const AXIS_LINEAR = 1,
                     value={values}
                 >
                     {_.map(options, (value, category) => {
+                        // console.log("selecttions", options, value, category)
                         return (
                             <optgroup key={category} label={category}>
                                 {value.map((d) => (
@@ -190,14 +191,12 @@ const AXIS_LINEAR = 1,
         // console.log(ids, ro, chems);
         return `${URL_CONCRESPMATRIX}?format=json&protocol_ids=${ids}&readouts=${ro}&casrns=${chems}`;
     },
-    getBmdsUrl = function(protocol_id, readout_id) {
-        if (protocol_id.length === 0 || readout_id.length === 0) {
+    getBmdsUrl = function(protocol_id, readout_ids) {
+        if (protocol_id.length === 0 || readout_ids.length === 0) {
             return null;
         }
         let id = protocol_id,
-            // ro = readout_id.join(',');
-            ro = readout_id;
-
+            ro = readout_ids.join(',');
         // return url, ro is the readout_id
         return `${URL_BMD}?format=json&protocol_ids=${id}&readouts=${ro}`;
     },

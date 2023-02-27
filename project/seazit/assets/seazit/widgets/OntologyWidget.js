@@ -7,12 +7,11 @@ import {
     renderSelectMultiWidget,
     renderSelectMultiOptgroupWidget,
     integrative_Granular,
-    integrative_General
+    integrative_General,
 } from '../shared';
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
 class OntologyWidget extends BaseWidget {
-
     constructor(props) {
         super(props);
     }
@@ -47,7 +46,6 @@ class OntologyWidget extends BaseWidget {
                     </label>
                 </div>
             </div>
-
         );
     }
 
@@ -56,29 +54,32 @@ class OntologyWidget extends BaseWidget {
         if (state.ontologyType === integrative_Granular) {
             opts = _.chain(state.Seazit_ontology)
                 .map((r) => {
-                return {
-                    key: r.developmental_defect_grouping_granular,
-                    label: r.developmental_defect_grouping_granular,
-                    developmental_defect_catergories:r.developmental_defect_catergories,
-                    developmental_defect_grouping_general:r.developmental_defect_grouping_general,
-                    developmental_defect_grouping_granular:r.developmental_defect_grouping_granular,
-                    hour_post_fertilization:r.hour_post_fertilization,
-                    ontology_id_number:r.ontology_id_number,
-                    proposed_ontology_label:r.proposed_ontology_label,
-                    protocol_source:r.protocol_source,
-                    recording_name:r.recording_name,
-                    seazit_recording_id:r.seazit_recording_id,
-                };
-            })
-            .reject((r) => r.key === null)
-            .uniqBy('developmental_defect_grouping_granular')
-            .sortBy('developmental_defect_grouping_granular')
-            .groupBy('developmental_defect_catergories')
-            .value()
-            ;
+                    return {
+                        key: r.developmental_defect_grouping_granular,
+                        label: r.developmental_defect_grouping_granular,
+                        developmental_defect_catergories: r.developmental_defect_catergories,
+                        developmental_defect_grouping_general:
+                            r.developmental_defect_grouping_general,
+                        developmental_defect_grouping_granular:
+                            r.developmental_defect_grouping_granular,
+                        hour_post_fertilization: r.hour_post_fertilization,
+                        ontology_id_number: r.ontology_id_number,
+                        proposed_ontology_label: r.proposed_ontology_label,
+                        protocol_source: r.protocol_source,
+                        recording_name: r.recording_name,
+                        seazit_recording_id: r.seazit_recording_id,
+                    };
+                })
+                .reject((r) => r.key === null)
+                .uniqBy('developmental_defect_grouping_granular')
+                .sortBy('developmental_defect_grouping_granular')
+                .groupBy('developmental_defect_catergories')
+                .value();
             if (_.keys(opts).length === 0) {
-                    return null;
+                return null;
             }
+            console.log('test', opts, state.ontologyGroup);
+
             return renderSelectMultiOptgroupWidget(
                 'ontologyGroup',
                 'Granular',
@@ -89,29 +90,33 @@ class OntologyWidget extends BaseWidget {
         } else {
             opts = _.chain(state.Seazit_ontology)
                 .map((r) => {
-                return {
-                    key: r.developmental_defect_grouping_general,
-                    label: r.developmental_defect_grouping_general,
-                    developmental_defect_catergories:r.developmental_defect_catergories,
-                    developmental_defect_grouping_general:r.developmental_defect_grouping_general,
-                    developmental_defect_grouping_granular:r.developmental_defect_grouping_granular,
-                    hour_post_fertilization:r.hour_post_fertilization,
-                    ontology_id_number:r.ontology_id_number,
-                    proposed_ontology_label:r.proposed_ontology_label,
-                    protocol_source:r.protocol_source,
-                    recording_name:r.recording_name,
-                    seazit_recording_id:r.seazit_recording_id,                };
-            })
-            .reject((r) => r.key === null)
-            .uniqBy('developmental_defect_grouping_general')
-            .sortBy('developmental_defect_grouping_general')
-            .groupBy('developmental_defect_catergories')
-            .value();
+                    return {
+                        key: r.developmental_defect_grouping_general,
+                        label: r.developmental_defect_grouping_general,
+                        developmental_defect_catergories: r.developmental_defect_catergories,
+                        developmental_defect_grouping_general:
+                            r.developmental_defect_grouping_general,
+                        developmental_defect_grouping_granular:
+                            r.developmental_defect_grouping_granular,
+                        hour_post_fertilization: r.hour_post_fertilization,
+                        ontology_id_number: r.ontology_id_number,
+                        proposed_ontology_label: r.proposed_ontology_label,
+                        protocol_source: r.protocol_source,
+                        recording_name: r.recording_name,
+                        seazit_recording_id: r.seazit_recording_id,
+                    };
+                })
+                .reject((r) => r.key === null)
+                .uniqBy('developmental_defect_grouping_general')
+                .sortBy('developmental_defect_grouping_general')
+                .groupBy('developmental_defect_catergories')
+                .value();
 
             if (_.keys(opts).length === 0) {
-                    return null;
-                }
+                return null;
+            }
 
+            console.log('test', opts, state.ontologyGroup);
             return renderSelectMultiOptgroupWidget(
                 'ontologyGroup',
                 'General',
@@ -124,6 +129,7 @@ class OntologyWidget extends BaseWidget {
 
     render() {
         let state = this.props.stateHolder.state;
+        console.log(state);
         return (
             <div className="clearfix">
                 {this._renderFilterBy(state)}

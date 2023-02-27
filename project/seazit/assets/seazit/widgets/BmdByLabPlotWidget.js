@@ -15,7 +15,6 @@ class BmdByLabPlotWidget extends BaseWidget {
             <div>
                 <label>Select visual: </label>
                 <div className="radio">
-                {/*<div >*/}
                     <label>
                         <input
                             type="radio"

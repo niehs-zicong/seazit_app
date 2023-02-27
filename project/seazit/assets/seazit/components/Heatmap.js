@@ -6,8 +6,18 @@ import * as d3 from 'd3';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import BootstrapModal from 'utils/BootstrapModal';
-import { Header, SingleCurveBody, MultipleCurveBody } from './DoseResponseModel';
-import { getDoseResponsesUrl, integrativeHandleCellClick, NO_COLLAPSE } from '../shared';
+import {
+    Header,
+    SingleCurveBody,
+    MultipleCurveBody,
+    molecularGraphBody,
+} from './DoseResponseModel';
+import {
+    COLLAPSE_WITH_Mortality120,
+    getDoseResponsesUrl,
+    integrativeHandleCellClick,
+    NO_COLLAPSE,
+} from '../shared';
 
 import styles from './graph.css';
 // import styles from './ResponseFigure.css';
@@ -15,6 +25,7 @@ import styles from './graph.css';
 import { getLog10AxisFunction } from 'utils/d3';
 import DoseResponseGridWidget from '../widgets/DoseResponseGridWidget';
 import IntegrativeCheckBoxWidget from '../widgets/IntegrativeCheckBoxWidget';
+import { DoseResponseMort120 } from './DoseResponse';
 
 let addStripMask = function(svg) {
     // add strip mask to top of d3-selected svg
@@ -42,17 +53,6 @@ let addStripMask = function(svg) {
         .attr('width', '100%')
         .attr('height', '100%')
         .style('fill', 'url(#maskStripePattern)');
-};
-let StaticExample = function() {
-    return (
-        <div className="col-sm-10">
-            <iframe
-                src="https://comptox.epa.gov/dashboard-api/ccdapp1/chemical-files/image/by-dtxsid/DTXSID6021248"
-                width="400"
-                height="400"
-            ></iframe>
-        </div>
-    );
 };
 let renderPlot = function(el, data, legendData) {
     $(el).empty();
@@ -96,36 +96,21 @@ let renderPlot = function(el, data, legendData) {
             console.log('protocol_source_ids');
             console.log(protocol_source_ids);
 
-            // new BootstrapModal(Header, MultipleCurveBody, {
-            //     title: label,
-            //     readout_ids,
-            //     casrns,
-            // });
+            new BootstrapModal(Header, MultipleCurveBody, {
+                title: label,
+                readout_ids,
+                casrns,
+            });
         },
         // draw y-axis
         handleYLabelClick = function(label) {
-            console.log('label');
-            console.log(label);
-            console.log(yMap);
             let cells = yMap[label],
-                // casrns = [cells[0].y_key],
-                // readout_ids = _.map(cells, 'x_key')
                 casrns = [...new Set(cells.map((item) => item.casrn))],
                 dtxsids = [...new Set(cells.map((item) => item.dtxsid))];
             console.log(cells);
-            console.log(casrns);
-            console.log(dtxsids);
-            console.log('Header');
-            console.log(Header);
-
-            // new BootstrapModal(Header, MultipleCurveBody, {
-            //     title: label,
-            //     readout_ids,
-            //     casrns,
-            // });
-            new BootstrapModal(Header, StaticExample, {
-                title: 'ZW Chemical Example label',
-                casrns,
+            new BootstrapModal(Header, molecularGraphBody, {
+                title: `${dtxsids[0]} // ${label} //  molecularGraph  ZWTBD`,
+                dtxsid: dtxsids[0],
             });
         },
         mouseover = function(d) {

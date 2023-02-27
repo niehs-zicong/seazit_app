@@ -1093,7 +1093,7 @@ webpackJsonp(
                                 categories: [],
                                 selectivityCutoff: 0.5,
                                 selectedAxis: C.AXIS_LOG10,
-                                assay: [],
+                                assays: [],
                                 readouts: [],
                                 visualization: C.BMDVIZ_ACTIVITY,
                             }),
@@ -1113,7 +1113,7 @@ webpackJsonp(
                                 key: 'renderNoSelection',
                                 value: function() {
                                     return (0, C.renderNoSelected)({
-                                        hasAssay: this.state.assay.length > 0,
+                                        hasAssay: this.state.assays.length > 0,
                                         hasReadouts: this.state.readouts.length > 0,
                                     });
                                 },
@@ -1215,7 +1215,7 @@ webpackJsonp(
                                     if (!this.state.metadataLoaded)
                                         return s.default.createElement(d.default, null);
                                     var e = (0, C.getBmdsUrl)(
-                                        this.state.assay,
+                                        this.state.assays,
                                         this.state.readouts
                                     );
                                     return s.default.createElement(
@@ -3713,10 +3713,10 @@ webpackJsonp(
                                               this.handleSelectMultiChange
                                           )
                                         : (0, _.renderSelectSingleWidget)(
-                                              'assay',
+                                              'assays',
                                               'Dataset',
                                               t,
-                                              e.assay,
+                                              e.assays,
                                               this.handleSelectChange
                                           );
                                 },
@@ -3727,7 +3727,7 @@ webpackJsonp(
                                     var t =
                                             !0 === this.props.multiAssaySelector
                                                 ? e.assays
-                                                : [e.assay],
+                                                : [e.assays],
                                         n = c.default
                                             .chain(e.Seazit_ui_panel)
                                             .filter(function(e) {

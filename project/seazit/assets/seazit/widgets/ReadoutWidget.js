@@ -3,6 +3,7 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import BaseWidget from './BaseWidget';
+import OntologyTypeWidget from './OntologyTypeWidget';
 
 import {
     renderSelectMultiWidget,
@@ -11,6 +12,8 @@ import {
     ConcentrationResponseTab,
     BMCTab,
     IntegrativeAnalysesTab,
+    integrative_Granular,
+    integrative_General,
 } from '../shared';
 
 class ReadoutWidget extends BaseWidget {
@@ -21,7 +24,6 @@ class ReadoutWidget extends BaseWidget {
     constructor(props) {
         super(props);
     }
-
 
     _renderSingleDatasetSelector(state) {
         let options = _.chain(state.protocol_data)
@@ -44,15 +46,15 @@ class ReadoutWidget extends BaseWidget {
             .sortBy('seazit_protocol_id')
             .value();
 
-            return renderSelectSingleWidget(
-                'assay',
-                'dataset',
-                options,
-                state.assay,
-                this.handleSelectChange,
-            );
-
+        return renderSelectSingleWidget(
+            'assays',
+            'dataset',
+            options,
+            state.assays,
+            this.handleSelectChange
+        );
     }
+
     _renderMultipleDatasetSelector(state) {
         let options = _.chain(state.protocol_data)
             .map((r) => {
@@ -71,138 +73,209 @@ class ReadoutWidget extends BaseWidget {
                     protocol_name_plot: r.protocol_name_plot,
                 };
             })
+
             .sortBy('seazit_protocol_id')
             .value();
 
-            return renderSelectMultiWidget(
-                'assays',
-                'dataset',
-                options,
-                state.assays,
-                this.handleSelectMultiChange,
-            );
+        return renderSelectMultiWidget(
+            'assays',
+            'dataset',
+            options,
+            state.assays,
+            this.handleSelectMultiChange
+        );
+    }
 
+    _renderFilterBy(state) {
+        if (state.assays.length === 0) {
+            return null;
+        }
+        return (
+            <div>
+                <label>Filter endpoints by:</label>
+                <div className="radio">
+                    <label>
+                        <input
+                            type="radio"
+                            name="ontologyType"
+                            onChange={this.handleRadioChange}
+                            value={integrative_Granular}
+                            checked={state.ontologyType === integrative_Granular}
+                        />
+                        Granular
+                    </label>
+
+                    <span style={{ paddingLeft: '0.5em', paddingRight: '0.5em' }}>|</span>
+
+                    <label>
+                        <input
+                            type="radio"
+                            name="ontologyType"
+                            onChange={this.handleRadioChange}
+                            value={integrative_General}
+                            checked={state.ontologyType === integrative_General}
+                        />
+                        General
+                    </label>
+                </div>
+            </div>
+        );
     }
 
     _renderSingleEndpointSelector(state) {
-        let assay =  [state.assay];
-        let opts = _.chain(state.Seazit_ui_panel)
-            .filter((r) => {
-                return _.includes(assay, r.seazit_protocol_id.toString());
-            })
-            .map((r) => {
-                    return {
-                        key: r.endpoint_name_protocol.toString(),
-                        category: r.protocol_name_plot,
-                        label: r.endpoint_name,
-                        description: r.endpoint_description,
-                        protocol_name: r.protocol_name,
-                        seazit_protocol_id: r.seazit_protocol_id.toString(),
-                        study_phase: r.study_phase,
-                        test_condition: r.test_condition,
-                        protocol_name_long: r.protocol_name_long,
-                        protocol_name_plot: r.protocol_name_plot,
-                        endpoint_name_protocol: r.endpoint_name_protocol,
-                    };
-                })
-            .filter((r) => {
-                return r.key !== 'Mortality@120' && r.key !== 'Mortality@24' && !(r.key.includes('@24'))
-            })
-                .sortBy('label')
-                .sortBy( function( r ) { return r.label !== 'MalformedAny+Mort@120'; } )
-                .sortBy('category')
-                .groupBy('category')
-                .value();
+        // Zicong: Render Endpoints by assays, then sort them by Ontology type. 2 OntologyTypes.
+        let assays = [state.assays],
+            opts,
+            ontologyGroup;
 
-            if (_.keys(opts).length === 0) {
-                return null;
-            }
-            opts = Object.values(opts)[0];
+        if (state.ontologyType === integrative_Granular) {
+            ontologyGroup = 'developmental_defect_grouping_granular';
+        } else {
+            ontologyGroup = 'developmental_defect_grouping_general';
+        }
 
-            // single selections.
-            return renderSelectSingleWidget(
-                'readouts',
-                'endpoint',
-                opts,
-                state.readouts,
-                this.handleSelectChange
-            );
-    }
-
-
-    _renderMultipleEndpointSelector(state) {
-        let assays =  state.assays;
-
-        let opts = _.chain(state.Seazit_ui_panel)
+        opts = _.chain(state.Seazit_ui_panel)
             .filter((r) => {
                 return _.includes(assays, r.seazit_protocol_id.toString());
             })
             .map((r) => {
-                    return {
-                        key: r.endpoint_name_protocol.toString(),
-                        category: r.protocol_name_plot,
-                        label: r.endpoint_name,
-                        description: r.endpoint_description,
-                        protocol_name: r.protocol_name,
-                        seazit_protocol_id: r.seazit_protocol_id,
-                        study_phase: r.study_phase,
-                        test_condition: r.test_condition,
-                        protocol_name_long: r.protocol_name_long,
-                        protocol_name_plot: r.protocol_name_plot,
-                        endpoint_name_protocol: r.endpoint_name_protocol,
-                    };
-                })
-                .sortBy('label')
-                .sortBy( function( r ) { return r.label !== 'Mortality@24' && r.label !==  'Mortality@120' && r.label !==  'MalformedAny+Mort@120'; } )
-                .sortBy('category')
-                .groupBy('category')
-                .value();
-            if (_.keys(opts).length === 0) {
-                return null;
-            }
-            return renderSelectMultiOptgroupWidget(
-                'readouts',
-                'endpoint',
-                opts,
-                state.readouts,
-                this.handleSelectMultiChange
-            );
+                return {
+                    key: r.endpoint_name_protocol.toString(),
+                    category: r.protocol_name_plot,
+                    label: r.endpoint_name,
+                    description: r.endpoint_description,
+                    protocol_name: r.protocol_name,
+                    seazit_protocol_id: r.seazit_protocol_id.toString(),
+                    study_phase: r.study_phase,
+                    test_condition: r.test_condition,
+                    protocol_name_long: r.protocol_name_long,
+                    protocol_name_plot: r.protocol_name_plot,
+                    endpoint_name_protocol: r.endpoint_name_protocol,
+                    developmental_defect_grouping_general: r.developmental_defect_grouping_general,
+                    developmental_defect_grouping_granular:
+                        r.developmental_defect_grouping_granular,
+                };
+            })
+
+            .uniqBy('key')
+
+            .filter((r) => {
+                return (
+                    r.key !== 'Mortality@120' && r.key !== 'Mortality@24' && !r.key.includes('@24')
+                );
+            })
+
+            .sortBy('label')
+            .sortBy(function(r) {
+                return r.label !== 'MalformedAny+Mort@120';
+            })
+            .sortBy('category')
+            // .reject((r) => r.key === null)
+            .groupBy(ontologyGroup)
+            .value();
+        if (_.keys(opts).length === 0) {
+            return null;
+        }
+        return renderSelectMultiOptgroupWidget(
+            'readouts',
+            'endpoint',
+            opts,
+            state.readouts,
+            this.handleSelectMultiChange
+        );
     }
 
+    _renderMultipleEndpointSelector(state) {
+        console.log('1st endpoints', state.Seazit_ui_panel);
+
+        let assays = state.assays,
+            opts,
+            ontologyGroup;
+        if (state.ontologyType === integrative_Granular) {
+            ontologyGroup = 'developmental_defect_grouping_granular';
+        } else {
+            ontologyGroup = 'developmental_defect_grouping_general';
+        }
+        console.log('state.assays', assays, 'ontologyGroup', ontologyGroup);
+
+        opts = _.chain(state.Seazit_ui_panel)
+            .filter((r) => {
+                return _.includes(assays, r.seazit_protocol_id.toString());
+            })
+            .map((r) => {
+                return {
+                    key: r.endpoint_name_protocol.toString(),
+                    category: r.protocol_name_plot,
+                    // category2: r.protocol_name_plot,
+                    label: r.endpoint_name,
+                    description: r.endpoint_description,
+                    protocol_name: r.protocol_name,
+                    seazit_protocol_id: r.seazit_protocol_id.toString(),
+                    study_phase: r.study_phase,
+                    test_condition: r.test_condition,
+                    protocol_name_long: r.protocol_name_long,
+                    protocol_name_plot: r.protocol_name_plot,
+                    endpoint_name_protocol: r.endpoint_name_protocol,
+                    developmental_defect_grouping_general: r.developmental_defect_grouping_general,
+                    developmental_defect_grouping_granular:
+                        r.developmental_defect_grouping_granular,
+                };
+            })
+            .uniqBy('key')
+            .filter((r) => {
+                return (
+                    r.key !== 'Mortality@120' && r.key !== 'Mortality@24' && !r.key.includes('@24')
+                );
+            })
+            .sortBy('label')
+            // .sortBy(function (r) {
+            //     return r.label !== 'MalformedAny+Mort@120';
+            // })
+            // .sortBy('category')
+            // .reject((r) => r.key === null)
+            .groupBy(ontologyGroup)
+            .value();
+        if (_.keys(opts).length === 0) {
+            return null;
+        }
+        console.log('filtered endpoints', opts);
+        return renderSelectMultiOptgroupWidget(
+            'readouts',
+            'endpoint',
+            opts,
+            state.readouts,
+            this.handleSelectMultiChange
+        );
+    }
 
     render() {
         let state = this.props.stateHolder.state;
-        switch (state.tabFlag)
-            {
-                case ConcentrationResponseTab:
-                    return(
-                        <div>
-                            {this._renderMultipleDatasetSelector(state)}
-                            {this._renderMultipleEndpointSelector(state)}
-
-                        </div>
-                    )
-            };
-        switch (state.tabFlag)
-            {
-                case BMCTab:
-                    return(
-                        <div>
-                            {this._renderSingleDatasetSelector(state)}
-                            {this._renderSingleEndpointSelector(state)}
-
-                        </div>
-                    )
-            };
-        switch (state.tabFlag)
-            {
-                case IntegrativeAnalysesTab:
-                    return(
-                        <div>
-                            {this._renderMultipleDatasetSelector(state)}
-                        </div>
-                    )
-            };
+        switch (state.tabFlag) {
+            case ConcentrationResponseTab:
+                return (
+                    <div>
+                        {this._renderMultipleDatasetSelector(state)}
+                        <br />
+                        {this._renderFilterBy(state)}
+                        {this._renderMultipleEndpointSelector(state)}
+                    </div>
+                );
+        }
+        switch (state.tabFlag) {
+            case BMCTab:
+                return (
+                    <div>
+                        {this._renderSingleDatasetSelector(state)}
+                        <br />
+                        {this._renderFilterBy(state)}
+                        {this._renderMultipleEndpointSelector(state)}
+                    </div>
+                );
+        }
+        switch (state.tabFlag) {
+            case IntegrativeAnalysesTab:
+                return <div>{this._renderMultipleDatasetSelector(state)}</div>;
+        }
     }
 }
 

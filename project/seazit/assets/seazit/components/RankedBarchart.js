@@ -34,12 +34,31 @@ let renderPlot = function(el, data, opts) {
     }
 
     // let pod_medData, mort_pod_medData ;
-    let medData = data
-        , pod_medData, mort_pod_medData;
+    let medData = data,
+        pod_medData,
+        mort_pod_medData,
+        viabilityData,
+        nonviabilityData;
 
-
+    // viabilityData is black dot, NonviabilityData is colored dots.
     pod_medData = _.filter(medData, (d) => d.med_pod_med !== null);
     mort_pod_medData = _.filter(medData, (d) => d.mort_med_pod_med !== null);
+    (nonviabilityData = _.chain(data)
+        .map(
+            (d) =>
+                d.minimimumNonViability &&
+                Object.assign({}, d.minimimumNonViability, {
+                    maximumSelectivity: d.maximumSelectivity,
+                })
+        )
+        .compact()
+        .value()),
+        (viabilityData = _.chain(data)
+            .map('minimimumViability')
+            .compact()
+            .value());
+    console.log('data2', medData, pod_medData, mort_pod_medData);
+
     // set dimensions and margins
     let elWidth = Math.max(Math.floor($(el).innerWidth()), 800),
         margin = { top: 40, right: 100, bottom: 25, left: 300 },
@@ -80,6 +99,7 @@ let renderPlot = function(el, data, opts) {
             .range([0, height])
             .padding(0.1)
             .domain(medData.map((d) => d.preferred_name));
+
     //
     // append plot
     let svg = d3
@@ -214,7 +234,7 @@ let renderPlot = function(el, data, opts) {
             .text((d) => {
                 return d.med_mort_hit_confidence < 0.5
                     ? `≥ ${printFloat(d.mean_selectivity)}`
-                    : printFloat(d.mean_selectivity) ;
+                    : printFloat(d.mean_selectivity);
             })
             .each(function(d) {
                 if (d.med_mort_hit_confidence < 0.5) {
@@ -361,7 +381,6 @@ class RankedBarChart extends React.Component {
     }
 
     _renderPlot(props) {
-
         renderPlot(this.refs.bmd_svg, props.data, {
             isSelective: props.visualization === BMDVIZ_SELECTIVITY,
             selectedAxis: props.selectedAxis,

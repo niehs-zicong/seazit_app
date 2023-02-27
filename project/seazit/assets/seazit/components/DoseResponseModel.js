@@ -91,6 +91,26 @@ SingleCurveBody.propTypes = {
     devtoxreadout_ids: PropTypes.string.isRequired,
 };
 
+class molecularGraphBody extends React.Component {
+    constructor(props) {
+        super(props);
+        // take 75% of the screen width since main body is col-9 size; assume
+        // each plot is ~400px for a reasonable start, make sure it's at least 1
+    }
+    render() {
+        let srcUrl = `https://comptox.epa.gov/dashboard-api/ccdapp1/chemical-files/image/by-dtxsid/${this.props.dtxsid}`;
+        return (
+            <div className="col-sm-10">
+                <iframe src={srcUrl} width="400" height="400"></iframe>
+            </div>
+        );
+    }
+}
+
+molecularGraphBody.propTypes = {
+    dtxsid: PropTypes.string.isRequired,
+};
+
 class MultipleCurveBody extends React.Component {
     constructor(props) {
         super(props);
@@ -164,3 +184,4 @@ MultipleCurveBody.propTypes = {
 export { Header };
 export { SingleCurveBody };
 export { MultipleCurveBody };
+export { molecularGraphBody };

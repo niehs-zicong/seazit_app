@@ -18,6 +18,7 @@ import {
     renderNoSelected,
     CHEMFILTER_CHEMICIAL,
     ConcentrationResponseTab,
+    integrative_Granular,
 } from '../shared';
 
 class DoseResponseMain extends React.Component {
@@ -42,6 +43,7 @@ class DoseResponseMain extends React.Component {
 
             chemicals: [],
             categories: [],
+            ontologyType: integrative_Granular,
 
             // ReadoutSelectorWidget
             assays: [],

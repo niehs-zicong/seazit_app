@@ -15,6 +15,7 @@ import IntegrativePlotWidget from '../widgets/IntegrativePlotWidget';
 import BmdWidget from '../widgets/BmdWidget';
 import ChemicalWidget from '../widgets/ChemicalWidget';
 import OntologyWidget from '../widgets/OntologyWidget';
+import OntologyTypeWidget from '../widgets/OntologyTypeWidget';
 
 import ReadoutWidget from '../widgets/ReadoutWidget';
 import ReadoutCategoryWidget from '../widgets/ReadoutCategoryWidget';
@@ -198,6 +199,7 @@ class IntegrativeAnalysesMain extends React.Component {
                     />
                     <hr />
                     <div>
+                        {/*<OntologyTypeWidget stateHolder={this} />*/}
                         <OntologyWidget stateHolder={this} />
                         <hr />
                     </div>
