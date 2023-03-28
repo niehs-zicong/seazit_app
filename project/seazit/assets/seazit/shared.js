@@ -44,7 +44,7 @@ const AXIS_LINEAR = 1,
     URL_CHEMXLSX = '/static_seazit/resources/seazit/NTP%20Chemical%20Library.xlsx',
     URL_METADATA = '/seazit/api/seazit_metadata/metadata/?format=json',
     // ConcentrationResponse URL
-    URL_CONCRESPMATRIX = '/seazit/api/seazit_result/crResult/',
+    URL_CR = '/seazit/api/seazit_result/crResult/',
     // BMC by lab URL
     URL_BMD = '/seazit/api/seazit_result/bmcByLabResult/',
     URL_INTEGRATIVE = '/seazit/api/seazit_result/integrativeResult/',
@@ -60,15 +60,16 @@ const AXIS_LINEAR = 1,
         'Selectivity is estimated and true value may be higher; viability BMC could not be calculated and was therefore estimated to equal the maximum tested dose.',
     loadMetadata = function(component) {
         d3.json(URL_METADATA, (d) => {
+            console.log('d');
+            console.log(d);
             component.setState({
                 metadataLoaded: true,
                 protocol_data: d.protocol_data,
                 Seazit_chemical_info: d.Seazit_chemical_info,
                 Seazit_ui_panel: d.Seazit_ui_panel,
+                Seazit_ui_panel2: d.Seazit_ui_panel2,
                 Seazit_ontology: d.Seazit_ontology,
             });
-            // console.log("d");
-            // console.log(d);
         });
     },
     data_exportToJsonFile = function(jsonData) {
@@ -189,7 +190,7 @@ const AXIS_LINEAR = 1,
             chems = casrns.join(',');
         // return url, ro is the readout_id
         // console.log(ids, ro, chems);
-        return `${URL_CONCRESPMATRIX}?format=json&protocol_ids=${ids}&readouts=${ro}&casrns=${chems}`;
+        return `${URL_CR}?format=json&protocol_ids=${ids}&readouts=${ro}&casrns=${chems}`;
     },
     getBmdsUrl = function(protocol_id, readout_ids) {
         if (protocol_id.length === 0 || readout_ids.length === 0) {
@@ -198,6 +199,7 @@ const AXIS_LINEAR = 1,
         let id = protocol_id,
             ro = readout_ids.join(',');
         // return url, ro is the readout_id
+        // Mortality@120
         return `${URL_BMD}?format=json&protocol_ids=${id}&readouts=${ro}`;
     },
     getIntegrativeUrl = function(protocol_ids, casrns) {
@@ -217,6 +219,11 @@ const AXIS_LINEAR = 1,
             return v.toExponential(2).toUpperCase();
         } else {
             return v.toFixed(2);
+        }
+    },
+    pod_med_processed = function(v) {
+        if (typeof v === 'number') {
+            return Math.pow(10, v) * 1000000;
         }
     },
     svg_download_form = function(id) {
@@ -250,6 +257,31 @@ const AXIS_LINEAR = 1,
         document.body.removeChild(element);
     },
     integrativeHandleCellClick = function(d) {
+        if (d.endPointList) {
+            if (d.endPointList && d.endPointList.length > 1) {
+                new BootstrapModal(Header, MultipleCurveBody, {
+                    title: d.title,
+                    protocol_id: d.protocol_id,
+                    readout_ids: _.map(d.endPointList, function(x) {
+                        return x + '_' + d.protocol_id;
+                    }),
+                    // if button checked, we will add mortality@120 to each plot
+                    casrns: [d.casrn],
+                    devtoxreadout_ids: d.devtoxEndPointList,
+                });
+            } else {
+                new BootstrapModal(Header, SingleCurveBody, {
+                    title: d.title,
+                    protocol_id: d.protocol_id,
+                    readout_id: d.endpoint_name + '_' + d.protocol_id,
+                    casrn: d.casrn,
+                    devtoxreadout_ids: d.devtoxEndPointList,
+                    // devtoxreadout_ids: d.devtoxEndPointList+ '_' + d.protocol_id,
+                });
+            }
+        }
+    },
+    BMCHandleCellClick = function(d) {
         if (d.endPointList) {
             if (d.endPointList && d.endPointList.length > 1) {
                 new BootstrapModal(Header, MultipleCurveBody, {
@@ -356,4 +388,6 @@ export {
     data_exportToJsonFile,
     svg_download_form,
     integrativeHandleCellClick,
+    BMCHandleCellClick,
+    pod_med_processed,
 };

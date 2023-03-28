@@ -73,7 +73,6 @@ class ReadoutWidget extends BaseWidget {
                     protocol_name_plot: r.protocol_name_plot,
                 };
             })
-
             .sortBy('seazit_protocol_id')
             .value();
 
@@ -122,91 +121,50 @@ class ReadoutWidget extends BaseWidget {
         );
     }
 
-    _renderSingleEndpointSelector(state) {
-        // Zicong: Render Endpoints by assays, then sort them by Ontology type. 2 OntologyTypes.
-        let assays = [state.assays],
-            opts,
-            ontologyGroup;
-
-        if (state.ontologyType === integrative_Granular) {
-            ontologyGroup = 'developmental_defect_grouping_granular';
-        } else {
-            ontologyGroup = 'developmental_defect_grouping_general';
-        }
-
-        opts = _.chain(state.Seazit_ui_panel)
-            .filter((r) => {
-                return _.includes(assays, r.seazit_protocol_id.toString());
-            })
-            .map((r) => {
-                return {
-                    key: r.endpoint_name_protocol.toString(),
-                    category: r.protocol_name_plot,
-                    label: r.endpoint_name,
-                    description: r.endpoint_description,
-                    protocol_name: r.protocol_name,
-                    seazit_protocol_id: r.seazit_protocol_id.toString(),
-                    study_phase: r.study_phase,
-                    test_condition: r.test_condition,
-                    protocol_name_long: r.protocol_name_long,
-                    protocol_name_plot: r.protocol_name_plot,
-                    endpoint_name_protocol: r.endpoint_name_protocol,
-                    developmental_defect_grouping_general: r.developmental_defect_grouping_general,
-                    developmental_defect_grouping_granular:
-                        r.developmental_defect_grouping_granular,
-                };
-            })
-
-            .uniqBy('key')
-
-            .filter((r) => {
-                return (
-                    r.key !== 'Mortality@120' && r.key !== 'Mortality@24' && !r.key.includes('@24')
-                );
-            })
-
-            .sortBy('label')
-            .sortBy(function(r) {
-                return r.label !== 'MalformedAny+Mort@120';
-            })
-            .sortBy('category')
-            // .reject((r) => r.key === null)
-            .groupBy(ontologyGroup)
-            .value();
-        if (_.keys(opts).length === 0) {
-            return null;
-        }
-        return renderSelectMultiOptgroupWidget(
-            'readouts',
-            'endpoint',
-            opts,
-            state.readouts,
-            this.handleSelectMultiChange
-        );
-    }
-
     _renderMultipleEndpointSelector(state) {
-        console.log('1st endpoints', state.Seazit_ui_panel);
-
         let assays = state.assays,
             opts,
-            ontologyGroup;
-        if (state.ontologyType === integrative_Granular) {
-            ontologyGroup = 'developmental_defect_grouping_granular';
-        } else {
-            ontologyGroup = 'developmental_defect_grouping_general';
-        }
-        console.log('state.assays', assays, 'ontologyGroup', ontologyGroup);
+            ontologyGroup,
+            groupBy;
 
+        switch (state.tabFlag) {
+            case ConcentrationResponseTab:
+                groupBy = 'category';
+                break;
+            case BMCTab:
+                if (state.ontologyType === integrative_Granular) {
+                    groupBy = 'developmental_defect_grouping_granular';
+                } else {
+                    groupBy = 'developmental_defect_grouping_general';
+                }
+                break;
+            case IntegrativeAnalysesTab:
+                if (state.ontologyType === integrative_Granular) {
+                    groupBy = 'developmental_defect_grouping_granular';
+                } else {
+                    groupBy = 'developmental_defect_grouping_general';
+                }
+                break;
+            default:
+                return null;
+        }
+
+        // console.log(state)
         opts = _.chain(state.Seazit_ui_panel)
             .filter((r) => {
                 return _.includes(assays, r.seazit_protocol_id.toString());
+            })
+            .reject((r) => {
+                return (
+                    r.endpoint_name == 'Mortality@120' ||
+                    r.endpoint_name == 'Mortality@24' ||
+                    r.endpoint_name.includes('@24')
+                );
             })
             .map((r) => {
                 return {
                     key: r.endpoint_name_protocol.toString(),
                     category: r.protocol_name_plot,
-                    // category2: r.protocol_name_plot,
                     label: r.endpoint_name,
                     description: r.endpoint_description,
                     protocol_name: r.protocol_name,
@@ -222,23 +180,13 @@ class ReadoutWidget extends BaseWidget {
                 };
             })
             .uniqBy('key')
-            .filter((r) => {
-                return (
-                    r.key !== 'Mortality@120' && r.key !== 'Mortality@24' && !r.key.includes('@24')
-                );
-            })
             .sortBy('label')
-            // .sortBy(function (r) {
-            //     return r.label !== 'MalformedAny+Mort@120';
-            // })
-            // .sortBy('category')
-            // .reject((r) => r.key === null)
-            .groupBy(ontologyGroup)
+            .groupBy(groupBy)
             .value();
         if (_.keys(opts).length === 0) {
             return null;
         }
-        console.log('filtered endpoints', opts);
+        console.log(opts);
         return renderSelectMultiOptgroupWidget(
             'readouts',
             'endpoint',
@@ -260,8 +208,7 @@ class ReadoutWidget extends BaseWidget {
                         {this._renderMultipleEndpointSelector(state)}
                     </div>
                 );
-        }
-        switch (state.tabFlag) {
+
             case BMCTab:
                 return (
                     <div>
@@ -271,8 +218,6 @@ class ReadoutWidget extends BaseWidget {
                         {this._renderMultipleEndpointSelector(state)}
                     </div>
                 );
-        }
-        switch (state.tabFlag) {
             case IntegrativeAnalysesTab:
                 return <div>{this._renderMultipleDatasetSelector(state)}</div>;
         }

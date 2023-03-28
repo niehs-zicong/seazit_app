@@ -12,6 +12,7 @@ import {
     COLLAPSE_BY_CHEMICAL,
     COLLAPSE_WITH_Mortality120,
     printFloat,
+    pod_med_processed,
 } from '../shared';
 
 const NO_COLLAPSE_COLORS = {
@@ -77,7 +78,7 @@ class DoseResponse extends React.Component {
                 .value());
 
         yrange = [0, 100];
-        console.log('collapsedData', data, keys, collapsedData);
+        // console.log('collapsedData', data, keys, collapsedData);
         return {
             data,
             collapsedData,
@@ -175,7 +176,7 @@ class DoseResponse extends React.Component {
             if (bmcData.hit_confidence < 0.5) {
                 return ' ';
             } else {
-                return `BMC:${printFloat(Math.pow(10, bmcData.pod_med) * 1000000)} µM`;
+                return `BMC:${printFloat(pod_med_processed(bmcData.pod_med))} µM`;
             }
         }
     }
@@ -446,8 +447,7 @@ class DoseResponseMort120 extends React.Component {
                     };
                 })
                 .each((d, k) => {
-                    console.log(d);
-                    console.log(d.bmcoutput);
+                    // console.log(d);
 
                     let dr = d.dose_response[0];
                     (d.title = this.getPlotTitle(dr, collapse)),
@@ -481,7 +481,7 @@ class DoseResponseMort120 extends React.Component {
                 .sortBy('endpoint_name')
                 .sortBy('casrn')
                 .value();
-        console.log(collapsedData);
+        // console.log(collapsedData);
 
         let yrange = [0, 100];
         return {
@@ -559,7 +559,7 @@ class DoseResponseMort120 extends React.Component {
             if (bmcData.hit_confidence < 0.5) {
                 return ' ';
             } else {
-                return `BMC:${printFloat(Math.pow(10, bmcData.pod_med) * 1000000)} µM`;
+                return `BMC:${printFloat(pod_med_processed(bmcData.pod_med))} µM`;
             }
         }
     }
@@ -584,12 +584,10 @@ class DoseResponseMort120 extends React.Component {
 
     updateData(data, collapse) {
         this.setKeys(data, collapse);
-        console.log('dr120');
 
-        console.log(data);
+        // console.log(data);
         let update = this.collapseData(data, collapse);
-        console.log(update);
-        console.log(update.collapsedData);
+        // console.log(update);
 
         let scale = this.getColorScale(update.collapsedData, collapse);
         this.setState({
@@ -684,14 +682,10 @@ class DoseResponseMort120 extends React.Component {
             });
 
             d.substance_code_input_ids_120.map((id_flag, index) => {
-                console.log(mor120drs);
-                console.log(id_flag);
-
                 let drs_split = _.chain(mor120drs)
                     .filter((r) => r.substance_code_input_id == id_flag)
                     .sortBy('dose')
                     .value();
-                console.log(drs_split);
                 data.push({
                     x: _.map(drs_split, 'dose'),
                     y: drs_split.map((obj) => {
@@ -747,8 +741,8 @@ class DoseResponseMort120 extends React.Component {
             // move legend to bottom of plot
             layout.legend = { orientation: 'h', y: -0.3 };
         }
-        console.log('newPlot');
-        console.log(data);
+        // console.log('newPlot');
+        // console.log(data);
         Plotly.newPlot(this.refs[d.key], data, layout, svgConfig);
     }
 

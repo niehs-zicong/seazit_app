@@ -1,20 +1,19 @@
 import $ from '$';
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import * as d3 from 'd3';
 
 import BootstrapModal from 'utils/BootstrapModal';
-import {Header, SingleCurveBody, MultipleCurveBody} from './DoseResponseModel';
+import { Header, SingleCurveBody, MultipleCurveBody } from './DoseResponseModel';
 
 import styles from './graph.css';
 
-import {getLog10AxisFunction} from 'utils/d3';
-import Heatmap from "./Heatmap";
-import {integrativeHandleCellClick, printFloat} from "../shared";
+import { getLog10AxisFunction } from 'utils/d3';
+import Heatmap from './Heatmap';
+import { integrativeHandleCellClick, printFloat } from '../shared';
 
-
-let addStripMask = function (svg) {
+let addStripMask = function(svg) {
     // add strip mask to top of d3-selected svg
     // use url(#stripeMask) to apply
 
@@ -42,10 +41,9 @@ let addStripMask = function (svg) {
         .style('fill', 'url(#maskStripePattern)');
 };
 
-let renderPlot = function (el, data, legendData) {
+let renderPlot = function(el, data, legendData) {
     $(el).empty();
-    let
-        margin = {
+    let margin = {
             top: 40,
             left: 10,
             bottom: 40,
@@ -56,39 +54,38 @@ let renderPlot = function (el, data, legendData) {
         },
         // cellSize = 30,
         cellSize = 50,
-        mouseover = function (d) {
-            tooltip
-                .style("opacity", 1)
+        mouseover = function(d) {
+            tooltip.style('opacity', 1);
         },
-        mousemove = function (d) {
+        mousemove = function(d) {
             tooltip
-                .html(`Potency: ${printFloat(Math.pow(10, d.mean_pod) * 1000000)} μM  \n
-                 Specificity: ${printFloat(d.mean_selectivity)}`)
+                .html(
+                    `Potency: ${printFloat(pod_med_processed(d.mean_pod))} μM  \n
+                 Specificity: ${printFloat(d.mean_selectivity)}`
+                )
                 .style('left', d3.event.pageX - 400 + 'px')
                 .style('top', d3.event.pageY - 300 + 'px')
                 .style('opacity', 1.0);
         },
-        mouseleave = function (d) {
-            tooltip
-                .style("opacity", 0)
+        mouseleave = function(d) {
+            tooltip.style('opacity', 0);
         },
-
         // xasix is column, yasix is row
-        xasix = d3.map(data, function (d) {
-            return d.x;
-        }).keys()
+        xasix = d3
+            .map(data, function(d) {
+                return d.x;
+            })
+            .keys()
             .sort(),
-
-
-        yasix = d3.map(data, function (d) {
-            return d.y;
-        }).keys()
+        yasix = d3
+            .map(data, function(d) {
+                return d.y;
+            })
+            .keys()
             .sort(),
-
-
-        width = xasix.length * cellSize + margin.axisLeft + margin.left + margin.right + margin.legend,
+        width =
+            xasix.length * cellSize + margin.axisLeft + margin.left + margin.right + margin.legend,
         height = yasix.length * cellSize + margin.axisTop + margin.top + margin.bottom,
-
         chartHeight = height - (margin.top + margin.bottom + margin.axisTop),
         chartWidth = width - (margin.left + margin.right + margin.axisLeft + margin.legend),
         // Create a color scale
@@ -111,23 +108,21 @@ let renderPlot = function (el, data, legendData) {
         sizeDomain = [0, 2],
         // sizeDomain = [0, 3],
 
-        size = d3.scaleSqrt()
+        size = d3
+            .scaleSqrt()
             .domain(sizeDomain)
             .range([0, cellSize / 2]),
-
         svg = d3
             .select(el)
             .append('svg')
             .attr('width', Math.max(1000, width + margin.left + margin.right))
             .attr('height', Math.max(1000, height + margin.left + margin.right))
-            .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")"),
-
+            .append('g')
+            .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')'),
         star = d3
             .symbol()
             .type(d3.symbolStar)
             .size(size(cellSize / 5)),
-
         tooltip = d3
             .select(el)
             .append('div')
@@ -139,11 +134,10 @@ let renderPlot = function (el, data, legendData) {
     // draw xy-axis
     let axisLayer = svg
         .append('g')
-        .attr("class", "axisLayer")
+        .attr('class', 'axisLayer')
         // .classed('axisLayer', true)
         .attr('width', width)
         .attr('height', height);
-
 
     let xScale = d3
         .scaleBand()
@@ -164,11 +158,10 @@ let renderPlot = function (el, data, legendData) {
         )
         .attr('class', 'axis y')
         .call(yAxis)
-        .style("font-size", 15)
+        .style('font-size', 15)
 
         .selectAll('text')
-        .style('cursor', 'pointer')
-    ;
+        .style('cursor', 'pointer');
     axisLayer
         .append('g')
         .attr(
@@ -177,17 +170,15 @@ let renderPlot = function (el, data, legendData) {
         )
         .attr('class', 'axis x')
         .call(xAxis)
-        .style("font-size", 15)
+        .style('font-size', 15)
         .selectAll('text')
         .attr('dx', '.8em')
         .attr('dy', '.55em')
         .attr('transform', 'rotate(-65)')
         .style('text-anchor', 'start')
-        .style('cursor', 'pointer')
-    ;
+        .style('cursor', 'pointer');
 
     // .select(".domain").remove()
-
 
     let chartLayer = svg
         .append('g')
@@ -198,7 +189,6 @@ let renderPlot = function (el, data, legendData) {
             'transform',
             `translate(${margin.left + margin.axisLeft}, ${margin.top + margin.axisTop})`
         );
-
 
     // plot bounding box
     chartLayer
@@ -222,54 +212,44 @@ let renderPlot = function (el, data, legendData) {
 
     chartLayer
         .selectAll('path')
-        .data(data.filter(d => d.final_dev_call === 'dev tox'))
+        .data(data.filter((d) => d.final_dev_call === 'dev tox'))
         .enter()
-        .append("g")
-        .attr("class", "cor")
-        .attr("transform", function (d) {
-            return (
-                `translate(${xScale(d.x) + xScale.bandwidth() / 2}, ${yScale(d.y) +
-                yScale.bandwidth() / 2})`
-            )
+        .append('g')
+        .attr('class', 'cor')
+        .attr('transform', function(d) {
+            return `translate(${xScale(d.x) +
+                xScale.bandwidth() / 2}, ${yScale(d.y) + yScale.bandwidth() / 2})`;
         })
-        .append("circle")
-        .attr("r", (d) => {
+        .append('circle')
+        .attr('r', (d) => {
             return size(Math.abs(d.mean_selectivity));
-
         })
         .attr('fill', (d) => d.fill)
-        .style("opacity", 0.8)
+        .style('opacity', 0.8)
         .style('cursor', 'pointer')
-        .on("mouseover", mouseover)
-        .on("mousemove", mousemove)
-        .on("mouseleave", mouseleave)
-        .on('click', integrativeHandleCellClick)
-    ;
-
+        .on('mouseover', mouseover)
+        .on('mousemove', mousemove)
+        .on('mouseleave', mouseleave)
+        .on('click', integrativeHandleCellClick);
 
     chartLayer
         .selectAll('path')
-        .data(data.filter(d => d.final_dev_call !== 'dev tox' && d.final_dev_call !== null))
+        .data(data.filter((d) => d.final_dev_call !== 'dev tox' && d.final_dev_call !== null))
         .enter()
         .append('path')
         .attr('class', 'star')
         .attr('d', star)
         .attr('fill', (d) => d.fill)
-        .attr("transform", function (d) {
-            return (
-                `translate(${xScale(d.x) + xScale.bandwidth() / 2}, ${yScale(d.y) +
-                yScale.bandwidth() / 2})`
-            )
+        .attr('transform', function(d) {
+            return `translate(${xScale(d.x) +
+                xScale.bandwidth() / 2}, ${yScale(d.y) + yScale.bandwidth() / 2})`;
         })
-        .style("opacity", 0.8)
-    ;
-
+        .style('opacity', 0.8);
 
     let legendLayer = svg
         .append('g')
         .classed('legendLayer', true)
         .attr('transform', `translate(${width - margin.legend},${margin.top})`);
-
 
     switch (legendData.type) {
         case 'discrete': {
@@ -297,10 +277,9 @@ let renderPlot = function (el, data, legendData) {
             break;
         }
         case 'continuous': {
-            let {colorScaleFunction, legendScale} = legendData,
+            let { colorScaleFunction, legendScale } = legendData,
                 // legendHeight = 200,
                 legendHeight = 300,
-
                 legend = legendLayer
                     .append('defs')
                     .append('linearGradient')
@@ -321,7 +300,7 @@ let renderPlot = function (el, data, legendData) {
 
             legendLayer
                 .append('rect')
-                .attr('width', cellSize - 20 )
+                .attr('width', cellSize - 20)
                 .attr('height', legendHeight)
                 .style('fill', 'url(#gradient)')
                 .style('stroke', 'black')
@@ -330,7 +309,10 @@ let renderPlot = function (el, data, legendData) {
             legendLayer
                 .append('g')
                 .attr('class', 'axis y')
-                .attr('transform', `translate(${20 + cellSize - 20},${margin.top + margin.axisTop})`)
+                .attr(
+                    'transform',
+                    `translate(${20 + cellSize - 20},${margin.top + margin.axisTop})`
+                )
                 .call(
                     getLog10AxisFunction(d3.axisRight, legendScale.copy().range([legendHeight, 0]))
                 );
@@ -340,9 +322,9 @@ let renderPlot = function (el, data, legendData) {
                 .attr('class', styles.legendText)
                 .attr('x', 0)
                 .attr('y', 0)
-                .attr('transform', `translate(20, ${margin.axisTop + (cellSize - 20) / 2 })`)
-                .text("BMC (µM) of specific developmental toxicity")
-                .style("font-size", 20);
+                .attr('transform', `translate(20, ${margin.axisTop + (cellSize - 20) / 2})`)
+                .text('BMC (µM) of specific developmental toxicity')
+                .style('font-size', 20);
 
             legendLayer
                 .append('path')
@@ -350,7 +332,11 @@ let renderPlot = function (el, data, legendData) {
                 .attr('d', star)
                 .attr(
                     'transform',
-                    `translate(${20 + 25 / 2},${margin.top + margin.axisTop + legendHeight + 10 + 25 / 2 })`
+                    `translate(${20 + 25 / 2},${margin.top +
+                        margin.axisTop +
+                        legendHeight +
+                        10 +
+                        25 / 2})`
                 )
                 .attr('fill', 'black')
                 .style('stroke', '#000000')
@@ -363,15 +349,17 @@ let renderPlot = function (el, data, legendData) {
                 .attr('y', 0)
                 .attr(
                     'transform',
-                    `translate(${15 + cellSize},${margin.top + margin.axisTop + legendHeight + 10 + 25 / 2 +5})`
+                    `translate(${15 + cellSize},${margin.top +
+                        margin.axisTop +
+                        legendHeight +
+                        10 +
+                        25 / 2 +
+                        5})`
                 )
                 .text('non-specific, non-toxic, inconclusive');
 
             // the reason I put 25/2 into this position transform, because square size is (25, 25),
             // make sure star is in center, make is position to be 25/2, 25/2
-
-
-
 
             legendLayer
                 .append('rect')
@@ -390,8 +378,8 @@ let renderPlot = function (el, data, legendData) {
                 .append('rect')
                 .attr('x', 0)
                 .attr('y', 0)
-                .attr('width', cellSize  - 20)
-                .attr('height', cellSize  - 20)
+                .attr('width', cellSize - 20)
+                .attr('height', cellSize - 20)
                 .attr(
                     'transform',
                     `translate(20,${margin.top + margin.axisTop + legendHeight + 40})`
@@ -407,7 +395,12 @@ let renderPlot = function (el, data, legendData) {
                 .attr('y', 0)
                 .attr(
                     'transform',
-                    `translate(${15 + cellSize},${margin.top + margin.axisTop + legendHeight + 40 + (cellSize - 20) / 2 +5 })`
+                    `translate(${15 + cellSize},${margin.top +
+                        margin.axisTop +
+                        legendHeight +
+                        40 +
+                        (cellSize - 20) / 2 +
+                        5})`
                 )
                 .text('not evaluated');
             break;
@@ -416,8 +409,6 @@ let renderPlot = function (el, data, legendData) {
         default:
             break;
     }
-
-
 };
 
 class DevtoxHeatmap extends Component {
@@ -463,7 +454,7 @@ class DevtoxHeatmap extends Component {
     }
 
     render() {
-        return <div id="IA_heatmap02" className="row-fluid" ref="svg"/>;
+        return <div id="IA_heatmap02" className="row-fluid" ref="svg" />;
     }
 }
 
@@ -490,8 +481,6 @@ DevtoxHeatmap.propTypes = {
         colorScaleFunction: PropTypes.func,
         legendScale: PropTypes.func,
     }).isRequired,
-
-
 };
 
 export default DevtoxHeatmap;

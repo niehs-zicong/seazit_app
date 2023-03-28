@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import * as d3 from 'd3';
 import _ from 'lodash';
 import Loading from 'utils/Loading';
-import {svg_download_form, data_exportToJsonFile, BMDVIZ_ACTIVITY} from '../shared';
 import Heatmap from './Heatmap';
 import DevtoxHeatmap from './DevtoxHeatmap';
 import {
@@ -17,8 +16,11 @@ import {
     integrative_General,
     printFloat,
     renderNoDataAlert,
+    pod_med_processed,
+    svg_download_form,
+    data_exportToJsonFile,
+    BMDVIZ_ACTIVITY,
 } from '../shared';
-
 
 class IntegrativePlotHandler extends React.Component {
     constructor(props) {
@@ -55,7 +57,6 @@ class IntegrativePlotHandler extends React.Component {
                     fill: '#C9C9C9',
                 },
             ],
-
         };
     }
 
@@ -73,9 +74,8 @@ class IntegrativePlotHandler extends React.Component {
                 scale = d3
                     .scaleLog()
                     .domain(domain)
-                    .range([1, 0])
-                ,
-                continuousColorScale = function (d) {
+                    .range([1, 0]),
+                continuousColorScale = function(d) {
                     return d3.interpolateViridis(scale(d));
                 };
 
@@ -87,8 +87,7 @@ class IntegrativePlotHandler extends React.Component {
         });
     }
 
-
-    _exportCsv = function (jsonData) {
+    _exportCsv = function(jsonData) {
         if (jsonData.length == 0) {
             return '';
         }
@@ -176,19 +175,19 @@ class IntegrativePlotHandler extends React.Component {
                         csvStr += `"${item[key]}"`;
                         break;
                     case 'mean_pod':
-                        csvStr += `"${Math.pow(10, item[key]) * 1000000}"`;
+                        csvStr += `"${pod_med_processed(item[key])}"`;
                         break;
                     case 'mort_med_pod_med':
-                        csvStr += `"${Math.pow(10, item[key]) * 1000000}"`;
+                        csvStr += `"${pod_med_processed(item[key])}"`;
                         break;
                     case 'mean_selectivity':
                         csvStr += `"${item[key]}"`;
                         break;
                     case 'min_lowest_conc':
-                        csvStr += `"${Math.pow(10, item[key]) * 1000000}"`;
+                        csvStr += `"${pod_med_processed(item[key])}"`;
                         break;
                     case 'max_highest_conc':
-                        csvStr += `"${Math.pow(10, item[key]) * 1000000}"`;
+                        csvStr += `"${pod_med_processed(item[key])}"`;
                         break;
 
                     default:
@@ -204,28 +203,28 @@ class IntegrativePlotHandler extends React.Component {
         linkElement.setAttribute('href', dataUri);
         linkElement.setAttribute('download', filename);
         linkElement.click();
-    }
-
+    };
 
     _getFilteredData() {
-
-        let getFillFunction = function (visualization, continuousColorScale, colorCategory) {
+        let getFillFunction = function(visualization, continuousColorScale, colorCategory) {
             switch (visualization) {
                 case INTVIZ_HEATMAP:
-                    return function (data) {
+                    return function(data) {
                         var color;
                         for (var i of colorCategory) {
-                          if (data.final_dev_call == i['key']){
-                              color = i['fill']
-                              return color;
-                          }
+                            if (data.final_dev_call == i['key']) {
+                                color = i['fill'];
+                                return color;
+                            }
                         }
                     };
                 case INTVIZ_DevtoxHEATMAP:
-                    return function (data) {
+                    return function(data) {
                         switch (data.final_dev_call) {
                             case 'dev tox':
-                                return data.mean_pod ? continuousColorScale(Math.pow(10, data.mean_pod) * 1000000) : 'red';
+                                return data.mean_pod
+                                    ? continuousColorScale(pod_med_processed(data.mean_pod))
+                                    : 'red';
                             // case 'general tox':
                             //     return '#000000';
                             // case 'inconclusive':
@@ -240,7 +239,7 @@ class IntegrativePlotHandler extends React.Component {
                     throw 'Unknown display type.';
             }
         };
-        let getLegendData = function (visualization, scale, colorScale, colorCategory) {
+        let getLegendData = function(visualization, scale, colorScale, colorCategory) {
             switch (visualization) {
                 case INTVIZ_HEATMAP:
                     return {
@@ -260,24 +259,25 @@ class IntegrativePlotHandler extends React.Component {
             }
         };
 
-
         let fillFunction = getFillFunction(
                 this.props.visualization,
                 this.state.continuousColorScale,
-                this.state.INTVIZ_HEATMAP_COLORS,
+                this.state.INTVIZ_HEATMAP_COLORS
             ),
             legendData = getLegendData(
                 this.props.visualization,
                 this.state.scale,
                 this.state.continuousColorScale,
-                this.state.INTVIZ_HEATMAP_COLORS,
+                this.state.INTVIZ_HEATMAP_COLORS
             );
-
 
         let data = this.state.data.integrative_activity_selectivity,
             ontologyGroup = this.props.ontologyGroup,
-            selectivityOrder = ["dev tox", "general tox", "inconclusive", "inactive"],
-            ontologyGroupName = (this.props.ontologyType == integrative_Granular) ? 'developmental_defect_grouping_granular' : 'developmental_defect_grouping_general';
+            selectivityOrder = ['dev tox', 'general tox', 'inconclusive', 'inactive'],
+            ontologyGroupName =
+                this.props.ontologyType == integrative_Granular
+                    ? 'developmental_defect_grouping_granular'
+                    : 'developmental_defect_grouping_general';
 
         data = _.chain(data)
             .filter((i) => ontologyGroup.includes(i[ontologyGroupName]))
@@ -323,16 +323,17 @@ class IntegrativePlotHandler extends React.Component {
                     recording_name: d.recording_name,
                     developmental_defect_catergories: d.developmental_defect_catergories,
                     defects_mapped_to_body_region: d.defects_mapped_to_body_region,
-                    developmental_defect_grouping_granular: d.developmental_defect_grouping_granular,
+                    developmental_defect_grouping_granular:
+                        d.developmental_defect_grouping_granular,
                     developmental_defect_grouping_general: d.developmental_defect_grouping_general,
                     seazit_recording_id: d.seazit_recording_id,
-                    x: d[ontologyGroupName] + ": " + d.protocol_name_plot,
+                    x: d[ontologyGroupName] + ': ' + d.protocol_name_plot,
                     y: d.preferred_name,
                     fill: null,
                     fillFlag: false,
                     ontologyGroupName: d[ontologyGroupName],
-                    title: d[ontologyGroupName] + "+" + d.protocol_name_plot + '+' + d.preferred_name,
-
+                    title:
+                        d[ontologyGroupName] + '+' + d.protocol_name_plot + '+' + d.preferred_name,
                 };
             })
             .sortBy('med_pod_med')
@@ -346,11 +347,11 @@ class IntegrativePlotHandler extends React.Component {
         let a = this.props.ontologyGroup;
         let b = this.props.datasetLabName;
         let xgroups = [];
-        a.forEach(k => {
-            b.forEach(i => {
-                xgroups.push(k + ": " + i)
-            })
-        })
+        a.forEach((k) => {
+            b.forEach((i) => {
+                xgroups.push(k + ': ' + i);
+            });
+        });
         let ygroups = _.chain(data)
             .map('y')
             .uniq()
@@ -360,7 +361,7 @@ class IntegrativePlotHandler extends React.Component {
             case INTVIZ_HEATMAP: {
                 for (const x of xgroups) {
                     for (const y of ygroups) {
-                        let result = _.filter(data, {x: x, y: y})
+                        let result = _.filter(data, { x: x, y: y });
 
                         let endpoints = _.chain(result)
                             .map('endpoint_name')
@@ -377,10 +378,11 @@ class IntegrativePlotHandler extends React.Component {
                             .map('final_dev_call')
                             .uniq()
                             .filter((d) => _.includes(selectivityOrder, d))
-                            .sort((a, b) => selectivityOrder.indexOf(a) - selectivityOrder.indexOf(b))
+                            .sort(
+                                (a, b) => selectivityOrder.indexOf(a) - selectivityOrder.indexOf(b)
+                            )
                             .first()
                             .value();
-
 
                         if (result.length == 0) {
                             data.push({
@@ -392,22 +394,20 @@ class IntegrativePlotHandler extends React.Component {
                                 mean_pod: null,
                                 final_dev_call: null,
                                 titile: x + '+' + y,
-                            })
+                            });
                         } else {
-
                             result = _.chain(result)
                                 .filter((i) => i.final_dev_call === topFinal)
                                 .sortBy('mean_pod')
                                 .first()
                                 .forEach((value, index, array) => {
-                                    array.fill = fillFunction(array)
-                                    array.endPointList = endpoints
-                                    array.devtoxEndPointList = devtoxEndpoints
-                                    array.fillFlag = true
+                                    array.fill = fillFunction(array);
+                                    array.endPointList = endpoints;
+                                    array.devtoxEndPointList = devtoxEndpoints;
+                                    array.fillFlag = true;
                                 })
                                 .value();
                         }
-
                     }
                 }
                 data = _.chain(data)
@@ -421,10 +421,9 @@ class IntegrativePlotHandler extends React.Component {
             }
 
             case INTVIZ_DevtoxHEATMAP: {
-
                 for (const x of xgroups) {
                     for (const y of ygroups) {
-                        let result = _.filter(data, {x: x, y: y})
+                        let result = _.filter(data, { x: x, y: y });
 
                         let endpoints = _.chain(result)
                             .map('endpoint_name')
@@ -440,10 +439,11 @@ class IntegrativePlotHandler extends React.Component {
                             .map('final_dev_call')
                             .uniq()
                             .filter((d) => _.includes(selectivityOrder, d))
-                            .sort((a, b) => selectivityOrder.indexOf(a) - selectivityOrder.indexOf(b))
+                            .sort(
+                                (a, b) => selectivityOrder.indexOf(a) - selectivityOrder.indexOf(b)
+                            )
                             .first()
                             .value();
-
 
                         if (result.length == 0) {
                             data.push({
@@ -455,17 +455,17 @@ class IntegrativePlotHandler extends React.Component {
                                 mean_pod: null,
                                 final_dev_call: null,
                                 titile: x + '+' + y,
-                            })
+                            });
                         } else {
                             result = _.chain(result)
                                 .filter((i) => i.final_dev_call === topFinal)
                                 .sortBy('mean_pod')
                                 .first()
                                 .forEach((value, index, array) => {
-                                    array.fill = fillFunction(array)
-                                    array.endPointList = endpoints
-                                    array.devtoxEndPointList = devtoxEndpoints
-                                    array.fillFlag = true
+                                    array.fill = fillFunction(array);
+                                    array.endPointList = endpoints;
+                                    array.devtoxEndPointList = devtoxEndpoints;
+                                    array.fillFlag = true;
                                 })
                                 .value();
                         }
@@ -485,8 +485,7 @@ class IntegrativePlotHandler extends React.Component {
             default:
                 throw 'Error: Unknown display type.';
         }
-    };
-
+    }
 
     componentWillMount() {
         this.fetchIntegrativeData(this.props.url);
@@ -498,10 +497,9 @@ class IntegrativePlotHandler extends React.Component {
         }
     }
 
-
     render() {
         if (!this.state.data) {
-            return <Loading/>;
+            return <Loading />;
         }
         let d;
         d = this._getFilteredData();
@@ -511,50 +509,45 @@ class IntegrativePlotHandler extends React.Component {
         }
 
         if (this.props.visualization == INTVIZ_HEATMAP) {
-
             return (
                 <div>
                     <h2>
-                        Download buttons:
-                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        Download buttons: &nbsp;&nbsp;&nbsp;&nbsp;
                         <button onClick={() => this._exportCsv(d.data)} className="btn btn-primary">
                             Export CSV
                         </button>
-
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <button onClick={() => svg_download_form('IA_heatmap01')} className="btn btn-primary">
+                        <button
+                            onClick={() => svg_download_form('IA_heatmap01')}
+                            className="btn btn-primary"
+                        >
                             Export SVG
                         </button>
                     </h2>
-                    <Heatmap data={d.data}
-                             legendData={d.legendData}
-                    />
+                    <Heatmap data={d.data} legendData={d.legendData} />
                 </div>
             );
         } else {
             return (
                 <div>
                     <h2>
-                        Download buttons:
-                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        Download buttons: &nbsp;&nbsp;&nbsp;&nbsp;
                         <button onClick={() => this._exportCsv(d.data)} className="btn btn-primary">
                             Export CSV
                         </button>
-
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <button onClick={() => svg_download_form('IA_heatmap02')} className="btn btn-primary">
+                        <button
+                            onClick={() => svg_download_form('IA_heatmap02')}
+                            className="btn btn-primary"
+                        >
                             Export SVG
                         </button>
                     </h2>
-                    <DevtoxHeatmap data={d.data}
-                                   legendData={d.legendData}
-                    />
+                    <DevtoxHeatmap data={d.data} legendData={d.legendData} />
                 </div>
             );
         }
-
     }
-
 }
 
 IntegrativePlotHandler.propTypes = {

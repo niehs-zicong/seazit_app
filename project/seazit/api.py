@@ -128,6 +128,7 @@ class SeazitProtocolViewSet(CachedReadOnlyViewSet):
     @list_route()
     def metadata(self, request, *args, **kwargs):
         return Response(models.SeazitProtocol.get_metadata())
+        # return Response(models.SeazitProtocol.get_metadata2())
 
 
 

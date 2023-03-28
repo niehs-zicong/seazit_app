@@ -11,9 +11,11 @@ import {
     COLLAPSE_WITH_Mortality120,
     renderSelectMultiOptgroupWidget,
     renderSelectMultiWidget,
+    BMDVIZ_SELECTIVITY,
 } from '../shared';
 import IntegrativeCheckBoxWidget from '../widgets/IntegrativeCheckBoxWidget';
 import _ from 'lodash';
+import BmdCheckBoxWidget from '../widgets/BmdCheckBoxWidget';
 
 class Header extends React.Component {
     render() {
@@ -75,9 +77,12 @@ class SingleCurveBody extends React.Component {
         );
         return (
             <div className="row-fluid">
-                <div className="col-sm-2">
+                {/*<div className="col-sm-2">*/}
+                {/*    <IntegrativeCheckBoxWidget stateHolder={this} />*/}
+                {/*</div>*/}
+                {this.props.CheckBoxDisable ? null : (
                     <IntegrativeCheckBoxWidget stateHolder={this} />
-                </div>
+                )}
                 {this._renderDoseResponse(this.state)}
             </div>
         );
@@ -89,6 +94,7 @@ SingleCurveBody.propTypes = {
     readout_id: PropTypes.string.isRequired,
     casrn: PropTypes.array.isRequired,
     devtoxreadout_ids: PropTypes.string.isRequired,
+    CheckBoxDisable: false,
 };
 
 class molecularGraphBody extends React.Component {
@@ -97,6 +103,7 @@ class molecularGraphBody extends React.Component {
         // take 75% of the screen width since main body is col-9 size; assume
         // each plot is ~400px for a reasonable start, make sure it's at least 1
     }
+
     render() {
         let srcUrl = `https://comptox.epa.gov/dashboard-api/ccdapp1/chemical-files/image/by-dtxsid/${this.props.dtxsid}`;
         return (

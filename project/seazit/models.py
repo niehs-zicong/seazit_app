@@ -266,9 +266,10 @@ class SeazitProtocol(models.Model):
             "protocol_data": pd.DataFrame(list(qs), columns=cols).to_dict(orient="records"),
             "Seazit_chemical_info": Seazit_chemical_info.get_chemicals().to_dict(orient="records"),
             "Seazit_ui_panel": Seazit_ui_panel.get_flat().to_dict(orient="records"),
+            "Seazit_ui_panel2": Seazit_ui_panel.get_flat().to_dict(orient="records"),
             "Seazit_ontology": SeazitOntology.get_ontology().to_dict(orient="records"),
-
         }
+
 
     class Meta:
         managed = False

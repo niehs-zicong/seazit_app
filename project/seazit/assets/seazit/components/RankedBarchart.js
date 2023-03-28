@@ -8,7 +8,7 @@ import ReactDOM from 'react-dom';
 import DoseResponse from './DoseResponse';
 import { getBmdsUrl, getDoseResponsesUrl, NO_COLLAPSE, svg_download_form } from '../shared';
 import BootstrapModal from 'utils/BootstrapModal';
-import { Header, SingleCurveBody } from './DoseResponseModel';
+import { Header, MultipleCurveBody, SingleCurveBody } from './DoseResponseModel';
 import RankedBarchartHandler from './RankedBarchartHandler';
 
 import {
@@ -19,9 +19,12 @@ import {
     BMDVIZ_SELECTIVITY,
     SELECTIVITY_FOOTNOTE,
     printFloat,
+    pod_med_processed,
+    BMCHandleCellClick,
 } from '../shared';
 
 import { getLog10AxisFunction } from 'utils/d3';
+import { merge } from 'lodash/object';
 
 let renderPlot = function(el, data, opts) {
     // stateless; outside react component
@@ -33,59 +36,46 @@ let renderPlot = function(el, data, opts) {
         return;
     }
 
-    // let pod_medData, mort_pod_medData ;
-    let medData = data,
-        pod_medData,
-        mort_pod_medData,
-        viabilityData,
-        nonviabilityData;
+    let nonviabilityData, viabilityData;
+
+    nonviabilityData = _.chain(data)
+        .map('minimimumNonViability')
+        .filter((d) => d.med_pod_med !== null)
+        .compact()
+        .value();
+
+    viabilityData = _.chain(data)
+        .map('minimimumViability')
+        .filter((d) => d.mort_med_pod_med !== null)
+        .compact()
+        .value();
 
     // viabilityData is black dot, NonviabilityData is colored dots.
-    pod_medData = _.filter(medData, (d) => d.med_pod_med !== null);
-    mort_pod_medData = _.filter(medData, (d) => d.mort_med_pod_med !== null);
-    (nonviabilityData = _.chain(data)
-        .map(
-            (d) =>
-                d.minimimumNonViability &&
-                Object.assign({}, d.minimimumNonViability, {
-                    maximumSelectivity: d.maximumSelectivity,
-                })
-        )
-        .compact()
-        .value()),
-        (viabilityData = _.chain(data)
-            .map('minimimumViability')
-            .compact()
-            .value());
-    console.log('data2', medData, pod_medData, mort_pod_medData);
-
+    console.log('data2', data, nonviabilityData, viabilityData);
     // set dimensions and margins
     let elWidth = Math.max(Math.floor($(el).innerWidth()), 800),
         margin = { top: 40, right: 100, bottom: 25, left: 300 },
         width = elWidth - margin.left - margin.right,
-        height = medData.length * 20 + 100 - margin.top - margin.bottom,
+        height = data.length * 20 + 100 - margin.top - margin.bottom,
         categoryWidth = 150,
         categoryPadding = 5,
         barStart = categoryWidth + categoryPadding * 2;
 
     let xScaleFunction = d3.scaleLog;
-    // if (opts.selectedAxis === AXIS_LOG10) {
-    //     xScaleFunction = d3.scaleLog;
-    // }
 
     //set the ranges
     let extent = d3.extent(
             _.compact(
                 _.flattenDeep([
-                    _.map(pod_medData, (d) => [
-                        Math.pow(10, d.med_pod_med) * 1000000,
-                        Math.pow(10, d.min_pod_med) * 1000000,
-                        Math.pow(10, d.max_pod_med) * 1000000,
+                    _.map(nonviabilityData, (d) => [
+                        pod_med_processed(d.med_pod_med),
+                        pod_med_processed(d.min_pod_med),
+                        pod_med_processed(d.max_pod_med),
                     ]),
-                    _.map(mort_pod_medData, (d) => [
-                        Math.pow(10, d.mort_med_pod_med) * 1000000,
-                        Math.pow(10, d.mort_min_pod_med) * 1000000,
-                        Math.pow(10, d.mort_max_pod_med) * 1000000,
+                    _.map(viabilityData, (d) => [
+                        pod_med_processed(d.mort_med_pod_med),
+                        pod_med_processed(d.mort_min_pod_med),
+                        pod_med_processed(d.mort_max_pod_med),
                     ]),
                 ])
             )
@@ -98,7 +88,7 @@ let renderPlot = function(el, data, opts) {
             .scaleBand()
             .range([0, height])
             .padding(0.1)
-            .domain(medData.map((d) => d.preferred_name));
+            .domain(data.map((d) => d.preferred_name));
 
     //
     // append plot
@@ -114,25 +104,15 @@ let renderPlot = function(el, data, opts) {
 
     // add pod_med error bars
     barG.selectAll('.pod-errorbar')
-        .data(pod_medData)
+        .data(nonviabilityData)
         .enter()
         .append('line')
         .attr('class', 'pod-errorbar')
         .attr('x1', (d) =>
-            x(
-                d3.min([
-                    Math.pow(10, d.min_pod_med) * 1000000,
-                    Math.pow(10, d.med_pod_med) * 1000000,
-                ])
-            )
+            x(d3.min([pod_med_processed(d.min_pod_med), pod_med_processed(d.med_pod_med)]))
         )
         .attr('x2', (d) =>
-            x(
-                d3.max([
-                    Math.pow(10, d.med_pod_med) * 1000000,
-                    Math.pow(10, d.max_pod_med) * 1000000,
-                ])
-            )
+            x(d3.max([pod_med_processed(d.med_pod_med), pod_med_processed(d.max_pod_med)]))
         )
         .attr('y1', (d) => y(d.preferred_name) + y.bandwidth() / 2)
         .attr('y2', (d) => y(d.preferred_name) + y.bandwidth() / 2)
@@ -142,44 +122,62 @@ let renderPlot = function(el, data, opts) {
 
     // add mort_pod_med circle
     barG.selectAll('.pod-circle')
-        .data(pod_medData)
+        .data(nonviabilityData)
         .enter()
         .append('circle')
         .attr('class', 'pod-circle')
-        .attr('cx', (d) => x(Math.pow(10, d.med_pod_med) * 1000000))
+        .attr('cx', (d) => x(pod_med_processed(d.med_pod_med)))
         .attr('cy', (d) => y(d.preferred_name) + y.bandwidth() / 2)
         .attr('r', 10)
         .style('fill', (d) => CATEGORY_COLORS[d.use_category1])
         .style('cursor', 'pointer')
         .on('click', function(d) {
-            new BootstrapModal(Header, SingleCurveBody, {
-                // title: `${d.preferred_name} (${d.chemical_casrn}): ${d.readout_endpoint}`,
-                title: d.preferred_name + `: ` + d.endpoint_name,
-                protocol_id: d.protocol_id,
-                readout_id: d.endpoint_name + '_' + d.protocol_id,
-                casrn: d.casrn,
-            });
+            console.log(d);
+            if (d.endpoint_names_list && d.endpoint_names_list.length > 1) {
+                new BootstrapModal(Header, MultipleCurveBody, {
+                    title: d.preferred_name + `: ` + d.endpoint_name,
+                    protocol_id: d.protocol_id,
+                    readout_ids: _.map(d.endpoint_names_list, function(x) {
+                        return x + '_' + d.protocol_id;
+                    }),
+                    casrns: [d.casrn],
+                });
+            } else {
+                new BootstrapModal(Header, SingleCurveBody, {
+                    title: d.preferred_name + `: ` + d.endpoint_name,
+                    protocol_id: d.protocol_id,
+                    readout_id: d.endpoint_name + '_' + d.protocol_id,
+                    casrn: d.casrn,
+                });
+            }
         });
-
-    // add mort_pod_medData error bars
+    // .on('click', function (d) {
+    //     new BootstrapModal(Header, SingleCurveBody, {
+    //         title: d.preferred_name + `: ` + d.endpoint_name,
+    //         protocol_id: d.protocol_id,
+    //         readout_id: d.endpoint_name + '_' + d.protocol_id,
+    //         casrn: d.casrn,
+    //     });
+    // });
+    // add viabilityData error bars
     barG.selectAll('.mort_pod-errorbar')
-        .data(mort_pod_medData)
+        .data(viabilityData)
         .enter()
         .append('line')
         .attr('class', 'mort_pod-errorbar')
         .attr('x1', (d) =>
             x(
                 d3.min([
-                    Math.pow(10, d.mort_min_pod_med) * 1000000,
-                    Math.pow(10, d.mort_med_pod_med) * 1000000,
+                    pod_med_processed(d.mort_min_pod_med),
+                    pod_med_processed(d.mort_med_pod_med),
                 ])
             )
         )
         .attr('x2', (d) =>
             x(
                 d3.max([
-                    Math.pow(10, d.mort_med_pod_med) * 1000000,
-                    Math.pow(10, d.mort_max_pod_med) * 1000000,
+                    pod_med_processed(d.mort_med_pod_med),
+                    pod_med_processed(d.mort_max_pod_med),
                 ])
             )
         )
@@ -192,26 +190,53 @@ let renderPlot = function(el, data, opts) {
         .style('pointer-events', 'none')
         .style('opacity', 0.8);
 
-    // add mort_pod_medData circle
+    // add viabilityData circle
     barG.selectAll('.mort_pod-circle')
-        .data(mort_pod_medData)
+        .data(viabilityData)
         .enter()
         .append('circle')
         .attr('class', 'mort_pod-circle')
-        .attr('cx', (d) => x(Math.pow(10, d.mort_med_pod_med) * 1000000))
+        .attr('cx', (d) => x(pod_med_processed(d.mort_med_pod_med)))
         .attr('cy', (d) => y(d.preferred_name) + y.bandwidth() / 2)
         .attr('r', 7)
         .style('fill', 'black')
         .style('opacity', 0.8)
         .style('cursor', 'pointer')
+        // .on('click', function (d) {
+        //     console.log(d)
+        //     new BootstrapModal(Header, SingleCurveBody, {
+        //         // title: `${d.preferred_name} (${d.chemical_casrn}): ${d.readout_endpoint}`,
+        //         title: d.preferred_name + `: ` + 'Mortality@120',
+        //         protocol_id: d.protocol_id,
+        //         readout_id: 'Mortality@120' + '_' + d.protocol_id,
+        //         casrn: d.casrn,
+        //         CheckBoxDisable: true,
+        //     });
+        // });
         .on('click', function(d) {
-            new BootstrapModal(Header, SingleCurveBody, {
-                // title: `${d.preferred_name} (${d.chemical_casrn}): ${d.readout_endpoint}`,
-                title: d.preferred_name + `: ` + d.endpoint_name,
-                protocol_id: d.protocol_id,
-                readout_id: 'Mortality@120' + '_' + d.protocol_id,
-                casrn: d.casrn,
-            });
+            console.log(d);
+            if (d.endpoint_names_list && d.endpoint_names_list.length > 1) {
+                new BootstrapModal(Header, MultipleCurveBody, {
+                    title: d.preferred_name + `: ` + 'Mortality@120',
+
+                    protocol_id: d.protocol_id,
+                    readout_ids: _.map(d.endpoint_names_list, function(x) {
+                        return x + '_' + d.protocol_id;
+                    }),
+                    casrns: [d.casrn],
+                    CheckBoxDisable: true,
+                });
+            } else {
+                new BootstrapModal(Header, SingleCurveBody, {
+                    title: d.preferred_name + `: ` + 'Mortality@120',
+
+                    protocol_id: d.protocol_id,
+                    readout_id: 'Mortality@120' + '_' + d.protocol_id,
+
+                    casrn: d.casrn,
+                    CheckBoxDisable: true,
+                });
+            }
         });
     // add selectivity-ratio text
     if (opts.isSelective) {
@@ -224,7 +249,7 @@ let renderPlot = function(el, data, opts) {
             .text('Selectivity');
 
         svg.selectAll('.selectivity-text')
-            .data(pod_medData)
+            .data(nonviabilityData)
             .enter()
             .append('text')
             .attr('x', elWidth - margin.right - margin.left + 24)
@@ -259,7 +284,7 @@ let renderPlot = function(el, data, opts) {
 
     // append category ids
     svg.selectAll('.category')
-        .data(medData)
+        .data(data)
         .enter()
         .append('rect')
         .attr('class', 'category')
@@ -271,7 +296,7 @@ let renderPlot = function(el, data, opts) {
 
     // append category label
     svg.selectAll('.category-text')
-        .data(medData)
+        .data(data)
         .enter()
         .append('text')
         .attr('x', categoryPadding + 2)
@@ -371,6 +396,7 @@ class RankedBarChart extends React.Component {
     constructor(props) {
         super(props);
     }
+
     componentDidMount() {
         this._renderPlot(this.props);
     }

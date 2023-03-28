@@ -5,8 +5,7 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import * as d3 from 'd3';
 import Loading from 'utils/Loading';
-import BmdTable from './BmdTable';
-import SelectivityTable from './SelectivityTable';
+import { SelectivityTable, BmdTable } from './BmdTable';
 import RankedBarchart, { submit_download_form } from './RankedBarchart';
 import {
     getBmdsUrl,
@@ -22,6 +21,7 @@ import {
     COLLAPSE_BY_CHEMICAL,
     printFloat,
     integrative_Granular,
+    pod_med_processed,
 } from '../shared';
 
 class RankedBarchartHandler extends React.Component {
@@ -71,52 +71,47 @@ class RankedBarchartHandler extends React.Component {
                 .value();
         }
         //
-        data.forEach((d) => {
-            (d.med_pod_med_processed = d.med_pod_med
-                ? Math.pow(10, d.med_pod_med) * 1000000
-                : null),
-                (d.min_pod_med_processed = d.min_pod_med
-                    ? Math.pow(10, d.min_pod_med) * 1000000
-                    : null),
-                (d.max_pod_med_processed = d.max_pod_med
-                    ? Math.pow(10, d.max_pod_med) * 1000000
-                    : null),
-                (d.mort_med_pod_med_processed = d.mort_med_pod_med
-                    ? Math.pow(10, d.mort_med_pod_med) * 1000000
-                    : null),
-                (d.mort_min_pod_med_processed = d.mort_min_pod_med
-                    ? Math.pow(10, d.mort_min_pod_med) * 1000000
-                    : null),
-                (d.mort_max_pod_med_processed = d.mort_max_pod_med
-                    ? Math.pow(10, d.mort_max_pod_med) * 1000000
-                    : null);
-        });
-
         plotData = _.chain(data)
             .groupBy('casrn')
-            .map((data) => {
-                return {
-                    casrn: data[0].casrn,
-
-                    data: data,
-                    // selectData: x,
-                    minimimumViability: _.chain(data)
-                        .min((d) => d.med_pod_med_processed)
-                        .value(),
-                    minimimumNonViability: _.chain(data)
-                        .min((d) => d.mort_med_pod_med_processed)
-                        .value(),
-                    endpoint_names: _.chain(data)
+            .map((k) => {
+                let endpoint_names = _.chain(k)
                         .map('endpoint_name')
                         .uniq()
                         .value(),
+                    minimimumNonViability = _.chain(k)
+                        .min((d) => pod_med_processed(d.med_pod_med))
+                        .value(),
+                    minimimumViability = _.chain(k)
+                        .min((d) => pod_med_processed(d.mort_med_pod_med))
+                        .value();
+                return {
+                    casrn: k[0].casrn,
+                    data: k,
+                    minimimumNonViability: {
+                        ...minimimumNonViability,
+                        endpoint_names_list: endpoint_names,
+                    },
+                    minimimumViability: {
+                        ...minimimumViability,
+                        endpoint_names_list: endpoint_names,
+                    },
+                    related_endpoint_names: endpoint_names,
+                    protocol_id: minimimumNonViability.protocol_id,
+                    preferred_name: minimimumNonViability.preferred_name,
+                    use_category1: minimimumNonViability.use_category1,
+                    malformation: minimimumNonViability.malformation,
+                    combin_ontology: minimimumNonViability.combin_ontology,
+                    combin_ontology_id: minimimumNonViability.combin_ontology_id,
+                    mean_pod: minimimumNonViability.mean_pod,
+                    mean_selectivity: minimimumNonViability.mean_selectivity,
+                    n_values: minimimumNonViability.n_values,
                 };
             })
             .value();
-        console.log('data1', data, plotData);
+        // console.log('data1', data, plotData);
         return {
             plotData: plotData,
-            tableData: data,
+            tableData: plotData,
         };
     }
 
@@ -158,26 +153,26 @@ class RankedBarchartHandler extends React.Component {
                         csvStr += `"${item[key]}"`;
                         break;
                     case 'med_pod_med':
-                        csvStr += `"${printFloat(Math.pow(10, item[key]) * 1000000)}"`;
+                        csvStr += `"${printFloat(pod_med_processed(item[key]))}"`;
                         break;
 
                     case 'min_pod_med':
-                        csvStr += `"${printFloat(Math.pow(10, item[key]) * 1000000)}"`;
+                        csvStr += `"${printFloat(pod_med_processed(item[key]))}"`;
                         break;
 
                     case 'max_pod_med':
-                        csvStr += `"${printFloat(Math.pow(10, item[key]) * 1000000)}"`;
+                        csvStr += `"${printFloat(pod_med_processed(item[key]))}"`;
                         break;
                     case 'mort_med_pod_med':
-                        csvStr += `"${printFloat(Math.pow(10, item[key]) * 1000000)}"`;
+                        csvStr += `"${printFloat(pod_med_processed(item[key]))}"`;
                         break;
 
                     case 'mort_min_pod_med':
-                        csvStr += `"${printFloat(Math.pow(10, item[key]) * 1000000)}"`;
+                        csvStr += `"${printFloat(pod_med_processed(item[key]))}"`;
                         break;
 
                     case 'mort_max_pod_med':
-                        csvStr += `"${printFloat(Math.pow(10, item[key]) * 1000000)}"`;
+                        csvStr += `"${printFloat(pod_med_processed(item[key]))}"`;
                         break;
                     default:
                         csvStr += 'undefined';
