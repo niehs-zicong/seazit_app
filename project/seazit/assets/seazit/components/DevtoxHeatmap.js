@@ -11,7 +11,7 @@ import styles from './graph.css';
 
 import { getLog10AxisFunction } from 'utils/d3';
 import Heatmap from './Heatmap';
-import { integrativeHandleCellClick, printFloat } from '../shared';
+import { integrativeHandleCellClick, printFloat, pod_med_processed } from '../shared';
 
 let addStripMask = function(svg) {
     // add strip mask to top of d3-selected svg

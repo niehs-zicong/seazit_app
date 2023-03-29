@@ -59,7 +59,7 @@ let renderMortalityModal = function(jsonData, flag) {
 
 class SelectivityTable extends React.Component {
     _renderRow(d) {
-        console.log(d);
+        // console.log(d);
         return (
             <tr key={d.casrn}>
                 <td>{d.preferred_name}</td>

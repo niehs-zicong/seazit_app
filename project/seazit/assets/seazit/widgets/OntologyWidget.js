@@ -78,7 +78,7 @@ class OntologyWidget extends BaseWidget {
             if (_.keys(opts).length === 0) {
                 return null;
             }
-            console.log('test', opts, state.ontologyGroup);
+            // console.log('test', opts, state.ontologyGroup);
 
             return renderSelectMultiOptgroupWidget(
                 'ontologyGroup',

@@ -131,34 +131,34 @@ let renderPlot = function(el, data, opts) {
         .attr('r', 10)
         .style('fill', (d) => CATEGORY_COLORS[d.use_category1])
         .style('cursor', 'pointer')
+        // .on('click', function(d) {
+        //     // console.log(d);
+        //     if (d.endpoint_names_list && d.endpoint_names_list.length > 1) {
+        //         new BootstrapModal(Header, MultipleCurveBody, {
+        //             title: d.preferred_name + `: ` + d.endpoint_name,
+        //             protocol_id: d.protocol_id,
+        //             readout_ids: _.map(d.endpoint_names_list, function(x) {
+        //                 return x + '_' + d.protocol_id;
+        //             }),
+        //             casrns: [d.casrn],
+        //         });
+        //     } else {
+        //         new BootstrapModal(Header, SingleCurveBody, {
+        //             title: d.preferred_name + `: ` + d.endpoint_name,
+        //             protocol_id: d.protocol_id,
+        //             readout_id: d.endpoint_name + '_' + d.protocol_id,
+        //             casrn: d.casrn,
+        //         });
+        //     }
+        // });
         .on('click', function(d) {
-            console.log(d);
-            if (d.endpoint_names_list && d.endpoint_names_list.length > 1) {
-                new BootstrapModal(Header, MultipleCurveBody, {
-                    title: d.preferred_name + `: ` + d.endpoint_name,
-                    protocol_id: d.protocol_id,
-                    readout_ids: _.map(d.endpoint_names_list, function(x) {
-                        return x + '_' + d.protocol_id;
-                    }),
-                    casrns: [d.casrn],
-                });
-            } else {
-                new BootstrapModal(Header, SingleCurveBody, {
-                    title: d.preferred_name + `: ` + d.endpoint_name,
-                    protocol_id: d.protocol_id,
-                    readout_id: d.endpoint_name + '_' + d.protocol_id,
-                    casrn: d.casrn,
-                });
-            }
+            new BootstrapModal(Header, SingleCurveBody, {
+                title: d.preferred_name + `: ` + d.endpoint_name,
+                protocol_id: d.protocol_id,
+                readout_id: d.endpoint_name + '_' + d.protocol_id,
+                casrn: d.casrn,
+            });
         });
-    // .on('click', function (d) {
-    //     new BootstrapModal(Header, SingleCurveBody, {
-    //         title: d.preferred_name + `: ` + d.endpoint_name,
-    //         protocol_id: d.protocol_id,
-    //         readout_id: d.endpoint_name + '_' + d.protocol_id,
-    //         casrn: d.casrn,
-    //     });
-    // });
     // add viabilityData error bars
     barG.selectAll('.mort_pod-errorbar')
         .data(viabilityData)
@@ -202,42 +202,42 @@ let renderPlot = function(el, data, opts) {
         .style('fill', 'black')
         .style('opacity', 0.8)
         .style('cursor', 'pointer')
-        // .on('click', function (d) {
-        //     console.log(d)
-        //     new BootstrapModal(Header, SingleCurveBody, {
-        //         // title: `${d.preferred_name} (${d.chemical_casrn}): ${d.readout_endpoint}`,
-        //         title: d.preferred_name + `: ` + 'Mortality@120',
-        //         protocol_id: d.protocol_id,
-        //         readout_id: 'Mortality@120' + '_' + d.protocol_id,
-        //         casrn: d.casrn,
-        //         CheckBoxDisable: true,
-        //     });
-        // });
         .on('click', function(d) {
             console.log(d);
-            if (d.endpoint_names_list && d.endpoint_names_list.length > 1) {
-                new BootstrapModal(Header, MultipleCurveBody, {
-                    title: d.preferred_name + `: ` + 'Mortality@120',
-
-                    protocol_id: d.protocol_id,
-                    readout_ids: _.map(d.endpoint_names_list, function(x) {
-                        return x + '_' + d.protocol_id;
-                    }),
-                    casrns: [d.casrn],
-                    CheckBoxDisable: true,
-                });
-            } else {
-                new BootstrapModal(Header, SingleCurveBody, {
-                    title: d.preferred_name + `: ` + 'Mortality@120',
-
-                    protocol_id: d.protocol_id,
-                    readout_id: 'Mortality@120' + '_' + d.protocol_id,
-
-                    casrn: d.casrn,
-                    CheckBoxDisable: true,
-                });
-            }
+            new BootstrapModal(Header, SingleCurveBody, {
+                // title: `${d.preferred_name} (${d.chemical_casrn}): ${d.readout_endpoint}`,
+                title: d.preferred_name + `: ` + 'Mortality@120',
+                protocol_id: d.protocol_id,
+                readout_id: 'Mortality@120' + '_' + d.protocol_id,
+                casrn: d.casrn,
+                CheckBoxDisable: true,
+            });
         });
+    // .on('click', function(d) {
+    //     console.log(d);
+    //     if (d.endpoint_names_list && d.endpoint_names_list.length > 1) {
+    //         new BootstrapModal(Header, MultipleCurveBody, {
+    //             title: d.preferred_name + `: ` + 'Mortality@120',
+    //
+    //             protocol_id: d.protocol_id,
+    //             readout_ids: _.map(d.endpoint_names_list, function(x) {
+    //                 return x + '_' + d.protocol_id;
+    //             }),
+    //             casrns: [d.casrn],
+    //             CheckBoxDisable: true,
+    //         });
+    //     } else {
+    //         new BootstrapModal(Header, SingleCurveBody, {
+    //             title: d.preferred_name + `: ` + 'Mortality@120',
+    //
+    //             protocol_id: d.protocol_id,
+    //             readout_id: 'Mortality@120' + '_' + d.protocol_id,
+    //
+    //             casrn: d.casrn,
+    //             CheckBoxDisable: true,
+    //         });
+    //     }
+    // });
     // add selectivity-ratio text
     if (opts.isSelective) {
         // axis label
