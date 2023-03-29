@@ -13,7 +13,6 @@ fi
 #This is for db server
 export DATABASE_URL=postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_SERVER_IP:$PORT/$POSTGRES_USER
  
-#DATABASE_URL=
 function postgres_ready(){
 /opt/conda/envs/seazit/bin/python << END
 import sys
@@ -55,6 +54,21 @@ sys.exit(0)
 END
 }
 
+function python_ready(){
+/opt/conda/envs/seazit/bin/python << END
+import sys
+import markdown
+try: 
+    print(markdown)
+    if markdown.__version__ <= '2.2':
+        print('makedow version property updated __version__')
+except:
+    sys.exit(-1)
+sys.exit(0)
+END
+    
+}
+
 until postgres_ready; do
   >&2 echo "Postgres is unavailable - sleeping"
   sleep 1
@@ -62,6 +76,11 @@ done
 
 until redis_ready; do
   >&2 echo "Redis is unavailable - sleeping"
+  sleep 1
+done
+
+until python_ready; do
+  >&2 echo "python_ready is unavailable - sleeping"
   sleep 1
 done
 

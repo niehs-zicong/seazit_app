@@ -4,7 +4,7 @@
 # javascript
 project/.happypack
 project/node_modules
-#project/static/bundles
+project/static/bundles
 project/webpack-stats.json
 **/.DS_Store
 
@@ -27,10 +27,14 @@ bin/*.local.sh
 project/main/settings/local.py
 .ipynb_checkpoints
 .vscode
-project/yarn.lock
+
+#project/yarn.lock
+#project/static_seazit/bundles/main*
+#project/static_seazit/bundles/vendor*
 
 # production environment
 *.log
+seazit_app.log*
 public/
 .env
 

@@ -1,7 +1,8 @@
-
 #!/usr/bin/python
 import psycopg2
 import sys
+import markdown
+
 sys.path.append('../../')
 #import config
 #from config import config
@@ -15,7 +16,7 @@ def connect():
 
         # connect to the PostgreSQL server
         print('Connecting to the PostgreSQL database...')
-        conn = psycopg2.connect(host='10.98.105.92',port='5432',database='dev_seazit',user='ntp_group',password='ntp_group')
+        conn = psycopg2.connect(host='10.98.105.92',port='5432',database='dev_seazit',user='yournamehere',password='ntp_*****')
       
         # create a cursor
         cur = conn.cursor()
@@ -37,7 +38,14 @@ def connect():
             conn.close()
             print('Database connection closed.')
 
+def test_packages():
+    print(markdown)
+    if markdown.version<= '2.2':
+        print('version=',markdown.__version__)
+    else:
+        print('new version',markdown.__version__)
 
 if __name__ == '__main__':
     connect()
+    test_packages()
 

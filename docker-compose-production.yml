@@ -12,17 +12,22 @@ services:
     #restart: always
     #build: ./compose/postgres
     #volumes:
-     # - postgres_data:/var/lib/postgresql/data
-     # - postgres_backup:/backups
+    #  - postgres_data:/var/lib/postgresql/data
+    #  - postgres_backup:/backups
     #env_file: .env
 
   rabbitmq:
     restart: always
-    build: ./compose/rabbitmq
+    build: ./compose/rabbitmq 
+    ports:
+      - "0.0.0.0:5672:5672"    
 
   redis:
     restart: always
     build: ./compose/redis
+    ports:
+      - "0.0.0.0:6379:6379"  
+     
 
   django:
     restart: always
@@ -30,11 +35,14 @@ services:
       context: .
       dockerfile: ./compose/django/Dockerfile
     command: /usr/bin/supervisord -c /supervisord.conf --nodaemon
+    #sue Jan 30
+    #ports:
+      #- "0.0.0.0:5000:5000"
     depends_on:
       #- postgres
       - rabbitmq
       - redis
-      - rserve
+      #- rserve
     env_file: .env
     volumes:
       - static_files:/app/public
@@ -43,10 +51,14 @@ services:
   rserve:
     restart: always
     build: ./compose/rserve
+    ports:
+      - "0.0.0.0:6311:6311"
 
   shiny:
     restart: always
     build: ./compose/shiny
+    ports:
+      - "0.0.0.0:3838:3838"
     volumes:
       - shiny_apps:/srv/shiny-apps
 
@@ -55,9 +67,9 @@ services:
     build: ./compose/nginx
     depends_on:
       - django
-      - shiny
+      #- shiny
     ports:
       - "0.0.0.0:81:80"
-      - "0.0.0.0:444:443"
+      - "0.0.0.0:443:443"
     volumes:
       - static_files:/app/public
