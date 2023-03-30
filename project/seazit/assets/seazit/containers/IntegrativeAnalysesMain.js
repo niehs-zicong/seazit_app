@@ -15,11 +15,12 @@ import IntegrativePlotWidget from '../widgets/IntegrativePlotWidget';
 import BmdWidget from '../widgets/BmdWidget';
 import ChemicalWidget from '../widgets/ChemicalWidget';
 import OntologyWidget from '../widgets/OntologyWidget';
+import OntologyTypeWidget from '../widgets/OntologyTypeWidget';
 
 import ReadoutWidget from '../widgets/ReadoutWidget';
 import ReadoutCategoryWidget from '../widgets/ReadoutCategoryWidget';
 import ReadoutTypeWidget from '../widgets/ReadoutTypeWidget';
-import IntegrativeCheckBoxWidget from "../widgets/IntegrativeCheckBoxWidget";
+import IntegrativeCheckBoxWidget from '../widgets/IntegrativeCheckBoxWidget';
 
 import {
     HEATMAP_ACTIVITY,
@@ -31,7 +32,6 @@ import {
     CHEMFILTER_CHEMICIAL,
     READOUT_TYPE_CATEGORY,
     READOUT_TYPE_READOUT,
-
     IntegrativeAnalysesTab,
     integrative_Granular,
     integrative_General,
@@ -39,9 +39,8 @@ import {
     renderNoSelected,
     getIntegrativeUrl,
 } from '../shared';
-import PropTypes from "prop-types";
-import BmdCheckBoxWidget from "../widgets/BmdCheckBoxWidget";
-
+import PropTypes from 'prop-types';
+import BmdCheckBoxWidget from '../widgets/BmdCheckBoxWidget';
 
 class IntegrativeAnalysesMain extends React.Component {
     constructor(props) {
@@ -55,7 +54,6 @@ class IntegrativeAnalysesMain extends React.Component {
             // HelpButtonWidget
             showHelpText: false,
             assays: [],
-            // assays: ['1', '2', '3'],
 
             datasetLabName: [],
             url: null,
@@ -64,16 +62,12 @@ class IntegrativeAnalysesMain extends React.Component {
             // ontologyType: integrative_General,
             //
             ontologyGroup: [],
-            // ontologyGroup:['craniofacial defects'],
 
             // ChemicalSelectorWidget
             chemicalFilterBy: CHEMFILTER_CATEGORY,
             // chemicalFilterBy: CHEMFILTER_CHEMICIAL,
 
             categories: [],
-            // categories: ['Insecticide'],
-
-
 
             chemicals: [],
 
@@ -91,11 +85,7 @@ class IntegrativeAnalysesMain extends React.Component {
             // HeatmapDisplaySelector
             heatmapDisplay: HEATMAP_ACTIVITY,
             tabFlag: IntegrativeAnalysesTab,
-
-
         };
-
-
     }
 
     componentWillMount() {
@@ -109,17 +99,9 @@ class IntegrativeAnalysesMain extends React.Component {
         return (
             <div className="alert alert-info">
                 <h2>Help text</h2>
-                <p>
-                    zw
-                </p>
-                <p>
-                    zw_renderReadoutChemicalSelectors
-
-                </p>
-                <p>
-                    zw
-
-                </p>
+                <p>zw</p>
+                <p>zw_renderReadoutChemicalSelectors</p>
+                <p>zw</p>
                 <p>
                     <b>Visualization options:</b>
                 </p>
@@ -157,14 +139,12 @@ class IntegrativeAnalysesMain extends React.Component {
         );
     }
 
-
     _renderMainBody() {
         // let hasChems = this.state.chemicals.length > 0,
         //     hasReadoutCategories = this.state.readoutCategories.length > 0,
         //     requiresFilters = [INTVIZ_HEATMAP, INTVIZ_DevtoxHEATMAP];
         return (
             <div>
-
                 <IntegrativePlotHandler
                     assays={this.state.assays}
                     casrns={this.state.chemicals}
@@ -175,8 +155,8 @@ class IntegrativeAnalysesMain extends React.Component {
                     datasetLabName={this.state.datasetLabName}
                 />
                 <p className="help-block">
-                    <b>Interactivity note:</b> This heatmap is interactive. Click a cell to
-                    view individual dose-response curves associated with it.
+                    <b>Interactivity note:</b> This heatmap is interactive. Click a cell to view
+                    individual dose-response curves associated with it.
                 </p>
             </div>
         );
@@ -184,16 +164,14 @@ class IntegrativeAnalysesMain extends React.Component {
 
     render() {
         if (!this.state.metadataLoaded) {
-            return <Loading/>;
+            return <Loading />;
         }
         this.state.datasetLabName = _.chain(this.state.protocol_data)
-            .filter((i) => this.state.assays.includes((i.seazit_protocol_id).toString()))
+            .filter((i) => this.state.assays.includes(i.seazit_protocol_id.toString()))
             .map('protocol_name_plot')
-            .value()
-        ;
+            .value();
 
         this.state.url = getIntegrativeUrl(this.state.assays, this.state.chemicals);
-        // this.state.url = '/seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=1,2,3&casrns=71751-41-2,5598-15-2,2921-88-2,58-89-9,116-06-3,298-02-2,95737-68-1,83-79-4';
 
         //heatmap test
         return (
@@ -201,15 +179,15 @@ class IntegrativeAnalysesMain extends React.Component {
                 <div className="col-md-12">
                     <h1>
                         Integrative Analyses
-                        <HelpButtonWidget stateHolder={this}/>
+                        <HelpButtonWidget stateHolder={this} />
                     </h1>
                 </div>
                 <div className="col-md-12">
-                    <FiveOhEight/>
+                    <FiveOhEight />
                 </div>
                 <div className="col-md-3">
-                    <IntegrativePlotWidget stateHolder={this}/>
-                                        <hr/>
+                    <IntegrativePlotWidget stateHolder={this} />
+                    <hr />
 
                     {/*<hr/>*/}
                     <ReadoutWidget
@@ -219,19 +197,19 @@ class IntegrativeAnalysesMain extends React.Component {
                         multiAssaySelector={true}
                         multiReadoutSelector={true}
                     />
-                    <hr/>
+                    <hr />
                     <div>
-                        <OntologyWidget stateHolder={this}/>
-                        <hr/>
+                        {/*<OntologyTypeWidget stateHolder={this} />*/}
+                        <OntologyWidget stateHolder={this} />
+                        <hr />
                     </div>
-                    <ChemicalWidget stateHolder={this}/>
+                    <ChemicalWidget stateHolder={this} />
                 </div>
 
                 <div className="col-md-9">
                     {this._renderHelpText()}
                     {this._renderMainBody()}
                 </div>
-
             </div>
         );
     }

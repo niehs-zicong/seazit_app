@@ -1,9 +1,17 @@
+import $ from '$';
+import _ from 'lodash';
 import React from 'react';
 import BaseWidget from './BaseWidget';
 
-import { READOUT_TYPE_READOUT, READOUT_TYPE_CATEGORY } from '../shared';
+import {
+    renderSelectMultiWidget,
+    renderSelectMultiOptgroupWidget,
+    integrative_Granular,
+    integrative_General,
+} from '../shared';
+import PropTypes from 'prop-types';
 
-class ReadoutTypeWidget extends BaseWidget {
+class OntologyTypeWidget extends BaseWidget {
     /*
     IntegrativePlotWidget requires the following state properties:
         - stateHolder.state.readoutType is one of the enumerations above
@@ -14,17 +22,17 @@ class ReadoutTypeWidget extends BaseWidget {
         console.log(state);
         return (
             <div>
-                <label>Filter endpoints by:</label>
+                <label>Ontology Groupings: Filter endpoints by:</label>
                 <div className="radio">
                     <label>
                         <input
                             type="radio"
-                            name="readoutType"
+                            name="ontologyType"
                             onChange={this.handleRadioChange}
-                            value={READOUT_TYPE_CATEGORY}
-                            checked={state.readoutType === READOUT_TYPE_CATEGORY}
+                            value={integrative_Granular}
+                            checked={state.ontologyType === integrative_Granular}
                         />
-                        by Category
+                        by Granular
                     </label>
 
                     <span style={{ paddingLeft: '0.5em', paddingRight: '0.5em' }}>|</span>
@@ -32,12 +40,12 @@ class ReadoutTypeWidget extends BaseWidget {
                     <label>
                         <input
                             type="radio"
-                            name="readoutType"
+                            name="ontologyType"
                             onChange={this.handleRadioChange}
-                            value={READOUT_TYPE_READOUT}
-                            checked={state.readoutType === READOUT_TYPE_READOUT}
+                            value={integrative_General}
+                            checked={state.ontologyType === integrative_General}
                         />
-                        by Readout
+                        by General
                     </label>
                 </div>
             </div>
@@ -45,4 +53,4 @@ class ReadoutTypeWidget extends BaseWidget {
     }
 }
 
-export default ReadoutTypeWidget;
+export default OntologyTypeWidget;

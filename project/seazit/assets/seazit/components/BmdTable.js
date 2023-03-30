@@ -5,48 +5,48 @@ import _ from 'lodash';
 import BootstrapModal from 'utils/BootstrapModal';
 import { Header, SingleCurveBody } from './DoseResponseModel';
 
-import { printFloat } from '../shared';
+import { pod_med_processed, printFloat } from '../shared';
+import { each } from 'underscore';
+import { forEach } from 'underscore';
 
-let renderMedPodModal = function(jsonData, flag) {
+let renderMortalityModal = function(jsonData, flag) {
     if (!jsonData) {
         // match button padding-left
         return <span style={{ paddingLeft: 12 }}>-</span>;
     }
-    // console.log(jsonData)
+    // console.log( jsonData,jsonData.minimimumNonViability, jsonData.minimimumViability)
     let showModal = () => {
+        // console.log( jsonData)
         new BootstrapModal(Header, SingleCurveBody, {
             // title: `${d.preferred_name} (${d.chemical_casrn}): ${d.readout_endpoint}`,
-            title: jsonData.preferred_name + `: ` + jsonData.endpoint_name,
+            title:
+                flag == 'NonMortality'
+                    ? jsonData.preferred_name + `: ` + jsonData.minimimumNonViability.endpoint_name
+                    : jsonData.preferred_name + `: ` + 'Mortality@120',
             protocol_id: jsonData.protocol_id,
             readout_id:
-                flag == 'pod_med'
-                    ? jsonData.endpoint_name + '_' + jsonData.protocol_id
+                flag == 'NonMortality'
+                    ? jsonData.minimimumNonViability.endpoint_name + '_' + jsonData.protocol_id
                     : 'Mortality@120' + '_' + jsonData.protocol_id,
             casrn: jsonData.casrn,
+            CheckBoxDisable: flag == 'NonMortality' ? false : true,
         });
     };
-    let med_result, min_med_result, max_med_result;
-    let result;
+    let med_result, min_med_result, max_med_result, d;
 
-    if (flag == 'pod_med') {
-        (med_result = jsonData.med_pod_med
-            ? printFloat(Math.pow(10, jsonData.med_pod_med) * 1000000)
-            : '-'),
-            (min_med_result = jsonData.min_pod_med
-                ? printFloat(Math.pow(10, jsonData.min_pod_med) * 1000000)
-                : ''),
-            (max_med_result = jsonData.max_pod_med
-                ? printFloat(Math.pow(10, jsonData.max_pod_med) * 1000000)
-                : '');
+    if (flag == 'NonMortality') {
+        d = jsonData.minimimumNonViability;
+        (med_result = d.med_pod_med ? printFloat(pod_med_processed(d.med_pod_med)) : '-'),
+            (min_med_result = d.min_pod_med ? printFloat(pod_med_processed(d.min_pod_med)) : ''),
+            (max_med_result = d.max_pod_med ? printFloat(pod_med_processed(d.max_pod_med)) : '');
     } else {
-        (med_result = jsonData.mort_med_pod_med
-            ? printFloat(Math.pow(10, jsonData.mort_med_pod_med) * 1000000)
-            : '-'),
-            (min_med_result = jsonData.mort_min_pod_med
-                ? printFloat(Math.pow(10, jsonData.mort_min_pod_med) * 1000000)
+        d = jsonData.minimimumViability;
+        (med_result = d.mort_med_pod_med ? printFloat(pod_med_processed(d.mort_med_pod_med)) : '-'),
+            (min_med_result = d.mort_min_pod_med
+                ? printFloat(pod_med_processed(d.mort_min_pod_med))
                 : ''),
-            (max_med_result = jsonData.mort_max_pod_med
-                ? printFloat(Math.pow(10, jsonData.mort_max_pod_med) * 1000000)
+            (max_med_result = d.mort_max_pod_med
+                ? printFloat(pod_med_processed(d.mort_max_pod_med))
                 : '');
     }
     return (
@@ -57,18 +57,105 @@ let renderMedPodModal = function(jsonData, flag) {
     );
 };
 
-class BmdTable extends React.Component {
+class SelectivityTable extends React.Component {
     _renderRow(d) {
-        // console.log("bmd d")
-        // console.log(d)
+        // console.log(d);
         return (
             <tr key={d.casrn}>
                 <td>{d.preferred_name}</td>
                 <td>{d.casrn}</td>
                 <td>{d.use_category1}</td>
-                {/*<td>{d.med_pod_med}</td>*/}
-                <td>{renderMedPodModal(d, 'pod_med')}</td>
-                <td>{renderMedPodModal(d, 'mort_pod_med')}</td>
+                <td>{d.malformation}</td>
+                <td>
+                    <ul>
+                        {/*{d.combin_ontology.map((value, index) => {*/}
+                        {/*    return <li key={`index-${index}`}>{value}</li>;*/}
+                        {/*})}*/}
+                        {/* I do this below instead of above because there is map error*/}
+                        {/* ref: https://bobbyhadz.com/blog/react-typeerror-cannot-read-property-map-of-null*/}
+                        {Array.isArray(d.combin_ontology) && !d.combin_ontology.includes(null)
+                            ? d.combin_ontology.map((value, index) => {
+                                  return <li key={`index-${index}`}>{value}</li>;
+                              })
+                            : '-'}
+                    </ul>
+                </td>
+
+                <td>
+                    <ul>
+                        {Array.isArray(d.combin_ontology_id) && !d.combin_ontology_id.includes(null)
+                            ? d.combin_ontology_id.map((value, index) => {
+                                  return (
+                                      <li key={index}>
+                                          <a
+                                              href={`https://www.ebi.ac.uk/ols/ontologies/zp/terms?iri=http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2F${value
+                                                  .toString()
+                                                  .split(':')
+                                                  .join('_')}`}
+                                              target="_blank"
+                                          >
+                                              {value}
+                                          </a>
+                                      </li>
+                                  );
+                              })
+                            : '-'}
+                    </ul>
+                </td>
+                <td>{printFloat(pod_med_processed(d.mean_pod))}</td>
+                <td>{printFloat(d.mean_selectivity)}</td>
+                <td>{d.n_values}</td>
+                <td>{renderMortalityModal(d, 'Mortality')}</td>
+            </tr>
+        );
+    }
+
+    render() {
+        if (this.props.data.length === 0) {
+            return null;
+        }
+        let medData = this.props.data;
+        return (
+            <div>
+                <table id="IA_table01" ref="table" className="table table-condensed table-hover">
+                    <thead>
+                        <tr>
+                            <th style={{ width: '20%' }}>Chemical</th>
+                            <th style={{ width: '20%' }}>CASRN</th>
+                            <th style={{ width: '20%' }}>Category</th>
+                            <th style={{ width: '20%' }}>Malformation</th>
+                            <th style={{ width: '20%' }}>Ontology term</th>
+                            <th style={{ width: '20%' }}>Ontology ID</th>
+                            <th style={{ width: '20%' }}>Malformation BMC</th>
+                            <th style={{ width: '20%' }}>Selectivity</th>
+                            <th style={{ width: '20%' }}>Number of curves evaluated</th>
+                            <th style={{ width: '20%' }}>
+                                Mortality BMC
+                                <br />
+                                (Min – Max)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>{medData.map(this._renderRow)}</tbody>
+                </table>
+            </div>
+        );
+    }
+}
+
+SelectivityTable.propTypes = {
+    data: PropTypes.array.isRequired,
+};
+
+class BmdTable extends React.Component {
+    _renderRow(d) {
+        return (
+            <tr key={d.casrn}>
+                <td>{d.preferred_name}</td>
+                <td>{d.casrn}</td>
+                <td>{d.use_category1}</td>
+                <td>{renderMortalityModal(d, 'NonMortality')}</td>
+                <td>{renderMortalityModal(d, 'Mortality')}</td>
                 <td>{d.n_values}</td>
             </tr>
         );
@@ -78,11 +165,7 @@ class BmdTable extends React.Component {
         if (this.props.data.length === 0) {
             return null;
         }
-        // console.log(this.props.data);
-
-        // let medData, pod_medData, mort_pod_medData;
         let medData = this.props.data;
-
         return (
             <div>
                 <table id="IA_table01" ref="table" className="table table-condensed table-hover">
@@ -102,8 +185,6 @@ class BmdTable extends React.Component {
                                 (Min – Max)
                             </th>
                             <th style={{ width: '20%' }}>Number of BMC</th>
-
-
                         </tr>
                     </thead>
                     <tbody>{medData.map(this._renderRow)}</tbody>
@@ -117,4 +198,6 @@ BmdTable.propTypes = {
     data: PropTypes.array.isRequired,
 };
 
-export default BmdTable;
+// export default BmdTable;
+export { SelectivityTable };
+export { BmdTable };

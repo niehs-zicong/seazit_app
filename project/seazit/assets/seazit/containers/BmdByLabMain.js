@@ -7,7 +7,9 @@ import BmdByLabPlotWidget from '../widgets/BmdByLabPlotWidget';
 // import BmdWidget from '../widgets/BmdWidget';
 import ReadoutWidget from '../widgets/ReadoutWidget';
 import SelectorSliderWidget from '../widgets/SelectorSliderWidget';
-import BmdCheckBoxWidget from "../widgets/BmdCheckBoxWidget";
+import BmdCheckBoxWidget from '../widgets/BmdCheckBoxWidget';
+import OntologyTypeWidget from '../widgets/OntologyTypeWidget';
+import OntologyWidget from '../widgets/OntologyWidget';
 
 // import AxisSelectorWidget from '../widgets/AxisSelectorWidget';
 import RankedBarchartHandler from '../components/RankedBarchartHandler';
@@ -23,6 +25,7 @@ import {
     loadMetadata,
     renderNoSelected,
     BMCTab,
+    integrative_Granular,
 } from '../shared';
 
 class BmdByLabMain extends React.Component {
@@ -42,44 +45,46 @@ class BmdByLabMain extends React.Component {
             chemicals: [],
             categories: [],
 
+            ontologyType: integrative_Granular,
+            // ontologyType: integrative_General,
+            //
+            ontologyGroup: [],
+
             // SelectorSliderWidget
             selectivityCutoff: 0.5,
-                        // BmdCheckBoxWidget
+            // BmdCheckBoxWidget
             selectivityList: [
                 {
                     id: 1,
-                    name: "dev tox",
+                    name: 'dev tox',
                     isChecked: true,
-                    label: "specific",
+                    label: 'specific',
                 },
                 {
                     id: 2,
-                    name: "general tox",
+                    name: 'general tox',
                     isChecked: false,
-                    label: "non-specific",
-
+                    label: 'non-specific',
                 },
                 {
                     id: 3,
-                    name: "inconclusive",
+                    name: 'inconclusive',
                     isChecked: false,
-                    label: "inconclusive, more tests are needed",
-
+                    label: 'inconclusive, more tests are needed',
                 },
                 {
                     id: 4,
-                    name: "inactive",
+                    name: 'inactive',
                     isChecked: false,
-                    label: "non-toxic",
-
-                }
+                    label: 'non-toxic',
+                },
             ],
 
             // AxisSelectorWidget
             selectedAxis: AXIS_LOG10,
 
             // ReadoutSelectorWidget
-            assay: [],
+            assays: [],
             readouts: [],
 
             visualization: BMDVIZ_ACTIVITY,
@@ -93,7 +98,7 @@ class BmdByLabMain extends React.Component {
 
     renderNoSelection() {
         return renderNoSelected({
-            hasAssay: this.state.assay.length > 0,
+            hasAssay: this.state.assays.length > 0,
             hasReadouts: this.state.readouts.length > 0,
         });
     }
@@ -157,9 +162,9 @@ class BmdByLabMain extends React.Component {
         if (!this.state.metadataLoaded) {
             return <Loading />;
         }
-        // console.log(this.state);
-        let url = getBmdsUrl(this.state.assay, this.state.readouts);
-
+        // for bmc lab case, readout always add Mortality@120.
+        // this.state.readouts.push('Mortality@120' + '_' + this.state.assays)
+        let url = getBmdsUrl(this.state.assays, this.state.readouts);
         return (
             <div className="row-fluid">
                 <div className="col-md-12">
@@ -172,6 +177,7 @@ class BmdByLabMain extends React.Component {
                     <FiveOhEight />
                 </div>
                 <div className="col-md-3">
+                    {/*<OntologyTypeWidget stateHolder={this} />*/}
                     <ReadoutWidget
                         stateHolder={this}
                         hideViability={true}

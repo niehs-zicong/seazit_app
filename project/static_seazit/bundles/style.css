@@ -1,2 +1,125 @@
-.graph__legendText___3XO50{font-size:15px;font-weight:700}.graph__tooltip___jiryp{position:absolute;width:120;height:auto;font-family:simsun;font-size:14px;text-align:center;border-style:solid;border-width:1px;background-color:#fff;border-radius:5px}.graph__yellowbox___2ICjO{float:left;height:20px;width:20px;margin-bottom:15px;border:1px solid #000;background-color:#ff0}.graph__red___11VBI{background-color:red}.graph__yellow___1grgd{background-color:#ff0}.graph__green___3DUtT{background-color:green}.graph__blue___1NegX{background-color:blue}.Switch__slider___1-yi7.Switch__round___2_1jB{border-radius:34px}.Switch__slider___1-yi7.Switch__round___2_1jB:before{border-radius:50%}.Switch__switch___2q0Rq{position:relative;display:inline-block;width:60px;height:34px}.Switch__switch___2q0Rq input{opacity:0;width:0;height:0}.Switch__slider___1-yi7{cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#ccc}.Switch__slider___1-yi7,.Switch__slider___1-yi7:before{position:absolute;-webkit-transition:.4s;transition:.4s}.Switch__slider___1-yi7:before{content:"";height:26px;width:26px;left:4px;bottom:4px;background-color:#fff}input:checked+.Switch__slider___1-yi7{background-color:#2196f3}input:focus+.Switch__slider___1-yi7{box-shadow:0 0 1px #2196f3}input:checked+.Switch__slider___1-yi7:before{-webkit-transform:translateX(26px);-ms-transform:translateX(26px);transform:translateX(26px)}.Switch__react-switch-checkbox___2tgED{height:0;width:0;visibility:hidden}.Switch__react-switch-label___2IdRs{display:flex;align-items:center;justify-content:space-between;cursor:pointer;width:100px;height:50px;background:grey;border-radius:100px;position:relative;transition:background-color .2s}.Switch__react-switch-label___2IdRs .Switch__react-switch-button___15b5h{content:"";position:absolute;top:2px;left:2px;width:45px;height:45px;border-radius:45px;transition:.2s;background:#fff;box-shadow:0 0 2px 0 hsla(0,0%,4%,.29)}.Switch__react-switch-checkbox___2tgED:checked+.Switch__react-switch-label___2IdRs .Switch__react-switch-button___15b5h{left:calc(100% - 2px);transform:translateX(-100%)}.Switch__react-switch-label___2IdRs:active .Switch__react-switch-button___15b5h{width:60px}
+.graph__legendText___3XO50 {
+    font-size: 15px;
+    font-weight: 700;
+}
+.graph__tooltip___jiryp {
+    position: absolute;
+    width: 120;
+    height: auto;
+    font-family: simsun;
+    font-size: 14px;
+    text-align: center;
+    border-style: solid;
+    border-width: 1px;
+    background-color: #fff;
+    border-radius: 5px;
+}
+.graph__yellowbox___2ICjO {
+    float: left;
+    height: 20px;
+    width: 20px;
+    margin-bottom: 15px;
+    border: 1px solid #000;
+    background-color: #ff0;
+}
+.graph__red___11VBI {
+    background-color: red;
+}
+.graph__yellow___1grgd {
+    background-color: #ff0;
+}
+.graph__green___3DUtT {
+    background-color: green;
+}
+.graph__blue___1NegX {
+    background-color: blue;
+}
+.Switch__slider___1-yi7.Switch__round___2_1jB {
+    border-radius: 34px;
+}
+.Switch__slider___1-yi7.Switch__round___2_1jB:before {
+    border-radius: 50%;
+}
+.Switch__switch___2q0Rq {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+.Switch__switch___2q0Rq input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.Switch__slider___1-yi7 {
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+}
+.Switch__slider___1-yi7,
+.Switch__slider___1-yi7:before {
+    position: absolute;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+}
+.Switch__slider___1-yi7:before {
+    content: '';
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: #fff;
+}
+input:checked + .Switch__slider___1-yi7 {
+    background-color: #2196f3;
+}
+input:focus + .Switch__slider___1-yi7 {
+    box-shadow: 0 0 1px #2196f3;
+}
+input:checked + .Switch__slider___1-yi7:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+.Switch__react-switch-checkbox___2tgED {
+    height: 0;
+    width: 0;
+    visibility: hidden;
+}
+.Switch__react-switch-label___2IdRs {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    width: 100px;
+    height: 50px;
+    background: grey;
+    border-radius: 100px;
+    position: relative;
+    transition: background-color 0.2s;
+}
+.Switch__react-switch-label___2IdRs .Switch__react-switch-button___15b5h {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 45px;
+    height: 45px;
+    border-radius: 45px;
+    transition: 0.2s;
+    background: #fff;
+    box-shadow: 0 0 2px 0 hsla(0, 0%, 4%, 0.29);
+}
+.Switch__react-switch-checkbox___2tgED:checked
+    + .Switch__react-switch-label___2IdRs
+    .Switch__react-switch-button___15b5h {
+    left: calc(100% - 2px);
+    transform: translateX(-100%);
+}
+.Switch__react-switch-label___2IdRs:active .Switch__react-switch-button___15b5h {
+    width: 60px;
+}
 /*# sourceMappingURL=style.css.map*/
