@@ -116,7 +116,6 @@ class OntologyWidget extends BaseWidget {
                 return null;
             }
 
-            console.log('test', opts, state.ontologyGroup);
             return renderSelectMultiOptgroupWidget(
                 'ontologyGroup',
                 'General',
@@ -129,7 +128,6 @@ class OntologyWidget extends BaseWidget {
 
     render() {
         let state = this.props.stateHolder.state;
-        console.log(state);
         return (
             <div className="clearfix">
                 {this._renderFilterBy(state)}

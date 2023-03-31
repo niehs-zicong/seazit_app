@@ -11,7 +11,6 @@ class ReadoutTypeWidget extends BaseWidget {
 
     render() {
         let state = this.props.stateHolder.state;
-        console.log(state);
         return (
             <div>
                 <label>Filter endpoints by:</label>
