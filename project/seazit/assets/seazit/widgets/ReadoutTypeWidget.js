@@ -13,7 +13,7 @@ class ReadoutTypeWidget extends BaseWidget {
         let state = this.props.stateHolder.state;
         return (
             <div>
-                <label>Filter endpoints by:</label>
+                <label>Filter endpoints by zw test:</label>
                 <div className="radio">
                     <label>
                         <input

@@ -35,8 +35,8 @@ RUN \
     chown django /supervisord.conf && \
     \
     mkdir -p /app/logs
-    
- 
+
+
 #RUN conda env create -f /conda.env && \
 #    \
 #    . /opt/conda/etc/profile.d/conda.sh && \
@@ -58,16 +58,16 @@ RUN conda env create -f /env_seazit.yml  && \
 
 RUN apt-get install nano
 
- 
+
 # fix the django 2.0 import error
-#replace 
+#replace
 #from django.core.urlresolvers import reverse, NoReverseMatch
-#to: 
+#to:
 #from django.urls import reverse, NoReverseMatch
 RUN sed -e 's/core.urlresolvers/urls/g' /opt/conda/envs/seazit/lib/python3.8/site-packages/selectable/base.py>/opt/conda/envs/seazit/lib/python3.8/site-packages/selectable/base.py.new
 RUN mv /opt/conda/envs/seazit/lib/python3.8/site-packages/selectable/base.py.new /opt/conda/envs/seazit/lib/python3.8/site-packages/selectable/base.py
 
-#fix markdown property vision from markdown.version 
+#fix markdown property vision from markdown.version
 #to: markdown.__version__
 RUN sed -e 's/markdown.version/markdown.__version__/g' /opt/conda/envs/seazit/lib/python3.8/site-packages/rest_framework/compat.py > /opt/conda/envs/seazit/lib/python3.8/site-packages/rest_framework/new_compat.py
 #replace compat.py with new_compat.py
