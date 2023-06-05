@@ -25,24 +25,26 @@ class ReadoutWidget extends BaseWidget {
         super(props);
     }
 
+    mapFun = (r) => {
+        return {
+            key: r.seazit_protocol_id,
+            label: r.protocol_name_long,
+            protocol_name: r.protocol_name,
+            description: r.protocol_name_plot,
+            protocol_type: r.protocol_type,
+            protocol_source: r.protocol_source,
+            seazit_protocol_id: r.seazit_protocol_id,
+            lab_anonymous_code: r.lab_anonymous_code,
+            study_phase: r.study_phase,
+            test_condition: r.test_condition,
+            protocol_name_long: r.protocol_name_long,
+            protocol_name_plot: r.protocol_name_plot,
+        };
+    };
+
     _renderSingleDatasetSelector(state) {
         let options = _.chain(state.protocol_data)
-            .map((r) => {
-                return {
-                    key: r.seazit_protocol_id,
-                    label: r.protocol_name_long,
-                    protocol_name: r.protocol_name,
-                    description: r.protocol_name_plot,
-                    protocol_type: r.protocol_type,
-                    protocol_source: r.protocol_source,
-                    seazit_protocol_id: r.seazit_protocol_id,
-                    lab_anonymous_code: r.lab_anonymous_code,
-                    study_phase: r.study_phase,
-                    test_condition: r.test_condition,
-                    protocol_name_long: r.protocol_name_long,
-                    protocol_name_plot: r.protocol_name_plot,
-                };
-            })
+            .map(this.mapFun)
             .sortBy('seazit_protocol_id')
             .value();
 
@@ -57,22 +59,7 @@ class ReadoutWidget extends BaseWidget {
 
     _renderMultipleDatasetSelector(state) {
         let options = _.chain(state.protocol_data)
-            .map((r) => {
-                return {
-                    key: r.seazit_protocol_id,
-                    label: r.protocol_name_long,
-                    protocol_name: r.protocol_name,
-                    description: r.protocol_name_plot,
-                    protocol_type: r.protocol_type,
-                    protocol_source: r.protocol_source,
-                    seazit_protocol_id: r.seazit_protocol_id,
-                    lab_anonymous_code: r.lab_anonymous_code,
-                    study_phase: r.study_phase,
-                    test_condition: r.test_condition,
-                    protocol_name_long: r.protocol_name_long,
-                    protocol_name_plot: r.protocol_name_plot,
-                };
-            })
+            .map(this.mapFun)
             .sortBy('seazit_protocol_id')
             .value();
 
@@ -125,13 +112,25 @@ class ReadoutWidget extends BaseWidget {
         let assays = state.assays,
             opts,
             ontologyGroup,
+            endPointFilterFun,
             groupBy;
 
         switch (state.tabFlag) {
             case ConcentrationResponseTab:
                 groupBy = 'category';
+                endPointFilterFun = (r) => {
+                    return r;
+                };
+
                 break;
             case BMCTab:
+                endPointFilterFun = (r) => {
+                    return (
+                        r.endpoint_name !== 'Mortality@120' ||
+                        r.endpoint_name !== 'Mortality@24' ||
+                        r.endpoint_name.includes('@24')
+                    );
+                };
                 if (state.ontologyType === integrative_Granular) {
                     groupBy = 'developmental_defect_grouping_granular';
                 } else {
@@ -139,6 +138,13 @@ class ReadoutWidget extends BaseWidget {
                 }
                 break;
             case IntegrativeAnalysesTab:
+                endPointFilterFun = (r) => {
+                    return (
+                        r.endpoint_name !== 'Mortality@120' ||
+                        r.endpoint_name !== 'Mortality@24' ||
+                        r.endpoint_name.includes('@24')
+                    );
+                };
                 if (state.ontologyType === integrative_Granular) {
                     groupBy = 'developmental_defect_grouping_granular';
                 } else {
@@ -154,13 +160,7 @@ class ReadoutWidget extends BaseWidget {
             .filter((r) => {
                 return _.includes(assays, r.seazit_protocol_id.toString());
             })
-            .reject((r) => {
-                return (
-                    r.endpoint_name == 'Mortality@120' ||
-                    r.endpoint_name == 'Mortality@24' ||
-                    r.endpoint_name.includes('@24')
-                );
-            })
+            .filter(endPointFilterFun)
             .map((r) => {
                 return {
                     key: r.endpoint_name_protocol.toString(),
@@ -179,14 +179,22 @@ class ReadoutWidget extends BaseWidget {
                         r.developmental_defect_grouping_granular,
                 };
             })
-            .uniqBy('key')
+            // .uniqBy('key')
             .sortBy('label')
+            .sortBy(function(e) {
+                return (
+                    'Mortality@24' !== e.label &&
+                    'Mortality@120' !== e.label &&
+                    'MalformedAny+Mort@120' !== e.label
+                );
+            })
             .groupBy(groupBy)
+            .mapValues((group) => _.uniqBy(group, 'key'))
             .value();
         if (_.keys(opts).length === 0) {
             return null;
         }
-        console.log(opts);
+        // console.log('endpoints', opts)
         return renderSelectMultiOptgroupWidget(
             'readouts',
             'endpoint',
@@ -204,7 +212,7 @@ class ReadoutWidget extends BaseWidget {
                     <div>
                         {this._renderMultipleDatasetSelector(state)}
                         <br />
-                        {this._renderFilterBy(state)}
+                        {/*{this._renderFilterBy(state)}*/}
                         {this._renderMultipleEndpointSelector(state)}
                     </div>
                 );
