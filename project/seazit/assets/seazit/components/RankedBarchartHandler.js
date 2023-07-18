@@ -193,7 +193,7 @@ class RankedBarchartHandler extends React.Component {
         this.fetchBmdData(this.props.url);
     }
 
-    componentWillUpdate(nextProps) {
+    UNSAFE_componentWillUpdate(nextProps) {
         if (nextProps.url !== this.props.url) {
             this.fetchBmdData(nextProps.url);
         }

@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../deploy-seazit/.idea/deploy-seazit.iml" filepath="$PROJECT_DIR$/../deploy-seazit/.idea/deploy-seazit.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../sankeyplot/.idea/sankeyplot.iml" filepath="$PROJECT_DIR$/../sankeyplot/.idea/sankeyplot.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/seazit_app.iml" filepath="$PROJECT_DIR$/.idea/seazit_app.iml" />
     </modules>
   </component>

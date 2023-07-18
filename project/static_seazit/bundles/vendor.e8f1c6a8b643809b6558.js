@@ -2888,7 +2888,9 @@ webpackJsonp(
                                         null != t &&
                                         !pc(t)
                                     ) ||
-                                    Cn.test(t) || !Nn.test(t) || (null != n && t in of(n))
+                                    Cn.test(t) ||
+                                    !Nn.test(t) ||
+                                    (null != n && t in of(n))
                                 );
                             }
                             function Ru(t) {
@@ -48184,8 +48186,8 @@ object-assign
                     ? 0 === i.type
                     : !r &&
                       2 < n.length &&
-                          ('o' === n[0] || 'O' === n[0]) &&
-                          ('n' === n[1] || 'N' === n[1])) ||
+                      ('o' === n[0] || 'O' === n[0]) &&
+                      ('n' === n[1] || 'N' === n[1])) ||
                     (w(n, e, i, r) && (e = null),
                     r || null === i
                         ? m(n) && (null === e ? t.removeAttribute(n) : t.setAttribute(n, '' + e))
@@ -49839,7 +49841,8 @@ object-assign
                         ? t.shouldComponentUpdate(r, u, o)
                         : !n.prototype ||
                           !n.prototype.isPureReactComponent ||
-                          !Cn(e, r) || !Cn(i, u)
+                          !Cn(e, r) ||
+                          !Cn(i, u)
                 );
             }
             function he(t, n, e) {
@@ -50816,12 +50819,12 @@ object-assign
                             ? ('function' == typeof f && (fe(n, e, f, r), (h = n.memoizedState)),
                               (f = cc || le(n, e, a, r, c, h, s))
                                   ? (l ||
-                                        ('function' != typeof o.UNSAFE_componentWillUpdate &&
-                                            'function' != typeof o.componentWillUpdate) ||
-                                        ('function' == typeof o.componentWillUpdate &&
-                                            o.componentWillUpdate(r, h, s),
-                                        'function' == typeof o.UNSAFE_componentWillUpdate &&
-                                            o.UNSAFE_componentWillUpdate(r, h, s)),
+                                        ('function' != typeof o.UNSAFE_UNSAFE_componentWillUpdate &&
+                                            'function' != typeof o.UNSAFE_componentWillUpdate) ||
+                                        ('function' == typeof o.UNSAFE_componentWillUpdate &&
+                                            o.UNSAFE_componentWillUpdate(r, h, s),
+                                        'function' == typeof o.UNSAFE_UNSAFE_componentWillUpdate &&
+                                            o.UNSAFE_UNSAFE_componentWillUpdate(r, h, s)),
                                     'function' == typeof o.componentDidUpdate && (n.effectTag |= 4),
                                     'function' == typeof o.getSnapshotBeforeUpdate &&
                                         (n.effectTag |= 256))
@@ -60625,7 +60628,8 @@ object-assign
                     e = t.tagName;
                 return (
                     !('INPUT' !== e || !b[n] || t.readOnly) ||
-                    ('TEXTAREA' === e && !t.readOnly) || !!t.isContentEditable
+                    ('TEXTAREA' === e && !t.readOnly) ||
+                    !!t.isContentEditable
                 );
             }
             function i(t) {

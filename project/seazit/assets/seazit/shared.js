@@ -3,7 +3,7 @@ import * as d3 from 'd3';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Tooltip from '@material-ui/core/Tooltip';
-import { Header, MultipleCurveBody, SingleCurveBody } from './components/DoseResponseModel';
+import { Header, MultipleCurveBody, SingleCurveBody } from './components/BootstrapBodyPart';
 import BootstrapModal from 'utils/BootstrapModal';
 
 const AXIS_LINEAR = 1,
@@ -18,24 +18,16 @@ const AXIS_LINEAR = 1,
     integrative_Granular = 1,
     integrative_General = 2,
     CATEGORY_COLORS = {
-        'Assay specific control': '#ee7621',
-        Botanical: '#fff590',
-        Drug: '#3182bd',
-        'Drug*': '#9ecae1',
-        'Flame Retardant': '#E7BA52',
-        Fungicide: '#F9D70B',
+        Insecticide: '#d62976',
+        Fungicide: '#f9d70b',
         Herbicide: '#3BD6C6',
-        Industrial: '#31A354',
-        'Industrial-PFAS': '#69BE77',
-        'Industrial*': '#A1D99B',
-        'Insect repellent': '#971C53',
-        'Insect repellant': '#971C53',
-        Insecticide: '#D62976',
-        Miscellaneous: '#EECCAA',
-        Negative: '#636363',
+        'Positive Control': '#ee7621',
+        Preservative: '#c89f73',
+        'Industrial Compound': '#31a354',
         PAH: '#756bb1',
-        Pesticide: '#AD494A',
-        'Pesticide*': '#d6616b',
+        'Flame Retardant': '#e7ba52',
+        Drug: '#3182bd',
+        'Vehicle Control': '#ee7621',
     },
     CHEMFILTER_CATEGORY = 1,
     CHEMFILTER_CHEMICIAL = 2,
@@ -51,6 +43,7 @@ const AXIS_LINEAR = 1,
     COLLAPSE_WITH_Mortality120 = 'COLLAPSE_WITH_Mortality120',
     URL_CHEMXLSX = '/static_seazit/resources/seazit/NTP%20Chemical%20Library.xlsx',
     URL_METADATA = '/seazit/api/seazit_metadata/metadata/?format=json',
+    URL_SANKEYDATA = '/seazit/api/seazit_sankeydata/sankeydata/?format=json',
     // ConcentrationResponse URL
     URL_CR = '/seazit/api/seazit_result/crResult/',
     // BMC by lab URL
@@ -68,14 +61,13 @@ const AXIS_LINEAR = 1,
         'Selectivity is estimated and true value may be higher; viability BMC could not be calculated and was therefore estimated to equal the maximum tested dose.',
     loadMetadata = function(component) {
         d3.json(URL_METADATA, (d) => {
-            // console.log('d');
-            // console.log(d);
+            console.log('d');
+            console.log(d);
             component.setState({
                 metadataLoaded: true,
                 protocol_data: d.protocol_data,
                 Seazit_chemical_info: d.Seazit_chemical_info,
                 Seazit_ui_panel: d.Seazit_ui_panel,
-                Seazit_ui_panel2: d.Seazit_ui_panel2,
                 Seazit_ontology: d.Seazit_ontology,
             });
         });
@@ -211,6 +203,16 @@ const AXIS_LINEAR = 1,
         return `${URL_BMD}?format=json&protocol_ids=${id}&readouts=${ro}`;
     },
     getIntegrativeUrl = function(protocol_ids, casrns) {
+        if (protocol_ids.length === 0 || casrns.length === 0) {
+            return null;
+        }
+        let ids = protocol_ids.join(','),
+            chems = casrns.join(',');
+        // return url, ro is the readout_id
+        // console.log(ids, ro, chems);
+        return `${URL_INTEGRATIVE}?format=json&protocol_ids=${ids}&casrns=${chems}`;
+    },
+    getSankeyPlotUrl = function(protocol_ids, casrns) {
         if (protocol_ids.length === 0 || casrns.length === 0) {
             return null;
         }
@@ -382,9 +384,11 @@ export {
     READOUT_TYPE_CATEGORY,
     SELECTIVITY_FOOTNOTE,
     URL_CHEMXLSX,
+    URL_SANKEYDATA,
     getDoseResponsesUrl,
     getBmdsUrl,
     getIntegrativeUrl,
+    getSankeyPlotUrl,
     loadMetadata,
     renderSelectMultiWidget,
     renderSelectSingleWidget,

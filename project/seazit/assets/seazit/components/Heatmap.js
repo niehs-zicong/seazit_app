@@ -11,10 +11,12 @@ import {
     SingleCurveBody,
     MultipleCurveBody,
     molecularGraphBody,
-} from './DoseResponseModel';
+    sankeyPlotGraphBody,
+} from './BootstrapBodyPart';
 import {
     COLLAPSE_WITH_Mortality120,
     getDoseResponsesUrl,
+    getSankeyPlotUrl,
     integrativeHandleCellClick,
     NO_COLLAPSE,
 } from '../shared';
@@ -56,8 +58,8 @@ let addStripMask = function(svg) {
 };
 let renderPlot = function(el, data, legendData) {
     $(el).empty();
-    console.log('data');
-    console.log(data);
+    // console.log('data');
+    // console.log(data);
 
     let margin = {
             top: 40,
@@ -75,39 +77,28 @@ let renderPlot = function(el, data, legendData) {
             console.log('label');
             console.log(label);
             console.log(xMap);
+            let cells = xMap[label];
+            let cell = {
+                developmental_defect_grouping_general:
+                    cells[0].developmental_defect_grouping_general,
+                ontologyGroupName: cells[0].ontologyGroupName,
+                protocol_source: cells[0].protocol_source,
+            };
+            console.log(cell);
 
-            let cells = xMap[label],
-                // casrns = _.map(cells, 'y_key'),
-                general_ids = [
-                    ...new Set(cells.map((item) => item.developmental_defect_grouping_general)),
-                ],
-                granular_ids = [
-                    ...new Set(cells.map((item) => item.developmental_defect_grouping_granular)),
-                ],
-                protocol_source_ids = [...new Set(cells.map((item) => item.protocol_source))];
-
-            console.log(cells);
-            console.log('general_ids');
-            console.log(general_ids);
-
-            console.log('granular_ids');
-            console.log(granular_ids);
-
-            console.log('protocol_source_ids');
-            console.log(protocol_source_ids);
-
-            new BootstrapModal(Header, MultipleCurveBody, {
-                title: label,
-                readout_ids,
-                casrns,
-            });
+            if (cell.developmental_defect_grouping_general && cell.protocol_source) {
+                new BootstrapModal(Header, sankeyPlotGraphBody, {
+                    title: label,
+                    cells: cell,
+                });
+            }
         },
         // draw y-axis
         handleYLabelClick = function(label) {
             let cells = yMap[label],
                 casrns = [...new Set(cells.map((item) => item.casrn))],
                 dtxsids = [...new Set(cells.map((item) => item.dtxsid))];
-            console.log(cells);
+
             new BootstrapModal(Header, molecularGraphBody, {
                 title: `${dtxsids[0]} // ${label} //  molecularGraph  ZWTBD`,
                 dtxsid: dtxsids[0],
@@ -449,7 +440,7 @@ class Heatmap extends Component {
         this.handleResize = this.handleResize.bind(this);
     }
 
-    unrenderPlot() {
+    _unrenderPlot() {
         if (this.refs.svg === undefined) {
             return;
         }
@@ -457,11 +448,11 @@ class Heatmap extends Component {
         this.refs.svg.innerHTML = '';
     }
 
-    renderPlot() {
+    _renderPlot() {
         if (this.refs.svg === undefined) {
             return;
         }
-        this.unrenderPlot();
+        this._unrenderPlot();
         // this is bootstrap plot svg
 
         renderPlot(this.refs.svg, this.props.data, this.props.legendData);
@@ -470,19 +461,19 @@ class Heatmap extends Component {
     }
 
     handleResize() {
-        this.renderPlot();
+        this._renderPlot();
     }
 
     componentDidMount() {
-        this.renderPlot();
+        this._renderPlot();
     }
 
     componentDidUpdate() {
-        this.renderPlot();
+        this._renderPlot();
     }
 
     componentWillUnmount() {
-        this.unrenderPlot();
+        this._unrenderPlot();
     }
 
     render() {

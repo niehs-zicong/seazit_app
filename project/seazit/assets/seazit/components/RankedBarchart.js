@@ -8,7 +8,7 @@ import ReactDOM from 'react-dom';
 import DoseResponse from './DoseResponse';
 import { getBmdsUrl, getDoseResponsesUrl, NO_COLLAPSE, svg_download_form } from '../shared';
 import BootstrapModal from 'utils/BootstrapModal';
-import { Header, MultipleCurveBody, SingleCurveBody } from './DoseResponseModel';
+import { Header, MultipleCurveBody, SingleCurveBody } from './BootstrapBodyPart';
 import RankedBarchartHandler from './RankedBarchartHandler';
 
 import {
@@ -131,26 +131,6 @@ let renderPlot = function(el, data, opts) {
         .attr('r', 10)
         .style('fill', (d) => CATEGORY_COLORS[d.use_category1])
         .style('cursor', 'pointer')
-        // .on('click', function(d) {
-        //     // console.log(d);
-        //     if (d.endpoint_names_list && d.endpoint_names_list.length > 1) {
-        //         new BootstrapModal(Header, MultipleCurveBody, {
-        //             title: d.preferred_name + `: ` + d.endpoint_name,
-        //             protocol_id: d.protocol_id,
-        //             readout_ids: _.map(d.endpoint_names_list, function(x) {
-        //                 return x + '_' + d.protocol_id;
-        //             }),
-        //             casrns: [d.casrn],
-        //         });
-        //     } else {
-        //         new BootstrapModal(Header, SingleCurveBody, {
-        //             title: d.preferred_name + `: ` + d.endpoint_name,
-        //             protocol_id: d.protocol_id,
-        //             readout_id: d.endpoint_name + '_' + d.protocol_id,
-        //             casrn: d.casrn,
-        //         });
-        //     }
-        // });
         .on('click', function(d) {
             new BootstrapModal(Header, SingleCurveBody, {
                 title: d.preferred_name + `: ` + d.endpoint_name,
@@ -213,31 +193,7 @@ let renderPlot = function(el, data, opts) {
                 CheckBoxDisable: true,
             });
         });
-    // .on('click', function(d) {
-    //     console.log(d);
-    //     if (d.endpoint_names_list && d.endpoint_names_list.length > 1) {
-    //         new BootstrapModal(Header, MultipleCurveBody, {
-    //             title: d.preferred_name + `: ` + 'Mortality@120',
-    //
-    //             protocol_id: d.protocol_id,
-    //             readout_ids: _.map(d.endpoint_names_list, function(x) {
-    //                 return x + '_' + d.protocol_id;
-    //             }),
-    //             casrns: [d.casrn],
-    //             CheckBoxDisable: true,
-    //         });
-    //     } else {
-    //         new BootstrapModal(Header, SingleCurveBody, {
-    //             title: d.preferred_name + `: ` + 'Mortality@120',
-    //
-    //             protocol_id: d.protocol_id,
-    //             readout_id: 'Mortality@120' + '_' + d.protocol_id,
-    //
-    //             casrn: d.casrn,
-    //             CheckBoxDisable: true,
-    //         });
-    //     }
-    // });
+
     // add selectivity-ratio text
     if (opts.isSelective) {
         // axis label

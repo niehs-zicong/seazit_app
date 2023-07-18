@@ -1778,7 +1778,7 @@ webpackJsonp(
                                 },
                             },
                             {
-                                key: 'componentWillUpdate',
+                                key: 'UNSAFE_componentWillUpdate',
                                 value: function(e) {
                                     e.url !== this.props.url && this.fetchDoseResponseData(e.url),
                                         e.collapse !== this.props.collapse &&
@@ -4191,7 +4191,7 @@ webpackJsonp(
                                 },
                             },
                             {
-                                key: 'componentWillUpdate',
+                                key: 'UNSAFE_componentWillUpdate',
                                 value: function(e) {
                                     e.url !== this.props.url && this.fetchIntegrativeData(e.url);
                                 },
@@ -6301,7 +6301,7 @@ webpackJsonp(
                                 },
                             },
                             {
-                                key: 'UNSAFE_componentWillUpdate',
+                                key: 'UNSAFE_UNSAFE_componentWillUpdate',
                                 value: function(e) {
                                     e.url !== this.props.url && this.fetchDoseResponseData(e.url),
                                         e.collapse !== this.props.collapse &&
@@ -6787,7 +6787,7 @@ webpackJsonp(
                                 },
                             },
                             {
-                                key: 'componentWillUpdate',
+                                key: 'UNSAFE_componentWillUpdate',
                                 value: function(e) {
                                     e.url !== this.props.url && this.fetchBmdData(e.url);
                                 },

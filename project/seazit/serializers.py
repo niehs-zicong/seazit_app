@@ -39,11 +39,24 @@ class SeazitProtocolSerializer(serializers.ModelSerializer):
         model = models.SeazitProtocol
         fields = "__all__"
 
+class SeazitOntologySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.SeazitOntology
+        fields = "__all__"
+
+class SeazitOntologySankeyFlowSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.SeazitOntologySankeyFlow
+        fields = "__all__"
+class SeazitOntologySankeyNodesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.SeazitOntologySankeyNodes
+        fields = "__all__"
 
 
 class SeazitRecordingSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.SeazitRecording
+        model = models.SeazitOntology
         fields = "__all__"
 
 
@@ -60,13 +73,6 @@ class SeazitSubstanceMappingSerializer(serializers.ModelSerializer):
         model = models.SeazitSubstanceMapping
         fields = "__all__"
 
-
-
-
-class SeazitTestSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.SeazitTest
-        fields = "__all__"
 
 
 

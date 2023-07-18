@@ -162,6 +162,7 @@ class BmdByLabMain extends React.Component {
         if (!this.state.metadataLoaded) {
             return <Loading />;
         }
+        console.log(this.state);
         // for bmc lab case, readout always add Mortality@120.
         // this.state.readouts.push('Mortality@120' + '_' + this.state.assays)
         let url = getBmdsUrl(this.state.assays, this.state.readouts);
