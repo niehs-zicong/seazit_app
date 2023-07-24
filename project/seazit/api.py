@@ -12,7 +12,6 @@ from utils.renderers import data_frame_renderers, plotly_renderers
 from . import models, serializers
 
 
-
 def format_param():
     return openapi.Parameter(
         "format",
@@ -20,6 +19,7 @@ def format_param():
         "Format of returned data. One of tsv, csv, xlsx, api, or json",
         type=openapi.TYPE_STRING,
     )
+
 
 class AnalysisBmcInputViewSet(CachedReadOnlyViewSet):
     """
@@ -35,6 +35,7 @@ class AnalysisBmcInputViewSet(CachedReadOnlyViewSet):
     model = models.AnalysisBmcInput
     queryset = models.AnalysisBmcInput.objects.all()
     serializer_class = serializers.AnalysisBmcInputSerializer
+
 
 class AnalysisBmcOutputViewSet(CachedReadOnlyViewSet):
     """
@@ -52,7 +53,6 @@ class AnalysisBmcOutputViewSet(CachedReadOnlyViewSet):
     serializer_class = serializers.AnalysisBmcOutputSerializer
 
 
-
 class AnalysisInputKeyViewSet(CachedReadOnlyViewSet):
     """
     retrieve:
@@ -67,7 +67,6 @@ class AnalysisInputKeyViewSet(CachedReadOnlyViewSet):
     model = models.AnalysisInputKey
     queryset = models.AnalysisInputKey.objects.all()
     serializer_class = serializers.AnalysisInputKeySerializer
-
 
 
 class SeazitDoseViewSet(CachedReadOnlyViewSet):
@@ -90,7 +89,6 @@ class SeazitDoseViewSet(CachedReadOnlyViewSet):
         return Response(self.model.get_doses())
 
 
-
 class SeazitPlateScreenViewSet(CachedReadOnlyViewSet):
     """
     retrieve:
@@ -105,8 +103,6 @@ class SeazitPlateScreenViewSet(CachedReadOnlyViewSet):
     model = models.SeazitPlateScreen
     queryset = models.SeazitPlateScreen.objects.all()
     serializer_class = serializers.SeazitPlateScreenSerializer
-
-
 
 
 class SeazitProtocolViewSet(CachedReadOnlyViewSet):
@@ -128,8 +124,69 @@ class SeazitProtocolViewSet(CachedReadOnlyViewSet):
     @list_route()
     def metadata(self, request, *args, **kwargs):
         return Response(models.SeazitProtocol.get_metadata())
-        # return Response(models.SeazitProtocol.get_metadata2())
 
+
+class SeazitOntologyViewSet(CachedReadOnlyViewSet):
+    """
+    retrieve:
+        Return a CurveP BMD instance.
+    list:
+        Return all available CurveP BMDs.
+    flat:
+        Return all readouts [flat file formats].
+            - Can specify one or more casrns
+            - Can specify one or more readout_ids
+    """
+    model = models.SeazitOntology
+    queryset = models.SeazitOntology.objects.all()
+    serializer_class = serializers.SeazitOntologySerializer
+
+    @cache_response()
+    @list_route()
+    def sankeydata(self, request, *args, **kwargs):
+        return Response(models.SeazitOntology.get_sankey())
+
+
+class SeazitOntologySankeyFlowViewSet(CachedReadOnlyViewSet):
+    """
+    retrieve:
+        Return a CurveP BMD instance.
+    list:
+        Return all available CurveP BMDs.
+    flat:
+        Return all readouts [flat file formats].
+            - Can specify one or more casrns
+            - Can specify one or more readout_ids
+    """
+    model = models.SeazitOntologySankeyFlow
+    queryset = models.SeazitOntologySankeyFlow.objects.all()
+    serializer_class = serializers.SeazitOntologySankeyFlowSerializer
+
+    # @cache_response()
+    # @list_route()
+    # def sankeydata(self, request, *args, **kwargs):
+    #     return Response(models.SeazitOntologySankeyFlow.get_flow())
+
+
+class SeazitOntologySankeyNodesViewSet(CachedReadOnlyViewSet):
+    """
+    retrieve:
+        Return a CurveP BMD instance.
+    list:
+        Return all available CurveP BMDs.
+    flat:
+        Return all readouts [flat file formats].
+            - Can specify one or more casrns
+            - Can specify one or more readout_ids
+    """
+    model = models.SeazitOntologySankeyNodes
+    queryset = models.SeazitOntologySankeyNodes.objects.all()
+    serializer_class = serializers.SeazitOntologySankeyNodesSerializer
+    #
+    # @cache_response()
+    # @list_route()
+    # def sankeydata(self, request, *args, **kwargs):
+    #     return Response(models.SeazitOntology.get_sankey())
 
 
 class SeazitRecordingViewSet(CachedReadOnlyViewSet):
@@ -164,8 +221,6 @@ class SeazitSubstanceViewSet(CachedReadOnlyViewSet):
     serializer_class = serializers.SeazitSubstanceSerializer
 
 
-
-
 class SeazitSubstanceMappingViewSet(CachedReadOnlyViewSet):
     """
     retrieve:
@@ -180,25 +235,6 @@ class SeazitSubstanceMappingViewSet(CachedReadOnlyViewSet):
     model = models.SeazitSubstanceMapping
     queryset = models.SeazitSubstanceMapping.objects.all()
     serializer_class = serializers.SeazitSubstanceMappingSerializer
-
-
-
-
-class SeazitTestViewSet(CachedReadOnlyViewSet):
-    """
-    retrieve:
-        Return a CurveP BMD instance.
-    list:
-        Return all available CurveP BMDs.
-    flat:
-        Return all readouts [flat file formats].
-            - Can specify one or more casrns
-            - Can specify one or more readout_ids
-    """
-    model = models.SeazitTest
-    queryset = models.SeazitTest.objects.all()
-    serializer_class = serializers.SeazitTestSerializer
-
 
 
 class SeazitWellViewSet(CachedReadOnlyViewSet):
@@ -217,7 +253,6 @@ class SeazitWellViewSet(CachedReadOnlyViewSet):
     serializer_class = serializers.SeazitWellSerializer
 
 
-
 class Seazit_readout_resultViewSet(CachedReadOnlyViewSet):
     """
     retrieve:
@@ -233,7 +268,6 @@ class Seazit_readout_resultViewSet(CachedReadOnlyViewSet):
     queryset = models.Seazit_readout_result.objects.all()
     serializer_class = serializers.Seazit_readout_resultSerializer
 
-
     @list_route(methods=["get"], renderer_classes=plotly_renderers)
     def bmcByLabResult(self, request, *args, **kwargs):
         protocol_ids = self.request.GET.get("protocol_ids", None)
@@ -242,7 +276,7 @@ class Seazit_readout_resultViewSet(CachedReadOnlyViewSet):
         readouts = self.request.GET.get("readouts", None).replace(" ", "+")
 
         if protocol_ids is None:
-             raise ValidationError("requires `protocol_ids` argument.")
+            raise ValidationError("requires `protocol_ids` argument.")
         if readouts is None:
             raise ValidationError("requires `readouts` argument.")
 
@@ -250,8 +284,6 @@ class Seazit_readout_resultViewSet(CachedReadOnlyViewSet):
         readout_ids = readouts.split(",")
 
         return Response(models.Seazit_readout_result.bmds_responses(protocol_ids, readout_ids))
-
-
 
     @list_route(methods=["get"], renderer_classes=plotly_renderers)
     def crResult(self, request, *args, **kwargs):
@@ -262,7 +294,7 @@ class Seazit_readout_resultViewSet(CachedReadOnlyViewSet):
         readouts = self.request.GET.get("readouts", None).replace(" ", "+")
         casrns = self.request.GET.get("casrns", None)
         if protocol_ids is None:
-             raise ValidationError("requires `protocol_ids` argument.")
+            raise ValidationError("requires `protocol_ids` argument.")
         if readouts is None:
             raise ValidationError("requires `readouts` argument.")
         if casrns is None:
@@ -272,12 +304,11 @@ class Seazit_readout_resultViewSet(CachedReadOnlyViewSet):
         readout_ids = readouts.split(",")
         carsns_ids = casrns.split(",")
         if len(readout_ids) * len(carsns_ids) > 100:
-
             raise ValidationError(
-                "Too many dose-response curves selected; please reduce the number of selected readouts and/or chemicals"  # noqa: E501
+                "Too many dose-response curves selected; please reduce the number of selected readouts and/or chemicals"
+                # noqa: E501
             )
         return Response(models.Seazit_readout_result.concentration_responses(protocol_ids, readout_ids, carsns_ids))
-
 
     @list_route(methods=["get"], renderer_classes=plotly_renderers)
     def integrativeResult(self, request, *args, **kwargs):
@@ -285,16 +316,14 @@ class Seazit_readout_resultViewSet(CachedReadOnlyViewSet):
         protocol_ids = self.request.GET.get("protocol_ids", None)
         casrns = self.request.GET.get("casrns", None)
         if protocol_ids is None:
-             raise ValidationError("requires `protocol_ids` argument.")
+            raise ValidationError("requires `protocol_ids` argument.")
         if casrns is None:
             raise ValidationError("requires `casrns` argument.")
 
         protocol_ids = protocol_ids.split(",")
         carsns_ids = casrns.split(",")
 
-
         return Response(models.Seazit_readout_result.integrative_responses(protocol_ids, carsns_ids))
-
 
 
 class Seazit_bmc_readout_resultViewSet(CachedReadOnlyViewSet):

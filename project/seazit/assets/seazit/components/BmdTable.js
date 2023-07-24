@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 
 import BootstrapModal from 'utils/BootstrapModal';
-import { Header, SingleCurveBody } from './DoseResponseModel';
+import { Header, SingleCurveBody } from './BootstrapBodyPart';
 
 import { pod_med_processed, printFloat } from '../shared';
 import { each } from 'underscore';

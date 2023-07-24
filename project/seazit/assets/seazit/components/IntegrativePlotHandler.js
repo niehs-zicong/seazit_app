@@ -61,6 +61,7 @@ class IntegrativePlotHandler extends React.Component {
     }
 
     fetchIntegrativeData(url) {
+        console.log(url);
         d3.json(url, (error, data) => {
             if (error) {
                 let err = error.target.responseText.replace('["', '').replace('"]', '');
@@ -283,50 +284,7 @@ class IntegrativePlotHandler extends React.Component {
             .filter((i) => ontologyGroup.includes(i[ontologyGroupName]))
             .map((d) => {
                 return {
-                    protocol_id: d.protocol_id,
-                    endpoint_name: d.endpoint_name,
-                    casrn: d.casrn,
-                    preferred_name: d.preferred_name,
-                    use_category1: d.use_category1,
-                    dtxsid: d.dtxsid,
-                    min_pod_med: d.min_pod_med,
-                    med_pod_med: d.med_pod_med,
-                    max_pod_med: d.max_pod_med,
-                    med_hitconf: d.med_hitconf,
-                    n_values: d.n_values,
-                    mort_min_pod_med: d.mort_min_pod_med,
-                    mort_med_pod_med: d.mort_med_pod_med,
-                    mort_max_pod_med: d.mort_max_pod_med,
-                    mort_med_hitconf: d.mort_med_hitconf,
-                    mort_n_values: d.mort_n_values,
-                    min_lowest_conc: d.min_lowest_conc,
-                    max_highest_conc: d.max_highest_conc,
-                    mean_pod: d.mean_pod,
-                    mean_selectivity: d.mean_selectivity,
-                    med_mort_hit_confidence: d.med_mort_hit_confidence,
-                    n_rep_max_dev_call: d.n_rep_max_dev_call,
-                    n_rep: d.n_rep,
-                    f_max_dev_call: d.f_max_dev_call,
-                    final_dev_call: d.final_dev_call,
-                    malformation: d.malformation,
-                    endpoint_name_protocol: d.endpoint_name_protocol,
-                    combin_ontology: d.combin_ontology,
-                    combin_ontology_id: d.combin_ontology_id,
-                    protocol_source: d.protocol_source,
-                    lab_anonymous_code: d.lab_anonymous_code,
-                    study_phase: d.study_phase,
-                    test_condition: d.test_condition,
-                    protocol_name_long: d.protocol_name_long,
-                    protocol_name_plot: d.protocol_name_plot,
-                    proposed_ontology_label: d.proposed_ontology_label,
-                    ontology_id_number: d.ontology_id_number,
-                    recording_name: d.recording_name,
-                    developmental_defect_catergories: d.developmental_defect_catergories,
-                    defects_mapped_to_body_region: d.defects_mapped_to_body_region,
-                    developmental_defect_grouping_granular:
-                        d.developmental_defect_grouping_granular,
-                    developmental_defect_grouping_general: d.developmental_defect_grouping_general,
-                    seazit_recording_id: d.seazit_recording_id,
+                    ...d,
                     x: d[ontologyGroupName] + ': ' + d.protocol_name_plot,
                     y: d.preferred_name,
                     fill: null,
@@ -491,7 +449,7 @@ class IntegrativePlotHandler extends React.Component {
         this.fetchIntegrativeData(this.props.url);
     }
 
-    componentWillUpdate(nextProps) {
+    UNSAFE_componentWillUpdate(nextProps) {
         if (nextProps.url !== this.props.url) {
             this.fetchIntegrativeData(nextProps.url);
         }
@@ -507,6 +465,7 @@ class IntegrativePlotHandler extends React.Component {
         if (d.data.length === 0) {
             return renderNoDataAlert();
         }
+        console.log('zw', this.props);
 
         if (this.props.visualization == INTVIZ_HEATMAP) {
             return (

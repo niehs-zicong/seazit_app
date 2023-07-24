@@ -216,12 +216,14 @@ class DoseResponse extends React.Component {
         this.setKeys(data, collapse);
 
         let update = this.collapseData(data, collapse);
+        console.log(update);
 
         let scale = this.getColorScale(update.collapsedData, collapse);
         this.setState({
             ...update,
             scale,
         });
+        console.log(this.state);
     }
 
     _renderPlot(d, yrange) {
@@ -346,6 +348,10 @@ class DoseResponse extends React.Component {
             // move legend to bottom of plot
             layout.legend = { orientation: 'h', y: -0.3 };
         }
+        // console.log('newPlot', data, d);
+        // console.log('this.refs[d.key]', this.refs, this.refs[d.key]);
+        // console.log('newPlot', data, layout);
+
         Plotly.newPlot(this.refs[d.key], data, layout, svgConfig);
     }
 
@@ -357,7 +363,7 @@ class DoseResponse extends React.Component {
         this.fetchDoseResponseData(this.props.url);
     }
 
-    UNSAFE_componentWillUpdate(nextProps) {
+    UNSAFE_UNSAFE_componentWillUpdate(nextProps) {
         if (nextProps.url !== this.props.url) {
             this.fetchDoseResponseData(nextProps.url);
         }
@@ -386,6 +392,7 @@ class DoseResponse extends React.Component {
         }
 
         let colNum = Math.ceil(12 / this.props.cols);
+
         return (
             <div>
                 {this.state.collapsedData.map((item) => (
@@ -741,8 +748,7 @@ class DoseResponseMort120 extends React.Component {
             // move legend to bottom of plot
             layout.legend = { orientation: 'h', y: -0.3 };
         }
-        // console.log('newPlot');
-        // console.log(data);
+
         Plotly.newPlot(this.refs[d.key], data, layout, svgConfig);
     }
 
@@ -754,7 +760,7 @@ class DoseResponseMort120 extends React.Component {
         this.fetchDoseResponseData(this.props.url);
     }
 
-    componentWillUpdate(nextProps) {
+    UNSAFE_componentWillUpdate(nextProps) {
         if (nextProps.url !== this.props.url) {
             this.fetchDoseResponseData(nextProps.url);
         }
@@ -783,6 +789,7 @@ class DoseResponseMort120 extends React.Component {
         }
 
         let colNum = Math.ceil(12 / this.props.cols);
+
         return (
             <div>
                 {this.state.collapsedData.map((item) => (

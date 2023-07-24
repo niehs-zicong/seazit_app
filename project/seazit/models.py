@@ -218,6 +218,71 @@ class SeazitOntology(models.Model):
         )
         return pd.DataFrame(list(qs), columns=cols)
 
+    @classmethod
+    def get_sankey(cls):
+        return {
+            "Seazit_ontology_sankey_nodes": SeazitOntologySankeyNodes.get_nodes().to_dict(orient="records"),
+            "Seazit_ontology_sankey_flow": SeazitOntologySankeyFlow.get_flow().to_dict(orient="records"),
+            "Seazit_ontology": SeazitOntology.get_ontology().to_dict(orient="records"),
+        }
+
+
+class SeazitOntologySankeyFlow(models.Model):
+    flow = models.TextField(blank=True, null=True)
+    top_level = models.TextField(blank=True, null=True)
+    flow_color = models.TextField(blank=True, null=True)
+    source_name = models.TextField(blank=True, null=True)
+    target_name = models.TextField(blank=True, null=True)
+    source_id = models.IntegerField(blank=True, null=True)
+    target_id = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'seazit_ontology_sankey_flow'
+
+    @classmethod
+    def get_flow(cls):
+        cols = (
+            "flow",
+            "top_level",
+            "flow_color",
+            "source_name",
+            "target_name",
+            "source_id",
+            "target_id",
+        )
+        qs = (
+            cls.objects.all().values_list(*cols)
+        )
+        return pd.DataFrame(list(qs), columns=cols)
+
+
+class SeazitOntologySankeyNodes(models.Model):
+    node_id = models.IntegerField(blank=True, null=True)
+    node = models.TextField(blank=True, null=True)
+    node_level = models.TextField(blank=True, null=True)
+    node_color = models.TextField(blank=True, null=True)
+    node_name = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'seazit_ontology_sankey_nodes'
+
+    @classmethod
+    def get_nodes(cls):
+        cols = (
+            "node_id",
+            "node",
+            "node_level",
+            "node_color",
+            "node_name",
+        )
+        qs = (
+            cls.objects.all().values_list(*cols)
+        )
+
+        return pd.DataFrame(list(qs), columns=cols)
+
 
 class SeazitPlateScreen(models.Model):
     plate_map_name = models.TextField(blank=True, null=True)
@@ -266,10 +331,8 @@ class SeazitProtocol(models.Model):
             "protocol_data": pd.DataFrame(list(qs), columns=cols).to_dict(orient="records"),
             "Seazit_chemical_info": Seazit_chemical_info.get_chemicals().to_dict(orient="records"),
             "Seazit_ui_panel": Seazit_ui_panel.get_flat().to_dict(orient="records"),
-            "Seazit_ui_panel2": Seazit_ui_panel.get_flat().to_dict(orient="records"),
             "Seazit_ontology": SeazitOntology.get_ontology().to_dict(orient="records"),
         }
-
 
     class Meta:
         managed = False
@@ -335,14 +398,6 @@ class SeazitSubstanceMapping(models.Model):
     class Meta:
         managed = False
         db_table = 'seazit_substance_mapping'
-
-
-class SeazitTest(models.Model):
-    students_name = models.CharField(max_length=100, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'seazit_test'
 
 
 class SeazitWell(models.Model):
