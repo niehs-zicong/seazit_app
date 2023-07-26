@@ -6,6 +6,7 @@ project/.happypack
 project/node_modules
 project/static/bundles
 project/webpack-stats.json
+#project/package-lock.json
 **/.DS_Store
 
 # testing
