@@ -6,7 +6,7 @@ import styles from './graph.css';
 import Loading from 'utils/Loading';
 
 import Plotly from 'plotly.js-dist';
-import FileReaderInput from 'react-file-reader';
+// import FileReaderInput from 'react-file-reader';
 
 import {
     printFloat,

@@ -169,16 +169,6 @@ class ReadoutWidget extends BaseWidget {
                     category: r.protocol_name_plot,
                     label: r.endpoint_name,
                     description: r.endpoint_description,
-                    // protocol_name: r.protocol_name,
-                    // seazit_protocol_id: r.seazit_protocol_id.toString(),
-                    // study_phase: r.study_phase,
-                    // test_condition: r.test_condition,
-                    // protocol_name_long: r.protocol_name_long,
-                    // protocol_name_plot: r.protocol_name_plot,
-                    // endpoint_name_protocol: r.endpoint_name_protocol,
-                    // developmental_defect_grouping_general: r.developmental_defect_grouping_general,
-                    // developmental_defect_grouping_granular:
-                    //     r.developmental_defect_grouping_granular,
                 };
             })
             // .uniqBy('key')

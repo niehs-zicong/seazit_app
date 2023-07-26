@@ -51,7 +51,6 @@ seaborn==0.11.1
 
 # neurotox
 plotly==2.0.12
-plotly.js-dist
 
 # job_runner
 #celery==4.2.0

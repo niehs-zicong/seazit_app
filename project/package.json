@@ -80,6 +80,7 @@
         "isomorphic-fetch": "^2.2.1",
         "lodash": "^4.17.4",
         "papaparse": "^5.4.1",
+        "plotly.js-dist": "^2.25.0",
         "prop-types": "^15.6.0",
         "react": "^16.2.0",
         "react-dom": "^16.2.0",
