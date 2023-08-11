@@ -5,7 +5,6 @@
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="sankeyplot" />
     <orderEntry type="module" module-name="deploy-seazit" />
   </component>
 </module>

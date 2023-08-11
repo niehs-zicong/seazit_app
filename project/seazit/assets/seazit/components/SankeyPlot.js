@@ -6,7 +6,7 @@ import styles from './graph.css';
 import Loading from 'utils/Loading';
 
 import Plotly from 'plotly.js-dist';
-import FileReaderInput from 'react-file-reader';
+// import FileReaderInput from 'react-file-reader';
 
 import {
     printFloat,
@@ -33,8 +33,8 @@ class SankeyPlot extends React.Component {
 
     fetchSankeyData() {
         d3.json(URL_SANKEYDATA, (d) => {
-            console.log('URL_SANKEYDATA');
-            console.log(d);
+            //console.log('URL_SANKEYDATA');
+            //console.log(d);
             this.updateData(d);
         });
     }
@@ -42,8 +42,8 @@ class SankeyPlot extends React.Component {
     updateData(data) {
         // let Sankeydata = loadSankeydata(this);
 
-        console.log(data);
-        console.log(this.props.cells);
+        //console.log(data);
+        //console.log(this.props.cells);
 
         let cells = this.props.cells,
             ontology = data.Seazit_ontology.filter(
@@ -109,7 +109,7 @@ class SankeyPlot extends React.Component {
                 return `<span style=' font-size: 20px; font-weight: bold;text-shadow: none;'>${label}</span>`;
             }
         };
-        console.log(d);
+        //console.log(d);
         let fig = {
             node_name: nodes.map((item) => getStyledLabel(item.node_name)),
             node_color: nodes.map((item) => item.node_color),
@@ -120,7 +120,7 @@ class SankeyPlot extends React.Component {
             value: d.map((item) => item.value),
             flow_color: d.map((item) => item.flow_color),
         };
-        console.log('fig', fig);
+        //console.log('fig', fig);
 
         var data = {
             type: 'sankey',
