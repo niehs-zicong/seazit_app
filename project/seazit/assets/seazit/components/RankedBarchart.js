@@ -51,7 +51,7 @@ let renderPlot = function(el, data, opts) {
         .value();
 
     // viabilityData is black dot, NonviabilityData is colored dots.
-    console.log('data2', data, nonviabilityData, viabilityData);
+    //console.log('data2', data, nonviabilityData, viabilityData);
     // set dimensions and margins
     let elWidth = Math.max(Math.floor($(el).innerWidth()), 800),
         margin = { top: 40, right: 100, bottom: 25, left: 300 },

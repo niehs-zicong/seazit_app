@@ -163,7 +163,6 @@ const AXIS_LINEAR = 1,
                     value={values}
                 >
                     {_.map(options, (value, category) => {
-                        // console.log("selecttions", options, value, category)
                         return (
                             <optgroup key={category} label={category}>
                                 {value.map((d) => (

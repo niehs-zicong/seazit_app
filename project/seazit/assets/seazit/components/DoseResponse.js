@@ -363,7 +363,7 @@ class DoseResponse extends React.Component {
         this.fetchDoseResponseData(this.props.url);
     }
 
-    UNSAFE_UNSAFE_componentWillUpdate(nextProps) {
+    UNSAFE_componentWillUpdate(nextProps) {
         if (nextProps.url !== this.props.url) {
             this.fetchDoseResponseData(nextProps.url);
         }

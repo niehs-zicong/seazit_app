@@ -30,16 +30,6 @@ class ReadoutWidget extends BaseWidget {
             ...r,
             key: r.seazit_protocol_id,
             label: r.protocol_name_long,
-            // protocol_name: r.protocol_name,
-            // description: r.protocol_name_plot,
-            // protocol_type: r.protocol_type,
-            // protocol_source: r.protocol_source,
-            // seazit_protocol_id: r.seazit_protocol_id,
-            // lab_anonymous_code: r.lab_anonymous_code,
-            // study_phase: r.study_phase,
-            // test_condition: r.test_condition,
-            // protocol_name_long: r.protocol_name_long,
-            // protocol_name_plot: r.protocol_name_plot,
         };
     };
 
@@ -110,19 +100,21 @@ class ReadoutWidget extends BaseWidget {
     }
 
     _renderMultipleEndpointSelector(state) {
-        let assays = state.assays,
+        //console.log(state.assays);
+        let assays = Array.isArray(state.assays)
+                ? state.assays.map((item) => Number(item))
+                : [Number(state.assays)],
             opts,
             ontologyGroup,
             endPointFilterFun,
             groupBy;
-
+        //console.log(assays);
         switch (state.tabFlag) {
             case ConcentrationResponseTab:
                 groupBy = 'category';
                 endPointFilterFun = (r) => {
                     return r;
                 };
-
                 break;
             case BMCTab:
                 endPointFilterFun = (r) => {
@@ -156,10 +148,11 @@ class ReadoutWidget extends BaseWidget {
                 return null;
         }
 
-        // console.log(state)
         opts = _.chain(state.Seazit_ui_panel)
             .filter((r) => {
-                return _.includes(assays, r.seazit_protocol_id.toString());
+                // I used to use _.includes(). I found this is wrong. if assays is double digits ex: 10,
+                // it will includes  [1, 10]
+                return _.includes(assays, r.seazit_protocol_id);
             })
             .filter(endPointFilterFun)
             .map((r) => {
@@ -183,10 +176,10 @@ class ReadoutWidget extends BaseWidget {
             .groupBy(groupBy)
             .mapValues((group) => _.uniqBy(group, 'key'))
             .value();
+        // //console.log('state.Seazit_ui_panel', state.Seazit_ui_panel, opts);
         if (_.keys(opts).length === 0) {
             return null;
         }
-        // console.log('endpoints', opts)
         return renderSelectMultiOptgroupWidget(
             'readouts',
             'endpoint',
@@ -204,7 +197,6 @@ class ReadoutWidget extends BaseWidget {
                     <div>
                         {this._renderMultipleDatasetSelector(state)}
                         <br />
-                        {/*{this._renderFilterBy(state)}*/}
                         {this._renderMultipleEndpointSelector(state)}
                     </div>
                 );

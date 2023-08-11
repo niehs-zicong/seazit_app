@@ -58,8 +58,8 @@ let addStripMask = function(svg) {
 };
 let renderPlot = function(el, data, legendData) {
     $(el).empty();
-    // console.log('data');
-    // console.log(data);
+    //console.log('data');
+    //console.log(data);
 
     let margin = {
             top: 40,
@@ -74,9 +74,9 @@ let renderPlot = function(el, data, legendData) {
         xMap = _.groupBy(data, 'x'),
         yMap = _.groupBy(data, 'y'),
         handleXLabelClick = function(label) {
-            console.log('label');
-            console.log(label);
-            console.log(xMap);
+            //console.log('label');
+            //console.log(label);
+            //console.log(xMap);
             let cells = xMap[label];
             let cell = {
                 developmental_defect_grouping_general:
@@ -84,7 +84,7 @@ let renderPlot = function(el, data, legendData) {
                 ontologyGroupName: cells[0].ontologyGroupName,
                 protocol_source: cells[0].protocol_source,
             };
-            console.log(cell);
+            //console.log(cell);
 
             if (cell.developmental_defect_grouping_general && cell.protocol_source) {
                 new BootstrapModal(Header, sankeyPlotGraphBody, {
@@ -271,7 +271,7 @@ let renderPlot = function(el, data, legendData) {
 
     switch (legendData.type) {
         case 'discrete': {
-            // console.log(legendData.values)
+            // //console.log(legendData.values)
             legendLayer
                 .selectAll('text')
                 .data(legendData.values)
