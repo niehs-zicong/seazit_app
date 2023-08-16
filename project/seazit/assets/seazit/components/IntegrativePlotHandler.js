@@ -61,7 +61,7 @@ class IntegrativePlotHandler extends React.Component {
     }
 
     fetchIntegrativeData(url) {
-        console.log(url);
+        //console.log(url);
         d3.json(url, (error, data) => {
             if (error) {
                 let err = error.target.responseText.replace('["', '').replace('"]', '');
@@ -290,16 +290,13 @@ class IntegrativePlotHandler extends React.Component {
                     fill: null,
                     fillFlag: false,
                     ontologyGroupName: d[ontologyGroupName],
+                    ontologyGroup: ontologyGroup,
                     title:
                         d[ontologyGroupName] + '+' + d.protocol_name_plot + '+' + d.preferred_name,
                 };
             })
             .sortBy('med_pod_med')
             .value();
-
-        // console.log("data  before and after ")
-        // console.log(this.state.data.integrative_activity_selectivity)
-        // console.log(data)
 
         // find xgroups names, and join datasetLabname and ontologyGroup into xGroup.
         let a = this.props.ontologyGroup;
@@ -465,7 +462,10 @@ class IntegrativePlotHandler extends React.Component {
         if (d.data.length === 0) {
             return renderNoDataAlert();
         }
-        console.log('zw', this.props);
+        //console.log('zw', this.props);
+        //console.log(this.props.ontologyGroup);
+        //console.log(this.props.ontologyType);
+        //console.log(d.data);
 
         if (this.props.visualization == INTVIZ_HEATMAP) {
             return (
@@ -483,7 +483,11 @@ class IntegrativePlotHandler extends React.Component {
                             Export SVG
                         </button>
                     </h2>
-                    <Heatmap data={d.data} legendData={d.legendData} />
+                    <Heatmap
+                        data={d.data}
+                        legendData={d.legendData}
+                        ontologyType={this.props.ontologyType}
+                    />
                 </div>
             );
         } else {

@@ -165,8 +165,6 @@ class BmdByLabMain extends React.Component {
         // for bmc lab case, readout always add Mortality@120.
         // this.state.readouts.push('Mortality@120' + '_' + this.state.assays)
         let url = getBmdsUrl(this.state.assays, this.state.readouts);
-        console.log(this.state);
-        console.log(url);
 
         return (
             <div className="row-fluid">

@@ -57,17 +57,7 @@ class OntologyWidget extends BaseWidget {
                     return {
                         key: r.developmental_defect_grouping_granular,
                         label: r.developmental_defect_grouping_granular,
-                        developmental_defect_catergories: r.developmental_defect_catergories,
-                        developmental_defect_grouping_general:
-                            r.developmental_defect_grouping_general,
-                        developmental_defect_grouping_granular:
-                            r.developmental_defect_grouping_granular,
-                        hour_post_fertilization: r.hour_post_fertilization,
-                        ontology_id_number: r.ontology_id_number,
-                        proposed_ontology_label: r.proposed_ontology_label,
-                        protocol_source: r.protocol_source,
-                        recording_name: r.recording_name,
-                        seazit_recording_id: r.seazit_recording_id,
+                        ...r,
                     };
                 })
                 .reject((r) => r.key === null)
@@ -75,6 +65,9 @@ class OntologyWidget extends BaseWidget {
                 .sortBy('developmental_defect_grouping_granular')
                 .groupBy('developmental_defect_catergories')
                 .value();
+            // console.log("ontoogy")
+            // console.log('state.Seazit_ui_panel', state.Seazit_ui_panel);
+            // console.log(opts)
             if (_.keys(opts).length === 0) {
                 return null;
             }
@@ -93,17 +86,7 @@ class OntologyWidget extends BaseWidget {
                     return {
                         key: r.developmental_defect_grouping_general,
                         label: r.developmental_defect_grouping_general,
-                        developmental_defect_catergories: r.developmental_defect_catergories,
-                        developmental_defect_grouping_general:
-                            r.developmental_defect_grouping_general,
-                        developmental_defect_grouping_granular:
-                            r.developmental_defect_grouping_granular,
-                        hour_post_fertilization: r.hour_post_fertilization,
-                        ontology_id_number: r.ontology_id_number,
-                        proposed_ontology_label: r.proposed_ontology_label,
-                        protocol_source: r.protocol_source,
-                        recording_name: r.recording_name,
-                        seazit_recording_id: r.seazit_recording_id,
+                        ...r,
                     };
                 })
                 .reject((r) => r.key === null)

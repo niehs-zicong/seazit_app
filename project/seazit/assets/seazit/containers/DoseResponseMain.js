@@ -110,7 +110,7 @@ class DoseResponseMain extends React.Component {
             return <Loading />;
         }
         let url = getDoseResponsesUrl(this.state.assays, this.state.readouts, this.state.chemicals);
-        console.log(url);
+        // console.log(url);
         return (
             <div className="row-fluid">
                 <div className="col-md-12">

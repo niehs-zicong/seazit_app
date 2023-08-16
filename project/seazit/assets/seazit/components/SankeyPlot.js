@@ -14,6 +14,8 @@ import {
     integrativeHandleCellClick,
     NO_COLLAPSE,
     URL_SANKEYDATA,
+    integrative_General,
+    integrative_Granular,
 } from '../shared';
 
 class SankeyPlot extends React.Component {
@@ -33,18 +35,18 @@ class SankeyPlot extends React.Component {
 
     fetchSankeyData() {
         d3.json(URL_SANKEYDATA, (d) => {
-            //console.log('URL_SANKEYDATA');
-            //console.log(d);
+            ////console.log('URL_SANKEYDATA');
+            ////console.log(d);
             this.updateData(d);
         });
     }
 
     updateData(data) {
         // let Sankeydata = loadSankeydata(this);
-
-        //console.log(data);
-        //console.log(this.props.cells);
-
+        //
+        // //console.log('cells');
+        // //console.log(this.props.cells);
+        // //console.log(data)
         let cells = this.props.cells,
             ontology = data.Seazit_ontology.filter(
                 (item) =>
@@ -54,8 +56,6 @@ class SankeyPlot extends React.Component {
             ),
             flowsData = data.Seazit_ontology_sankey_flow,
             nodesData = data.Seazit_ontology_sankey_nodes,
-            // flowsData = flows,
-            // nodesData = nodes,
             plotData,
             filterDataFun = (dataA, dataB) => {
                 // Filter dataA based on some condition
@@ -94,6 +94,8 @@ class SankeyPlot extends React.Component {
         plotData = filterDataFun(flowsData, ontology);
         plotData = joinDataFun(plotData, nodesData);
         plotData = valueCountsFun(plotData);
+        //console.log(plotData)
+
         this.renderPlot(plotData, nodesData);
     }
 
@@ -102,16 +104,18 @@ class SankeyPlot extends React.Component {
         // if (this.refs[d.key] === undefined) {
         //     return;
         // }
-        let getStyledLabel = (label) => {
-            if (label == this.props.cells.ontologyGroupName) {
-                return `<span style='color: red; font-size: 20px; font-weight: bold;text-shadow: none; '>${label}</span>`;
+        let ontologyType =
+            this.props.cells.ontologyType == integrative_Granular ? 'granular' : 'general';
+        let getStyledLabel = (node_name, node_level) => {
+            if (node_name == this.props.cells.ontologyGroupName && node_level == ontologyType) {
+                return `<span style='color: red; font-size: 20px; font-weight: bold;text-shadow: none;'>${node_name}</span>`;
             } else {
-                return `<span style=' font-size: 20px; font-weight: bold;text-shadow: none;'>${label}</span>`;
+                return `<span style='font-size: 20px; font-weight: bold;text-shadow: none;'>${node_name}</span>`;
             }
         };
-        //console.log(d);
+
         let fig = {
-            node_name: nodes.map((item) => getStyledLabel(item.node_name)),
+            node_name: nodes.map((item) => getStyledLabel(item.node_name, item.node_level)),
             node_color: nodes.map((item) => item.node_color),
             source_id: d.map((item) => parseInt(item.source_id)),
             target_id: d.map((item) => parseInt(item.target_id)),
@@ -120,10 +124,11 @@ class SankeyPlot extends React.Component {
             value: d.map((item) => item.value),
             flow_color: d.map((item) => item.flow_color),
         };
-        //console.log('fig', fig);
+        //console.log(fig);
 
         var data = {
             type: 'sankey',
+            orientation: 'h', // Horizontal orientation
             node: {
                 pad: 15,
                 thickness: 20,
@@ -132,21 +137,27 @@ class SankeyPlot extends React.Component {
                     width: 0.5,
                 },
                 label: fig.node_name,
+                // color:nodes.map((item) => item.node_color),
                 color: fig.node_color,
             },
 
             link: {
                 source: fig.source_id,
                 target: fig.target_id,
+                // source: [0, 1, 2],
+                // target:[1, 2, 3],
                 color: fig.flow_color,
                 value: fig.value,
             },
         };
+        //console.log(data);
 
         // Define the layout options for the Sankey plot
         var layout = {
             title: ` Sankey Plot <span style='color: red;font-weight: bold;'>${this.props.cells.ontologyGroupName}</span>`,
-            width: 2000,
+            // i use width to be 2400 to avoid node label overlapping.
+            // TODO
+            width: 2400,
             height: 400,
             hoverlabel: {
                 font: {

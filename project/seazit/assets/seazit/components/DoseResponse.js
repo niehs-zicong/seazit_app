@@ -216,14 +216,14 @@ class DoseResponse extends React.Component {
         this.setKeys(data, collapse);
 
         let update = this.collapseData(data, collapse);
-        console.log(update);
+        // console.log(update);
 
         let scale = this.getColorScale(update.collapsedData, collapse);
         this.setState({
             ...update,
             scale,
         });
-        console.log(this.state);
+        // console.log(this.state);
     }
 
     _renderPlot(d, yrange) {
