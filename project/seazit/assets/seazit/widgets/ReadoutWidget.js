@@ -107,21 +107,32 @@ class ReadoutWidget extends BaseWidget {
             opts,
             ontologyGroup,
             endPointFilterFun,
+            endPointSortFun,
             groupBy;
         //console.log(assays);
         switch (state.tabFlag) {
             case ConcentrationResponseTab:
+                // group by category,
+                // no endpoint filter function,
+                //   Sort endpoint, put 'Mortality@24',      'Mortality@120',  'MalformedAny+Mort@120' be first 3 endpoints.
                 groupBy = 'category';
-                endPointFilterFun = (r) => {
-                    return r;
+                endPointSortFun = (e) => {
+                    return (
+                        'Mortality@24' !== e.label &&
+                        'Mortality@120' !== e.label &&
+                        'MalformedAny+Mort@120' !== e.label
+                    );
                 };
                 break;
             case BMCTab:
+                // group by 'developmental_defect_grouping_granular' or 'developmental_defect_grouping_general',
+                //  endpoint filter out, 'Mortality@24', 'Mortality@120', endpoint contains @24
+                //  no sort function.
                 endPointFilterFun = (r) => {
                     return (
-                        r.endpoint_name !== 'Mortality@120' ||
-                        r.endpoint_name !== 'Mortality@24' ||
-                        r.endpoint_name.includes('@24')
+                        r.endpoint_name !== 'Mortality@120' &&
+                        r.endpoint_name !== 'Mortality@24' &&
+                        !r.endpoint_name.includes('@24')
                     );
                 };
                 if (state.ontologyType === integrative_Granular) {
@@ -131,18 +142,23 @@ class ReadoutWidget extends BaseWidget {
                 }
                 break;
             case IntegrativeAnalysesTab:
-                endPointFilterFun = (r) => {
-                    return (
-                        r.endpoint_name !== 'Mortality@120' ||
-                        r.endpoint_name !== 'Mortality@24' ||
-                        r.endpoint_name.includes('@24')
-                    );
-                };
-                if (state.ontologyType === integrative_Granular) {
-                    groupBy = 'developmental_defect_grouping_granular';
-                } else {
-                    groupBy = 'developmental_defect_grouping_general';
-                }
+                // Currtently no endpoint used in this tab. If use, the follow is code.
+                // group by 'developmental_defect_grouping_granular' or 'developmental_defect_grouping_general',
+                //  endpoint filter out, 'Mortality@24', 'Mortality@120', endpoint contains @24
+                //  no sort function.
+                // endPointFilterFun = (r) => {
+                //     return (
+                //         r.endpoint_name !== 'Mortality@120' &&
+                //         r.endpoint_name !== 'Mortality@24' &&
+                //         !r.endpoint_name.includes('@24')
+                //     );
+                // };
+                //
+                // if (state.ontologyType === integrative_Granular) {
+                //     groupBy = 'developmental_defect_grouping_granular';
+                // } else {
+                //     groupBy = 'developmental_defect_grouping_general';
+                // }
                 break;
             default:
                 return null;
@@ -158,7 +174,7 @@ class ReadoutWidget extends BaseWidget {
             .map((r) => {
                 return {
                     ...r,
-                    key: r.endpoint_name_protocol.toString(),
+                    key: r.endpoint_name_protocol,
                     category: r.protocol_name_plot,
                     label: r.endpoint_name,
                     description: r.endpoint_description,
@@ -166,17 +182,13 @@ class ReadoutWidget extends BaseWidget {
             })
             // .uniqBy('key')
             .sortBy('label')
-            .sortBy(function(e) {
-                return (
-                    'Mortality@24' !== e.label &&
-                    'Mortality@120' !== e.label &&
-                    'MalformedAny+Mort@120' !== e.label
-                );
-            })
+            .sortBy(endPointSortFun)
             .groupBy(groupBy)
             .mapValues((group) => _.uniqBy(group, 'key'))
             .value();
-        // //console.log('state.Seazit_ui_panel', state.Seazit_ui_panel, opts);
+        // console.log(endPointFilterFun)
+        // console.log('state.Seazit_ui_panel', state.Seazit_ui_panel);
+        // console.log(opts)
         if (_.keys(opts).length === 0) {
             return null;
         }

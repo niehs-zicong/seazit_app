@@ -4,16 +4,16 @@
     "chunks": {
         "vendor": [
             {
-                "name": "vendor.ba5af3b12e76e6275236.js",
-                "publicPath": "http://localhost:3000/dist/vendor.ba5af3b12e76e6275236.js",
-                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/vendor.ba5af3b12e76e6275236.js"
+                "name": "vendor.47ff7ae5bca3882ecf60.js",
+                "publicPath": "http://localhost:3000/dist/vendor.47ff7ae5bca3882ecf60.js",
+                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/vendor.47ff7ae5bca3882ecf60.js"
             }
         ],
         "main": [
             {
-                "name": "main.ba5af3b12e76e6275236.js",
-                "publicPath": "http://localhost:3000/dist/main.ba5af3b12e76e6275236.js",
-                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/main.ba5af3b12e76e6275236.js"
+                "name": "main.47ff7ae5bca3882ecf60.js",
+                "publicPath": "http://localhost:3000/dist/main.47ff7ae5bca3882ecf60.js",
+                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/main.47ff7ae5bca3882ecf60.js"
             },
             {
                 "name": "style.css",
@@ -23,12 +23,10 @@
         ],
         "manifest": [
             {
-                "name": "manifest.ba5af3b12e76e6275236.js",
-                "publicPath": "http://localhost:3000/dist/manifest.ba5af3b12e76e6275236.js",
-                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/manifest.ba5af3b12e76e6275236.js"
+                "name": "manifest.47ff7ae5bca3882ecf60.js",
+                "publicPath": "http://localhost:3000/dist/manifest.47ff7ae5bca3882ecf60.js",
+                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/manifest.47ff7ae5bca3882ecf60.js"
             }
         ]
-    },
-    "error": "ModuleBuildError",
-    "message": "Module build failed: SyntaxError: Unexpected token, expected ; (368:46)\n\n  366 | \n  367 |     UNSAFE_UNSAFE_componentWillUpdate(nextProps) {\n> 368 |         UNSAFE_componentWillUpdate(nextProps) {\n      |                                               ^\n  369 | \n  370 |         if (nextProps.url !== this.props.url) {\n  371 |             this.fetchDoseResponseData(nextProps.url);\n"
+    }
 }

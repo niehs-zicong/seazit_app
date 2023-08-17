@@ -61,8 +61,8 @@ const AXIS_LINEAR = 1,
         'Selectivity is estimated and true value may be higher; viability BMC could not be calculated and was therefore estimated to equal the maximum tested dose.',
     loadMetadata = function(component) {
         d3.json(URL_METADATA, (d) => {
-            console.log('d');
-            console.log(d);
+            // console.log('d');
+            // console.log(d);
             component.setState({
                 metadataLoaded: true,
                 protocol_data: d.protocol_data,

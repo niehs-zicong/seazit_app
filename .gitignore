@@ -14,8 +14,12 @@ project/package-lock.json
 .cache
 
 *.DS_Store
-*log.txt
+.DS_Store
 
+*log.txt
+__pycache__/
+.DS_Store/
+.idea/
 # data
 data/
 venv/
@@ -26,6 +30,12 @@ docs/_build
 # developer environment
 bin/*.local.sh
 project/main/settings/local.py
+project/main/settings/__pycache__
+project/seazit/__pycache__
+project/utils/__pycache__
+project/main/__pycache__
+
+project/.DS_Store
 .ipynb_checkpoints
 .vscode
 
@@ -35,9 +45,10 @@ project/main/settings/local.py
 
 # production environment
 *.log
-seazit_app.log*
+seazit_app.log
 public/
 .env
+.idea
 
 # django (keep path, not contents)
 compose/django/drivers/*

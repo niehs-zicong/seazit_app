@@ -464,7 +464,6 @@ DevtoxHeatmap.propTypes = {
             x: PropTypes.string,
             y: PropTypes.string,
             fill: PropTypes.string,
-            hover_text: PropTypes.string,
         })
     ).isRequired,
     legendData: PropTypes.shape({
