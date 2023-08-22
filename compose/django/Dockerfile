@@ -56,7 +56,7 @@ RUN conda env create -f /env_seazit.yml  && \
     pip install -U pip && \
     pip install -r /requirements/production.txt
 
-RUN apt-get install nano
+#RUN apt-get install nano
 
 
 # fix the django 2.0 import error
