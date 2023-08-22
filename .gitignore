@@ -7,6 +7,8 @@ project/node_modules
 project/static/bundles
 project/webpack-stats.json
 project/package-lock.json
+project/static_seazit/bundles/
+project/node_modules_back/
 **/.DS_Store
 
 # testing
