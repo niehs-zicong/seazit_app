@@ -4,16 +4,16 @@
     "chunks": {
         "vendor": [
             {
-                "name": "vendor.4fba1d774a3c47df7c58.js",
-                "publicPath": "http://localhost:3000/dist/vendor.4fba1d774a3c47df7c58.js",
-                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/vendor.4fba1d774a3c47df7c58.js"
+                "name": "vendor.0f64de4bdfe3786f048b.js",
+                "publicPath": "http://localhost:3000/dist/vendor.0f64de4bdfe3786f048b.js",
+                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/vendor.0f64de4bdfe3786f048b.js"
             }
         ],
         "main": [
             {
-                "name": "main.4fba1d774a3c47df7c58.js",
-                "publicPath": "http://localhost:3000/dist/main.4fba1d774a3c47df7c58.js",
-                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/main.4fba1d774a3c47df7c58.js"
+                "name": "main.0f64de4bdfe3786f048b.js",
+                "publicPath": "http://localhost:3000/dist/main.0f64de4bdfe3786f048b.js",
+                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/main.0f64de4bdfe3786f048b.js"
             },
             {
                 "name": "style.css",
@@ -23,12 +23,10 @@
         ],
         "manifest": [
             {
-                "name": "manifest.4fba1d774a3c47df7c58.js",
-                "publicPath": "http://localhost:3000/dist/manifest.4fba1d774a3c47df7c58.js",
-                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/manifest.4fba1d774a3c47df7c58.js"
+                "name": "manifest.0f64de4bdfe3786f048b.js",
+                "publicPath": "http://localhost:3000/dist/manifest.0f64de4bdfe3786f048b.js",
+                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/manifest.0f64de4bdfe3786f048b.js"
             }
         ]
-    },
-    "error": "ModuleBuildError",
-    "message": "Module build failed: SyntaxError: Unterminated string constant (31:35)\n\n  29 |                     <HelpButtonWidget\n  30 |                         stateHolder={this}\n> 31 |                         headLevel={'label}\n     |                                    ^\n  32 |                         title={\"More information on developmental phenotype groups\"}\n  33 |                     />\n  34 |                 </label>\n"
+    }
 }
