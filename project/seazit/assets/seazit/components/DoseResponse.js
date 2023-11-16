@@ -64,6 +64,11 @@ class DoseResponse extends React.Component {
                             .map('input_id')
                             .uniq()
                             .value()),
+                        (d.style =
+                            this.props.devtoxreadout_ids &&
+                            this.props.devtoxreadout_ids.includes(d.endpoint_name)
+                                ? { border: '5px solid #d62976', padding: '1px', margin: '1px' }
+                                : null),
                         // filter with input_ids to filter bmcout into different case
                         (d.bmcoutput = d.bmcoutput.filter((i) => d.input_ids.includes(i.input_id))),
                         (d.substance_code_input_ids = _.chain(
@@ -78,7 +83,6 @@ class DoseResponse extends React.Component {
                 .value());
 
         yrange = [0, 100];
-        // console.log('collapsedData', data, keys, collapsedData);
         return {
             data,
             collapsedData,
@@ -108,7 +112,7 @@ class DoseResponse extends React.Component {
 
         switch (collapse) {
             case COLLAPSE_BY_READOUT:
-                return this.colorScale.domain(_.map(data[0].dose_response, 'casrn'));
+                return this.colorScale.domain(_.map(data[0].dose_response, 'cawwsrn'));
             case COLLAPSE_BY_CHEMICAL:
                 return this.colorScale.domain(_.map(data[0].dose_response, 'endpoint_name'));
             case NO_COLLAPSE:
@@ -216,18 +220,17 @@ class DoseResponse extends React.Component {
         this.setKeys(data, collapse);
 
         let update = this.collapseData(data, collapse);
-        // console.log(update);
+        // //console.log(update);
 
         let scale = this.getColorScale(update.collapsedData, collapse);
         this.setState({
             ...update,
             scale,
         });
-        // console.log(this.state);
     }
 
     _renderPlot(d, yrange) {
-        //
+        //console.log(d)
         if (this.refs[d.key] === undefined) {
             return;
         }
@@ -271,12 +274,8 @@ class DoseResponse extends React.Component {
             showlegend: false,
             // add room for collapsed plot legends
             height: this.props.height + d.groupKeys.length * 19 + 20,
-            autosize: true,
-            paper_bgcolor:
-                this.props.devtoxreadout_ids &&
-                this.props.devtoxreadout_ids.includes(d.endpoint_name)
-                    ? '#FFFF00'
-                    : null,
+            width: 470,
+            // autosize: true,
         };
         d.groupKeys.map((gk) => {
             let drs = d.dose_response.filter((r) => r.groupKey == gk),
@@ -348,10 +347,8 @@ class DoseResponse extends React.Component {
             // move legend to bottom of plot
             layout.legend = { orientation: 'h', y: -0.3 };
         }
-        // console.log('newPlot', data, d);
-        // console.log('this.refs[d.key]', this.refs, this.refs[d.key]);
-        // console.log('newPlot', data, layout);
-
+        // //console.log(this.refs[d.key], data, layout, svgConfig)
+        // //console.log(Plotly.newPlot(this.refs[d.key], data, layout, svgConfig))
         Plotly.newPlot(this.refs[d.key], data, layout, svgConfig);
     }
 
@@ -392,11 +389,17 @@ class DoseResponse extends React.Component {
         }
 
         let colNum = Math.ceil(12 / this.props.cols);
+        // //console.log(this.state.collapsedData)
 
         return (
             <div>
                 {this.state.collapsedData.map((item) => (
-                    <div className={`col-xs-${colNum}`} key={item.key} ref={item.key} />
+                    <div
+                        className={`col-xs-${colNum}`}
+                        key={item.key}
+                        ref={item.key}
+                        style={item.style}
+                    />
                 ))}
             </div>
         );
@@ -409,6 +412,7 @@ DoseResponse.propTypes = {
     height: PropTypes.number.isRequired,
     url: PropTypes.string.isRequired,
     devtoxreadout_ids: PropTypes.array,
+    fill: PropTypes.string,
 };
 
 // this is for specical case, each dataset collapse with mortality120 data
@@ -454,12 +458,17 @@ class DoseResponseMort120 extends React.Component {
                     };
                 })
                 .each((d, k) => {
-                    // console.log(d);
+                    // //console.log(d);
 
                     let dr = d.dose_response[0];
                     (d.title = this.getPlotTitle(dr, collapse)),
                         (d.casrn = dr.casrn),
                         (d.endpoint_name = dr.endpoint_name),
+                        (d.style =
+                            this.props.devtoxreadout_ids &&
+                            this.props.devtoxreadout_ids.includes(d.endpoint_name)
+                                ? { border: '5px solid #d62976', padding: '1px', margin: '1px' }
+                                : null),
                         (d.input_ids = _.chain(d.bmcoutput)
                             .map('input_id')
                             .uniq()
@@ -488,7 +497,6 @@ class DoseResponseMort120 extends React.Component {
                 .sortBy('endpoint_name')
                 .sortBy('casrn')
                 .value();
-        // console.log(collapsedData);
 
         let yrange = [0, 100];
         return {
@@ -592,9 +600,9 @@ class DoseResponseMort120 extends React.Component {
     updateData(data, collapse) {
         this.setKeys(data, collapse);
 
-        // console.log(data);
+        // //console.log(data);
         let update = this.collapseData(data, collapse);
-        // console.log(update);
+        // //console.log(update);
 
         let scale = this.getColorScale(update.collapsedData, collapse);
         this.setState({
@@ -647,12 +655,8 @@ class DoseResponseMort120 extends React.Component {
             showlegend: false,
             // add room for collapsed plot legends
             height: this.props.height + d.groupKeys.length * 19 + 20,
-            autosize: true,
-            paper_bgcolor:
-                this.props.devtoxreadout_ids &&
-                this.props.devtoxreadout_ids.includes(d.endpoint_name)
-                    ? '#FFFF00'
-                    : null,
+            width: 470,
+            // autosize: true,
         };
         d.groupKeys.map((gk) => {
             let drs = d.dose_response.filter((r) => r.groupKey == gk),
@@ -789,11 +793,15 @@ class DoseResponseMort120 extends React.Component {
         }
 
         let colNum = Math.ceil(12 / this.props.cols);
-
         return (
             <div>
                 {this.state.collapsedData.map((item) => (
-                    <div className={`col-xs-${colNum}`} key={item.key} ref={item.key} />
+                    <div
+                        className={`col-xs-${colNum}`}
+                        key={item.key}
+                        ref={item.key}
+                        style={item.style}
+                    />
                 ))}
             </div>
         );
@@ -806,6 +814,8 @@ DoseResponseMort120.propTypes = {
     height: PropTypes.number.isRequired,
     url: PropTypes.string.isRequired,
     devtoxreadout_ids: PropTypes.array,
+    fill: PropTypes.string,
+    Mort120Flag: PropTypes.bool,
 };
 
 export { DoseResponse };

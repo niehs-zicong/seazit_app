@@ -1,10 +1,10 @@
-import React, { useState }from 'react';
+import React, { useState } from 'react';
 import BaseWidget from './BaseWidget';
-import * as d3 from "d3";
-import _ from "lodash";
-import PropTypes from "prop-types";
-import RankedBarchartHandler from "../components/RankedBarchartHandler";
-
+import * as d3 from 'd3';
+import _ from 'lodash';
+import PropTypes from 'prop-types';
+import RankedBarchartHandler from '../components/RankedBarchartHandler';
+import styles from '../components/graph.css';
 
 class BmdCheckBoxWidget extends BaseWidget {
     /*
@@ -15,13 +15,13 @@ class BmdCheckBoxWidget extends BaseWidget {
         super(props);
     }
 
-        render() {
+    render() {
         let state = this.props.stateHolder.state;
         return (
             <div>
                 <label>Developmental Toxicity Classification:</label>
-                    {/*{this.props.stateHolder.state.selectivityList.map((d, index) => {*/}
-                    {state.selectivityList.map((d, index) => {
+                {/*{this.props.stateHolder.state.selectivityList.map((d, index) => {*/}
+                {state.selectivityList.map((d, index) => {
                     return (
                         <div className="checkbox" key={index}>
                             <label>
@@ -38,6 +38,6 @@ class BmdCheckBoxWidget extends BaseWidget {
                 })}
             </div>
         );
-        }
+    }
 }
 export default BmdCheckBoxWidget;

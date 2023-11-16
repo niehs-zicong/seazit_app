@@ -2972,7 +2972,7 @@ execa@^0.8.0:
 
 exenv@^1.2.0:
   version "1.2.2"
-  resolved "https://registry.npmjs.org/exenv/-/exenv-1.2.2.tgz"
+  resolved "https://registry.yarnpkg.com/exenv/-/exenv-1.2.2.tgz#2ae78e85d9894158670b03d47bec1f03bd91bb9d"
 
 exit-hook@^1.0.0:
   version "1.1.1"
@@ -5702,6 +5702,12 @@ react-base16-styling@^0.5.1:
     lodash.flow "^3.3.0"
     pure-color "^1.2.0"
 
+react-bootstrap-icons@^1.10.3:
+  version "1.10.3"
+  resolved "https://registry.yarnpkg.com/react-bootstrap-icons/-/react-bootstrap-icons-1.10.3.tgz#5d64a93c7b172856b03c7d3cd5119a025b094966"
+  dependencies:
+    prop-types "^15.7.2"
+
 react-dock@^0.3.0:
   version "0.3.0"
   resolved "https://registry.npmjs.org/react-dock/-/react-dock-0.3.0.tgz"
@@ -5749,9 +5755,9 @@ react-lifecycles-compat@^3.0.0:
   version "3.0.4"
   resolved "https://registry.npmjs.org/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz"
 
-react-modal@^3.1.7:
+react-modal@^3.0.4:
   version "3.16.1"
-  resolved "https://registry.npmjs.org/react-modal/-/react-modal-3.16.1.tgz"
+  resolved "https://registry.yarnpkg.com/react-modal/-/react-modal-3.16.1.tgz#34018528fc206561b1a5467fc3beeaddafb39b2b"
   dependencies:
     exenv "^1.2.0"
     prop-types "^15.7.2"
@@ -5820,6 +5826,10 @@ react@^16.2.0:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     prop-types "^15.6.2"
+
+reactjs-popup@1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/reactjs-popup/-/reactjs-popup-1.0.4.tgz#04a251e3536f88972b912e8be7f65783c25e3431"
 
 read-pkg-up@^2.0.0:
   version "2.0.0"
@@ -7090,7 +7100,7 @@ vm-browserify@^1.0.1:
 
 warning@^4.0.3:
   version "4.0.3"
-  resolved "https://registry.npmjs.org/warning/-/warning-4.0.3.tgz"
+  resolved "https://registry.yarnpkg.com/warning/-/warning-4.0.3.tgz#16e9e077eb8a86d6af7d64aa1e05fd85b4678ca3"
   dependencies:
     loose-envify "^1.0.0"
 

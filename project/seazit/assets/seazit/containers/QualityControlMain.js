@@ -18,8 +18,6 @@ class QualityControlMain extends React.Component {
         }
         return (
             <div className="alert alert-info">
-                <h2>Help text</h2>
-
                 <p>
                     This page allows for the visualization of DMSO response variability for each
                     endpoint in each dataset. This information was used by the NTP to assign a
@@ -133,7 +131,7 @@ class QualityControlMain extends React.Component {
                 <div className="col-md-12">
                     <h1>
                         Quality Check
-                        <HelpButtonWidget stateHolder={this} />
+                        <HelpButtonWidget stateHolder={this} headLevel={'h1'} />
                     </h1>
                     {this._renderHelpText()}
                 </div>

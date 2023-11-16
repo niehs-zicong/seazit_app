@@ -26,7 +26,6 @@ import styles from './graph.css';
 
 import { getLog10AxisFunction } from 'utils/d3';
 import DoseResponseGridWidget from '../widgets/DoseResponseGridWidget';
-import IntegrativeCheckBoxWidget from '../widgets/IntegrativeCheckBoxWidget';
 import { DoseResponseMort120 } from './DoseResponse';
 
 class Heatmap extends Component {
@@ -38,46 +37,16 @@ class Heatmap extends Component {
         this.handleResize = this.handleResize.bind(this);
     }
 
-    addStripMask = function(svg) {
-        // add strip mask to top of d3-selected svg
-        // use url(#stripeMask) to apply
-
-        let defs = svg.append('defs');
-        defs.append('pattern')
-            .attr('id', 'maskStripePattern')
-            .attr('width', 8)
-            .attr('height', 8)
-            .attr('patternUnits', 'userSpaceOnUse')
-            .attr('patternTransform', 'rotate(45)')
-            .append('rect')
-            .attr('x', 0)
-            .attr('y', 0)
-            .attr('width', 4)
-            .attr('height', 8)
-            .attr('fill', 'white');
-
-        defs.append('mask')
-            .attr('id', 'stripeMask')
-            .append('rect')
-            .attr('x', 0)
-            .attr('y', 0)
-            .attr('width', '100%')
-            .attr('height', '100%')
-            .style('fill', 'url(#maskStripePattern)');
-    };
-
     renderPlot = function(el, data, legendData) {
         $(el).empty();
-        //console.log('data');
-        //console.log(data);
         let margin = {
                 top: 40,
                 left: 10,
                 bottom: 40,
                 right: 40,
                 axisLeft: 290,
-                axisTop: 390,
-                legend: 300,
+                axisTop: 300,
+                legend: 900,
             },
             cellSize = 50,
             xMap = _.groupBy(data, 'x'),
@@ -94,7 +63,7 @@ class Heatmap extends Component {
                 };
                 if (cell.developmental_defect_grouping_general && cell.protocol_source) {
                     new BootstrapModal(Header, sankeyPlotGraphBody, {
-                        title: label,
+                        title: label.replace(/:/g, ' +'),
                         cells: cell,
                     });
                 }
@@ -160,6 +129,8 @@ class Heatmap extends Component {
                 .select(el)
                 .append('svg')
                 .attr('width', Math.max(1000, width + margin.left + margin.right))
+                // .attr('width', Math.max(1000, 2000))
+
                 .attr('height', Math.max(1000, height + margin.left + margin.right))
                 .append('g')
                 .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')'),
@@ -239,6 +210,7 @@ class Heatmap extends Component {
             .attr('height', yScale.range()[1])
             .attr('mask', 'url(#stripeMask)')
             .attr('fill', '#ccc');
+        // .attr('fill', 'black');
 
         chartLayer
             .append('rect')
@@ -250,6 +222,8 @@ class Heatmap extends Component {
             .style('stroke', 'black')
             .style('stroke-width', 2);
 
+        console.log('d', data);
+        console.log(data.filter((d) => d.final_dev_call === 'default'));
         chartLayer
             .selectAll('.square')
             .data(data)
@@ -278,170 +252,46 @@ class Heatmap extends Component {
             .append('g')
             .classed('legendLayer', true)
             .attr('transform', `translate(${width - margin.legend},${margin.top})`);
+        legendLayer
+            .selectAll('text')
+            .data(legendData.values)
+            .enter()
+            .append('text')
+            .attr('class', styles.legendText)
+            .attr(
+                'transform',
+                (d, i) =>
+                    `translate(${15 + cellSize}, ${i * cellSize +
+                        margin.axisTop +
+                        (cellSize - 20) / 2 +
+                        cellSize})`
+            )
+            .text((d) => d.label);
 
-        switch (legendData.type) {
-            case 'discrete': {
-                // //console.log(legendData.values)
-                legendLayer
-                    .selectAll('text')
-                    .data(legendData.values)
-                    .enter()
-                    .append('text')
-                    .attr('class', styles.legendText)
-                    .attr(
-                        'transform',
-                        (d, i) =>
-                            `translate(${15 + cellSize}, ${i * cellSize +
-                                margin.axisTop +
-                                (cellSize - 20) / 2 +
-                                cellSize})`
-                    )
-                    .text((d) => d.label);
+        legendLayer
+            .append('text')
+            .attr('class', styles.legendText)
+            .attr('x', 0)
+            .attr('y', 0)
+            .attr('transform', (d, i) => `translate(25, ${margin.axisTop + (cellSize - 20) / 2})`)
+            .html('Developmental Toxicity Classification')
+            .style('font-size', 20);
+        // console.log(legendData.values)
 
-                legendLayer
-                    .append('text')
-                    .attr('class', styles.legendText)
-                    .attr('x', 0)
-                    .attr('y', 0)
-                    .attr(
-                        'transform',
-                        (d, i) => `translate(25, ${margin.axisTop + (cellSize - 20) / 2})`
-                    )
-                    .html('Developmental Toxicity Classification')
-                    .style('font-size', 20);
-
-                let ds = legendLayer
-                    .selectAll('path')
-                    .data(legendData.values)
-                    .enter()
-                    .append('rect')
-                    .attr('width', cellSize - 20)
-                    .attr('height', cellSize - 20)
-                    .attr('fill', (d) => d.fill)
-                    .attr(
-                        'transform',
-                        (d, i) => `translate(25, ${i * cellSize + margin.axisTop + cellSize})`
-                    )
-                    .style('stroke', 'black')
-                    .style('stroke-width', '1');
-
-                break;
-            }
-            case 'continuous': {
-                let { colorScaleFunction, legendScale } = legendData,
-                    legendHeight = 200,
-                    legend = legendLayer
-                        .append('defs')
-                        .append('linearGradient')
-                        .attr('id', 'gradient')
-                        .attr('x1', '0%')
-                        .attr('y1', '100%')
-                        .attr('x2', '0%')
-                        .attr('y2', '0%')
-                        .attr('spreadMethod', 'pad');
-
-                legendScale.ticks().map((d, i) => {
-                    legend
-                        .append('stop')
-                        .attr('offset', `${i}%`)
-                        .attr('stop-color', colorScaleFunction(d))
-                        .attr('stop-opacity', 1);
-                });
-
-                legendLayer
-                    .append('rect')
-                    .attr('width', 30)
-                    .attr('height', legendHeight)
-                    .style('fill', 'url(#gradient)')
-                    .style('stroke', 'black')
-                    .attr('transform', `translate(20,${margin.top + margin.axisTop})`);
-
-                legendLayer
-                    .append('g')
-                    .attr('class', 'axis y')
-                    .attr('transform', `translate(50,${margin.top + margin.axisTop})`)
-                    .call(
-                        getLog10AxisFunction(
-                            d3.axisRight,
-                            legendScale.copy().range([legendHeight, 0])
-                        )
-                    );
-
-                legendLayer
-                    .append('text')
-                    .attr('class', styles.legendText)
-                    .attr('x', 0)
-                    .attr('y', 0)
-                    .attr('transform', `translate(15, ${margin.top + margin.axisTop - 10})`)
-                    .text('BMC (µM)');
-                legendLayer
-                    .append('text')
-                    .attr('class', styles.legendText)
-                    .attr('x', 0)
-                    .attr('y', 0)
-                    .attr(
-                        'transform',
-                        `translate(50,${margin.top + margin.axisTop + legendHeight + 25})`
-                    )
-                    .text('Not active (no BMC)');
-
-                legendLayer
-                    .append('rect')
-                    .attr('x', 0)
-                    .attr('y', 0)
-                    .attr('width', 25)
-                    .attr('height', 25)
-                    .attr(
-                        'transform',
-                        `translate(20,${margin.top + margin.axisTop + legendHeight + 10})`
-                    )
-                    .attr('fill', 'white')
-                    .style('stroke', 'black')
-                    .style('stroke-width', '1');
-
-                legendLayer
-                    .append('rect')
-                    .attr('x', 0)
-                    .attr('y', 0)
-                    .attr('width', 25)
-                    .attr('height', 25)
-                    .attr(
-                        'transform',
-                        `translate(20,${margin.top + margin.axisTop + legendHeight + 40})`
-                    )
-                    .attr('mask', 'url(#stripeMask)')
-                    .attr('fill', '#ccc');
-
-                legendLayer
-                    .append('rect')
-                    .attr('x', 0)
-                    .attr('y', 0)
-                    .attr('width', 25)
-                    .attr('height', 25)
-                    .attr(
-                        'transform',
-                        `translate(20,${margin.top + margin.axisTop + legendHeight + 40})`
-                    )
-                    .attr('fill', 'transparent')
-                    .style('stroke', 'black')
-                    .style('stroke-width', '1');
-
-                legendLayer
-                    .append('text')
-                    .attr('class', styles.legendText)
-                    .attr('x', 0)
-                    .attr('y', 0)
-                    .attr(
-                        'transform',
-                        `translate(50,${margin.top + margin.axisTop + legendHeight + 55})`
-                    )
-                    .text('Not tested');
-                break;
-            }
-
-            default:
-                break;
-        }
+        let ds = legendLayer
+            .selectAll('path')
+            .data(legendData.values)
+            .enter()
+            .append('rect')
+            .attr('width', cellSize - 20)
+            .attr('height', cellSize - 20)
+            .attr('fill', (d) => d.fill)
+            .attr(
+                'transform',
+                (d, i) => `translate(25, ${i * cellSize + margin.axisTop + cellSize})`
+            )
+            .style('stroke', 'black')
+            .style('stroke-width', '1');
     };
 
     _unrenderPlot() {
@@ -492,7 +342,6 @@ Heatmap.propTypes = {
         })
     ).isRequired,
     legendData: PropTypes.shape({
-        type: PropTypes.oneOf(['discrete', 'continuous']).isRequired,
         values: PropTypes.arrayOf(
             PropTypes.shape({
                 label: PropTypes.string,

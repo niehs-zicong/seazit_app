@@ -10,6 +10,7 @@ import SelectorSliderWidget from '../widgets/SelectorSliderWidget';
 import BmdCheckBoxWidget from '../widgets/BmdCheckBoxWidget';
 import OntologyTypeWidget from '../widgets/OntologyTypeWidget';
 import OntologyWidget from '../widgets/OntologyWidget';
+import styles from '../components/graph.css';
 
 // import AxisSelectorWidget from '../widgets/AxisSelectorWidget';
 import RankedBarchartHandler from '../components/RankedBarchartHandler';
@@ -114,13 +115,13 @@ class BmdByLabMain extends React.Component {
             />
         );
     }
+
     _renderHelpText() {
         if (!this.state.showHelpText) {
             return null;
         }
         return (
             <div className="alert alert-info">
-                <h2>Help text</h2>
                 <p>
                     This page allows for each investigator to see how the chemicals rank by activity
                     in two ways:
@@ -169,9 +170,13 @@ class BmdByLabMain extends React.Component {
         return (
             <div className="row-fluid">
                 <div className="col-md-12">
-                    <h1>
+                    <h1 className={styles.labelHorizaontal}>
                         Benchmark concentration (BMC) summary by lab
-                        <HelpButtonWidget stateHolder={this} />
+                        <HelpButtonWidget
+                            stateHolder={this}
+                            headLevel={'h1'}
+                            // title={'More information on ontology and phenotype terms'}
+                        />
                     </h1>
                 </div>
                 <div className="col-md-12">

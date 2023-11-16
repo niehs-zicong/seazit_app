@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Modal from 'react-modal';
+//import Popup from 'reactjs-popup';
+import HelpButtonWidget from '../widgets/HelpButtonWidget';
 import PropTypes from 'prop-types';
 import * as d3 from 'd3';
 import _ from 'lodash';
 import Loading from 'utils/Loading';
 import Heatmap from './Heatmap';
 import DevtoxHeatmap from './DevtoxHeatmap';
+import styles from './graph.css';
+
 import {
     READOUT_TYPE_READOUT,
     READOUT_TYPE_CATEGORY,
@@ -29,12 +34,12 @@ class IntegrativePlotHandler extends React.Component {
             data: null,
             scale: null,
             continuousColorScale: null,
+            open: false,
             INTVIZ_HEATMAP_COLORS: [
                 {
                     key: 'dev tox',
                     label: 'specific',
                     fill: '#d62976',
-                    // fill: 'black'
                 },
                 {
                     key: 'general tox',
@@ -89,118 +94,62 @@ class IntegrativePlotHandler extends React.Component {
     }
 
     _exportCsv = function(jsonData) {
-        if (jsonData.length == 0) {
+        if (jsonData.length === 0) {
             return '';
         }
-        let filename = 'IntegrativeAnalysesData.csv',
-            keys = [
-                'protocol_name_long',
-                'protocol_name_plot',
-                'chemical_category',
-                'dtxsid',
-                'casrn',
-                'preferred_name',
-                'use_category1',
-                'ontologyGroupName',
-                'endPointList',
-                'combin_ontology_id',
-                'f_max_dev_call',
-                'mean_pod',
-                'mort_med_pod_med',
-                'mean_selectivity',
-                'min_lowest_conc',
-                'max_highest_conc',
-            ];
-        //         keys = {
-        //     'protocol_name_long': 'dataset name (short)',
-        //     'protocol_name_plot': 'dataset name (long)',
-        //     'dtxsid': 'dtxsid',
-        //     'casrn': 'casrn',
-        //     'preferred_name': 'preferred_name',
-        //     'use_category1': 'use category level1',
-        //     'ontologyGroupName': 'ontology group',
-        //     'endPointList': 'n endpoints in the ontology group',
-        //     'combin_ontology_id': 'n ontology terms in the ontology group',
-        //     'final_dev_call': 'activity decision on ontology',
-        //     'mean_pod': ' ontology group bmc (um)',
-        //     'mort_med_pod_med': 'mortality bmc (um)',
-        //     'mean_selectivity': 'selectivity ',
-        //     'min_lowest_conc': 'lowest tested conc (um)',
-        //     'max_highest_conc': 'highest tested conc (um)',
-        // }
+        const filename = 'IntegrativeAnalysesData.csv';
 
-        let columnDelimiter = ',';
-        let lineDelimiter = '\n';
+        const headerMappings = {
+            protocol_name_long: 'dataset name (short)',
+            protocol_name_plot: 'dataset name (long)',
+            chemical_category: 'use category level1',
+            dtxsid: 'dtxsid',
+            casrn: 'casrn',
+            preferred_name: 'preferred_name',
+            use_category1: 'use category level1',
+            ontologyGroupName: 'ontology group',
+            endPointList: 'n endpoints in the ontology group',
+            combin_ontology_id: 'n ontology terms in the ontology group',
+            f_max_dev_call: 'activity decision on ontology',
+            mean_pod: 'ontology group bmc (um)',
+            mort_med_pod_med: 'mortality bmc (um)',
+            mean_selectivity: 'selectivity',
+            min_lowest_conc: 'lowest tested conc (um)',
+            max_highest_conc: 'highest tested conc (um)',
+        };
 
-        let csvColumnHeader = keys.join(columnDelimiter);
+        const columnDelimiter = ',';
+        const lineDelimiter = '\n';
+        const headerKeys = Object.keys(headerMappings);
+
+        const csvColumnHeader = headerKeys.map((key) => headerMappings[key]).join(columnDelimiter);
         let csvStr = csvColumnHeader + lineDelimiter;
+
         jsonData.forEach((item) => {
-            keys.forEach((key, index) => {
-                if (index > 0 && index < keys.length) {
+            headerKeys.forEach((key, index) => {
+                if (index > 0 && index < headerKeys.length) {
                     csvStr += columnDelimiter;
                 }
-                // the reason I used replcae all function, replace all comma
-                // to . , the comma will make my csv format mass.
-                switch (key) {
-                    case 'protocol_name_long':
-                        csvStr += `"${item[key]}"`;
-                        break;
-                    case 'protocol_name_plot':
-                        csvStr += `"${item[key]}"`;
-                        break;
-                    case 'chemical_category':
-                        csvStr += `"${item[key]}"`;
-                        break;
-                    case 'dtxsid':
-                        csvStr += `"${item[key]}"`;
-                        break;
-                    case 'casrn':
-                        csvStr += `"${item[key]}"`;
-                        break;
-                    case 'preferred_name':
-                        csvStr += `"${item[key]}"`;
-                        break;
-                    case 'use_category1':
-                        csvStr += `"${item[key]}"`;
-                        break;
-                    case 'ontologyGroupName':
-                        csvStr += `"${item[key]}"`;
-                        break;
-                    case 'endPointList':
-                        csvStr += `"${item[key] ? item[key].length : 0}"`;
-                        break;
-                    case 'combin_ontology_id':
-                        csvStr += `"${item[key] ? item[key].length : 0}"`;
-                        break;
-                    case 'f_max_dev_call':
-                        csvStr += `"${item[key]}"`;
-                        break;
-                    case 'mean_pod':
-                        csvStr += `"${pod_med_processed(item[key])}"`;
-                        break;
-                    case 'mort_med_pod_med':
-                        csvStr += `"${pod_med_processed(item[key])}"`;
-                        break;
-                    case 'mean_selectivity':
-                        csvStr += `"${item[key]}"`;
-                        break;
-                    case 'min_lowest_conc':
-                        csvStr += `"${pod_med_processed(item[key])}"`;
-                        break;
-                    case 'max_highest_conc':
-                        csvStr += `"${pod_med_processed(item[key])}"`;
-                        break;
-
-                    default:
-                        csvStr += '';
+                let value = item[key] || '';
+                if (key === 'endPointList' || key === 'combin_ontology_id') {
+                    value = value ? value.length : 0;
                 }
+                if (
+                    key === 'mean_pod' ||
+                    key === 'mort_med_pod_med' ||
+                    key === 'min_lowest_conc' ||
+                    key === 'max_highest_conc'
+                ) {
+                    value = pod_med_processed(value);
+                }
+                csvStr += `"${value}"`;
             });
             csvStr += lineDelimiter;
         });
         csvStr = encodeURIComponent(csvStr);
 
-        let dataUri = 'data:text/csv;charset=utf-8,' + csvStr;
-        let linkElement = document.createElement('a');
+        const dataUri = 'data:text/csv;charset=utf-8,' + csvStr;
+        const linkElement = document.createElement('a');
         linkElement.setAttribute('href', dataUri);
         linkElement.setAttribute('download', filename);
         linkElement.click();
@@ -244,15 +193,15 @@ class IntegrativePlotHandler extends React.Component {
             switch (visualization) {
                 case INTVIZ_HEATMAP:
                     return {
-                        type: 'discrete',
                         values: colorCategory,
                     };
 
                 // HEATMAP_BMC type is continuous, search that.
                 case INTVIZ_DevtoxHEATMAP:
                     return {
-                        type: 'continuous',
                         legendScale: scale,
+                        values: colorCategory,
+
                         colorScaleFunction: colorScale,
                     };
                 default:
@@ -452,6 +401,106 @@ class IntegrativePlotHandler extends React.Component {
         }
     }
 
+    _renderHelpText() {
+        if (!this.state.showHelpText) {
+            return null;
+        }
+        if (this.props.visualization === INTVIZ_HEATMAP) {
+            return (
+                <div className="alert alert-info">
+                    <ul>
+                        <li>
+                            specific = a test substance produces quantifiable alteration(s) in
+                            phenotypes at a concentration lower than that which causes overt
+                            toxicity (i.e., mortality)
+                        </li>
+                        <li>
+                            non-specific = a test substance produces both altered phenotypes and
+                            mortality at similar concentrations
+                        </li>
+                        <li>
+                            non-toxic = no changes to phenotype or survival occurred at the
+                            concentrations evaluated
+                        </li>
+                        <li>
+                            inconclusive = specificity couldn’t be determined based on differences
+                            among plate replicates and requires more testing
+                        </li>
+                        <li>
+                            not evaluated = a phenotype that was not assessed in a particular
+                            laboratory
+                        </li>
+                    </ul>
+                </div>
+            );
+        } else {
+            return (
+                <div className="alert alert-info">
+                    <p>
+                        Benchmark concentration (BMC) of a selected endpoint is indicative of
+                        potency; darker shades indicative lower BMC value which is a more potent
+                        effect. Specificity is the fold change of the BMC values between the
+                        mortality and a certain altered phenotype. The fold change value is
+                        log10-transformed; higher specificity represents a more specific phenotypic
+                        effect compared to mortality. The higher the specificity, the larger the
+                        circle.
+                    </p>
+                </div>
+            );
+        }
+    }
+
+    _renderButtons(d) {
+        const title =
+            this.props.visualization === INTVIZ_HEATMAP
+                ? 'More information on developmental toxicity classifications'
+                : 'More information on BMC and specificity';
+
+        const svgId = this.props.visualization === INTVIZ_HEATMAP ? 'IA_heatmap01' : 'IA_heatmap02';
+
+        return (
+            <div>
+                <h2 className={styles.labelHorizaontal}>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <HelpButtonWidget stateHolder={this} headLevel={'h2'} title={title} />
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button
+                        onClick={() => this._exportCsv(d.data)}
+                        className="fa fa-download"
+                    ></button>
+                    &nbsp;Data &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button
+                        onClick={() => svg_download_form(svgId)}
+                        className="fa fa-camera"
+                    ></button>
+                    &nbsp;Image
+                </h2>
+            </div>
+        );
+    }
+
+    _renderMain(d) {
+        console.log(this.props);
+
+        if (this.props.visualization === INTVIZ_HEATMAP) {
+            return (
+                <Heatmap
+                    data={d.data}
+                    legendData={d.legendData}
+                    ontologyType={this.props.ontologyType}
+                />
+            );
+        } else {
+            return (
+                <DevtoxHeatmap
+                    data={d.data}
+                    legendData={d.legendData}
+                    ontologyType={this.props.ontologyType}
+                />
+            );
+        }
+    }
+
     render() {
         if (!this.state.data) {
             return <Loading />;
@@ -462,54 +511,14 @@ class IntegrativePlotHandler extends React.Component {
         if (d.data.length === 0) {
             return renderNoDataAlert();
         }
-        //console.log('zw', this.props);
-        //console.log(this.props.ontologyGroup);
-        //console.log(this.props.ontologyType);
-        //console.log(d.data);
 
-        if (this.props.visualization == INTVIZ_HEATMAP) {
-            return (
-                <div>
-                    <h2>
-                        Download buttons: &nbsp;&nbsp;&nbsp;&nbsp;
-                        <button onClick={() => this._exportCsv(d.data)} className="btn btn-primary">
-                            Export CSV
-                        </button>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <button
-                            onClick={() => svg_download_form('IA_heatmap01')}
-                            className="btn btn-primary"
-                        >
-                            Export SVG
-                        </button>
-                    </h2>
-                    <Heatmap
-                        data={d.data}
-                        legendData={d.legendData}
-                        ontologyType={this.props.ontologyType}
-                    />
-                </div>
-            );
-        } else {
-            return (
-                <div>
-                    <h2>
-                        Download buttons: &nbsp;&nbsp;&nbsp;&nbsp;
-                        <button onClick={() => this._exportCsv(d.data)} className="btn btn-primary">
-                            Export CSV
-                        </button>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <button
-                            onClick={() => svg_download_form('IA_heatmap02')}
-                            className="btn btn-primary"
-                        >
-                            Export SVG
-                        </button>
-                    </h2>
-                    <DevtoxHeatmap data={d.data} legendData={d.legendData} />
-                </div>
-            );
-        }
+        return (
+            <div>
+                {this._renderButtons(d)}
+                {this._renderHelpText()}
+                {this._renderMain(d)}
+            </div>
+        );
     }
 }
 

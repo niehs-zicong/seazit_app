@@ -4,6 +4,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import BaseWidget from './BaseWidget';
 import OntologyTypeWidget from './OntologyTypeWidget';
+import HelpButtonWidget from './HelpButtonWidget';
 
 import {
     renderSelectMultiWidget,
@@ -23,6 +24,10 @@ class ReadoutWidget extends BaseWidget {
 
     constructor(props) {
         super(props);
+
+        this.state = {
+            showHelpText: false,
+        };
     }
 
     mapFun = (r) => {
@@ -54,13 +59,60 @@ class ReadoutWidget extends BaseWidget {
             .sortBy('seazit_protocol_id')
             .value();
 
-        return renderSelectMultiWidget(
-            'assays',
-            'dataset',
-            options,
-            state.assays,
-            this.handleSelectMultiChange
-        );
+        // const helpText = this._renderHelpText();
+        const renderHelpText = () => {
+            if (!this.state.showHelpText) {
+                return null;
+            }
+
+            return (
+                <div className="alert alert-info">
+                    <p>
+                        Study abbreviations: Dose range finding study = DRF and Definitive study =
+                        Def. Note: there is no limit to the number of datasets you can select. More
+                        information can be found on the
+                        <a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/"> Datasets page</a>.
+                    </p>
+                </div>
+            );
+        };
+        const renderHelpButtonWidget = () => {
+            return (
+                <HelpButtonWidget
+                    stateHolder={this}
+                    headLevel={'label'}
+                    title={'Click to toggle help-text'}
+                />
+            );
+        };
+        switch (state.tabFlag) {
+            case ConcentrationResponseTab:
+                return renderSelectMultiWidget(
+                    'assays',
+                    'dataset',
+                    options,
+                    state.assays,
+                    this.handleSelectMultiChange
+                );
+            case BMCTab:
+            case IntegrativeAnalysesTab:
+                return (
+                    <div>
+                        {renderSelectMultiWidget(
+                            'assays',
+                            'dataset',
+                            options,
+                            state.assays,
+                            this.handleSelectMultiChange,
+                            renderHelpButtonWidget,
+                            renderHelpText
+                        )}
+                    </div>
+                );
+            default:
+                // Default action or other cases
+                return null;
+        }
     }
 
     _renderFilterBy(state) {
@@ -109,7 +161,7 @@ class ReadoutWidget extends BaseWidget {
             endPointFilterFun,
             endPointSortFun,
             groupBy;
-        //console.log(assays);
+        console.log(assays);
         switch (state.tabFlag) {
             case ConcentrationResponseTab:
                 // group by category,

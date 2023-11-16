@@ -2,6 +2,7 @@ import $ from '$';
 import _ from 'lodash';
 import React from 'react';
 import BaseWidget from './BaseWidget';
+import styles from '../components/graph.css';
 
 import {
     CHEMFILTER_CATEGORY,
@@ -13,6 +14,7 @@ import {
     renderSelectMultiWidget,
     renderSelectMultiOptgroupWidget,
 } from '../shared';
+import HelpButtonWidget from './HelpButtonWidget';
 
 class ChemicalWidget extends BaseWidget {
     /*
@@ -25,6 +27,10 @@ class ChemicalWidget extends BaseWidget {
 
     constructor(props) {
         super(props);
+
+        this.state = {
+            showHelpText: false,
+        };
         this.handleChemlistChange = this.handleChemlistChange.bind(this);
         this.handleCategoryChange = this.handleCategoryChange.bind(this);
     }
@@ -58,14 +64,35 @@ class ChemicalWidget extends BaseWidget {
             .uniq()
             .value();
         this.props.stateHolder.setState(d);
+    }
 
+    _renderHelpText() {
+        if (!this.state.showHelpText) {
+            return null;
+        }
+        return (
+            <div className="alert alert-info">
+                <p>
+                    More information on use categories and test substance name can be found on{' '}
+                    <a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/">Datasets page</a>.
+                </p>
+            </div>
+        );
     }
 
     _renderFilterBy(state) {
-
         return (
             <div>
-                <label>Filter chemicals by: </label>
+                <label className={styles.labelHorizaontal}>
+                    Filter test substance by:
+                    <HelpButtonWidget
+                        stateHolder={this}
+                        headLevel={'label'}
+                        title={'More information on use categories and test substance names'}
+                    />
+                </label>
+                {this._renderHelpText()}
+
                 <div className="radio">
                     <label>
                         <input
@@ -75,7 +102,7 @@ class ChemicalWidget extends BaseWidget {
                             value={CHEMFILTER_CATEGORY}
                             checked={state.chemicalFilterBy === CHEMFILTER_CATEGORY}
                         />
-                        Category
+                        Use category
                     </label>
 
                     <span style={{ paddingLeft: '0.5em', paddingRight: '0.5em' }}>|</span>
@@ -88,7 +115,7 @@ class ChemicalWidget extends BaseWidget {
                             value={CHEMFILTER_CHEMICIAL}
                             checked={state.chemicalFilterBy === CHEMFILTER_CHEMICIAL}
                         />
-                        Name
+                        Name (CASRN)
                     </label>
                 </div>
             </div>
@@ -97,9 +124,9 @@ class ChemicalWidget extends BaseWidget {
 
     _renderSelector(state) {
         let opts;
-
         if (state.chemicalFilterBy === CHEMFILTER_CHEMICIAL) {
             opts = _.chain(state.Seazit_chemical_info)
+                .filter((r) => r.use_category1 !== 'Vehicle Control') // Filter out data with use_category1 equal to 'Vehicle Control'
                 .groupBy('preferred_name')
                 .values()
                 .map((r) => r[0])
@@ -114,7 +141,6 @@ class ChemicalWidget extends BaseWidget {
                 })
                 .groupBy('category')
                 .value();
-
             return renderSelectMultiOptgroupWidget(
                 'chemicals',
                 'chemical',
@@ -124,6 +150,7 @@ class ChemicalWidget extends BaseWidget {
             );
         } else {
             opts = _.chain(state.Seazit_chemical_info)
+                .filter((r) => r.use_category1 !== 'Vehicle Control') // Filter out data with use_category1 equal to 'Vehicle Control'
                 .groupBy('use_category1')
                 .values()
                 .map((r) => r[0])
