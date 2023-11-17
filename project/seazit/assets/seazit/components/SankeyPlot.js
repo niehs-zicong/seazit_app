@@ -4,6 +4,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from './graph.css';
 import Loading from 'utils/Loading';
+import HelpButtonWidget from '../widgets/HelpButtonWidget';
+// import styles from './graph.css';
+import './graph.css';
 
 import Plotly from 'plotly.js-dist';
 // import FileReaderInput from 'react-file-reader';
@@ -16,6 +19,7 @@ import {
     URL_SANKEYDATA,
     integrative_General,
     integrative_Granular,
+    INTVIZ_HEATMAP,
 } from '../shared';
 
 class SankeyPlot extends React.Component {
@@ -108,9 +112,13 @@ class SankeyPlot extends React.Component {
             this.props.cells.ontologyType == integrative_Granular ? 'granular' : 'general';
         let getStyledLabel = (node_name, node_level) => {
             if (node_name == this.props.cells.ontologyGroupName && node_level == ontologyType) {
-                return `<span style='color: red; font-size: 20px; font-weight: bold;text-shadow: none;'>${node_name}</span>`;
+                return `<span style='color: red; 
+                font-size: 15px; 
+                font-weight: bold;text-shadow: none;'>${node_name}</span>`;
             } else {
-                return `<span style='font-size: 20px; font-weight: bold;text-shadow: none;'>${node_name}</span>`;
+                return `<span style=' font-weight: bold; 
+                font-size: 15px; 
+                text-shadow: none;'>${node_name}</span>`;
             }
         };
 
@@ -137,15 +145,12 @@ class SankeyPlot extends React.Component {
                     width: 0.5,
                 },
                 label: fig.node_name,
-                // color:nodes.map((item) => item.node_color),
                 color: fig.node_color,
             },
 
             link: {
                 source: fig.source_id,
                 target: fig.target_id,
-                // source: [0, 1, 2],
-                // target:[1, 2, 3],
                 color: fig.flow_color,
                 value: fig.value,
             },
@@ -154,22 +159,116 @@ class SankeyPlot extends React.Component {
 
         // Define the layout options for the Sankey plot
         var layout = {
-            title: ` Sankey Plot <span style='color: red;font-weight: bold;'>${this.props.cells.ontologyGroupName}</span>`,
+            title: ` Sankey Diagram of <span style='color: red;font-weight: bold;'>${this.props.cells.ontologyGroupName}</span>`,
             // i use width to be 2400 to avoid node label overlapping.
             // TODO
-            width: 2400,
-            height: 400,
-            hoverlabel: {
-                font: {
-                    size: 30,
-                },
-            },
+            // width: 1550,
+            // height: 450,
+            autosize: true,
             font: {
                 size: 20,
             },
+
+            hoverlabel: {
+                font: {
+                    size: 20,
+                },
+            },
+
+            annotations: [
+                {
+                    text: `<span style='font-weight: bold;text-shadow: none;'>Laboratory specific <br> recording term</span>`,
+                    xref: 'paper',
+                    yref: 'paper',
+                    x: 0,
+                    xanchor: 'left',
+                    y: 0,
+                    yanchor: 'top',
+                    showarrow: false,
+                    bgcolor: 'rgba(97, 97, 97, 0.9)', // Set the background color here
+
+                    font: {
+                        color: '#fff',
+                        size: 20,
+                    },
+                },
+                {
+                    text: `<span style='font-weight: bold;text-shadow: none;'>${this.props.cells.ontologyGroupName}<br>Zebrafish Phenotype Ontology term</span>`,
+                    xref: 'paper',
+                    yref: 'paper',
+                    x: 0.25,
+                    xanchor: 'left',
+                    y: 0,
+                    yanchor: 'top',
+                    showarrow: false,
+                    bgcolor: 'rgba(97, 97, 97, 0.9)', // Set the background color here
+
+                    font: {
+                        color: '#fff',
+                        size: 20,
+                    },
+                },
+                {
+                    text: `<span style='font-weight: bold;text-shadow: none;'>Granular phenotype <br> term</span>`,
+
+                    xref: 'paper',
+                    yref: 'paper',
+                    x: 0.8,
+                    xanchor: 'right',
+                    y: 0,
+                    yanchor: 'top',
+                    showarrow: false,
+                    bgcolor: 'rgba(97, 97, 97, 0.9)', // Set the background color here
+
+                    font: {
+                        color: '#fff',
+                        size: 20,
+                    },
+                },
+                {
+                    text: `<span style='display: flex; flex-direction: column; font-weight: bold;text-shadow: none;'>General phenotype <br> term</span>`,
+                    xref: 'paper',
+                    yref: 'paper',
+                    x: 1,
+                    xanchor: 'right',
+                    y: 0,
+                    yanchor: 'top',
+                    showarrow: false,
+                    font: {
+                        color: '#fff',
+                        size: 20,
+                    },
+                    bgcolor: 'rgba(97, 97, 97, 0.9)', // Set the background color here
+                },
+            ],
         };
 
         Plotly.newPlot('SankeyPlot', [data], layout);
+    }
+
+    _renderHelpText() {
+        if (!this.state.showHelpText) {
+            return null;
+        }
+        return (
+            <div className="alert alert-info">
+                <p>
+                    Relationship of zebrafish developmental phenotype terminologies starting with
+                    the laboratory specific reporting term, Zebrafish Phenotype ontology, granular
+                    and general developmental phenotype terms.
+                </p>
+                <p>
+                    The numbers included in the hover over boxes indicate the number of ontology
+                    terms associated with the altered phenotype. Red text indicates the final
+                    phenotype selected under Select developmental phenotype group.
+                </p>
+                <p>
+                    Background color refers to the hierarchical relationship of all zebrafish
+                    phenotype ontologies included in both DRF and Def studies and are described on
+                    the datasets page.
+                </p>
+            </div>
+        );
     }
 
     componentWillMount() {
@@ -197,7 +296,18 @@ class SankeyPlot extends React.Component {
 
         let colNum = Math.ceil(12 / this.props.cols);
 
-        return <div className={'row-fluid'} id="SankeyPlot"></div>;
+        return (
+            <div>
+                <HelpButtonWidget
+                    stateHolder={this}
+                    headLevel={'h2'}
+                    title={'More information on ontology and phenotype terms'}
+                />
+                {this._renderHelpText()}
+                <br />
+                <div className={'row-fluid'} id="SankeyPlot"></div>
+            </div>
+        );
     }
 }
 

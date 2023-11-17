@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom';
 import Tooltip from '@material-ui/core/Tooltip';
 import { Header, MultipleCurveBody, SingleCurveBody } from './components/BootstrapBodyPart';
 import BootstrapModal from 'utils/BootstrapModal';
+import styles from './components/graph.css';
 
 const AXIS_LINEAR = 1,
     AXIS_LOG10 = 2,
@@ -83,11 +84,25 @@ const AXIS_LINEAR = 1,
         linkElement.setAttribute('download', filename);
         linkElement.click();
     },
-    renderSelectMultiWidget = function(name, label, options, values, handleChange) {
+    renderSelectMultiWidget = function(
+        name,
+        label,
+        options,
+        values,
+        handleChange,
+        helpButtonWidget = null,
+        renderHelpText = null
+    ) {
         let size = Math.min(options.length, 11);
+        // console.log(helpButtonWidget)
+        // console.log(renderHelpText)
         return (
             <div>
-                <label>Select {label}(s):</label>
+                <label className={styles.labelHorizaontal}>
+                    Select {label}(s):
+                    {helpButtonWidget && helpButtonWidget()}
+                </label>
+                {renderHelpText && renderHelpText()}
                 <select
                     name={name}
                     className="form-control"
@@ -153,7 +168,7 @@ const AXIS_LINEAR = 1,
         let size = 10;
         return (
             <div>
-                <label>Select {label}(s):</label>
+                <label>Select {label} phenotype terms:</label>
                 <select
                     name={name}
                     className="form-control"
@@ -266,10 +281,12 @@ const AXIS_LINEAR = 1,
         document.body.removeChild(element);
     },
     integrativeHandleCellClick = function(d) {
+        console.log(d);
         if (d.endPointList) {
             if (d.endPointList && d.endPointList.length > 1) {
                 new BootstrapModal(Header, MultipleCurveBody, {
                     title: d.title,
+                    ontologyGroupName: d.ontologyGroupName,
                     protocol_id: d.protocol_id,
                     readout_ids: _.map(d.endPointList, function(x) {
                         return x + '_' + d.protocol_id;
@@ -277,15 +294,17 @@ const AXIS_LINEAR = 1,
                     // if button checked, we will add mortality@120 to each plot
                     casrns: [d.casrn],
                     devtoxreadout_ids: d.devtoxEndPointList,
+                    fill: d.fill,
                 });
             } else {
                 new BootstrapModal(Header, SingleCurveBody, {
                     title: d.title,
+                    ontologyGroupName: d.ontologyGroupName,
                     protocol_id: d.protocol_id,
                     readout_id: d.endpoint_name + '_' + d.protocol_id,
                     casrn: d.casrn,
                     devtoxreadout_ids: d.devtoxEndPointList,
-                    // devtoxreadout_ids: d.devtoxEndPointList+ '_' + d.protocol_id,
+                    fill: d.fill,
                 });
             }
         }
@@ -319,7 +338,8 @@ const AXIS_LINEAR = 1,
         return (
             <div className="alert alert-info">
                 <p>
-                    This combination of <b>endpoints</b> and <b>chemicals</b> returned no data.
+                    This combination of <b>endpoints</b> and <b>test substances</b> returned no
+                    data.
                 </p>
             </div>
         );

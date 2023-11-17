@@ -2,6 +2,7 @@ import $ from '$';
 import _ from 'lodash';
 import React from 'react';
 import BaseWidget from './BaseWidget';
+import styles from '../components/graph.css';
 
 import {
     renderSelectMultiWidget,
@@ -10,30 +11,31 @@ import {
     integrative_General,
 } from '../shared';
 import PropTypes from 'prop-types';
+import HelpButtonWidget from './HelpButtonWidget';
 
 class OntologyWidget extends BaseWidget {
     constructor(props) {
         super(props);
+
+        this.state = {
+            showHelpText: false,
+        };
     }
 
     _renderFilterBy(state) {
         return (
             <div>
-                <label>Ontology Groupings:</label>
+                <label className={styles.labelHorizaontal}>
+                    Select developmental phenotype group:
+                    <HelpButtonWidget
+                        stateHolder={this}
+                        headLevel={'label'}
+                        title={'More information on developmental phenotype groups'}
+                    />
+                </label>
+                {this._renderHelpText()}
+
                 <div className="radio">
-                    <label>
-                        <input
-                            type="radio"
-                            name="ontologyType"
-                            onChange={this.handleRadioChange}
-                            value={integrative_Granular}
-                            checked={state.ontologyType === integrative_Granular}
-                        />
-                        Granular
-                    </label>
-
-                    <span style={{ paddingLeft: '0.5em', paddingRight: '0.5em' }}>|</span>
-
                     <label>
                         <input
                             type="radio"
@@ -44,69 +46,75 @@ class OntologyWidget extends BaseWidget {
                         />
                         General
                     </label>
+                    <span style={{ paddingLeft: '0.5em', paddingRight: '0.5em' }}>|</span>
+                    <label>
+                        <input
+                            type="radio"
+                            name="ontologyType"
+                            onChange={this.handleRadioChange}
+                            value={integrative_Granular}
+                            checked={state.ontologyType === integrative_Granular}
+                        />
+                        Granular
+                    </label>
                 </div>
             </div>
         );
     }
 
     _renderSelector(state) {
-        let opts;
-        if (state.ontologyType === integrative_Granular) {
-            opts = _.chain(state.Seazit_ontology)
-                .map((r) => {
-                    return {
-                        key: r.developmental_defect_grouping_granular,
-                        label: r.developmental_defect_grouping_granular,
-                        ...r,
-                    };
-                })
-                .reject((r) => r.key === null)
-                .uniqBy('developmental_defect_grouping_granular')
-                .sortBy('developmental_defect_grouping_granular')
-                .groupBy('developmental_defect_catergories')
-                .value();
-            // console.log("ontoogy")
-            // console.log('state.Seazit_ui_panel', state.Seazit_ui_panel);
-            // console.log(opts)
-            if (_.keys(opts).length === 0) {
-                return null;
-            }
-            // console.log('test', opts, state.ontologyGroup);
+        const customGroupOrder = ['General', 'Head', 'Appendage', 'Torso'];
+        const groupingKey =
+            state.ontologyType === integrative_Granular
+                ? 'developmental_defect_grouping_granular'
+                : 'developmental_defect_grouping_general';
+        // console.log(state.Seazit_ontology)
+        const opts = _.chain(state.Seazit_ontology)
+            .filter((r) => r[groupingKey] !== 'dead') // Filter out items where groupingKey is 'dead'
 
-            return renderSelectMultiOptgroupWidget(
-                'ontologyGroup',
-                'Granular',
-                opts,
-                state.ontologyGroup,
-                this.handleSelectMultiChange
-            );
-        } else {
-            opts = _.chain(state.Seazit_ontology)
-                .map((r) => {
-                    return {
-                        key: r.developmental_defect_grouping_general,
-                        label: r.developmental_defect_grouping_general,
-                        ...r,
-                    };
-                })
-                .reject((r) => r.key === null)
-                .uniqBy('developmental_defect_grouping_general')
-                .sortBy('developmental_defect_grouping_general')
-                .groupBy('developmental_defect_catergories')
-                .value();
+            .map((r) => ({ key: r[groupingKey], label: r[groupingKey], ...r }))
+            .reject((r) => r.key === null)
+            .uniqBy(groupingKey)
+            .groupBy('developmental_defect_catergories')
+            .thru((groupedData) =>
+                _.fromPairs(
+                    _.sortBy(Object.entries(groupedData), ([group]) =>
+                        customGroupOrder.indexOf(group)
+                    )
+                )
+            )
+            .value();
 
-            if (_.keys(opts).length === 0) {
-                return null;
-            }
-
-            return renderSelectMultiOptgroupWidget(
-                'ontologyGroup',
-                'General',
-                opts,
-                state.ontologyGroup,
-                this.handleSelectMultiChange
-            );
+        if (_.isEmpty(opts)) {
+            return null;
         }
+        // console.log(opts)
+
+        return renderSelectMultiOptgroupWidget(
+            'ontologyGroup',
+            state.ontologyType === integrative_Granular ? 'Granular' : 'General',
+            opts,
+            state.ontologyGroup,
+            this.handleSelectMultiChange
+        );
+    }
+
+    _renderHelpText() {
+        if (!this.state.showHelpText) {
+            return null;
+        }
+        return (
+            <div className="alert alert-info">
+                <p>
+                    Detailed recordings of each laboratory are grouped into corresponding higher
+                    level developmental defect phenotype groups. We created two types of
+                    developmental defect phenotypes, the general grouping (n = 10) and the granular
+                    grouping (n = 18). See{' '}
+                    <a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/">Datasets page</a> for
+                    more information .
+                </p>
+            </div>
+        );
     }
 
     render() {

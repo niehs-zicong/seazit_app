@@ -20,6 +20,7 @@ import {
     ConcentrationResponseTab,
     integrative_Granular,
 } from '../shared';
+import styles from '../components/graph.css';
 
 class DoseResponseMain extends React.Component {
     // lifecycle
@@ -87,7 +88,6 @@ class DoseResponseMain extends React.Component {
         }
         return (
             <div className="alert alert-info">
-                <h2>Help text</h2>
                 <p>helptext zw</p>
                 <p>helptext zw</p>
                 <p>helptext zw</p>
@@ -114,9 +114,9 @@ class DoseResponseMain extends React.Component {
         return (
             <div className="row-fluid">
                 <div className="col-md-12">
-                    <h1>
+                    <h1 className={styles.labelHorizaontal}>
                         Concentration Response
-                        <HelpButtonWidget stateHolder={this} />
+                        <HelpButtonWidget stateHolder={this} headLevel={'h1'} />
                     </h1>
                 </div>
                 <div className="col-md-12">

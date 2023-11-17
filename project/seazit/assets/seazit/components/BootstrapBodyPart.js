@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {DoseResponse, DoseResponseMort120} from './DoseResponse';
+import { DoseResponse, DoseResponseMort120 } from './DoseResponse';
 import SankeyPlot from './SankeyPlot';
+import styles from './graph.css';
 
 import DoseResponseGridWidget from '../widgets/DoseResponseGridWidget';
 import Plotly from 'Plotly';
@@ -19,6 +20,34 @@ import {
 import IntegrativeCheckBoxWidget from '../widgets/IntegrativeCheckBoxWidget';
 import _ from 'lodash';
 import BmdCheckBoxWidget from '../widgets/BmdCheckBoxWidget';
+import HelpButtonWidget from '../widgets/HelpButtonWidget';
+
+function _renderHelpText(state) {
+    if (!state.showHelpText) {
+        return null;
+    }
+    return (
+        <div className="alert alert-info">
+            <p>
+                Detailed view of each developmental phenotype incorporated into the selected
+                phenotype group. Specific phenotype terms used per laboratory are included in each
+                figure title. Click an x-axis label of the heatmap to learn more about selected
+                phenotype .
+            </p>
+            <p>
+                Percent mortality at 120 hours post fertilization alone can be visualized in each
+                figure by selecting the “add mortality@120” box. Effects that were driven by altered
+                morphological phenotypes and not mortality (i.e., specific developmental toxicity
+                effect) have backgrounds highlighted using a magenta box. Dotted line is the
+                benchmark response (BMR) visualized when looking at altered phenotype data.
+            </p>
+            <p>
+                Figures are interactive: the user can zoom in and out using curser and hover over
+                each line for information per plate.
+            </p>
+        </div>
+    );
+}
 
 class Header extends React.Component {
     render() {
@@ -37,35 +66,56 @@ class SingleCurveBody extends React.Component {
         // each plot is ~400px for a reasonable start, make sure it's at least 1
         this.state = {
             mortalityCheck: false,
+            fill: this.props.fill,
+            showHelpText: false,
         };
     }
 
     _renderDoseResponse(state) {
-        if (state.mortalityCheck) {
-            return (
-                <div className="col-sm-10">
+        const commonHeader = (
+            <div className="col-sm-10">
+                <h4 className={styles.labelHorizaontal}>
+                    Developmental Toxicity Concentration Response Figures
+                    <HelpButtonWidget
+                        stateHolder={this}
+                        headLevel={'h4'}
+                        title={'Click to toggle help-text'}
+                    />
+                </h4>
+                <h5>
+                    {this.props.devtoxreadout_ids.length} of endpoints are associated with{' '}
+                    {this.props.ontologyGroupName}
+                </h5>
+                {_renderHelpText(this.state)}
+            </div>
+        );
+
+        return (
+            <div className="col-sm-10">
+                {commonHeader}
+                {state.mortalityCheck ? (
                     <DoseResponseMort120
+                        stateHolder={this}
                         url={state.url}
                         cols={1}
                         height={400}
                         collapse={COLLAPSE_WITH_Mortality120}
                         devtoxreadout_ids={this.props.devtoxreadout_ids}
+                        fill={this.props.fill}
                     />
-                </div>
-            );
-        } else {
-            return (
-                <div className="col-sm-10">
+                ) : (
                     <DoseResponse
+                        stateHolder={this}
                         url={state.url}
                         cols={1}
                         height={400}
                         collapse={NO_COLLAPSE}
                         devtoxreadout_ids={this.props.devtoxreadout_ids}
+                        fill={this.props.fill}
                     />
-                </div>
-            );
-        }
+                )}
+            </div>
+        );
     }
 
     render() {
@@ -80,12 +130,12 @@ class SingleCurveBody extends React.Component {
         );
         return (
             <div className="row-fluid">
-                {/*<div className="col-sm-2">*/}
-                {/*    <IntegrativeCheckBoxWidget stateHolder={this} />*/}
-                {/*</div>*/}
-                {this.props.CheckBoxDisable ? null : (
-                    <IntegrativeCheckBoxWidget stateHolder={this}/>
-                )}
+                <div className="col-sm-2">
+                    <IntegrativeCheckBoxWidget stateHolder={this} />
+                </div>
+                {/*{this.props.CheckBoxDisable ? null : (*/}
+                {/*    <IntegrativeCheckBoxWidget stateHolder={this}/>*/}
+                {/*)}*/}
                 {this._renderDoseResponse(this.state)}
             </div>
         );
@@ -98,6 +148,8 @@ SingleCurveBody.propTypes = {
     casrn: PropTypes.array.isRequired,
     devtoxreadout_ids: PropTypes.string.isRequired,
     CheckBoxDisable: false,
+    fill: PropTypes.string,
+    title: PropTypes.string,
 };
 
 class molecularGraphBody extends React.Component {
@@ -121,7 +173,6 @@ molecularGraphBody.propTypes = {
     dtxsid: PropTypes.string.isRequired,
 };
 
-
 class sankeyPlotGraphBody extends React.Component {
     constructor(props) {
         super(props);
@@ -130,9 +181,7 @@ class sankeyPlotGraphBody extends React.Component {
     render() {
         return (
             <div className="col-sm-10">
-                <SankeyPlot
-                    cells={this.props.cells}
-                />
+                <SankeyPlot cells={this.props.cells} />
             </div>
         );
     }
@@ -141,9 +190,7 @@ class sankeyPlotGraphBody extends React.Component {
 sankeyPlotGraphBody.propTypes = {
     title: PropTypes.string.isRequired,
     cells: PropTypes.array.isRequired,
-
 };
-
 
 class MultipleCurveBody extends React.Component {
     constructor(props) {
@@ -154,37 +201,60 @@ class MultipleCurveBody extends React.Component {
         this.state = {
             // DoseResponseGridWidget
             vizColumns: initialCols,
-            vizHeight: 350,
+            vizHeight: 340,
             mortalityCheck: false,
+            showHelpText: false,
+            fill: this.props.fill,
         };
     }
 
     _renderDoseResponse(state) {
-        if (state.mortalityCheck) {
-            return (
-                <div className="col-sm-10">
+        // console.log(state)
+        console.log(this.props.devtoxreadout_ids);
+
+        const commonHeader = (
+            <div className="col-sm-10">
+                <h4 className={styles.labelHorizaontal}>
+                    Developmental Toxicity Concentration Response Figures
+                    <HelpButtonWidget
+                        stateHolder={this}
+                        headLevel={'h4'}
+                        title={'Click to toggle help-text'}
+                    />
+                </h4>
+                <h5>
+                    {this.props.devtoxreadout_ids.length} of endpoints are associated with{' '}
+                    {this.props.ontologyGroupName}
+                </h5>
+                {_renderHelpText(this.state)}
+            </div>
+        );
+
+        return (
+            <div className="col-sm-10">
+                {commonHeader}
+                {state.mortalityCheck ? (
                     <DoseResponseMort120
+                        stateHolder={this}
                         url={state.url}
                         cols={state.vizColumns}
                         height={state.vizHeight}
                         collapse={COLLAPSE_WITH_Mortality120}
                         devtoxreadout_ids={this.props.devtoxreadout_ids}
+                        fill={this.props.fill}
                     />
-                </div>
-            );
-        } else {
-            return (
-                <div className="col-sm-10">
+                ) : (
                     <DoseResponse
                         url={state.url}
                         cols={state.vizColumns}
                         height={state.vizHeight}
                         collapse={NO_COLLAPSE}
                         devtoxreadout_ids={this.props.devtoxreadout_ids}
+                        fill={this.props.fill}
                     />
-                </div>
-            );
-        }
+                )}
+            </div>
+        );
     }
 
     render() {
@@ -199,8 +269,9 @@ class MultipleCurveBody extends React.Component {
         return (
             <div className="row-fluid">
                 <div className="col-sm-2">
-                    <DoseResponseGridWidget stateHolder={this}/>
-                    <IntegrativeCheckBoxWidget stateHolder={this}/>
+                    <DoseResponseGridWidget stateHolder={this} />
+                    <br />
+                    <IntegrativeCheckBoxWidget stateHolder={this} />
                 </div>
                 {this._renderDoseResponse(this.state)}
             </div>
@@ -213,11 +284,8 @@ MultipleCurveBody.propTypes = {
     readout_ids: PropTypes.array.isRequired,
     casrns: PropTypes.array.isRequired,
     devtoxreadout_ids: PropTypes.array.isRequired,
+    fill: PropTypes.string,
+    ontologyGroupName: PropTypes.ontologyGroupName,
 };
 
-export {Header};
-export {SingleCurveBody};
-export {MultipleCurveBody};
-export {molecularGraphBody};
-export {sankeyPlotGraphBody};
-
+export { Header, SingleCurveBody, MultipleCurveBody, molecularGraphBody, sankeyPlotGraphBody };

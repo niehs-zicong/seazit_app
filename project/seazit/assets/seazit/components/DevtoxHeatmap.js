@@ -3,421 +3,481 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import * as d3 from 'd3';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import BootstrapModal from 'utils/BootstrapModal';
-import { Header, SingleCurveBody, MultipleCurveBody } from './BootstrapBodyPart';
+import {
+    Header,
+    SingleCurveBody,
+    MultipleCurveBody,
+    sankeyPlotGraphBody,
+    molecularGraphBody,
+} from './BootstrapBodyPart';
 
 import styles from './graph.css';
 
 import { getLog10AxisFunction } from 'utils/d3';
-import Heatmap from './Heatmap';
 import { integrativeHandleCellClick, printFloat, pod_med_processed } from '../shared';
-
-let addStripMask = function(svg) {
-    // add strip mask to top of d3-selected svg
-    // use url(#stripeMask) to apply
-
-    let defs = svg.append('defs');
-    defs.append('pattern')
-        .attr('id', 'maskStripePattern')
-        .attr('width', 8)
-        .attr('height', 8)
-        .attr('patternUnits', 'userSpaceOnUse')
-        .attr('patternTransform', 'rotate(45)')
-        .append('rect')
-        .attr('x', 0)
-        .attr('y', 0)
-        .attr('width', 4)
-        .attr('height', 8)
-        .attr('fill', 'white');
-
-    defs.append('mask')
-        .attr('id', 'stripeMask')
-        .append('rect')
-        .attr('x', 0)
-        .attr('y', 0)
-        .attr('width', '100%')
-        .attr('height', '100%')
-        .style('fill', 'url(#maskStripePattern)');
-};
-
-let renderPlot = function(el, data, legendData) {
-    $(el).empty();
-    let margin = {
-            top: 40,
-            left: 10,
-            bottom: 40,
-            right: 40,
-            axisLeft: 290,
-            axisTop: 390,
-            legend: 300,
-        },
-        // cellSize = 30,
-        cellSize = 50,
-        mouseover = function(d) {
-            tooltip.style('opacity', 1);
-        },
-        mousemove = function(d) {
-            tooltip
-                .html(
-                    `Potency: ${printFloat(pod_med_processed(d.mean_pod))} μM  \n
-                 Specificity: ${printFloat(d.mean_selectivity)}`
-                )
-                .style('left', d3.event.pageX - 400 + 'px')
-                .style('top', d3.event.pageY - 300 + 'px')
-                .style('opacity', 1.0);
-        },
-        mouseleave = function(d) {
-            tooltip.style('opacity', 0);
-        },
-        // xasix is column, yasix is row
-        xasix = d3
-            .map(data, function(d) {
-                return d.x;
-            })
-            .keys()
-            .sort(),
-        yasix = d3
-            .map(data, function(d) {
-                return d.y;
-            })
-            .keys()
-            .sort(),
-        width =
-            xasix.length * cellSize + margin.axisLeft + margin.left + margin.right + margin.legend,
-        height = yasix.length * cellSize + margin.axisTop + margin.top + margin.bottom,
-        chartHeight = height - (margin.top + margin.bottom + margin.axisTop),
-        chartWidth = width - (margin.left + margin.right + margin.axisLeft + margin.legend),
-        // Create a color scale
-
-        // colorDomain = [-8, -4],
-        //  sizeDomain = [0, 3.15],
-
-        // [-0.20605, 3.1549] is min and max for allset data from table.
-        // var colorRange = [0, 3.1549];
-
-        // Create a size scale for bubbles on top right. Watch out: must be a rootscale!
-        // The scaleSqrt scale is useful for sizing circles by area (rather than radius).
-        // domain is domain between all data
-        // range is between 0 to half of cellsize,   which is radius.
-
-        //   make radius linear scale.  TODO
-        // sizeDomain = d3.extent(_.map(data, 'mean_selectivity')),
-
-        // sizeDomain = [0, 3.1549],
-        sizeDomain = [0, 2],
-        // sizeDomain = [0, 3],
-
-        size = d3
-            .scaleSqrt()
-            .domain(sizeDomain)
-            .range([0, cellSize / 2]),
-        svg = d3
-            .select(el)
-            .append('svg')
-            .attr('width', Math.max(1000, width + margin.left + margin.right))
-            .attr('height', Math.max(1000, height + margin.left + margin.right))
-            .append('g')
-            .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')'),
-        star = d3
-            .symbol()
-            .type(d3.symbolStar)
-            .size(size(cellSize / 5)),
-        tooltip = d3
-            .select(el)
-            .append('div')
-            .attr('class', 'tooltip')
-            .style('opacity', 0.0);
-
-    // addStripMask(svg);
-
-    // draw xy-axis
-    let axisLayer = svg
-        .append('g')
-        .attr('class', 'axisLayer')
-        // .classed('axisLayer', true)
-        .attr('width', width)
-        .attr('height', height);
-
-    let xScale = d3
-        .scaleBand()
-        .domain(xasix)
-        .range([0, chartWidth]);
-    let yScale = d3
-        .scaleBand()
-        .domain(yasix)
-        .range([0, chartHeight]);
-
-    let xAxis = d3.axisTop(xScale).tickSizeOuter(0);
-    let yAxis = d3.axisLeft(yScale).tickSizeOuter(0);
-    axisLayer
-        .append('g')
-        .attr(
-            'transform',
-            `translate(${margin.left + margin.axisLeft}, ${margin.top + margin.axisTop})`
-        )
-        .attr('class', 'axis y')
-        .call(yAxis)
-        .style('font-size', 15)
-
-        .selectAll('text')
-        .style('cursor', 'pointer');
-    axisLayer
-        .append('g')
-        .attr(
-            'transform',
-            `translate(${margin.left + margin.axisLeft}, ${margin.top + margin.axisTop})`
-        )
-        .attr('class', 'axis x')
-        .call(xAxis)
-        .style('font-size', 15)
-        .selectAll('text')
-        .attr('dx', '.8em')
-        .attr('dy', '.55em')
-        .attr('transform', 'rotate(-65)')
-        .style('text-anchor', 'start')
-        .style('cursor', 'pointer');
-
-    // .select(".domain").remove()
-
-    let chartLayer = svg
-        .append('g')
-        .classed('chartLayer', true)
-        .attr('width', chartWidth)
-        .attr('height', chartHeight)
-        .attr(
-            'transform',
-            `translate(${margin.left + margin.axisLeft}, ${margin.top + margin.axisTop})`
-        );
-
-    // plot bounding box
-    chartLayer
-        .append('rect')
-        .attr('x', xScale.range()[0])
-        .attr('y', yScale.range()[0])
-        .attr('width', xScale.range()[1])
-        .attr('height', yScale.range()[1])
-        .attr('mask', 'url(#stripeMask)')
-        .attr('fill', '#ccc');
-
-    chartLayer
-        .append('rect')
-        .attr('x', xScale.range()[0])
-        .attr('y', yScale.range()[0])
-        .attr('width', xScale.range()[1])
-        .attr('height', yScale.range()[1])
-        .attr('fill', 'transparent')
-        .style('stroke', 'black')
-        .style('stroke-width', 2);
-
-    chartLayer
-        .selectAll('path')
-        .data(data.filter((d) => d.final_dev_call === 'dev tox'))
-        .enter()
-        .append('g')
-        .attr('class', 'cor')
-        .attr('transform', function(d) {
-            return `translate(${xScale(d.x) +
-                xScale.bandwidth() / 2}, ${yScale(d.y) + yScale.bandwidth() / 2})`;
-        })
-        .append('circle')
-        .attr('r', (d) => {
-            return size(Math.abs(d.mean_selectivity));
-        })
-        .attr('fill', (d) => d.fill)
-        .style('opacity', 0.8)
-        .style('cursor', 'pointer')
-        .on('mouseover', mouseover)
-        .on('mousemove', mousemove)
-        .on('mouseleave', mouseleave)
-        .on('click', integrativeHandleCellClick);
-
-    chartLayer
-        .selectAll('path')
-        .data(data.filter((d) => d.final_dev_call !== 'dev tox' && d.final_dev_call !== null))
-        .enter()
-        .append('path')
-        .attr('class', 'star')
-        .attr('d', star)
-        .attr('fill', (d) => d.fill)
-        .attr('transform', function(d) {
-            return `translate(${xScale(d.x) +
-                xScale.bandwidth() / 2}, ${yScale(d.y) + yScale.bandwidth() / 2})`;
-        })
-        .style('opacity', 0.8);
-
-    let legendLayer = svg
-        .append('g')
-        .classed('legendLayer', true)
-        .attr('transform', `translate(${width - margin.legend},${margin.top})`);
-
-    switch (legendData.type) {
-        case 'discrete': {
-            legendLayer
-                .selectAll('text')
-                .data(legendData.values)
-                .enter()
-                .append('text')
-                .attr('class', styles.legendText)
-                .attr('x', 35)
-                .attr('y', (d, i) => i * 20 + margin.axisTop + 10)
-                .text((d) => d.label);
-
-            let ds = legendLayer
-                .selectAll('path')
-                .data(legendData.values)
-                .enter()
-                .append('rect')
-                .attr('width', 15)
-                .attr('height', 15)
-                .attr('fill', (d) => d.fill)
-                .attr('transform', (d, i) => `translate(15, ${i * 20 + margin.axisTop})`)
-                .style('stroke', 'black')
-                .style('stroke-width', '1');
-            break;
-        }
-        case 'continuous': {
-            let { colorScaleFunction, legendScale } = legendData,
-                // legendHeight = 200,
-                legendHeight = 300,
-                legend = legendLayer
-                    .append('defs')
-                    .append('linearGradient')
-                    .attr('id', 'gradient')
-                    .attr('x1', '0%')
-                    .attr('y1', '100%')
-                    .attr('x2', '0%')
-                    .attr('y2', '0%')
-                    .attr('spreadMethod', 'pad');
-
-            legendScale.ticks().map((d, i) => {
-                legend
-                    .append('stop')
-                    .attr('offset', `${i}%`)
-                    .attr('stop-color', colorScaleFunction(d))
-                    .attr('stop-opacity', 1);
-            });
-
-            legendLayer
-                .append('rect')
-                .attr('width', cellSize - 20)
-                .attr('height', legendHeight)
-                .style('fill', 'url(#gradient)')
-                .style('stroke', 'black')
-                .attr('transform', `translate(20,${margin.top + margin.axisTop})`);
-
-            legendLayer
-                .append('g')
-                .attr('class', 'axis y')
-                .attr(
-                    'transform',
-                    `translate(${20 + cellSize - 20},${margin.top + margin.axisTop})`
-                )
-                .call(
-                    getLog10AxisFunction(d3.axisRight, legendScale.copy().range([legendHeight, 0]))
-                );
-
-            legendLayer
-                .append('text')
-                .attr('class', styles.legendText)
-                .attr('x', 0)
-                .attr('y', 0)
-                .attr('transform', `translate(20, ${margin.axisTop + (cellSize - 20) / 2})`)
-                .text('BMC (µM) of specific developmental toxicity')
-                .style('font-size', 20);
-
-            legendLayer
-                .append('path')
-                .attr('class', 'star')
-                .attr('d', star)
-                .attr(
-                    'transform',
-                    `translate(${20 + 25 / 2},${margin.top +
-                        margin.axisTop +
-                        legendHeight +
-                        10 +
-                        25 / 2})`
-                )
-                .attr('fill', 'black')
-                .style('stroke', '#000000')
-                .style('stroke-width', '1');
-
-            legendLayer
-                .append('text')
-                .attr('class', styles.legendText)
-                .attr('x', 0)
-                .attr('y', 0)
-                .attr(
-                    'transform',
-                    `translate(${15 + cellSize},${margin.top +
-                        margin.axisTop +
-                        legendHeight +
-                        10 +
-                        25 / 2 +
-                        5})`
-                )
-                .text('non-specific, non-toxic, inconclusive');
-
-            // the reason I put 25/2 into this position transform, because square size is (25, 25),
-            // make sure star is in center, make is position to be 25/2, 25/2
-
-            legendLayer
-                .append('rect')
-                .attr('x', 0)
-                .attr('y', 0)
-                .attr('width', cellSize - 20)
-                .attr('height', cellSize - 20)
-                .attr(
-                    'transform',
-                    `translate(20,${margin.top + margin.axisTop + legendHeight + 40})`
-                )
-                .attr('mask', 'url(#stripeMask)')
-                .attr('fill', '#ccc');
-
-            legendLayer
-                .append('rect')
-                .attr('x', 0)
-                .attr('y', 0)
-                .attr('width', cellSize - 20)
-                .attr('height', cellSize - 20)
-                .attr(
-                    'transform',
-                    `translate(20,${margin.top + margin.axisTop + legendHeight + 40})`
-                )
-                .attr('fill', 'transparent')
-                .style('stroke', 'black')
-                .style('stroke-width', '1');
-
-            legendLayer
-                .append('text')
-                .attr('class', styles.legendText)
-                .attr('x', 0)
-                .attr('y', 0)
-                .attr(
-                    'transform',
-                    `translate(${15 + cellSize},${margin.top +
-                        margin.axisTop +
-                        legendHeight +
-                        40 +
-                        (cellSize - 20) / 2 +
-                        5})`
-                )
-                .text('not evaluated');
-            break;
-        }
-
-        default:
-            break;
-    }
-};
+import DoseResponseGridWidget from '../widgets/DoseResponseGridWidget';
+import { DoseResponseMort120 } from './DoseResponse';
 
 class DevtoxHeatmap extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            data: null,
+        };
         this.handleResize = this.handleResize.bind(this);
     }
 
-    unrenderPlot() {
+    renderPlot = function(el, data, legendData) {
+        $(el).empty();
+        let margin = {
+                top: 40,
+                left: 10,
+                bottom: 40,
+                right: 40,
+                axisLeft: 290,
+                axisTop: 300,
+                legend: 900,
+            },
+            legendCirclesSizes = [0.5, 1.0, 1.5, 2.0, 2.5],
+            cellSize = 50,
+            legendCellSize = cellSize - 20,
+            xMap = _.groupBy(data, 'x'),
+            yMap = _.groupBy(data, 'y'),
+            ontologyType = this.props.ontologyType,
+            handleXLabelClick = function(label) {
+                let cells = xMap[label];
+                let cell = {
+                    developmental_defect_grouping_general:
+                        cells[0].developmental_defect_grouping_general,
+                    ontologyGroupName: cells[0].ontologyGroupName,
+                    protocol_source: cells[0].protocol_source,
+                    ontologyType: ontologyType,
+                };
+
+                if (cell.developmental_defect_grouping_general && cell.protocol_source) {
+                    new BootstrapModal(Header, sankeyPlotGraphBody, {
+                        title: label.replace(/:/g, ' +'),
+                        cells: cell,
+                    });
+                }
+            },
+            // draw y-axis
+            handleYLabelClick = function(label) {
+                let cells = yMap[label],
+                    casrns = [...new Set(cells.map((item) => item.casrn))],
+                    dtxsids = [...new Set(cells.map((item) => item.dtxsid))];
+
+                new BootstrapModal(Header, molecularGraphBody, {
+                    title: `${dtxsids[0]} // ${label} //  molecularGraph  ZWTBD`,
+                    dtxsid: dtxsids[0],
+                });
+            },
+            mouseover = function(d) {
+                tooltip.style('opacity', 1);
+            },
+            mousemove = function(d) {
+                tooltip
+                    .html(
+                        `Potency: ${printFloat(pod_med_processed(d.mean_pod))} μM  \n
+                 Specificity: ${printFloat(d.mean_selectivity)}`
+                    )
+                    .style('left', d3.event.pageX - 400 + 'px')
+                    .style('top', d3.event.pageY - 300 + 'px')
+                    .style('opacity', 1.0);
+            },
+            mouseleave = function(d) {
+                tooltip.style('opacity', 0);
+            },
+            // xasix is column, yasix is row
+            xasix = d3
+                .map(data, function(d) {
+                    return d.x;
+                })
+                .keys()
+                .sort(),
+            yasix = d3
+                .map(data, function(d) {
+                    return d.y;
+                })
+                .keys()
+                .sort(),
+            width =
+                xasix.length * cellSize +
+                margin.axisLeft +
+                margin.left +
+                margin.right +
+                margin.legend,
+            height = yasix.length * cellSize + margin.axisTop + margin.top + margin.bottom,
+            chartHeight = height - (margin.top + margin.bottom + margin.axisTop),
+            chartWidth = width - (margin.left + margin.right + margin.axisLeft + margin.legend),
+            // Create a color scale
+
+            // colorDomain = [-8, -4],
+            //  sizeDomain = [0, 3.15],
+
+            // [-0.20605, 3.1549] is min and max for allset data from table.
+            // var colorRange = [0, 3.1549];
+
+            // Create a size scale for bubbles on top right. Watch out: must be a rootscale!
+            // The scaleSqrt scale is useful for sizing circles by area (rather than radius).
+            // domain is domain between all data
+            // range is between 0 to half of cellsize,   which is radius.
+
+            //   make radius linear scale.  TODO
+            // sizeDomain = d3.extent(_.map(data, 'mean_selectivity')),
+
+            // sizeDomain = [0, 3.1549],
+            sizeDomain = [0, 2],
+            // sizeDomain = [0, 3],
+
+            size = d3
+                .scaleSqrt()
+                .domain(sizeDomain)
+                .range([0, cellSize / 2]),
+            square = d3
+                .symbol()
+                .type(d3.symbolSquare)
+                .size(cellSize * cellSize),
+            svg = d3
+                .select(el)
+                .append('svg')
+                .attr('width', Math.max(1000, width + margin.left + margin.right))
+                .attr('height', Math.max(1500, height + margin.left + margin.right))
+                .append('g')
+                .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')'),
+            star = d3
+                .symbol()
+                .type(d3.symbolStar)
+                .size(size(cellSize / 5)),
+            tooltip = d3
+                .select(el)
+                .append('div')
+                .attr('class', 'tooltip')
+                .style('opacity', 0.0);
+
+        // this.addStripMask(svg);
+        // draw xy-axis
+        let axisLayer = svg
+            .append('g')
+            .attr('class', 'axisLayer')
+            // .classed('axisLayer', true)
+            .attr('width', width)
+            .attr('height', height);
+
+        let xScale = d3
+            .scaleBand()
+            .domain(xasix)
+            .range([0, chartWidth]);
+        let yScale = d3
+            .scaleBand()
+            .domain(yasix)
+            .range([0, chartHeight]);
+
+        let xAxis = d3.axisTop(xScale).tickSizeOuter(0);
+        let yAxis = d3.axisLeft(yScale).tickSizeOuter(0);
+        axisLayer
+            .append('g')
+            .attr(
+                'transform',
+                `translate(${margin.left + margin.axisLeft}, ${margin.top + margin.axisTop})`
+            )
+            .attr('class', 'axis y')
+            .call(yAxis)
+            .style('font-size', 15)
+
+            .selectAll('text')
+            .style('cursor', 'pointer')
+            .on('click', handleYLabelClick);
+        axisLayer
+            .append('g')
+            .attr(
+                'transform',
+                `translate(${margin.left + margin.axisLeft}, ${margin.top + margin.axisTop})`
+            )
+            .attr('class', 'axis x')
+            .call(xAxis)
+            .style('font-size', 15)
+            .selectAll('text')
+            .attr('dx', '.8em')
+            .attr('dy', '.55em')
+            .attr('transform', 'rotate(-65)')
+            .style('text-anchor', 'start')
+            .style('cursor', 'pointer')
+            .on('click', handleXLabelClick);
+        // .select(".domain").remove()
+
+        let chartLayer = svg
+            .append('g')
+            .classed('chartLayer', true)
+            .attr('width', chartWidth)
+            .attr('height', chartHeight)
+            .attr(
+                'transform',
+                `translate(${margin.left + margin.axisLeft}, ${margin.top + margin.axisTop})`
+            );
+
+        chartLayer
+            .append('rect')
+            .attr('x', xScale.range()[0])
+            .attr('y', yScale.range()[0])
+            .attr('width', xScale.range()[1])
+            .attr('height', yScale.range()[1])
+            .attr('fill', 'transparent')
+            .style('stroke', 'black')
+            .style('stroke-width', 2);
+
+        chartLayer
+            .selectAll('path')
+
+            .data(data.filter((d) => d.final_dev_call === 'dev tox'))
+            .enter()
+            .append('g')
+            .attr('class', 'cor')
+            .attr('transform', function(d) {
+                return `translate(${xScale(d.x) +
+                    xScale.bandwidth() / 2}, ${yScale(d.y) + yScale.bandwidth() / 2})`;
+            })
+            .append('circle')
+            .attr('r', (d) => {
+                return size(Math.abs(d.mean_selectivity));
+            })
+            .attr('fill', (d) => d.fill)
+            .style('opacity', 0.8)
+
+            .style('cursor', 'pointer')
+            .on('mouseover', mouseover)
+            .on('mousemove', mousemove)
+            .on('mouseleave', mouseleave)
+            .on('click', integrativeHandleCellClick);
+
+        chartLayer
+            .selectAll('path')
+            .data(data.filter((d) => d.final_dev_call !== 'dev tox' && d.final_dev_call !== null))
+            .enter()
+            .append('path')
+            .attr('class', 'star')
+            .attr('d', star)
+            .attr('fill', (d) => d.fill)
+            .attr('transform', function(d) {
+                return `translate(${xScale(d.x) +
+                    xScale.bandwidth() / 2}, ${yScale(d.y) + yScale.bandwidth() / 2})`;
+            })
+            // .style('stroke', 'black')
+            .style('opacity', 0.8);
+
+        chartLayer
+            .selectAll('.square')
+            .data(data.filter((d) => d.final_dev_call === null))
+            .enter()
+            .append('path')
+            .attr('class', 'square')
+            .attr('d', square)
+            .attr('fill', '#C9C9C9')
+            .attr('transform', function(d) {
+                return `translate(${xScale(d.x) +
+                    xScale.bandwidth() / 2}, ${yScale(d.y) + yScale.bandwidth() / 2})`;
+            })
+            // .style('stroke', 'black')
+            .style('stroke-width', '0.8');
+
+        let legendLayer = svg
+            .append('g')
+            .classed('legendLayer', true)
+            .attr('transform', `translate(${width - margin.legend},${margin.top})`);
+
+        let { colorScaleFunction, legendScale } = legendData,
+            legendCirclesWidth = 6 * cellSize,
+            legendHeight = 6 * cellSize,
+            legend = legendLayer
+                .append('defs')
+                .append('linearGradient')
+                .attr('id', 'gradient')
+                .attr('x1', '0%')
+                .attr('y1', '100%')
+                .attr('x2', '0%')
+                .attr('y2', '0%')
+                .attr('spreadMethod', 'pad');
+
+        legendScale.ticks().map((d, i) => {
+            legend
+                .append('stop')
+                .attr('offset', `${i}%`)
+                .attr('stop-color', colorScaleFunction(d))
+                .attr('stop-opacity', 1);
+        });
+
+        legendLayer
+            .append('rect')
+            .attr('width', legendCellSize)
+            .attr('height', legendHeight)
+            .style('fill', 'url(#gradient)')
+            .style('stroke', 'black')
+            .attr('transform', `translate(20,${margin.top + margin.axisTop})`);
+
+        legendLayer
+            .append('g')
+            .attr('class', 'axis y')
+            .attr('transform', `translate(${20 + legendCellSize},${margin.top + margin.axisTop})`)
+            .call(getLog10AxisFunction(d3.axisRight, legendScale.copy().range([legendHeight, 0])));
+
+        legendLayer
+            .append('text')
+            .attr('class', styles.legendText)
+            .attr('x', 0)
+            .attr('y', 0)
+            .attr('transform', `translate(20, ${margin.axisTop + legendCellSize / 2})`)
+            .text('BMC (µM)')
+            .style('font-size', 20);
+
+        legendLayer
+            .append('path')
+            .attr('class', 'star')
+            .attr('d', star)
+            .attr(
+                'transform',
+                `translate(${20 + cellSize / 2 / 2},
+                ${margin.top + margin.axisTop + legendHeight + legendCellSize})`
+            )
+            .attr('fill', 'black')
+            .style('stroke', '#000000')
+            .style('stroke-width', '1');
+
+        legendLayer
+            .append('text')
+            .attr('class', styles.legendText)
+            .attr('x', 0)
+            .attr('y', 0)
+            .attr(
+                'transform',
+                `translate(${15 + cellSize},
+                ${margin.top + margin.axisTop + legendHeight + legendCellSize + 5})`
+            )
+            .text('non-specific, non-toxic, inconclusive');
+
+        // the reason I put 25/2 into this position transform, because square size is (25, 25),
+        // make sure star is in center, make is position to be 25/2, 25/2
+
+        legendLayer
+            .append('rect')
+            .attr('x', 0)
+            .attr('y', 0)
+            .attr('width', legendCellSize)
+            .attr('height', legendCellSize)
+            .attr(
+                'transform',
+                `translate(${20},
+                ${margin.top + margin.axisTop + legendHeight + legendCellSize * 2})`
+            )
+            .attr('mask', 'url(#stripeMask)')
+            .attr('fill', '#ccc');
+
+        legendLayer
+            .append('rect')
+            .attr('x', 0)
+            .attr('y', 0)
+            .attr('width', legendCellSize)
+            .attr('height', legendCellSize)
+            .attr(
+                'transform',
+                `translate(${20},
+                ${margin.top + margin.axisTop + legendHeight + legendCellSize * 2})`
+            )
+            .attr('fill', 'transparent')
+            .style('stroke', 'black')
+            .style('stroke-width', '1');
+
+        legendLayer
+            .append('text')
+            .attr('class', styles.legendText)
+            .attr('x', 0)
+            .attr('y', 0)
+            .attr(
+                'transform',
+                `translate(${15 + cellSize},
+                ${margin.top +
+                    margin.axisTop +
+                    legendHeight +
+                    legendCellSize * 2 +
+                    legendCellSize / 2})`
+            )
+            .text('not evaluated');
+        //
+        legendLayer
+            .append('text')
+            .attr('class', styles.legendText)
+            .attr('x', 0)
+            .attr('y', 0)
+            .attr(
+                'transform',
+                `translate(20,
+                ${margin.top + margin.axisTop + legendHeight + legendCellSize * 5})`
+            )
+            .text('specificity')
+            .style('font-size', 20);
+
+        let legendCircles = legendLayer.append('g').classed('legendCircles', true);
+        let spaceBetweenCircles = 10;
+        // legendCircles
+        //   .selectAll('circle')
+        //   .data(legendCirclesSizes)
+        //   .enter()
+        //   .append('circle')
+        //   .attr('r', (d) => size(d))
+        //   .attr('fill', 'none')
+        //   .attr('cx', (d, i) => {
+        //     const cumulativeWidth = legendCirclesSizes
+        //       .slice(0, i + 1)
+        //       .reduce((sum, value) => sum + spaceBetweenCircles, 0);
+        //     return cumulativeWidth + i * cellSize + 20;
+        //   })
+        //   .attr('cy', margin.top + margin.axisTop + legendHeight + legendCellSize * 6)
+        //   .style('stroke', 'black')
+        //   .style('stroke-width', '1');
+        //
+        // legendCircles
+        //   .selectAll('text')
+        //   .data(legendCirclesSizes)
+        //   .enter()
+        //   .append('text')
+        //   .attr('class', styles.legendText)
+        //   .attr('x', (d, i) => {
+        //     const cumulativeWidth = legendCirclesSizes
+        //       .slice(0, i + 1)
+        //       .reduce((sum, value) => sum + spaceBetweenCircles, 0);
+        //     return cumulativeWidth + i * cellSize ;
+        //   })
+        //   .attr('y', margin.top + margin.axisTop + legendHeight + legendCellSize * 8)
+        //   .text((d) => d);
+
+        legendCircles
+            .selectAll('circle')
+            .data(legendCirclesSizes)
+            .enter()
+            .append('circle')
+            .attr('r', (d) => size(d))
+            .attr('fill', 'none')
+            .attr('cx', (d, i) => i * (cellSize + spaceBetweenCircles) + 30)
+            .attr('cy', margin.top + margin.axisTop + legendHeight + legendCellSize * 6)
+            .style('stroke', 'black')
+            .style('stroke-width', '1');
+
+        legendCircles
+            .selectAll('text')
+            .data(legendCirclesSizes)
+            .enter()
+            .append('text')
+            .attr('class', styles.legendText)
+            .attr('x', (d, i) => i * (cellSize + spaceBetweenCircles) + 20)
+            .attr('y', margin.top + margin.axisTop + legendHeight + legendCellSize * 8) // Adjusted y-coordinate
+            // .attr('text-anchor', 'middle') // Center the text horizontally
+            .attr('dominant-baseline', 'middle') // Center the text vertically
+            .text((d) => d.toFixed(1));
+    };
+
+    _unrenderPlot() {
         if (this.refs.svg === undefined) {
             return;
         }
@@ -425,32 +485,32 @@ class DevtoxHeatmap extends Component {
         this.refs.svg.innerHTML = '';
     }
 
-    renderPlot() {
+    _renderPlot() {
         if (this.refs.svg === undefined) {
             return;
         }
-        this.unrenderPlot();
+        this._unrenderPlot();
         // this is bootstrap plot svg
 
-        renderPlot(this.refs.svg, this.props.data, this.props.legendData);
+        this.renderPlot(this.refs.svg, this.props.data, this.props.legendData);
 
         window.addEventListener('resize', this.handleResize);
     }
 
     handleResize() {
-        this.renderPlot();
+        this._renderPlot();
     }
 
     componentDidMount() {
-        this.renderPlot();
+        this._renderPlot();
     }
 
     componentDidUpdate() {
-        this.renderPlot();
+        this._renderPlot();
     }
 
     componentWillUnmount() {
-        this.unrenderPlot();
+        this._unrenderPlot();
     }
 
     render() {
@@ -467,7 +527,6 @@ DevtoxHeatmap.propTypes = {
         })
     ).isRequired,
     legendData: PropTypes.shape({
-        type: PropTypes.oneOf(['discrete', 'continuous']).isRequired,
         values: PropTypes.arrayOf(
             PropTypes.shape({
                 label: PropTypes.string,
@@ -480,6 +539,7 @@ DevtoxHeatmap.propTypes = {
         colorScaleFunction: PropTypes.func,
         legendScale: PropTypes.func,
     }).isRequired,
+    ontologyType: PropTypes.number.isRequired,
 };
 
 export default DevtoxHeatmap;

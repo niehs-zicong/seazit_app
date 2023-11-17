@@ -1,5 +1,6 @@
 import React from 'react';
 import BaseWidget from './BaseWidget';
+import styles from '../components/graph.css';
 
 class DoseResponseGridWidget extends BaseWidget {
     /*
@@ -9,14 +10,13 @@ class DoseResponseGridWidget extends BaseWidget {
     */
     constructor(props) {
         super(props);
-
     }
 
     render() {
         let state = this.props.stateHolder.state;
         return (
             <div>
-                <label>Number of columns [1-4]:</label>
+                <label>Number of columns [1-4] to view:</label>
                 <input
                     className="form-control"
                     type="range"
@@ -43,6 +43,23 @@ class DoseResponseGridWidget extends BaseWidget {
                 />
                 <span>{state.vizHeight} px selected</span>
 
+                <br />
+
+                {/*<label>*/}
+                {/*    <input*/}
+                {/*        type="checkbox"*/}
+                {/*        name="mortalityCheck"*/}
+                {/*        onChange={this.handleToggleChange}*/}
+                {/*        value={state.mortalityCheck}*/}
+                {/*    />*/}
+                {/*    <span>Add mortality@120 responses</span>*/}
+                {/*</label>*/}
+                {/*<br/>*/}
+
+                {/*<div>*/}
+                {/*    <div className={styles.yellowbox}></div>*/}
+                {/*    Background: specific*/}
+                {/*</div>*/}
             </div>
         );
     }

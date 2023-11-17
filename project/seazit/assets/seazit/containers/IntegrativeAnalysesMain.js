@@ -1,5 +1,6 @@
 import React from 'react';
-
+import Modal from 'react-modal';
+//import Popup from 'reactjs-popup';
 import _ from 'lodash';
 import BmdBoxplot from '../components/BmdBoxplot';
 import BmdAssayPca from '../components/BmdAssayPca';
@@ -20,7 +21,7 @@ import OntologyTypeWidget from '../widgets/OntologyTypeWidget';
 import ReadoutWidget from '../widgets/ReadoutWidget';
 import ReadoutCategoryWidget from '../widgets/ReadoutCategoryWidget';
 import ReadoutTypeWidget from '../widgets/ReadoutTypeWidget';
-import IntegrativeCheckBoxWidget from '../widgets/IntegrativeCheckBoxWidget';
+import styles from '../components/graph.css';
 
 import {
     HEATMAP_ACTIVITY,
@@ -45,6 +46,7 @@ import BmdCheckBoxWidget from '../widgets/BmdCheckBoxWidget';
 class IntegrativeAnalysesMain extends React.Component {
     constructor(props) {
         super(props);
+
         this.state = {
             // loadMetadata
 
@@ -58,8 +60,8 @@ class IntegrativeAnalysesMain extends React.Component {
             datasetLabName: [],
             url: null,
             // ontologyWidget
-            ontologyType: integrative_Granular,
-            // ontologyType: integrative_General,
+            // ontologyType: integrative_Granular,
+            ontologyType: integrative_General,
             //
             ontologyGroup: [],
 
@@ -98,41 +100,36 @@ class IntegrativeAnalysesMain extends React.Component {
         }
         return (
             <div className="alert alert-info">
-                <h2>Help text</h2>
-                <p>zw</p>
-                <p>zw_renderReadoutChemicalSelectors</p>
-                <p>zw</p>
                 <p>
-                    <b>Visualization options:</b>
+                    This page allows for the cross-dataset comparison of developmental toxicity
+                    results determined by alteration of zebrafish larva phenotypes after test
+                    substance exposure.
                 </p>
-                <ol>
-                    <li>
-                        <b>Heatmap:</b> For comparisons of readout or endpoint-category via activity
-                        or BMC; the most sensitive (i.e., lowest BMC) is presented where multiple
-                        BMCs are available. Selection of ‘activity’ presents the activity result as
-                        a binary output (active or inactive). Selection of ‘BMC’ will present the
-                        activity results based on the BMC value. Clicking on individual cells shows
-                        the user the concentration-response curve. By clicking on the row or column
-                        label, the concentration-response curves for an entire row/column are
-                        displayed.
-                    </li>
-                    <li>
-                        <b>XXX:</b>
-                    </li>
-                </ol>
+                <br />
+                <p>
+                    The developmental toxicity results include three main elements: test substance
+                    classification, activity, and specificity related to the associated
+                    developmental phenotype group.
+                </p>
+                <br />
+                <p>
+                    Multiple features can be selected at once. Once the user has selected at least
+                    one item within each feature, interactive heatmaps will appear if data are
+                    available. More information on each dataset can be viewed on the{' '}
+                    <a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/">Datasets tool page</a>.
+                </p>
+                <br />
+                <p>
+                    Options for editing or saving images are provided by toggling over the upper
+                    right side of each image. If the edit/save toolbar is not available, it was a
+                    custom visualization created specifically for this application. Please take a
+                    screenshot to save, or if you need a higher resolution image, please contact us.
+                </p>
+                <br />
                 <p>
                     <i>
                         Disclaimer: The use of two different methods of analysis will be reflected
-                        as different benchmark concentrations
-                    </i>
-                </p>
-                <p>
-                    <i>
-                        Options for editing or saving images are provided by toggling over the upper
-                        right side of each image. If the edit/save toolbar is not available, it was
-                        a custom visualization created specifically for this application. Please
-                        take a screenshot to save, or if you need a higher resolution image, please
-                        contact us.
+                        as different benchmark concentrations.”
                     </i>
                 </p>
             </div>
@@ -156,7 +153,9 @@ class IntegrativeAnalysesMain extends React.Component {
                 />
                 <p className="help-block">
                     <b>Interactivity note:</b> This heatmap is interactive. Click a cell to view
-                    individual dose-response curves associated with it.
+                    individual concentration response curves associated with it. Select x-axis label
+                    to learn more about selected phenotype. Click a cell to view individual
+                    concentration response curves associated with it.
                 </p>
             </div>
         );
@@ -177,9 +176,13 @@ class IntegrativeAnalysesMain extends React.Component {
         return (
             <div className="row-fluid">
                 <div className="col-md-12">
-                    <h1>
+                    <h1 className={styles.labelHorizaontal}>
                         Integrative Analyses
-                        <HelpButtonWidget stateHolder={this} />
+                        <HelpButtonWidget
+                            stateHolder={this}
+                            headLevel={'h1'}
+                            title={'Click to toggle help-text'}
+                        />
                     </h1>
                 </div>
                 <div className="col-md-12">
