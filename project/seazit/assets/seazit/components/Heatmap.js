@@ -21,7 +21,7 @@ import {
     NO_COLLAPSE,
 } from '../shared';
 
-import styles from './graph.css';
+import styles from '../style.css';
 // import styles from './ResponseFigure.css';
 
 import { getLog10AxisFunction } from 'utils/d3';
@@ -53,6 +53,7 @@ class Heatmap extends Component {
             yMap = _.groupBy(data, 'y'),
             ontologyType = this.props.ontologyType,
             handleXLabelClick = function(label) {
+                console.log(label);
                 let cells = xMap[label];
                 let cell = {
                     developmental_defect_grouping_general:
@@ -70,6 +71,8 @@ class Heatmap extends Component {
             },
             // draw y-axis
             handleYLabelClick = function(label) {
+                console.log(label);
+
                 let cells = yMap[label],
                     casrns = [...new Set(cells.map((item) => item.casrn))],
                     dtxsids = [...new Set(cells.map((item) => item.dtxsid))];
@@ -129,8 +132,6 @@ class Heatmap extends Component {
                 .select(el)
                 .append('svg')
                 .attr('width', Math.max(1000, width + margin.left + margin.right))
-                // .attr('width', Math.max(1000, 2000))
-
                 .attr('height', Math.max(1000, height + margin.left + margin.right))
                 .append('g')
                 .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')'),
@@ -171,8 +172,8 @@ class Heatmap extends Component {
             .call(yAxis)
             .style('font-size', 15)
             .selectAll('text')
-            .style('cursor', 'pointer')
-            .on('click', handleYLabelClick);
+            .style('cursor', 'pointer');
+        // .on('click', handleYLabelClick)
 
         axisLayer
             .append('g')
@@ -201,17 +202,6 @@ class Heatmap extends Component {
                 `translate(${margin.left + margin.axisLeft}, ${margin.top + margin.axisTop})`
             );
 
-        // plot bounding box
-        chartLayer
-            .append('rect')
-            .attr('x', xScale.range()[0])
-            .attr('y', yScale.range()[0])
-            .attr('width', xScale.range()[1])
-            .attr('height', yScale.range()[1])
-            .attr('mask', 'url(#stripeMask)')
-            .attr('fill', '#ccc');
-        // .attr('fill', 'black');
-
         chartLayer
             .append('rect')
             .attr('x', xScale.range()[0])
@@ -222,8 +212,6 @@ class Heatmap extends Component {
             .style('stroke', 'black')
             .style('stroke-width', 2);
 
-        console.log('d', data);
-        console.log(data.filter((d) => d.final_dev_call === 'default'));
         chartLayer
             .selectAll('.square')
             .data(data)
@@ -252,8 +240,18 @@ class Heatmap extends Component {
             .append('g')
             .classed('legendLayer', true)
             .attr('transform', `translate(${width - margin.legend},${margin.top})`);
+
         legendLayer
-            .selectAll('text')
+            .append('text')
+            .attr('class', styles.legendText)
+            .attr('x', 0)
+            .attr('y', 0)
+            .attr('transform', (d, i) => `translate(25, ${margin.axisTop + (cellSize - 20) / 2})`)
+            .html('Developmental Toxicity Classification')
+            .style('font-size', 20);
+
+        legendLayer
+            .selectAll('.legendText') // Use a specific class for the selection
             .data(legendData.values)
             .enter()
             .append('text')
@@ -267,19 +265,8 @@ class Heatmap extends Component {
                         cellSize})`
             )
             .text((d) => d.label);
-
         legendLayer
-            .append('text')
-            .attr('class', styles.legendText)
-            .attr('x', 0)
-            .attr('y', 0)
-            .attr('transform', (d, i) => `translate(25, ${margin.axisTop + (cellSize - 20) / 2})`)
-            .html('Developmental Toxicity Classification')
-            .style('font-size', 20);
-        // console.log(legendData.values)
-
-        let ds = legendLayer
-            .selectAll('path')
+            .selectAll('.legendRect') // Use a specific class for the selection
             .data(legendData.values)
             .enter()
             .append('rect')

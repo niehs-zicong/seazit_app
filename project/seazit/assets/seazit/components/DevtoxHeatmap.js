@@ -14,7 +14,7 @@ import {
     molecularGraphBody,
 } from './BootstrapBodyPart';
 
-import styles from './graph.css';
+import styles from '../style.css';
 
 import { getLog10AxisFunction } from 'utils/d3';
 import { integrativeHandleCellClick, printFloat, pod_med_processed } from '../shared';
@@ -32,6 +32,9 @@ class DevtoxHeatmap extends Component {
 
     renderPlot = function(el, data, legendData) {
         $(el).empty();
+        console.log(data);
+        console.log(legendData);
+
         let margin = {
                 top: 40,
                 left: 10,
@@ -41,6 +44,7 @@ class DevtoxHeatmap extends Component {
                 axisTop: 300,
                 legend: 900,
             },
+            { colorScaleFunction, legendScale } = legendData,
             legendCirclesSizes = [0.5, 1.0, 1.5, 2.0, 2.5],
             cellSize = 50,
             legendCellSize = cellSize - 20,
@@ -115,9 +119,6 @@ class DevtoxHeatmap extends Component {
             chartWidth = width - (margin.left + margin.right + margin.axisLeft + margin.legend),
             // Create a color scale
 
-            // colorDomain = [-8, -4],
-            //  sizeDomain = [0, 3.15],
-
             // [-0.20605, 3.1549] is min and max for allset data from table.
             // var colorRange = [0, 3.1549];
 
@@ -128,11 +129,7 @@ class DevtoxHeatmap extends Component {
 
             //   make radius linear scale.  TODO
             // sizeDomain = d3.extent(_.map(data, 'mean_selectivity')),
-
-            // sizeDomain = [0, 3.1549],
             sizeDomain = [0, 2],
-            // sizeDomain = [0, 3],
-
             size = d3
                 .scaleSqrt()
                 .domain(sizeDomain)
@@ -148,10 +145,6 @@ class DevtoxHeatmap extends Component {
                 .attr('height', Math.max(1500, height + margin.left + margin.right))
                 .append('g')
                 .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')'),
-            star = d3
-                .symbol()
-                .type(d3.symbolStar)
-                .size(size(cellSize / 5)),
             tooltip = d3
                 .select(el)
                 .append('div')
@@ -187,10 +180,9 @@ class DevtoxHeatmap extends Component {
             .attr('class', 'axis y')
             .call(yAxis)
             .style('font-size', 15)
-
             .selectAll('text')
-            .style('cursor', 'pointer')
-            .on('click', handleYLabelClick);
+            .style('cursor', 'pointer');
+        // .on('click', handleYLabelClick)
         axisLayer
             .append('g')
             .attr(
@@ -207,7 +199,6 @@ class DevtoxHeatmap extends Component {
             .style('text-anchor', 'start')
             .style('cursor', 'pointer')
             .on('click', handleXLabelClick);
-        // .select(".domain").remove()
 
         let chartLayer = svg
             .append('g')
@@ -230,66 +221,121 @@ class DevtoxHeatmap extends Component {
             .style('stroke-width', 2);
 
         chartLayer
-            .selectAll('path')
+            .selectAll('.square')
+            .data(data)
+            // .data(data.filter((d) => d.final_dev_call !== 'dev tox'))
+            .enter()
+            .append('path')
+            .attr('class', 'square')
+            .attr('d', square)
+            .attr('fill', (d) => d.fill)
 
-            .data(data.filter((d) => d.final_dev_call === 'dev tox'))
+            .attr(
+                'transform',
+                (d) =>
+                    `translate(${xScale(d.x) + xScale.bandwidth() / 2}, ${yScale(d.y) +
+                        yScale.bandwidth() / 2})`
+            )
+            .style('stroke', 'black')
+            .style('stroke-width', '0.8');
+        // .style('cursor', 'pointer')
+        // .on('mouseover', mouseover)
+        // .on('mousemove', mousemove)
+        // .on('mouseleave', mouseleave)
+        // .on('click', integrativeHandleCellClick)
+
+        const filteredData = data.filter((d) => d.final_dev_call === 'dev tox');
+
+        const circles = chartLayer
+            .selectAll('.circle')
+            .data(filteredData)
             .enter()
             .append('g')
             .attr('class', 'cor')
-            .attr('transform', function(d) {
-                return `translate(${xScale(d.x) +
-                    xScale.bandwidth() / 2}, ${yScale(d.y) + yScale.bandwidth() / 2})`;
-            })
+            .attr(
+                'transform',
+                (d) =>
+                    `translate(${xScale(d.x) + xScale.bandwidth() / 2}, ${yScale(d.y) +
+                        yScale.bandwidth() / 2})`
+            );
+
+        circles
             .append('circle')
+            .attr('class', 'circle')
+            // .attr('r', (d) => size(Math.abs(d.mean_selectivity)))
             .attr('r', (d) => {
                 return size(Math.abs(d.mean_selectivity));
             })
-            .attr('fill', (d) => d.fill)
+            .attr('fill', (d) => colorScaleFunction(pod_med_processed(d.mean_pod)))
+            // .attr('fill', '#25838e')
             .style('opacity', 0.8)
-
             .style('cursor', 'pointer')
             .on('mouseover', mouseover)
             .on('mousemove', mousemove)
             .on('mouseleave', mouseleave)
             .on('click', integrativeHandleCellClick);
 
-        chartLayer
-            .selectAll('path')
-            .data(data.filter((d) => d.final_dev_call !== 'dev tox' && d.final_dev_call !== null))
-            .enter()
-            .append('path')
-            .attr('class', 'star')
-            .attr('d', star)
-            .attr('fill', (d) => d.fill)
-            .attr('transform', function(d) {
-                return `translate(${xScale(d.x) +
-                    xScale.bandwidth() / 2}, ${yScale(d.y) + yScale.bandwidth() / 2})`;
-            })
-            // .style('stroke', 'black')
-            .style('opacity', 0.8);
+        // chartLayer
+        //     .selectAll('path')
+        //     .data(data.filter((d) => d.final_dev_call === 'dev tox'))
+        //     .enter()
+        //     .append('g')
+        //     .attr('class', 'cor')
+        //     .attr('transform', function (d) {
+        //         return `translate(${xScale(d.x) +
+        //         xScale.bandwidth() / 2}, ${yScale(d.y) + yScale.bandwidth() / 2})`;
+        //     })
+        //     .append('circle')
+        //     .attr('r', (d) => {
+        //         return size(Math.abs(d.mean_selectivity));
+        //     })
+        //     // .attr('fill', (d) => d.fill)
+        //     .attr('fill', "#25838e")
+        //
+        //     .style('opacity', 0.8)
+        //
+        //     .style('cursor', 'pointer')
+        //     .on('mouseover', mouseover)
+        //     .on('mousemove', mousemove)
+        //     .on('mouseleave', mouseleave)
+        //     .on('click', integrativeHandleCellClick);
 
-        chartLayer
-            .selectAll('.square')
-            .data(data.filter((d) => d.final_dev_call === null))
-            .enter()
-            .append('path')
-            .attr('class', 'square')
-            .attr('d', square)
-            .attr('fill', '#C9C9C9')
-            .attr('transform', function(d) {
-                return `translate(${xScale(d.x) +
-                    xScale.bandwidth() / 2}, ${yScale(d.y) + yScale.bandwidth() / 2})`;
-            })
-            // .style('stroke', 'black')
-            .style('stroke-width', '0.8');
+        // chartLayer
+        //     .selectAll('.square')
+        //     .data(data.filter((d) => d.final_dev_call !== 'dev tox' && d.final_dev_call !== null))
+        //     .enter()
+        //     .append('path')
+        //     .attr('class', 'square')
+        //     .attr('d', square)
+        //     .attr('fill', (d) => d.fill)
+        //     .attr('transform', function (d) {
+        //         return `translate(${xScale(d.x) +
+        //         xScale.bandwidth() / 2}, ${yScale(d.y) + yScale.bandwidth() / 2})`;
+        //     })
+        //     .style('stroke', 'black')
+        //     .style('opacity', 0.8);
+        //
+        // chartLayer
+        //     .selectAll('.square')
+        //     .data(data.filter((d) => d.final_dev_call === null))
+        //     .enter()
+        //     .append('path')
+        //     .attr('class', 'square')
+        //     .attr('d', square)
+        //     .attr('fill', '#C9C9C9')
+        //     .attr('transform', function (d) {
+        //         return `translate(${xScale(d.x) +
+        //         xScale.bandwidth() / 2}, ${yScale(d.y) + yScale.bandwidth() / 2})`;
+        //     })
+        //     .style('stroke', 'black')
+        //     .style('stroke-width', '0.8');
 
         let legendLayer = svg
             .append('g')
             .classed('legendLayer', true)
             .attr('transform', `translate(${width - margin.legend},${margin.top})`);
 
-        let { colorScaleFunction, legendScale } = legendData,
-            legendCirclesWidth = 6 * cellSize,
+        let legendCirclesWidth = 6 * cellSize,
             legendHeight = 6 * cellSize,
             legend = legendLayer
                 .append('defs')
@@ -332,34 +378,7 @@ class DevtoxHeatmap extends Component {
             .text('BMC (µM)')
             .style('font-size', 20);
 
-        legendLayer
-            .append('path')
-            .attr('class', 'star')
-            .attr('d', star)
-            .attr(
-                'transform',
-                `translate(${20 + cellSize / 2 / 2},
-                ${margin.top + margin.axisTop + legendHeight + legendCellSize})`
-            )
-            .attr('fill', 'black')
-            .style('stroke', '#000000')
-            .style('stroke-width', '1');
-
-        legendLayer
-            .append('text')
-            .attr('class', styles.legendText)
-            .attr('x', 0)
-            .attr('y', 0)
-            .attr(
-                'transform',
-                `translate(${15 + cellSize},
-                ${margin.top + margin.axisTop + legendHeight + legendCellSize + 5})`
-            )
-            .text('non-specific, non-toxic, inconclusive');
-
-        // the reason I put 25/2 into this position transform, because square size is (25, 25),
-        // make sure star is in center, make is position to be 25/2, 25/2
-
+        // this is white square part.
         legendLayer
             .append('rect')
             .attr('x', 0)
@@ -369,7 +388,46 @@ class DevtoxHeatmap extends Component {
             .attr(
                 'transform',
                 `translate(${20},
-                ${margin.top + margin.axisTop + legendHeight + legendCellSize * 2})`
+                ${margin.top + margin.axisTop + legendHeight + legendCellSize * 1})`
+            )
+            .attr('fill', 'transparent')
+            .style('stroke', 'black')
+            .style('stroke-width', '1');
+
+        legendLayer
+            .append('text')
+            .attr('class', styles.legendText)
+            .attr('x', 0)
+            .attr('y', 0)
+            .attr(
+                'transform',
+                `translate(${20 + cellSize},
+                ${margin.top +
+                    margin.axisTop +
+                    legendHeight +
+                    legendCellSize +
+                    legendCellSize / 2})`
+            )
+            .text('non-specific, non-toxic, inconclusive');
+
+        // the reason I put 25/2 into this position transform, because square size is (25, 25),
+        // make sure star is in center, make is position to be 25/2, 25/2
+
+        // this is grey square part.
+        legendLayer
+            .append('rect')
+            .attr('x', 0)
+            .attr('y', 0)
+            .attr('width', legendCellSize)
+            .attr('height', legendCellSize)
+            .attr(
+                'transform',
+                `translate(${20},
+                ${margin.top +
+                    margin.axisTop +
+                    legendHeight +
+                    legendCellSize * 2 +
+                    legendCellSize / 2})`
             )
             .attr('mask', 'url(#stripeMask)')
             .attr('fill', '#ccc');
@@ -383,7 +441,11 @@ class DevtoxHeatmap extends Component {
             .attr(
                 'transform',
                 `translate(${20},
-                ${margin.top + margin.axisTop + legendHeight + legendCellSize * 2})`
+                ${margin.top +
+                    margin.axisTop +
+                    legendHeight +
+                    legendCellSize * 2 +
+                    legendCellSize / 2})`
             )
             .attr('fill', 'transparent')
             .style('stroke', 'black')
@@ -396,12 +458,12 @@ class DevtoxHeatmap extends Component {
             .attr('y', 0)
             .attr(
                 'transform',
-                `translate(${15 + cellSize},
+                `translate(${20 + cellSize},
                 ${margin.top +
                     margin.axisTop +
                     legendHeight +
                     legendCellSize * 2 +
-                    legendCellSize / 2})`
+                    legendCellSize})`
             )
             .text('not evaluated');
         //
@@ -420,37 +482,6 @@ class DevtoxHeatmap extends Component {
 
         let legendCircles = legendLayer.append('g').classed('legendCircles', true);
         let spaceBetweenCircles = 10;
-        // legendCircles
-        //   .selectAll('circle')
-        //   .data(legendCirclesSizes)
-        //   .enter()
-        //   .append('circle')
-        //   .attr('r', (d) => size(d))
-        //   .attr('fill', 'none')
-        //   .attr('cx', (d, i) => {
-        //     const cumulativeWidth = legendCirclesSizes
-        //       .slice(0, i + 1)
-        //       .reduce((sum, value) => sum + spaceBetweenCircles, 0);
-        //     return cumulativeWidth + i * cellSize + 20;
-        //   })
-        //   .attr('cy', margin.top + margin.axisTop + legendHeight + legendCellSize * 6)
-        //   .style('stroke', 'black')
-        //   .style('stroke-width', '1');
-        //
-        // legendCircles
-        //   .selectAll('text')
-        //   .data(legendCirclesSizes)
-        //   .enter()
-        //   .append('text')
-        //   .attr('class', styles.legendText)
-        //   .attr('x', (d, i) => {
-        //     const cumulativeWidth = legendCirclesSizes
-        //       .slice(0, i + 1)
-        //       .reduce((sum, value) => sum + spaceBetweenCircles, 0);
-        //     return cumulativeWidth + i * cellSize ;
-        //   })
-        //   .attr('y', margin.top + margin.axisTop + legendHeight + legendCellSize * 8)
-        //   .text((d) => d);
 
         legendCircles
             .selectAll('circle')

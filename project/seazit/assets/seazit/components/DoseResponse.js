@@ -64,9 +64,15 @@ class DoseResponse extends React.Component {
                             .map('input_id')
                             .uniq()
                             .value()),
+                        // (d.style =
+                        //     this.props.devtoxEndPointList &&
+                        //     this.props.devtoxEndPointList.includes(d.endpoint_name)
+                        //         ? {border: '5px solid #d62976', padding: '1px', margin: '1px'}
+                        //         : null),
                         (d.style =
-                            this.props.devtoxreadout_ids &&
-                            this.props.devtoxreadout_ids.includes(d.endpoint_name)
+                            (this.props.devtoxEndPointList &&
+                                this.props.devtoxEndPointList.includes(d.endpoint_name)) ||
+                            this.props.final_dev_call === 'dev tox'
                                 ? { border: '5px solid #d62976', padding: '1px', margin: '1px' }
                                 : null),
                         // filter with input_ids to filter bmcout into different case
@@ -347,7 +353,7 @@ class DoseResponse extends React.Component {
             // move legend to bottom of plot
             layout.legend = { orientation: 'h', y: -0.3 };
         }
-        // //console.log(this.refs[d.key], data, layout, svgConfig)
+        console.log(this.refs[d.key], data, layout, svgConfig);
         // //console.log(Plotly.newPlot(this.refs[d.key], data, layout, svgConfig))
         Plotly.newPlot(this.refs[d.key], data, layout, svgConfig);
     }
@@ -411,8 +417,8 @@ DoseResponse.propTypes = {
     collapse: PropTypes.string.isRequired,
     height: PropTypes.number.isRequired,
     url: PropTypes.string.isRequired,
-    devtoxreadout_ids: PropTypes.array,
-    fill: PropTypes.string,
+    devtoxEndPointList: PropTypes.array,
+    final_dev_call: PropTypes.string,
 };
 
 // this is for specical case, each dataset collapse with mortality120 data
@@ -433,6 +439,7 @@ class DoseResponseMort120 extends React.Component {
         if (_.isEmpty(data)) {
             return '';
         }
+
         let keys = _.chain(data.dose_response)
                 .reject((r) => r.endpoint_name == 'Mortality@120')
                 .map('key')
@@ -461,14 +468,21 @@ class DoseResponseMort120 extends React.Component {
                     // //console.log(d);
 
                     let dr = d.dose_response[0];
+
                     (d.title = this.getPlotTitle(dr, collapse)),
                         (d.casrn = dr.casrn),
                         (d.endpoint_name = dr.endpoint_name),
                         (d.style =
-                            this.props.devtoxreadout_ids &&
-                            this.props.devtoxreadout_ids.includes(d.endpoint_name)
+                            (this.props.devtoxEndPointList &&
+                                this.props.devtoxEndPointList.includes(d.endpoint_name)) ||
+                            this.props.final_dev_call === 'dev tox'
                                 ? { border: '5px solid #d62976', padding: '1px', margin: '1px' }
                                 : null),
+                        //      (d.style =
+                        // this.props.devtoxEndPointList &&
+                        // this.props.devtoxEndPointList.includes(d.endpoint_name)
+                        //     ? { border: '5px solid #d62976', padding: '1px', margin: '1px' }
+                        //     : null),
                         (d.input_ids = _.chain(d.bmcoutput)
                             .map('input_id')
                             .uniq()
@@ -497,6 +511,11 @@ class DoseResponseMort120 extends React.Component {
                 .sortBy('endpoint_name')
                 .sortBy('casrn')
                 .value();
+
+        console.log(data);
+        console.log(data.dose_response);
+        console.log(collapsedData);
+        console.log(this.props.final_dev_call);
 
         let yrange = [0, 100];
         return {
@@ -813,9 +832,9 @@ DoseResponseMort120.propTypes = {
     collapse: PropTypes.string.isRequired,
     height: PropTypes.number.isRequired,
     url: PropTypes.string.isRequired,
-    devtoxreadout_ids: PropTypes.array,
-    fill: PropTypes.string,
+    devtoxEndPointList: PropTypes.array,
     Mort120Flag: PropTypes.bool,
+    final_dev_call: PropTypes.string,
 };
 
 export { DoseResponse };

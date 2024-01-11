@@ -14,7 +14,7 @@ import {
 } from '../shared';
 import HelpButtonWidget from './HelpButtonWidget';
 import _ from 'lodash';
-import styles from '../components/graph.css';
+import styles from '../style.css';
 
 class IntegrativePlotWidget extends BaseWidget {
     /*
@@ -52,7 +52,7 @@ class IntegrativePlotWidget extends BaseWidget {
             return (
                 <div className="alert alert-info">
                     <p>
-                        Potency value s are determined by the benchmark concentration (BMC).
+                        Potency values are determined by the benchmark concentration (BMC).
                         Specificity is the fold change of the BMC values between the mortality and a
                         certain altered phenotype. The fold change value is log10-transformed;
                         higher specificity represents a more specific phenotypic effect compared to
@@ -67,7 +67,7 @@ class IntegrativePlotWidget extends BaseWidget {
         let state = this.props.stateHolder.state;
         return (
             <div>
-                <label>Select visual: </label>
+                <label>Select visual:</label>
                 {[
                     {
                         value: INTVIZ_HEATMAP,
@@ -83,7 +83,7 @@ class IntegrativePlotWidget extends BaseWidget {
                     },
                 ].map((option) => (
                     <div className={`radio ${styles.labelHorizontal}`} key={option.value}>
-                        <label className={styles.labelHorizaontal}>
+                        <label className={styles.labelHorizontal}>
                             <input
                                 type="radio"
                                 name="visualization"

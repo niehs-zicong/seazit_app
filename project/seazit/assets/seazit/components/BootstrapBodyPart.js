@@ -16,6 +16,9 @@ import {
     renderSelectMultiOptgroupWidget,
     renderSelectMultiWidget,
     BMDVIZ_SELECTIVITY,
+    BMCTab,
+    ConcentrationResponseTab,
+    IntegrativeAnalysesTab,
 } from '../shared';
 import IntegrativeCheckBoxWidget from '../widgets/IntegrativeCheckBoxWidget';
 import _ from 'lodash';
@@ -74,7 +77,7 @@ class SingleCurveBody extends React.Component {
     _renderDoseResponse(state) {
         const commonHeader = (
             <div className="col-sm-10">
-                <h4 className={styles.labelHorizaontal}>
+                <h4 className={styles.labelHorizontal}>
                     Developmental Toxicity Concentration Response Figures
                     <HelpButtonWidget
                         stateHolder={this}
@@ -82,14 +85,12 @@ class SingleCurveBody extends React.Component {
                         title={'Click to toggle help-text'}
                     />
                 </h4>
-                <h5>
-                    {this.props.devtoxreadout_ids.length} of endpoints are associated with{' '}
-                    {this.props.ontologyGroupName}
-                </h5>
                 {_renderHelpText(this.state)}
+                {this.props.heading && <h5>{this.props.heading}</h5>}
             </div>
         );
 
+        console.log(this.props.final_dev_call);
         return (
             <div className="col-sm-10">
                 {commonHeader}
@@ -97,21 +98,21 @@ class SingleCurveBody extends React.Component {
                     <DoseResponseMort120
                         stateHolder={this}
                         url={state.url}
-                        cols={1}
+                        cols={2}
                         height={400}
                         collapse={COLLAPSE_WITH_Mortality120}
-                        devtoxreadout_ids={this.props.devtoxreadout_ids}
-                        fill={this.props.fill}
+                        devtoxEndPointList={this.props.devtoxEndPointList}
+                        final_dev_call={this.props.final_dev_call}
                     />
                 ) : (
                     <DoseResponse
                         stateHolder={this}
                         url={state.url}
-                        cols={1}
+                        cols={2}
                         height={400}
                         collapse={NO_COLLAPSE}
-                        devtoxreadout_ids={this.props.devtoxreadout_ids}
-                        fill={this.props.fill}
+                        devtoxEndPointList={this.props.devtoxEndPointList}
+                        final_dev_call={this.props.final_dev_call}
                     />
                 )}
             </div>
@@ -133,9 +134,6 @@ class SingleCurveBody extends React.Component {
                 <div className="col-sm-2">
                     <IntegrativeCheckBoxWidget stateHolder={this} />
                 </div>
-                {/*{this.props.CheckBoxDisable ? null : (*/}
-                {/*    <IntegrativeCheckBoxWidget stateHolder={this}/>*/}
-                {/*)}*/}
                 {this._renderDoseResponse(this.state)}
             </div>
         );
@@ -146,10 +144,11 @@ SingleCurveBody.propTypes = {
     protocol_id: PropTypes.number.isRequired,
     readout_id: PropTypes.string.isRequired,
     casrn: PropTypes.array.isRequired,
-    devtoxreadout_ids: PropTypes.string.isRequired,
+    devtoxEndPointList: PropTypes.string,
     CheckBoxDisable: false,
     fill: PropTypes.string,
-    title: PropTypes.string,
+    heading: PropTypes.string,
+    final_dev_call: PropTypes.string,
 };
 
 class molecularGraphBody extends React.Component {
@@ -210,11 +209,12 @@ class MultipleCurveBody extends React.Component {
 
     _renderDoseResponse(state) {
         // console.log(state)
-        console.log(this.props.devtoxreadout_ids);
+        console.log(this.props);
+        console.log('MultipleCurveBody');
 
         const commonHeader = (
             <div className="col-sm-10">
-                <h4 className={styles.labelHorizaontal}>
+                <h4 className={styles.labelHorizontal}>
                     Developmental Toxicity Concentration Response Figures
                     <HelpButtonWidget
                         stateHolder={this}
@@ -222,10 +222,7 @@ class MultipleCurveBody extends React.Component {
                         title={'Click to toggle help-text'}
                     />
                 </h4>
-                <h5>
-                    {this.props.devtoxreadout_ids.length} of endpoints are associated with{' '}
-                    {this.props.ontologyGroupName}
-                </h5>
+                {this.props.heading && <h5>{this.props.heading}</h5>}
                 {_renderHelpText(this.state)}
             </div>
         );
@@ -240,8 +237,7 @@ class MultipleCurveBody extends React.Component {
                         cols={state.vizColumns}
                         height={state.vizHeight}
                         collapse={COLLAPSE_WITH_Mortality120}
-                        devtoxreadout_ids={this.props.devtoxreadout_ids}
-                        fill={this.props.fill}
+                        devtoxEndPointList={this.props.devtoxEndPointList}
                     />
                 ) : (
                     <DoseResponse
@@ -249,8 +245,7 @@ class MultipleCurveBody extends React.Component {
                         cols={state.vizColumns}
                         height={state.vizHeight}
                         collapse={NO_COLLAPSE}
-                        devtoxreadout_ids={this.props.devtoxreadout_ids}
-                        fill={this.props.fill}
+                        devtoxEndPointList={this.props.devtoxEndPointList}
                     />
                 )}
             </div>
@@ -261,6 +256,9 @@ class MultipleCurveBody extends React.Component {
         let readout_ids = this.state.mortalityCheck
             ? this.props.readout_ids.concat(['Mortality@120' + '_' + this.props.protocol_id])
             : [this.props.readout_ids];
+        console.log(readout_ids);
+        console.log(this.props.protocol_id);
+
         this.state.url = getDoseResponsesUrl(
             [this.props.protocol_id],
             [readout_ids],
@@ -283,9 +281,10 @@ MultipleCurveBody.propTypes = {
     protocol_id: PropTypes.number.isRequired,
     readout_ids: PropTypes.array.isRequired,
     casrns: PropTypes.array.isRequired,
-    devtoxreadout_ids: PropTypes.array.isRequired,
+    devtoxEndPointList: PropTypes.array.isRequired,
     fill: PropTypes.string,
     ontologyGroupName: PropTypes.ontologyGroupName,
+    heading: PropTypes.string,
 };
 
 export { Header, SingleCurveBody, MultipleCurveBody, molecularGraphBody, sankeyPlotGraphBody };

@@ -1,13 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
-
 import BootstrapModal from 'utils/BootstrapModal';
 import { Header, SingleCurveBody } from './BootstrapBodyPart';
-
-import { pod_med_processed, printFloat } from '../shared';
-import { each } from 'underscore';
-import { forEach } from 'underscore';
+import { BMDVIZ_ACTIVITY, pod_med_processed, printFloat } from '../shared';
+import _ from 'lodash';
 
 let renderMortalityModal = function(jsonData, flag) {
     if (!jsonData) {
@@ -57,108 +53,71 @@ let renderMortalityModal = function(jsonData, flag) {
     );
 };
 
-class SelectivityTable extends React.Component {
-    _renderRow(d) {
-        // console.log(d);
-        return (
-            <tr key={d.casrn}>
-                <td>{d.preferred_name}</td>
-                <td>{d.casrn}</td>
-                <td>{d.use_category1}</td>
-                <td>{d.malformation}</td>
-                <td>
-                    <ul>
-                        {/*{d.combin_ontology.map((value, index) => {*/}
-                        {/*    return <li key={`index-${index}`}>{value}</li>;*/}
-                        {/*})}*/}
-                        {/* I do this below instead of above because there is map error*/}
-                        {/* ref: https://bobbyhadz.com/blog/react-typeerror-cannot-read-property-map-of-null*/}
-                        {Array.isArray(d.combin_ontology) && !d.combin_ontology.includes(null)
-                            ? d.combin_ontology.map((value, index) => {
-                                  return <li key={`index-${index}`}>{value}</li>;
-                              })
-                            : '-'}
-                    </ul>
-                </td>
-
-                <td>
-                    <ul>
-                        {Array.isArray(d.combin_ontology_id) && !d.combin_ontology_id.includes(null)
-                            ? d.combin_ontology_id.map((value, index) => {
-                                  return (
-                                      <li key={index}>
-                                          <a
-                                              href={`https://www.ebi.ac.uk/ols/ontologies/zp/terms?iri=http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2F${value
-                                                  .toString()
-                                                  .split(':')
-                                                  .join('_')}`}
-                                              target="_blank"
-                                          >
-                                              {value}
-                                          </a>
-                                      </li>
-                                  );
-                              })
-                            : '-'}
-                    </ul>
-                </td>
-                <td>{printFloat(pod_med_processed(d.mean_pod))}</td>
-                <td>{printFloat(d.mean_selectivity)}</td>
-                <td>{d.n_values}</td>
-                <td>{renderMortalityModal(d, 'Mortality')}</td>
-            </tr>
-        );
-    }
-
-    render() {
-        if (this.props.data.length === 0) {
-            return null;
-        }
-        let medData = this.props.data;
-        return (
-            <div>
-                <table id="IA_table01" ref="table" className="table table-condensed table-hover">
-                    <thead>
-                        <tr>
-                            <th style={{ width: '20%' }}>Chemical</th>
-                            <th style={{ width: '20%' }}>CASRN</th>
-                            <th style={{ width: '20%' }}>Category</th>
-                            <th style={{ width: '20%' }}>Malformation</th>
-                            <th style={{ width: '20%' }}>Ontology term</th>
-                            <th style={{ width: '20%' }}>Ontology ID</th>
-                            <th style={{ width: '20%' }}>Malformation BMC</th>
-                            <th style={{ width: '20%' }}>Selectivity</th>
-                            <th style={{ width: '20%' }}>Number of curves evaluated</th>
-                            <th style={{ width: '20%' }}>
-                                Mortality BMC
-                                <br />
-                                (Min – Max)
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>{medData.map(this._renderRow)}</tbody>
-                </table>
-            </div>
-        );
-    }
-}
-
-SelectivityTable.propTypes = {
-    data: PropTypes.array.isRequired,
-};
-
 class BmdTable extends React.Component {
+    constructor(props) {
+        super(props);
+        this._renderRow = this._renderRow.bind(this);
+    }
+
     _renderRow(d) {
-        return (
-            <tr key={d.casrn}>
-                <td>{d.preferred_name}</td>
-                <td>{d.casrn}</td>
-                <td>{d.use_category1}</td>
-                <td>{renderMortalityModal(d, 'NonMortality')}</td>
-                <td>{renderMortalityModal(d, 'Mortality')}</td>
-                <td>{d.n_values}</td>
-            </tr>
-        );
+        // console.log(d)
+        if (this.props.visualization === BMDVIZ_ACTIVITY) {
+            return (
+                <tr key={d.casrn}>
+                    <td>{d.preferred_name}</td>
+                    <td>{d.casrn}</td>
+                    <td>{d.use_category1}</td>
+                    <td>{renderMortalityModal(d, 'NonMortality')}</td>
+                    <td>{renderMortalityModal(d, 'Mortality')}</td>
+                    <td>{d.n_values}</td>
+                </tr>
+            );
+        } else {
+            return (
+                <tr key={d.casrn}>
+                    <td>{d.preferred_name}</td>
+                    <td>{d.casrn}</td>
+                    <td>{d.use_category1}</td>
+                    <td>{d.malformation}</td>
+
+                    <td>
+                        <ul>
+                            {Array.isArray(d.combin_ontology) && !d.combin_ontology.includes(null)
+                                ? d.combin_ontology.map((value, index) => {
+                                      return <li key={`index-${index}`}>{value}</li>;
+                                  })
+                                : '-'}
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            {Array.isArray(d.combin_ontology_id) &&
+                            !d.combin_ontology_id.includes(null)
+                                ? d.combin_ontology_id.map((value, index) => {
+                                      return (
+                                          <li key={index}>
+                                              <a
+                                                  href={`https://www.ebi.ac.uk/ols/ontologies/zp/terms?iri=http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2F${value
+                                                      .toString()
+                                                      .split(':')
+                                                      .join('_')}`}
+                                                  target="_blank"
+                                              >
+                                                  {value}
+                                              </a>
+                                          </li>
+                                      );
+                                  })
+                                : '-'}
+                        </ul>
+                    </td>
+                    <td>{printFloat(pod_med_processed(d.mean_pod))}</td>
+                    <td>{printFloat(d.mean_selectivity)}</td>
+                    <td>{d.n_values}</td>
+                    <td>{renderMortalityModal(d, 'Mortality')}</td>
+                </tr>
+            );
+        }
     }
 
     render() {
@@ -166,38 +125,73 @@ class BmdTable extends React.Component {
             return null;
         }
         let medData = this.props.data;
-        return (
-            <div>
-                <table id="IA_table01" ref="table" className="table table-condensed table-hover">
-                    <thead>
-                        <tr>
-                            <th style={{ width: '20%' }}>Chemical</th>
-                            <th style={{ width: '20%' }}>CASRN</th>
-                            <th style={{ width: '20%' }}>Category</th>
-                            <th style={{ width: '20%' }}>
-                                Non-Mortality BMC
-                                <br />
-                                (Min – Max)
-                            </th>
-                            <th style={{ width: '20%' }}>
-                                Mortality BMC
-                                <br />
-                                (Min – Max)
-                            </th>
-                            <th style={{ width: '20%' }}>Number of BMC</th>
-                        </tr>
-                    </thead>
-                    <tbody>{medData.map(this._renderRow)}</tbody>
-                </table>
-            </div>
-        );
+        if (this.props.visualization === BMDVIZ_ACTIVITY) {
+            return (
+                <div>
+                    <table
+                        id="IA_table01"
+                        ref="table"
+                        className="table table-condensed table-hover"
+                    >
+                        <thead>
+                            <tr>
+                                <th style={{ width: '20%' }}>Chemical</th>
+                                <th style={{ width: '20%' }}>CASRN</th>
+                                <th style={{ width: '20%' }}>Category</th>
+                                <th style={{ width: '20%' }}>
+                                    Non-Mortality BMC
+                                    <br />
+                                    (Min – Max)
+                                </th>
+                                <th style={{ width: '20%' }}>
+                                    Mortality BMC
+                                    <br />
+                                    (Min – Max)
+                                </th>
+                                <th style={{ width: '20%' }}>Number of BMC</th>
+                            </tr>
+                        </thead>
+                        <tbody>{medData.map(this._renderRow)}</tbody>
+                    </table>
+                </div>
+            );
+        } else {
+            return (
+                <div>
+                    <table
+                        id="IA_table01"
+                        ref="table"
+                        className="table table-condensed table-hover"
+                    >
+                        <thead>
+                            <tr>
+                                <th style={{ width: '20%' }}>Chemical</th>
+                                <th style={{ width: '20%' }}>CASRN</th>
+                                <th style={{ width: '20%' }}>Category</th>
+                                <th style={{ width: '20%' }}>Malformation</th>
+                                <th style={{ width: '20%' }}>Ontology term</th>
+                                <th style={{ width: '20%' }}>Ontology ID</th>
+                                <th style={{ width: '20%' }}>Malformation BMC</th>
+                                <th style={{ width: '20%' }}>Selectivity</th>
+                                <th style={{ width: '20%' }}>Number of curves evaluated</th>
+                                <th style={{ width: '20%' }}>
+                                    Mortality BMC
+                                    <br />
+                                    (Min – Max)
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>{medData.map(this._renderRow)}</tbody>
+                    </table>
+                </div>
+            );
+        }
     }
 }
 
 BmdTable.propTypes = {
     data: PropTypes.array.isRequired,
+    visualization: PropTypes.number.isRequired,
 };
 
-// export default BmdTable;
-export { SelectivityTable };
-export { BmdTable };
+export default BmdTable;

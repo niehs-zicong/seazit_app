@@ -10,7 +10,7 @@ import SelectorSliderWidget from '../widgets/SelectorSliderWidget';
 import BmdCheckBoxWidget from '../widgets/BmdCheckBoxWidget';
 import OntologyTypeWidget from '../widgets/OntologyTypeWidget';
 import OntologyWidget from '../widgets/OntologyWidget';
-import styles from '../components/graph.css';
+import styles from '../style.css';
 
 // import AxisSelectorWidget from '../widgets/AxisSelectorWidget';
 import RankedBarchartHandler from '../components/RankedBarchartHandler';
@@ -27,6 +27,7 @@ import {
     renderNoSelected,
     BMCTab,
     integrative_Granular,
+    integrative_General,
 } from '../shared';
 
 class BmdByLabMain extends React.Component {
@@ -36,7 +37,9 @@ class BmdByLabMain extends React.Component {
             // loadMetadata
             metadataLoaded: false,
             metadata: null,
-
+            // url: null,
+            url:
+                '/seazit/api/seazit_result/bmcByLabResult/?format=json&protocol_ids=6&readouts=Abnormal_heartbeat+Mort@120_6,Abnormal_length+Mort@120_6,Altered_jaw_morphology+Mort@120_6,Altered_snout+Mort@120_6,Mortality@120_6',
             // HelpButtonWidget
             showHelpText: false,
 
@@ -46,8 +49,8 @@ class BmdByLabMain extends React.Component {
             chemicals: [],
             categories: [],
 
-            ontologyType: integrative_Granular,
-            // ontologyType: integrative_General,
+            // ontologyType: integrative_Granular,
+            ontologyType: integrative_General,
             //
             ontologyGroup: [],
 
@@ -104,14 +107,14 @@ class BmdByLabMain extends React.Component {
         });
     }
 
-    renderSelection(url) {
+    renderSelection() {
         return (
             <RankedBarchartHandler
                 visualization={this.state.visualization}
                 selectivityCutoff={this.state.selectivityCutoff}
                 selectivityList={this.state.selectivityList}
                 selectedAxis={this.state.selectedAxis}
-                url={url}
+                url={this.state.url}
             />
         );
     }
@@ -123,37 +126,21 @@ class BmdByLabMain extends React.Component {
         return (
             <div className="alert alert-info">
                 <p>
-                    This page allows for each investigator to see how the chemicals rank by activity
-                    in two ways:
-                    <ul>
-                        <li>
-                            <b>Activity:</b> any chemical where a BMC can be calculated for any
-                            effect, or
-                        </li>
-                        <li>
-                            <b>Selectivity:</b> a neuro or developmental specific effect occurring
-                            in the absence of general toxicity (i.e., mortality or loss of cell
-                            viability).
-                        </li>
-                    </ul>
-                </p>
-                <p>zw</p>
-                <p>
-                    When <b>Activity</b> is selected:
-                </p>
-                <p style={{ paddingLeft: '1em' }}>zw</p>
-                <p>
-                    When <b>Selectivity</b> is selected:
-                </p>
-                <p style={{ paddingLeft: '1em' }}>zw</p>
-                <p>
-                    <i>
-                        Disclaimer: The use of two different methods of analysis will be reflected
-                        as different benchmark concentrations
-                    </i>
+                    The page allows for the visualization of test substance ranking based on either
+                    the Activity or Specificity of selected altered laboratory defined phenotype(s)
+                    within a single dataset.
                 </p>
                 <p>
-                    <i>zw</i>
+                    The Use Categories of test substances are color coded next to substance name.
+                    More information on Use Category can be viewed on the{' '}
+                    <a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/">Datasets tool page</a>.
+                </p>
+                <p>A table will appear underneath each visual with additional information.</p>
+                <p>
+                    Options for editing or saving images are provided by toggling over the upper
+                    right side of each image. If the edit/save toolbar is not available, it was a
+                    custom visualization created specifically for this application. Please take a
+                    screenshot to save, or if you need a higher resolution image, please contact us.
                 </p>
             </div>
         );
@@ -164,18 +151,17 @@ class BmdByLabMain extends React.Component {
             return <Loading />;
         }
         // for bmc lab case, readout always add Mortality@120.
-        // this.state.readouts.push('Mortality@120' + '_' + this.state.assays)
-        let url = getBmdsUrl(this.state.assays, this.state.readouts);
-
+        this.state.readouts.push('Mortality@120' + '_' + this.state.assays);
+        // this.state.url = getBmdsUrl(this.state.assays, this.state.readouts);
         return (
             <div className="row-fluid">
                 <div className="col-md-12">
-                    <h1 className={styles.labelHorizaontal}>
-                        Benchmark concentration (BMC) summary by lab
+                    <h1 className={styles.labelHorizontal}>
+                        Benchmark concentration (BMC) summary by dataset
                         <HelpButtonWidget
                             stateHolder={this}
                             headLevel={'h1'}
-                            // title={'More information on ontology and phenotype terms'}
+                            title={'Click to toggle help-text'}
                         />
                     </h1>
                 </div>
@@ -202,7 +188,7 @@ class BmdByLabMain extends React.Component {
                 </div>
                 <div className="col-md-9">
                     {this._renderHelpText()}
-                    {url ? this.renderSelection(url) : this.renderNoSelection()}
+                    {this.state.url ? this.renderSelection() : this.renderNoSelection()}
                 </div>
             </div>
         );

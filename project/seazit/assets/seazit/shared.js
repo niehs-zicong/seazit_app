@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 import Tooltip from '@material-ui/core/Tooltip';
 import { Header, MultipleCurveBody, SingleCurveBody } from './components/BootstrapBodyPart';
 import BootstrapModal from 'utils/BootstrapModal';
-import styles from './components/graph.css';
+import styles from './style.css';
 
 const AXIS_LINEAR = 1,
     AXIS_LOG10 = 2,
@@ -58,8 +58,6 @@ const AXIS_LINEAR = 1,
     HEATMAP_BMC = 2,
     READOUT_TYPE_READOUT = 1,
     READOUT_TYPE_CATEGORY = 2,
-    SELECTIVITY_FOOTNOTE =
-        'Selectivity is estimated and true value may be higher; viability BMC could not be calculated and was therefore estimated to equal the maximum tested dose.',
     loadMetadata = function(component) {
         d3.json(URL_METADATA, (d) => {
             // console.log('d');
@@ -94,11 +92,9 @@ const AXIS_LINEAR = 1,
         renderHelpText = null
     ) {
         let size = Math.min(options.length, 11);
-        // console.log(helpButtonWidget)
-        // console.log(renderHelpText)
         return (
             <div>
-                <label className={styles.labelHorizaontal}>
+                <label className={styles.labelHorizontal}>
                     Select {label}(s):
                     {helpButtonWidget && helpButtonWidget()}
                 </label>
@@ -132,10 +128,24 @@ const AXIS_LINEAR = 1,
             </div>
         );
     },
-    renderSelectSingleWidget = function(name, label, options, values, handleChange) {
+    renderSelectSingleWidget = function(
+        name,
+        label,
+        options,
+        values,
+        handleChange,
+        helpButtonWidget = null,
+        renderHelpText = null
+    ) {
         return (
             <div>
-                <label>Select one {label}:</label>
+                {/*<label>Select one {label}:</label>*/}
+
+                <label className={styles.labelHorizontal}>
+                    Select one {label}:{helpButtonWidget && helpButtonWidget()}
+                </label>
+                {renderHelpText && renderHelpText()}
+
                 <select
                     name={name}
                     className="row form-control"
@@ -164,11 +174,19 @@ const AXIS_LINEAR = 1,
             </div>
         );
     },
-    renderSelectMultiOptgroupWidget = function(name, label, options, values, handleChange) {
+    renderSelectMultiOptgroupWidget = function(
+        name,
+        label,
+        options,
+        values,
+        handleChange,
+        helpButtonWidget = null,
+        renderHelpText = null
+    ) {
         let size = 10;
         return (
             <div>
-                <label>Select {label} phenotype terms:</label>
+                <label>Select {label}(s):</label>
                 <select
                     name={name}
                     className="form-control"
@@ -274,7 +292,6 @@ const AXIS_LINEAR = 1,
             'data:text/plain;charset=utf-8,' + encodeURIComponent(svg_xml)
         );
         element.setAttribute('download', filename);
-
         element.style.display = 'none';
         document.body.appendChild(element);
         element.click();
@@ -282,10 +299,14 @@ const AXIS_LINEAR = 1,
     },
     integrativeHandleCellClick = function(d) {
         console.log(d);
+        const headingHtml = `
+        ${d.devtoxEndPointList.length} of endpoints are associated with ${d.ontologyGroupName}
+    `;
         if (d.endPointList) {
             if (d.endPointList && d.endPointList.length > 1) {
                 new BootstrapModal(Header, MultipleCurveBody, {
                     title: d.title,
+                    heading: headingHtml,
                     ontologyGroupName: d.ontologyGroupName,
                     protocol_id: d.protocol_id,
                     readout_ids: _.map(d.endPointList, function(x) {
@@ -293,45 +314,48 @@ const AXIS_LINEAR = 1,
                     }),
                     // if button checked, we will add mortality@120 to each plot
                     casrns: [d.casrn],
-                    devtoxreadout_ids: d.devtoxEndPointList,
+                    devtoxEndPointList: d.devtoxEndPointList,
                     fill: d.fill,
                 });
             } else {
                 new BootstrapModal(Header, SingleCurveBody, {
                     title: d.title,
+                    heading: headingHtml,
                     ontologyGroupName: d.ontologyGroupName,
                     protocol_id: d.protocol_id,
                     readout_id: d.endpoint_name + '_' + d.protocol_id,
                     casrn: d.casrn,
-                    devtoxreadout_ids: d.devtoxEndPointList,
+                    devtoxEndPointList: d.devtoxEndPointList,
                     fill: d.fill,
                 });
             }
         }
     },
-    BMCHandleCellClick = function(d) {
-        if (d.endPointList) {
-            if (d.endPointList && d.endPointList.length > 1) {
-                new BootstrapModal(Header, MultipleCurveBody, {
-                    title: d.title,
-                    protocol_id: d.protocol_id,
-                    readout_ids: _.map(d.endPointList, function(x) {
-                        return x + '_' + d.protocol_id;
-                    }),
-                    // if button checked, we will add mortality@120 to each plot
-                    casrns: [d.casrn],
-                    devtoxreadout_ids: d.devtoxEndPointList,
-                });
-            } else {
+    BMCHandleCellClick = function(d, clickType) {
+        console.log('SingleCurveBody', d);
+        switch (clickType) {
+            case 'nonviabilityData':
                 new BootstrapModal(Header, SingleCurveBody, {
-                    title: d.title,
+                    title: d.preferred_name + `: ` + d.endpoint_name,
                     protocol_id: d.protocol_id,
                     readout_id: d.endpoint_name + '_' + d.protocol_id,
                     casrn: d.casrn,
-                    devtoxreadout_ids: d.devtoxEndPointList,
-                    // devtoxreadout_ids: d.devtoxEndPointList+ '_' + d.protocol_id,
+                    final_dev_call: d.final_dev_call,
                 });
-            }
+                break;
+            case 'viabilityData':
+                new BootstrapModal(Header, SingleCurveBody, {
+                    title: d.preferred_name + `: ` + 'Mortality@120',
+                    protocol_id: d.protocol_id,
+                    readout_id: 'Mortality@120' + '_' + d.protocol_id,
+                    casrn: d.casrn,
+                    CheckBoxDisable: true,
+                    final_dev_call: d.final_dev_call,
+                });
+                break;
+            // Add more cases if needed for different click types
+            default:
+                break;
         }
     },
     renderNoDataAlert = function() {
@@ -401,7 +425,6 @@ export {
     BMDVIZ_SELECTIVITY,
     READOUT_TYPE_READOUT,
     READOUT_TYPE_CATEGORY,
-    SELECTIVITY_FOOTNOTE,
     URL_CHEMXLSX,
     URL_SANKEYDATA,
     getDoseResponsesUrl,

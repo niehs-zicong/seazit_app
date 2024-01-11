@@ -2,7 +2,7 @@ import $ from '$';
 import _ from 'lodash';
 import React from 'react';
 import BaseWidget from './BaseWidget';
-import styles from '../components/graph.css';
+import styles from '../style.css';
 
 import {
     renderSelectMultiWidget,
@@ -25,7 +25,7 @@ class OntologyWidget extends BaseWidget {
     _renderFilterBy(state) {
         return (
             <div>
-                <label className={styles.labelHorizaontal}>
+                <label className={styles.labelHorizontal}>
                     Select developmental phenotype group:
                     <HelpButtonWidget
                         stateHolder={this}

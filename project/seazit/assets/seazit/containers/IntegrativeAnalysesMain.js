@@ -7,7 +7,7 @@ import BmdAssayPca from '../components/BmdAssayPca';
 import BmdChemicalPca from '../components/BmdChemicalPca';
 import FiveOhEight from '../components/FiveOhEight';
 import RankedBarchart from '../components/RankedBarchart';
-import IntegrativePlotHandler from '../components/IntegrativePlotHandler';
+import HeatmapHandler from '../components/HeatmapHandler';
 
 import Loading from 'utils/Loading';
 import HeatmapDisplaySelector from '../widgets/HeatmapDisplaySelector';
@@ -21,7 +21,7 @@ import OntologyTypeWidget from '../widgets/OntologyTypeWidget';
 import ReadoutWidget from '../widgets/ReadoutWidget';
 import ReadoutCategoryWidget from '../widgets/ReadoutCategoryWidget';
 import ReadoutTypeWidget from '../widgets/ReadoutTypeWidget';
-import styles from '../components/graph.css';
+import styles from '../style.css';
 
 import {
     HEATMAP_ACTIVITY,
@@ -142,7 +142,7 @@ class IntegrativeAnalysesMain extends React.Component {
         //     requiresFilters = [INTVIZ_HEATMAP, INTVIZ_DevtoxHEATMAP];
         return (
             <div>
-                <IntegrativePlotHandler
+                <HeatmapHandler
                     assays={this.state.assays}
                     casrns={this.state.chemicals}
                     visualization={this.state.visualization}
@@ -176,7 +176,7 @@ class IntegrativeAnalysesMain extends React.Component {
         return (
             <div className="row-fluid">
                 <div className="col-md-12">
-                    <h1 className={styles.labelHorizaontal}>
+                    <h1 className={styles.labelHorizontal}>
                         Integrative Analyses
                         <HelpButtonWidget
                             stateHolder={this}

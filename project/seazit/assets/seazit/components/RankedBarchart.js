@@ -6,7 +6,13 @@ import $ from '$';
 import * as d3 from 'd3';
 import ReactDOM from 'react-dom';
 import DoseResponse from './DoseResponse';
-import { getBmdsUrl, getDoseResponsesUrl, NO_COLLAPSE, svg_download_form } from '../shared';
+import {
+    getBmdsUrl,
+    getDoseResponsesUrl,
+    integrativeHandleCellClick,
+    NO_COLLAPSE,
+    svg_download_form,
+} from '../shared';
 import BootstrapModal from 'utils/BootstrapModal';
 import { Header, MultipleCurveBody, SingleCurveBody } from './BootstrapBodyPart';
 import RankedBarchartHandler from './RankedBarchartHandler';
@@ -17,7 +23,6 @@ import {
     AXIS_SQRT,
     CATEGORY_COLORS,
     BMDVIZ_SELECTIVITY,
-    SELECTIVITY_FOOTNOTE,
     printFloat,
     pod_med_processed,
     BMCHandleCellClick,
@@ -35,6 +40,8 @@ let renderPlot = function(el, data, opts) {
         $(el).append('<div class="alert alert-info"><p>No BMC data are available.</p></div>');
         return;
     }
+    console.log(data);
+    console.log(opts);
 
     let nonviabilityData, viabilityData;
 
@@ -102,43 +109,59 @@ let renderPlot = function(el, data, opts) {
 
     let barG = svg.append('g').attr('transform', `translate(${barStart},0)`);
 
-    // add pod_med error bars
-    barG.selectAll('.pod-errorbar')
-        .data(nonviabilityData)
-        .enter()
-        .append('line')
-        .attr('class', 'pod-errorbar')
-        .attr('x1', (d) =>
-            x(d3.min([pod_med_processed(d.min_pod_med), pod_med_processed(d.med_pod_med)]))
-        )
-        .attr('x2', (d) =>
-            x(d3.max([pod_med_processed(d.med_pod_med), pod_med_processed(d.max_pod_med)]))
-        )
-        .attr('y1', (d) => y(d.preferred_name) + y.bandwidth() / 2)
-        .attr('y2', (d) => y(d.preferred_name) + y.bandwidth() / 2)
-        .style('stroke', (d) => CATEGORY_COLORS[d.use_category1])
-        .style('stroke-width', 8)
-        .style('pointer-events', 'none');
-
-    // add mort_pod_med circle
-    barG.selectAll('.pod-circle')
-        .data(nonviabilityData)
-        .enter()
-        .append('circle')
-        .attr('class', 'pod-circle')
-        .attr('cx', (d) => x(pod_med_processed(d.med_pod_med)))
-        .attr('cy', (d) => y(d.preferred_name) + y.bandwidth() / 2)
-        .attr('r', 10)
-        .style('fill', (d) => CATEGORY_COLORS[d.use_category1])
-        .style('cursor', 'pointer')
-        .on('click', function(d) {
-            new BootstrapModal(Header, SingleCurveBody, {
-                title: d.preferred_name + `: ` + d.endpoint_name,
-                protocol_id: d.protocol_id,
-                readout_id: d.endpoint_name + '_' + d.protocol_id,
-                casrn: d.casrn,
+    if (opts.isSelective) {
+        // add mort_pod_med circle, color bar and dot.
+        // console.log(nonviabilityData)
+        barG.selectAll('.pod-circle')
+            .data(nonviabilityData)
+            .enter()
+            .append('circle')
+            .attr('class', 'pod-circle')
+            // .attr('cx', (d) => x(pod_med_processed(d.med_pod_med)))
+            .attr('cx', (d) => x(pod_med_processed(d.mean_pod)))
+            .attr('cy', (d) => y(d.preferred_name) + y.bandwidth() / 2)
+            .attr('r', 10)
+            .style('fill', (d) => CATEGORY_COLORS[d.use_category1])
+            .style('cursor', 'pointer')
+            .on('click', function(d) {
+                BMCHandleCellClick(d, 'nonviabilityData');
             });
-        });
+    } else {
+        barG.selectAll('.pod-errorbar')
+            .data(nonviabilityData)
+            .enter()
+            .append('line')
+            .attr('class', 'pod-errorbar')
+            .attr('x1', (d) =>
+                x(d3.min([pod_med_processed(d.min_pod_med), pod_med_processed(d.med_pod_med)]))
+            )
+            .attr('x2', (d) =>
+                x(d3.max([pod_med_processed(d.med_pod_med), pod_med_processed(d.max_pod_med)]))
+            )
+            .attr('y1', (d) => y(d.preferred_name) + y.bandwidth() / 2)
+            .attr('y2', (d) => y(d.preferred_name) + y.bandwidth() / 2)
+            .style('stroke', (d) => CATEGORY_COLORS[d.use_category1])
+            .style('stroke-width', 8)
+            .style('pointer-events', 'none');
+
+        // add mort_pod_med circle, color bar and dot.
+
+        barG.selectAll('.pod-circle')
+            .data(nonviabilityData)
+            .enter()
+            .append('circle')
+            .attr('class', 'pod-circle')
+            .attr('cx', (d) => x(pod_med_processed(d.med_pod_med)))
+            .attr('cy', (d) => y(d.preferred_name) + y.bandwidth() / 2)
+            .attr('r', 10)
+            .style('fill', (d) => CATEGORY_COLORS[d.use_category1])
+            .style('cursor', 'pointer')
+            .on('click', function(d) {
+                BMCHandleCellClick(d, 'nonviabilityData');
+            });
+    }
+    // add pod_med error bars
+
     // add viabilityData error bars
     barG.selectAll('.mort_pod-errorbar')
         .data(viabilityData)
@@ -161,7 +184,6 @@ let renderPlot = function(el, data, opts) {
                 ])
             )
         )
-
         .attr('y1', (d) => y(d.preferred_name) + y.bandwidth() / 2)
         .attr('y2', (d) => y(d.preferred_name) + y.bandwidth() / 2)
         .style('stroke', 'black')
@@ -183,15 +205,7 @@ let renderPlot = function(el, data, opts) {
         .style('opacity', 0.8)
         .style('cursor', 'pointer')
         .on('click', function(d) {
-            console.log(d);
-            new BootstrapModal(Header, SingleCurveBody, {
-                // title: `${d.preferred_name} (${d.chemical_casrn}): ${d.readout_endpoint}`,
-                title: d.preferred_name + `: ` + 'Mortality@120',
-                protocol_id: d.protocol_id,
-                readout_id: 'Mortality@120' + '_' + d.protocol_id,
-                casrn: d.casrn,
-                CheckBoxDisable: true,
-            });
+            BMCHandleCellClick(d, 'viabilityData');
         });
 
     // add selectivity-ratio text
@@ -202,7 +216,7 @@ let renderPlot = function(el, data, opts) {
             .attr('y', -8)
             .style('font-weight', 'bold')
             .style('font-family', 'sans-serif')
-            .text('Selectivity');
+            .text('Specificity');
 
         svg.selectAll('.selectivity-text')
             .data(nonviabilityData)
@@ -228,12 +242,14 @@ let renderPlot = function(el, data, opts) {
                         .attr('font-size', '0.7em');
                 }
             });
-
+        let SELECTIVITY_FOOTNOTE =
+            'Specificity is estimated and true value may be higher; mortality BMC could not be calculated and was therefore estimated to equal the maximum tested dose.';
         // add footnote
         svg.append('text')
             .attr('x', -margin.left + 10)
             .attr('y', height + margin.top - margin.bottom)
-            .attr('font-size', '0.7em')
+            // .attr('y', height + margin.top - margin.bottom + 10)
+            .attr('font-size', '1.3em')
             .style('font-family', 'sans-serif')
             .text(`† ${SELECTIVITY_FOOTNOTE}`);
     }
@@ -258,11 +274,17 @@ let renderPlot = function(el, data, opts) {
         .attr('x', categoryPadding + 2)
         .attr('y', (d) => y(d.preferred_name) + y.bandwidth() / 2)
         .attr('dy', '0.35em')
+        // .attr('dy', '0.5em')
         .text((d) => d.use_category1)
         .style('fill', 'white');
 
     // add axes
-    svg.append('g').call(d3.axisLeft(y));
+    // svg.append('g').call(d3.axisLeft(y));
+    // add axes
+    svg.append('g')
+        .call(d3.axisLeft(y))
+        .selectAll('text') // Select all text elements within the y-axis
+        .style('font-size', '16px'); // Adjust the font size as needed
 
     let axisFn =
         opts.selectedAxis === AXIS_LOG10 ? getLog10AxisFunction(d3.axisTop, x) : d3.axisTop(x);
@@ -273,7 +295,7 @@ let renderPlot = function(el, data, opts) {
     barG.append('text')
         .attr('transform', `translate(${(width - barStart) / 2}, -25)`)
         .style('text-anchor', 'middle')
-        .text('Benchmark concentration value (µM)');
+        .text('Benchmark concentration value (BMC) (µM)');
 
     // add legend
     let barLegend = svg
