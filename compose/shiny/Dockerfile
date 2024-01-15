@@ -1,4 +1,4 @@
-FROM rocker/rstudio
+FROM rocker/rstudio:4.2.1
 #FROM rocker/rstudio:3.4.3
 EXPOSE 3838
 
