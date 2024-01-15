@@ -1,4 +1,4 @@
-FROM rocker/tidyverse
+FROM rocker/tidyverse:4.0.0
 #FROM rocker/tidyverse:3.4.3
 
 # install R and Rserve
