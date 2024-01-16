@@ -1,6 +1,6 @@
 import React from 'react';
 import BaseWidget from './BaseWidget';
-import styles from '../components/graph.css';
+import styles from '../style.css';
 
 class DoseResponseGridWidget extends BaseWidget {
     /*

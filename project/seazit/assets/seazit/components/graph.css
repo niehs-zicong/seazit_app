@@ -50,11 +50,6 @@
     background-color: blue;
 }
 
-.labelHorizaontal {
-    display: flex;
-    align-items: center;
-}
-
 .flex-container {
     display: flex;
     /* Additional styles for the flex container, if needed */
@@ -65,4 +60,8 @@
     margin: 10px;
     padding: 10px;
     border: 1px solid #ccc;
+}
+
+.pointer-button {
+    cursor: pointer;
 }

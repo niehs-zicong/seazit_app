@@ -38,6 +38,7 @@ class DoseResponse extends React.Component {
             return '';
         }
         let keys, groupKeys, collapsedData, responses, yrange, offset;
+
         (keys = _.chain(data.dose_response)
             .map('key')
             .uniq()
@@ -65,10 +66,19 @@ class DoseResponse extends React.Component {
                             .uniq()
                             .value()),
                         (d.style =
-                            this.props.devtoxreadout_ids &&
-                            this.props.devtoxreadout_ids.includes(d.endpoint_name)
-                                ? { border: '5px solid #d62976', padding: '1px', margin: '1px' }
-                                : null),
+                            (this.props.devtoxEndPointList &&
+                                this.props.devtoxEndPointList.includes(d.endpoint_name)) ||
+                            this.props.final_dev_call === 'dev tox'
+                                ? {
+                                      border: '5px solid #d62976',
+                                      padding: '1px',
+                                      margin: '1px',
+                                  }
+                                : {
+                                      border: '5px solid transparent',
+                                      padding: '1px',
+                                      margin: '1px',
+                                  }),
                         // filter with input_ids to filter bmcout into different case
                         (d.bmcoutput = d.bmcoutput.filter((i) => d.input_ids.includes(i.input_id))),
                         (d.substance_code_input_ids = _.chain(
@@ -83,6 +93,11 @@ class DoseResponse extends React.Component {
                 .value());
 
         yrange = [0, 100];
+        //         console.log(data)
+        // console.log(collapse)
+        // console.log(keys)
+        //         console.log(data);
+        // console.log(collapsedData)
         return {
             data,
             collapsedData,
@@ -242,7 +257,12 @@ class DoseResponse extends React.Component {
             annotations = [];
 
         let svgConfig = {
-            // modeBarButtonsToRemove: ['toImage', 'sendDataToCloud'],
+            modeBarButtonsToRemove: [
+                'toImage', // Remove "Download plot as PNG" button
+                'hoverClosest3d', // Remove "Show closest data on hover" button
+                'hoverCompareCartesian', // Remove "Compare data on hover" button
+                'toggleSpikelines', // Remove "Toggle spikelines" button
+            ],
             modeBarButtonsToAdd: [
                 {
                     name: 'Download plot as a SVG',
@@ -269,12 +289,14 @@ class DoseResponse extends React.Component {
                 type: 'linear',
                 title: 'response (%)',
                 // range should be [0, 100]
-                range: [-10, 110],
+                // range: [-10, 110],
+                autorange: true,
             },
             showlegend: false,
             // add room for collapsed plot legends
             height: this.props.height + d.groupKeys.length * 19 + 20,
-            width: 470,
+            width: 440,
+            // width:this.props.height + d.groupKeys.length * 19 + 20
             // autosize: true,
         };
         d.groupKeys.map((gk) => {
@@ -347,9 +369,20 @@ class DoseResponse extends React.Component {
             // move legend to bottom of plot
             layout.legend = { orientation: 'h', y: -0.3 };
         }
-        // //console.log(this.refs[d.key], data, layout, svgConfig)
+        // console.log(this.refs[d.key], data, layout, svgConfig);
+        console.log(this.refs[d.key]);
+        console.log(data);
+        console.log(d);
+        // console.log(Plotly.newPlot(this.refs[d.key], data, layout, svgConfig));
+
         // //console.log(Plotly.newPlot(this.refs[d.key], data, layout, svgConfig))
         Plotly.newPlot(this.refs[d.key], data, layout, svgConfig);
+
+        //         if (d.style) {
+        //
+        // // Add a border to the plot container
+        //         plotContainer.style.outline = '5px solid rgb(214, 41, 118)';
+        //                     }
     }
 
     loadDoseResponse() {
@@ -389,7 +422,9 @@ class DoseResponse extends React.Component {
         }
 
         let colNum = Math.ceil(12 / this.props.cols);
-        // //console.log(this.state.collapsedData)
+        // console.log(this.state.collapsedData)
+        // console.log(this.props.cols)
+        // console.log(colNum)
 
         return (
             <div>
@@ -411,8 +446,8 @@ DoseResponse.propTypes = {
     collapse: PropTypes.string.isRequired,
     height: PropTypes.number.isRequired,
     url: PropTypes.string.isRequired,
-    devtoxreadout_ids: PropTypes.array,
-    fill: PropTypes.string,
+    devtoxEndPointList: PropTypes.array,
+    final_dev_call: PropTypes.string,
 };
 
 // this is for specical case, each dataset collapse with mortality120 data
@@ -433,6 +468,7 @@ class DoseResponseMort120 extends React.Component {
         if (_.isEmpty(data)) {
             return '';
         }
+
         let keys = _.chain(data.dose_response)
                 .reject((r) => r.endpoint_name == 'Mortality@120')
                 .map('key')
@@ -461,14 +497,24 @@ class DoseResponseMort120 extends React.Component {
                     // //console.log(d);
 
                     let dr = d.dose_response[0];
+
                     (d.title = this.getPlotTitle(dr, collapse)),
                         (d.casrn = dr.casrn),
                         (d.endpoint_name = dr.endpoint_name),
                         (d.style =
-                            this.props.devtoxreadout_ids &&
-                            this.props.devtoxreadout_ids.includes(d.endpoint_name)
-                                ? { border: '5px solid #d62976', padding: '1px', margin: '1px' }
-                                : null),
+                            (this.props.devtoxEndPointList &&
+                                this.props.devtoxEndPointList.includes(d.endpoint_name)) ||
+                            this.props.final_dev_call === 'dev tox'
+                                ? {
+                                      border: '5px solid #d62976',
+                                      padding: '1px',
+                                      margin: '1px',
+                                  }
+                                : {
+                                      border: '5px solid transparent',
+                                      padding: '1px',
+                                      margin: '1px',
+                                  }),
                         (d.input_ids = _.chain(d.bmcoutput)
                             .map('input_id')
                             .uniq()
@@ -497,6 +543,11 @@ class DoseResponseMort120 extends React.Component {
                 .sortBy('endpoint_name')
                 .sortBy('casrn')
                 .value();
+
+        console.log(data);
+        // console.log(data.dose_response);
+        console.log(collapsedData);
+        // console.log(this.props.final_dev_call);
 
         let yrange = [0, 100];
         return {
@@ -623,7 +674,12 @@ class DoseResponseMort120 extends React.Component {
             annotations = [];
 
         let svgConfig = {
-            // modeBarButtonsToRemove: ['toImage', 'sendDataToCloud'],
+            modeBarButtonsToRemove: [
+                'toImage', // Remove "Download plot as PNG" button
+                'hoverClosest', // Remove "Show closest data on hover" button
+                'hoverCompare', // Remove "Compare data on hover" button
+                'toggleSpikelines', // Remove "Toggle spikelines" button
+            ],
             modeBarButtonsToAdd: [
                 {
                     name: 'Download plot as a SVG',
@@ -654,8 +710,12 @@ class DoseResponseMort120 extends React.Component {
             },
             showlegend: false,
             // add room for collapsed plot legends
-            height: this.props.height + d.groupKeys.length * 19 + 20,
-            width: 470,
+            // height: this.props.height + d.groupKeys.length * 19 + 20,
+            height: this.props.height + d.groupKeys.length * 19,
+
+            // width: 470,
+            width: 440,
+
             // autosize: true,
         };
         d.groupKeys.map((gk) => {
@@ -813,9 +873,9 @@ DoseResponseMort120.propTypes = {
     collapse: PropTypes.string.isRequired,
     height: PropTypes.number.isRequired,
     url: PropTypes.string.isRequired,
-    devtoxreadout_ids: PropTypes.array,
-    fill: PropTypes.string,
+    devtoxEndPointList: PropTypes.array,
     Mort120Flag: PropTypes.bool,
+    final_dev_call: PropTypes.string,
 };
 
 export { DoseResponse };

@@ -107,7 +107,7 @@ webpackJsonp(
                                               cols: 1,
                                               height: 400,
                                               collapse: b.NO_COLLAPSE,
-                                              devtoxreadout_ids: this.props.devtoxreadout_ids,
+                                              devtoxEndPointList: this.props.devtoxEndPointList,
                                           })
                                       )
                                     : s.default.createElement(
@@ -118,7 +118,7 @@ webpackJsonp(
                                               cols: 1,
                                               height: 400,
                                               collapse: b.NO_COLLAPSE,
-                                              devtoxreadout_ids: this.props.devtoxreadout_ids,
+                                              devtoxEndPointList: this.props.devtoxEndPointList,
                                           })
                                       );
                             },
@@ -161,7 +161,7 @@ webpackJsonp(
                 protocol_id: d.default.number.isRequired,
                 readout_id: d.default.string.isRequired,
                 casrn: d.default.array.isRequired,
-                devtoxreadout_ids: d.default.string.isRequired,
+                devtoxEndPointList: d.default.string.isRequired,
             };
             var C = (function(e) {
                 function t(e) {
@@ -185,7 +185,7 @@ webpackJsonp(
                                               cols: e.vizColumns,
                                               height: e.vizHeight,
                                               collapse: b.NO_COLLAPSE,
-                                              devtoxreadout_ids: this.props.devtoxreadout_ids,
+                                              devtoxEndPointList: this.props.devtoxEndPointList,
                                           })
                                       )
                                     : s.default.createElement(
@@ -196,7 +196,7 @@ webpackJsonp(
                                               cols: e.vizColumns,
                                               height: e.vizHeight,
                                               collapse: b.NO_COLLAPSE,
-                                              devtoxreadout_ids: this.props.devtoxreadout_ids,
+                                              devtoxEndPointList: this.props.devtoxEndPointList,
                                           })
                                       );
                             },
@@ -241,7 +241,7 @@ webpackJsonp(
                 protocol_id: d.default.number.isRequired,
                 readout_ids: d.default.array.isRequired,
                 casrns: d.default.array.isRequired,
-                devtoxreadout_ids: d.default.array.isRequired,
+                devtoxEndPointList: d.default.array.isRequired,
             }),
                 (t.Header = w),
                 (t.SingleCurveBody = O),
@@ -1645,8 +1645,8 @@ webpackJsonp(
                                                     20,
                                                 autosize: !0,
                                                 paper_bgcolor:
-                                                    this.props.devtoxreadout_ids &&
-                                                    this.props.devtoxreadout_ids.includes(
+                                                    this.props.devtoxEndPointList &&
+                                                    this.props.devtoxEndPointList.includes(
                                                         e.endpoint_name
                                                     )
                                                         ? '#FFFF00'
@@ -1833,7 +1833,7 @@ webpackJsonp(
                 collapse: h.default.string.isRequired,
                 height: h.default.number.isRequired,
                 url: h.default.string.isRequired,
-                devtoxreadout_ids: h.default.array,
+                devtoxEndPointList: h.default.array,
             }),
                 (t.default = E);
         },
@@ -6150,8 +6150,8 @@ webpackJsonp(
                                                     20,
                                                 autosize: !0,
                                                 paper_bgcolor:
-                                                    this.props.devtoxreadout_ids &&
-                                                    this.props.devtoxreadout_ids.includes(
+                                                    this.props.devtoxEndPointList &&
+                                                    this.props.devtoxEndPointList.includes(
                                                         e.endpoint_name
                                                     )
                                                         ? '#FFFF00'
@@ -6356,7 +6356,7 @@ webpackJsonp(
                 collapse: h.default.string.isRequired,
                 height: h.default.number.isRequired,
                 url: h.default.string.isRequired,
-                devtoxreadout_ids: h.default.array,
+                devtoxEndPointList: h.default.array,
             }),
                 (t.default = E);
         },
@@ -8940,14 +8940,14 @@ webpackJsonp(
                                       return t + '_' + e.protocol_id;
                                   }),
                                   casrns: [e.casrn],
-                                  devtoxreadout_ids: e.devtoxEndPointList,
+                                  devtoxEndPointList: e.devtoxEndPointList,
                               })
                             : new h.default(_.Header, _.SingleCurveBody, {
                                   title: e.title,
                                   protocol_id: e.protocol_id,
                                   readout_id: e.endpoint_name + '_' + e.protocol_id,
                                   casrn: e.casrn,
-                                  devtoxreadout_ids: e.devtoxEndPointList,
+                                  devtoxEndPointList: e.devtoxEndPointList,
                               }));
                 },
                 L = function() {

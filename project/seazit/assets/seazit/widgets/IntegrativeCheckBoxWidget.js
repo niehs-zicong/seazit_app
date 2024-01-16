@@ -1,7 +1,7 @@
 import React from 'react';
 import BaseWidget from './BaseWidget';
 import './Switch.css';
-import styles from '../components/graph.css';
+import styles from '../style.css';
 
 import * as d3 from 'd3';
 import _ from 'lodash';

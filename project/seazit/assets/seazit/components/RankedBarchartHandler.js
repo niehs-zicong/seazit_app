@@ -5,15 +5,17 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import * as d3 from 'd3';
 import Loading from 'utils/Loading';
-import { SelectivityTable, BmdTable } from './BmdTable';
+import BmdTable from './BmdTable';
 import RankedBarchart, { submit_download_form } from './RankedBarchart';
+import HelpButtonWidget from '../widgets/HelpButtonWidget';
+import styles from '../style.css';
+
 import {
     getBmdsUrl,
     BMDVIZ_ACTIVITY,
-    BMD_CW,
-    // svg_download_form,
+    BMDVIZ_SELECTIVITY,
+    BMD_CW, // svg_download_form,
     data_exportToJsonFile,
-    // data_exportToCSVFile,
     CHEMLIST_80,
     CHEMFILTER_CHEMICIAL,
     NO_COLLAPSE,
@@ -22,6 +24,9 @@ import {
     printFloat,
     integrative_Granular,
     pod_med_processed,
+    svg_download_form,
+    INTVIZ_HEATMAP,
+    renderNoDataAlert,
 } from '../shared';
 
 class RankedBarchartHandler extends React.Component {
@@ -51,11 +56,17 @@ class RankedBarchartHandler extends React.Component {
         data.chemicalKey = `${data.casrn}|${data.dtxsid}`;
     }
 
-    filterData() {
+    _getFilteredData() {
         let selectivityCheckedArray, data, plotData;
 
         if (this.props.visualization === BMDVIZ_ACTIVITY) {
             data = _.chain(this.state.data.bmd_activity_selectivity)
+                .map((d) => {
+                    return {
+                        ...d,
+                        y: d.casrn,
+                    };
+                })
                 .sortBy('med_pod_med')
                 .value();
         } else {
@@ -66,10 +77,22 @@ class RankedBarchartHandler extends React.Component {
                 .value();
             data = _.chain(this.state.data.bmd_activity_selectivity)
                 .filter((i) => selectivityCheckedArray.includes(i.final_dev_call))
+                .map((d) => {
+                    return {
+                        ...d,
+                        y: d.casrn,
+                        // ontologyGroupName: d[ontologyGroupType],
+                        // title:
+                        //     d[ontologyGroupType] + '+' + d.protocol_name_plot + '+' + d.preferred_name,
+                    };
+                })
                 .sortBy('mean_selectivity')
                 .reverse()
                 .value();
         }
+        console.log(this.state.data.bmd_activity_selectivity);
+        console.log(data);
+
         //
         plotData = _.chain(data)
             .groupBy('casrn')
@@ -84,6 +107,12 @@ class RankedBarchartHandler extends React.Component {
                     minimimumViability = _.chain(k)
                         .min((d) => pod_med_processed(d.mort_med_pod_med))
                         .value();
+                let devtoxEndpoints = _.chain(k)
+                    .filter((i) => i.final_dev_call === 'dev tox')
+                    .map('endpoint_name')
+                    .uniq()
+                    .value();
+
                 return {
                     casrn: k[0].casrn,
                     data: k,
@@ -96,6 +125,7 @@ class RankedBarchartHandler extends React.Component {
                         endpoint_names_list: endpoint_names,
                     },
                     related_endpoint_names: endpoint_names,
+                    related_devtoxEndpoints: devtoxEndpoints,
                     protocol_id: minimimumNonViability.protocol_id,
                     preferred_name: minimimumNonViability.preferred_name,
                     use_category1: minimimumNonViability.use_category1,
@@ -108,82 +138,80 @@ class RankedBarchartHandler extends React.Component {
                 };
             })
             .value();
-        // console.log('data1', data, plotData);
-        return {
-            plotData: plotData,
-            tableData: plotData,
-        };
+        console.log('data');
+
+        console.log(data);
+        // if (this.props.visualization === BMDVIZ_ACTIVITY) {
+        //     plotData = _.chain(plotData)
+        //         .sortBy('med_pod_med')
+        //         .value();
+        // } else {
+        //     plotData = _.chain(plotData)
+        //         .sortBy('mean_selectivity')
+        //         .reverse()
+        //         .value();
+        // }
+        console.log('plotData');
+        console.log(plotData);
+        return plotData;
     }
 
-    data_exportToCSVFile = function(jsonData) {
-        if (jsonData.length == 0) {
+    _exportCsv = function(jsonData) {
+        if (jsonData.length === 0) {
             return '';
         }
-        let medData = _.sortBy(jsonData.bmd_activity_selectivity, 'med_pod_med');
-        let keys = [
-            'preferred_name',
-            'casrn',
-            'use_category1',
-            'med_pod_med',
-            'min_pod_med',
-            'max_pod_med',
-            'mort_med_pod_med',
-            'mort_min_pod_med',
-            'mort_max_pod_med',
-        ];
-        var filename = 'csvData.csv';
-        let columnDelimiter = ',';
-        let lineDelimiter = '\n';
-        let csvColumnHeader = keys.join(columnDelimiter);
+        const filename = 'bmcData.csv';
+        console.log(jsonData);
+
+        const headerMappings = {
+            casrn: 'casrn',
+            use_category1: 'use category level1',
+            preferred_name: 'preferred_name',
+            combin_ontology: 'combin_ontology',
+            combin_ontology_id: 'combin_ontology_id',
+            malformation: 'malformation',
+            mean_pod: 'ontology group bmc (um)',
+            mean_selectivity: 'selectivity',
+            n_values: 'n_values',
+            // med_pod_med: 'med_pod_med',
+            // min_pod_med: 'min_pod_med',
+            // max_pod_med: 'max_pod_med',
+            // mort_med_pod_med: 'mort_med_pod_med',
+            // mort_min_pod_med: 'mort_min_pod_med',
+            // mort_max_pod_med: 'mort_max_pod_med',
+        };
+
+        const columnDelimiter = ',';
+        const lineDelimiter = '\n';
+        const headerKeys = Object.keys(headerMappings);
+
+        const csvColumnHeader = headerKeys.map((key) => headerMappings[key]).join(columnDelimiter);
         let csvStr = csvColumnHeader + lineDelimiter;
-        medData.forEach((item) => {
-            keys.forEach((key, index) => {
-                if (index > 0 && index < keys.length) {
-                    // if( (index > 0) && (index < keys.length-1) ) {
+
+        jsonData.forEach((item) => {
+            headerKeys.forEach((key, index) => {
+                if (index > 0 && index < headerKeys.length) {
                     csvStr += columnDelimiter;
                 }
-                switch (key) {
-                    case 'preferred_name':
-                        csvStr += `"${item[key]}"`;
-                        break;
-                    case 'casrn':
-                        csvStr += `"${item[key]}"`;
-                        break;
-                    case 'use_category1':
-                        csvStr += `"${item[key]}"`;
-                        break;
-                    case 'med_pod_med':
-                        csvStr += `"${printFloat(pod_med_processed(item[key]))}"`;
-                        break;
-
-                    case 'min_pod_med':
-                        csvStr += `"${printFloat(pod_med_processed(item[key]))}"`;
-                        break;
-
-                    case 'max_pod_med':
-                        csvStr += `"${printFloat(pod_med_processed(item[key]))}"`;
-                        break;
-                    case 'mort_med_pod_med':
-                        csvStr += `"${printFloat(pod_med_processed(item[key]))}"`;
-                        break;
-
-                    case 'mort_min_pod_med':
-                        csvStr += `"${printFloat(pod_med_processed(item[key]))}"`;
-                        break;
-
-                    case 'mort_max_pod_med':
-                        csvStr += `"${printFloat(pod_med_processed(item[key]))}"`;
-                        break;
-                    default:
-                        csvStr += 'undefined';
+                let value = item[key] || '';
+                if (
+                    key === 'med_pod_med' ||
+                    key === 'min_pod_med' ||
+                    key === 'max_pod_med' ||
+                    key === 'mort_med_pod_med' ||
+                    key === 'mort_min_pod_med' ||
+                    key === 'mort_max_pod_med'
+                ) {
+                    value = pod_med_processed(value);
                 }
+                csvStr += `"${value}"`;
             });
             csvStr += lineDelimiter;
         });
         csvStr = encodeURIComponent(csvStr);
 
-        let dataUri = 'data:text/csv;charset=utf-8,' + csvStr;
-        let linkElement = document.createElement('a');
+        const dataUri = 'data:text/csv;charset=utf-8,' + csvStr;
+        const linkElement = document.createElement('a');
         linkElement.setAttribute('href', dataUri);
         linkElement.setAttribute('download', filename);
         linkElement.click();
@@ -199,64 +227,123 @@ class RankedBarchartHandler extends React.Component {
         }
     }
 
+    _renderHelpText() {
+        if (!this.state.showHelpText) {
+            return null;
+        }
+        if (this.props.visualization === INTVIZ_HEATMAP) {
+            return (
+                <div className="alert alert-info">
+                    <p>
+                        Test substances are ranked from top to bottom (y-axis of the chart) by
+                        lowest BMC (most active) to highest. The Use categories of test substances
+                        are color coded next to each test substance name. If more than one
+                        non-mortality endpoint was selected, the endpoint with the lowest BMC is
+                        included. Each BMC for ranking is the median value of the BMC from the
+                        triplicate testing and is shown as the colored dot. The range of lowest BMC
+                        and the highest BMC is shown as the colored bar.
+                    </p>
+
+                    <p>
+                        Additionally, the BMC values of the corresponding mortality (median, min and
+                        max) are shown as the black dot and the black dashed line, respectively. If
+                        the substance is inactive in either the non-mortality endpoints or the
+                        mortality endpoint, no dots or bars will be shown.
+                    </p>
+                    <p>
+                        The BMC values of all substances of the endpoint with the lowest median BMC
+                        are listed below in tabular form (“-“ for inactive).
+                    </p>
+                </div>
+            );
+        } else {
+            return (
+                <div className="alert alert-info">
+                    <p>
+                        Specificity values for each test substance appear on the right-side of the
+                        chart and are ranked by most to least specific. The use categories of test
+                        substances are color coded next to each test substance name. The user can
+                        select more than one non-mortality endpoint.
+                    </p>
+
+                    <p>
+                        BMC value of the altered phenotype with the lowest summarized BMC among the
+                        selected non-mortality endpoints is shown as the colored dot, and the
+                        corresponding mortality (if active) is shown as the black dot (median) and
+                        the black bar (min-max BMC). If the substance is inactive in either the
+                        non-mortality endpoints or the mortality endpoint, no dots or bars will be
+                        shown.
+                    </p>
+                    <p>
+                        The BMC values of test substances with specific effect (default, but other
+                        types can be toggled) listed below in tabular form (“-“ for inactive).
+                    </p>
+                </div>
+            );
+        }
+    }
+
     render() {
         if (!this.state.data) {
             return <Loading />;
         }
         // let url = getBmdsUrl(this.state.assays, this.state.readouts);
-        let chartName = this.props.visualization === BMDVIZ_ACTIVITY ? 'activity' : 'selectivity',
+        let chartName = this.props.visualization === BMDVIZ_ACTIVITY ? 'activity' : 'specificity',
             tableName =
                 this.props.visualization === BMDVIZ_ACTIVITY
                     ? 'all chemicals'
                     : 'selected chemicals',
-            { plotData, tableData } = this.filterData();
+            title =
+                this.props.visualization === BMDVIZ_ACTIVITY
+                    ? 'More information on BMC by activity'
+                    : 'More information on BMC by specificity',
+            plotData = this._getFilteredData();
+
         return (
             <div>
-                <h2>
+                <h4 className={`${styles.labelHorizontal} ${styles.labelNormal}`}>
                     BMC values: sorted by {chartName}
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    {/*<button*/}
-                    {/*    onClick={() => svg_download_form('BMC_heatmap01')}*/}
-                    {/*    class="btn btn-primary"*/}
-                    {/*>*/}
-                    {/*    Export plot*/}
-                    {/*</button>*/}
-                </h2>
+                    <HelpButtonWidget stateHolder={this} headLevel={'h2'} title={title} />
+                </h4>
+                {this._renderHelpText()}
+                <div>
+                    <h4 className={` ${styles.labelNormal}`}>
+                        <button
+                            onClick={() => svg_download_form('BMC_heatmap01')}
+                            className={`fa fa-camera ${styles['pointer-button']}`}
+                        ></button>
+                        <span> Image</span>
+                    </h4>
+                </div>
                 <RankedBarchart
-                    // the visualization function not affect the plot
-                    // the selectedAxis is the main function to show tables,
-                    // check the RankedBarchart file, selectedAxis part
                     data={plotData}
                     visualization={this.props.visualization}
                     selectedAxis={this.props.selectedAxis}
                     selectivityList={this.props.selectivityList}
                 />
                 <p class="help-block">
-                    <b>Interactivity note:</b> This barchart is interactive. Click an item to view
-                    the concentration-response curves from which the BMC was derived.
+                    <b>Interactivity note:</b> This chart is interactive. Click an item to view the
+                    concentration-response curves from which the BMC was derived.
                 </p>
-                <h2>
-                    BMC for {tableName}
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    {/*<button*/}
-                    {/*    onClick={() => this.data_exportToCSVFile(tableData)}*/}
-                    {/*    class="btn btn-primary"*/}
-                    {/*>*/}
-                    {/*    Export data .csv*/}
-                    {/*</button>*/}
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    {/*<button*/}
-                    {/*    onClick={() => this.data_exportToJsonFile(tableData)}*/}
-                    {/*    class="btn btn-primary"*/}
-                    {/*>*/}
-                    {/*    Export data .json*/}
-                    {/*</button>*/}
-                </h2>
-                {this.props.visualization === BMDVIZ_ACTIVITY ? (
-                    <BmdTable data={tableData} />
-                ) : (
-                    <SelectivityTable data={tableData} />
-                )}
+                <div>
+                    <h4 className={`${styles.labelHorizontal} ${styles.labelNormal}`}>
+                        BMC for {tableName}
+                        <HelpButtonWidget stateHolder={this} headLevel={'h2'} title={title} />
+                    </h4>
+                    <div>
+                        <h4 className={` ${styles.labelNormal}`}>
+                            <button
+                                onClick={() => this._exportCsv(plotData)}
+                                className={`fa fa-download ${styles['pointer-button']}`}
+                            ></button>
+                            <span> Data</span>
+                        </h4>
+                    </div>
+                </div>
+
+                {/*{this.props.visualization === BMDVIZ_ACTIVITY ? (<BmdTable data={plotData}/>) : (*/}
+                {/*    <SelectivityTable data={plotData}/>)}*/}
+                <BmdTable data={plotData} visualization={this.props.visualization} />
             </div>
         );
     }

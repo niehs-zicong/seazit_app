@@ -2,7 +2,7 @@ import $ from '$';
 import _ from 'lodash';
 import React from 'react';
 import BaseWidget from './BaseWidget';
-import styles from '../components/graph.css';
+import styles from '../style.css';
 
 import {
     renderSelectMultiWidget,
@@ -25,7 +25,7 @@ class OntologyWidget extends BaseWidget {
     _renderFilterBy(state) {
         return (
             <div>
-                <label className={styles.labelHorizaontal}>
+                <label className={styles.labelHorizontal}>
                     Select developmental phenotype group:
                     <HelpButtonWidget
                         stateHolder={this}
@@ -110,7 +110,7 @@ class OntologyWidget extends BaseWidget {
                     level developmental defect phenotype groups. We created two types of
                     developmental defect phenotypes, the general grouping (n = 10) and the granular
                     grouping (n = 18). See{' '}
-                    <a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/">Datasets page</a> for
+                    <a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/"> Datasets page</a> for
                     more information .
                 </p>
             </div>
