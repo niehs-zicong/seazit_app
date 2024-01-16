@@ -4,7 +4,8 @@ import * as d3 from 'd3';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import RankedBarchartHandler from '../components/RankedBarchartHandler';
-import styles from '../components/graph.css';
+import styles from '../style.css';
+import HelpButtonWidget from './HelpButtonWidget';
 
 class BmdCheckBoxWidget extends BaseWidget {
     /*
@@ -13,13 +14,60 @@ class BmdCheckBoxWidget extends BaseWidget {
     */
     constructor(props) {
         super(props);
-    }
 
+        this.state = {
+            showHelpText: false,
+        };
+    }
+    _renderHelpText() {
+        if (!this.state.showHelpText) {
+            return null;
+        }
+        return (
+            <div className="alert alert-info">
+                <p>
+                    Text box: “By default, only the test substances eliciting specific effects will
+                    appear.
+                </p>
+                <ul>
+                    <li>
+                        specific = a test substance produces quantifiable alteration(s) in
+                        phenotypes at a concentration lower than that which causes overt toxicity
+                        (i.e., mortality)
+                    </li>
+                    <li>
+                        non-specific = a test substance produces both altered phenotypes and
+                        mortality at similar concentrations
+                    </li>
+                    <li>
+                        non-toxic = no changes to phenotype or survival occurred at the
+                        concentrations evaluated
+                    </li>
+                    <li>
+                        inconclusive = specificity couldn’t be determined based on differences among
+                        plate replicates and requires more testing
+                    </li>
+                    <li>
+                        not evaluated = a phenotype that was not assessed in a particular laboratory
+                    </li>
+                </ul>
+            </div>
+        );
+    }
     render() {
         let state = this.props.stateHolder.state;
         return (
             <div>
-                <label>Developmental Toxicity Classification:</label>
+                <label className={styles.labelHorizontal}>
+                    Developmental Toxicity Classification:
+                    <HelpButtonWidget
+                        stateHolder={this}
+                        headLevel={'label'}
+                        title={'More information on developmental toxicity classifications'}
+                    />
+                </label>
+                {this._renderHelpText()}
+
                 {/*{this.props.stateHolder.state.selectivityList.map((d, index) => {*/}
                 {state.selectivityList.map((d, index) => {
                     return (

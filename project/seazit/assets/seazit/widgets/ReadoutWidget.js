@@ -16,6 +16,7 @@ import {
     integrative_Granular,
     integrative_General,
 } from '../shared';
+import styles from '../style.css';
 
 class ReadoutWidget extends BaseWidget {
     /*
@@ -27,6 +28,9 @@ class ReadoutWidget extends BaseWidget {
 
         this.state = {
             showHelpText: false,
+            showCategoryHelpText: null,
+            showDatasetHelpText: false,
+            showEndpointHelpText: false,
         };
     }
 
@@ -38,7 +42,7 @@ class ReadoutWidget extends BaseWidget {
         };
     };
 
-    _renderSingleDatasetSelector(state) {
+    _renderSingleDatasetSelector(state, renderHelpButtonWidget, renderHelpText) {
         let options = _.chain(state.protocol_data)
             .map(this.mapFun)
             .sortBy('seazit_protocol_id')
@@ -49,93 +53,46 @@ class ReadoutWidget extends BaseWidget {
             'dataset',
             options,
             state.assays,
-            this.handleSelectChange
+            this.handleSelectChange,
+            renderHelpButtonWidget,
+            renderHelpText
         );
     }
 
-    _renderMultipleDatasetSelector(state) {
+    _renderMultipleDatasetSelector(state, renderHelpButtonWidget, renderHelpText) {
         let options = _.chain(state.protocol_data)
             .map(this.mapFun)
             .sortBy('seazit_protocol_id')
             .value();
 
-        // const helpText = this._renderHelpText();
-        const renderHelpText = () => {
-            if (!this.state.showHelpText) {
-                return null;
-            }
-
-            return (
-                <div className="alert alert-info">
-                    <p>
-                        Study abbreviations: Dose range finding study = DRF and Definitive study =
-                        Def. Note: there is no limit to the number of datasets you can select. More
-                        information can be found on the
-                        <a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/"> Datasets page</a>.
-                    </p>
-                </div>
-            );
-        };
-        const renderHelpButtonWidget = () => {
-            return (
-                <HelpButtonWidget
-                    stateHolder={this}
-                    headLevel={'label'}
-                    title={'Click to toggle help-text'}
-                />
-            );
-        };
-        switch (state.tabFlag) {
-            case ConcentrationResponseTab:
-                return renderSelectMultiWidget(
+        return (
+            <div>
+                {renderSelectMultiWidget(
                     'assays',
                     'dataset',
                     options,
                     state.assays,
-                    this.handleSelectMultiChange
-                );
-            case BMCTab:
-            case IntegrativeAnalysesTab:
-                return (
-                    <div>
-                        {renderSelectMultiWidget(
-                            'assays',
-                            'dataset',
-                            options,
-                            state.assays,
-                            this.handleSelectMultiChange,
-                            renderHelpButtonWidget,
-                            renderHelpText
-                        )}
-                    </div>
-                );
-            default:
-                // Default action or other cases
-                return null;
-        }
+                    this.handleSelectMultiChange,
+                    renderHelpButtonWidget,
+                    renderHelpText
+                )}
+            </div>
+        );
     }
 
-    _renderFilterBy(state) {
+    _renderFilterBy(state, renderHelpButtonWidget, renderHelpText) {
         if (state.assays.length === 0) {
             return null;
         }
         return (
             <div>
-                <label>Filter endpoints by:</label>
+                {/*<label>Filter endpoints by:</label>*/}
+                <label className={styles.labelHorizontal}>
+                    Filter endpoints by:
+                    {renderHelpButtonWidget && renderHelpButtonWidget()}
+                </label>
+                {renderHelpText && renderHelpText()}
                 <div className="radio">
-                    <label>
-                        <input
-                            type="radio"
-                            name="ontologyType"
-                            onChange={this.handleRadioChange}
-                            value={integrative_Granular}
-                            checked={state.ontologyType === integrative_Granular}
-                        />
-                        Granular
-                    </label>
-
-                    <span style={{ paddingLeft: '0.5em', paddingRight: '0.5em' }}>|</span>
-
                     <label>
                         <input
                             type="radio"
@@ -146,76 +103,62 @@ class ReadoutWidget extends BaseWidget {
                         />
                         General
                     </label>
+
+                    <span style={{ paddingLeft: '0.5em', paddingRight: '0.5em' }}>|</span>
+
+                    <label>
+                        <input
+                            type="radio"
+                            name="ontologyType"
+                            onChange={this.handleRadioChange}
+                            value={integrative_Granular}
+                            checked={state.ontologyType === integrative_Granular}
+                        />
+                        Granular
+                    </label>
                 </div>
             </div>
         );
     }
 
-    _renderMultipleEndpointSelector(state) {
+    _renderMultipleEndpointSelector(state, renderHelpButtonWidget, renderHelpText) {
         //console.log(state.assays);
         let assays = Array.isArray(state.assays)
-                ? state.assays.map((item) => Number(item))
-                : [Number(state.assays)],
-            opts,
-            ontologyGroup,
-            endPointFilterFun,
-            endPointSortFun,
-            groupBy;
-        console.log(assays);
+            ? state.assays.map((item) => Number(item))
+            : [Number(state.assays)];
+        let opts = null;
+        let endPointFilterFun = null;
+        let endPointSortFun = null;
+        let keyFunction = null;
+        let groupBy = null;
         switch (state.tabFlag) {
             case ConcentrationResponseTab:
                 // group by category,
                 // no endpoint filter function,
                 //   Sort endpoint, put 'Mortality@24',      'Mortality@120',  'MalformedAny+Mort@120' be first 3 endpoints.
                 groupBy = 'category';
-                endPointSortFun = (e) => {
-                    return (
-                        'Mortality@24' !== e.label &&
-                        'Mortality@120' !== e.label &&
-                        'MalformedAny+Mort@120' !== e.label
-                    );
-                };
+                endPointSortFun = (e) =>
+                    !['Mortality@24', 'Mortality@120', 'MalformedAny+Mort@120'].includes(e.label);
                 break;
             case BMCTab:
                 // group by 'developmental_defect_grouping_granular' or 'developmental_defect_grouping_general',
                 //  endpoint filter out, 'Mortality@24', 'Mortality@120', endpoint contains @24
                 //  no sort function.
-                endPointFilterFun = (r) => {
-                    return (
-                        r.endpoint_name !== 'Mortality@120' &&
-                        r.endpoint_name !== 'Mortality@24' &&
-                        !r.endpoint_name.includes('@24')
+                endPointFilterFun = (r) =>
+                    !['Mortality@120', 'Mortality@24', '@24'].some((term) =>
+                        r.endpoint_name.includes(term)
                     );
-                };
-                if (state.ontologyType === integrative_Granular) {
-                    groupBy = 'developmental_defect_grouping_granular';
-                } else {
-                    groupBy = 'developmental_defect_grouping_general';
-                }
+                groupBy =
+                    state.ontologyType === integrative_Granular
+                        ? 'developmental_defect_grouping_granular'
+                        : 'developmental_defect_grouping_general';
+                keyFunction = (key) => (key === 'null' ? '(no labels)' : key);
                 break;
             case IntegrativeAnalysesTab:
-                // Currtently no endpoint used in this tab. If use, the follow is code.
-                // group by 'developmental_defect_grouping_granular' or 'developmental_defect_grouping_general',
-                //  endpoint filter out, 'Mortality@24', 'Mortality@120', endpoint contains @24
-                //  no sort function.
-                // endPointFilterFun = (r) => {
-                //     return (
-                //         r.endpoint_name !== 'Mortality@120' &&
-                //         r.endpoint_name !== 'Mortality@24' &&
-                //         !r.endpoint_name.includes('@24')
-                //     );
-                // };
-                //
-                // if (state.ontologyType === integrative_Granular) {
-                //     groupBy = 'developmental_defect_grouping_granular';
-                // } else {
-                //     groupBy = 'developmental_defect_grouping_general';
-                // }
                 break;
             default:
                 return null;
         }
-
         opts = _.chain(state.Seazit_ui_panel)
             .filter((r) => {
                 // I used to use _.includes(). I found this is wrong. if assays is double digits ex: 10,
@@ -232,11 +175,16 @@ class ReadoutWidget extends BaseWidget {
                     description: r.endpoint_description,
                 };
             })
-            // .uniqBy('key')
             .sortBy('label')
             .sortBy(endPointSortFun)
             .groupBy(groupBy)
             .mapValues((group) => _.uniqBy(group, 'key'))
+            .thru((result) =>
+                keyFunction ? _.mapKeys(result, (value, key) => keyFunction(key)) : result
+            )
+            .toPairs()
+            .orderBy(0) // Sort by the group key (the first element in each pair)
+            .fromPairs()
             .value();
         // console.log(endPointFilterFun)
         // console.log('state.Seazit_ui_panel', state.Seazit_ui_panel);
@@ -249,33 +197,226 @@ class ReadoutWidget extends BaseWidget {
             'endpoint',
             opts,
             state.readouts,
-            this.handleSelectMultiChange
+            this.handleSelectMultiChange,
+            renderHelpButtonWidget,
+            renderHelpText
         );
     }
 
     render() {
         let state = this.props.stateHolder.state;
+        let DatasetHelpText = null;
+        let EndpointtHelpText = null;
+        let DatasetHelpButtonWidget = null;
+        let EndpointHelpButtonWidget = null;
+
         switch (state.tabFlag) {
             case ConcentrationResponseTab:
+                DatasetHelpText = () => {
+                    if (!this.state.showHelpText) {
+                        return null;
+                    }
+                    return (
+                        <div className="alert alert-info">
+                            <p>
+                                Study abbreviations: Dose range finding study = DRF and Definitive
+                                study = Def. Note: there is no limit to the number of datasets you
+                                can select. More information can be found on the
+                                <a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/">
+                                    {' '}
+                                    Datasets page
+                                </a>
+                                .
+                            </p>
+                        </div>
+                    );
+                };
+
+                DatasetHelpButtonWidget = () => {
+                    return (
+                        <HelpButtonWidget
+                            stateHolder={this}
+                            headLevel={'label'}
+                            title={'Information on datasets'}
+                        />
+                    );
+                };
+
+                EndpointtHelpText = () => {
+                    if (!this.state.showHelpText) {
+                        return null;
+                    }
+                    return (
+                        <div className="alert alert-info">
+                            <p>Custom help text for ConcentrationResponseTab.</p>
+                        </div>
+                    );
+                };
+                EndpointHelpButtonWidget = () => {
+                    return (
+                        <HelpButtonWidget
+                            stateHolder={this}
+                            headLevel={'label'}
+                            title={'More information on endpoints'}
+                        />
+                    );
+                };
                 return (
                     <div>
-                        {this._renderMultipleDatasetSelector(state)}
+                        {this._renderMultipleDatasetSelector(
+                            state,
+                            DatasetHelpButtonWidget,
+                            DatasetHelpText
+                        )}
                         <br />
+                        {this._renderMultipleEndpointSelector(
+                            state,
+                            EndpointHelpButtonWidget,
+                            EndpointtHelpText
+                        )}
+                    </div>
+                );
+            case BMCTab:
+                // stateholder
+
+                // Example state holders
+                // const datasetHelpStateHolder = {
+                //     state: {
+                //         showHelpText: false,
+                //         helpButtonContentId: null,
+                //         // ... other properties you might need
+                //     },
+                //     setState: (newState) => {
+                //         datasetHelpStateHolder.state = { ...datasetHelpStateHolder.state, ...newState };
+                //     },
+                // };
+                //
+                // const endpointHelpStateHolder = {
+                //     state: {
+                //         showHelpText: false,
+                //         helpButtonContentId: null,
+                //         // ... other properties you might need
+                //     },
+                //     setState: (newState) => {
+                //         endpointHelpStateHolder.state = { ...endpointHelpStateHolder.state, ...newState };
+                //     },
+                // };
+
+                DatasetHelpButtonWidget = () => {
+                    return (
+                        <HelpButtonWidget
+                            stateHolder={this}
+                            headLevel={'label'}
+                            title={'Information on datasets'}
+                            contentId="datasetHelp"
+                        />
+                    );
+                };
+                DatasetHelpText = () => {
+                    if (!this.state.showDatasetHelpText) {
+                        return null;
+                    }
+                    return (
+                        <div className="alert alert-info">
+                            <p>
+                                Study abbreviations: Dose range finding study = DRF and Definitive
+                                study = Def. Note that only one dateset can be selected at one time.
+                                More information can be found on the
+                                <a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/">
+                                    {' '}
+                                    Datasets page
+                                </a>
+                                .
+                            </p>
+                        </div>
+                    );
+                };
+
+                EndpointHelpButtonWidget = () => {
+                    return (
+                        <HelpButtonWidget
+                            stateHolder={this}
+                            headLevel={'label'}
+                            title={'More information on endpoints'}
+                            contentId="endpointHelp"
+                        />
+                    );
+                };
+
+                EndpointtHelpText = () => {
+                    if (!this.state.showEndpointHelpText) {
+                        return null;
+                    }
+                    return (
+                        <div className="alert alert-info">
+                            <p>
+                                Detailed recordings of each laboratory are grouped into
+                                corresponding higher level developmental defect phenotype groups. We
+                                created two types of developmental defect phenotypes, the general
+                                grouping and the granular grouping. See
+                                <a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/">
+                                    {' '}
+                                    Datasets page
+                                </a>{' '}
+                                for more information.
+                            </p>
+                        </div>
+                    );
+                };
+                return (
+                    <div>
+                        {this._renderSingleDatasetSelector(
+                            state,
+                            DatasetHelpButtonWidget,
+                            DatasetHelpText
+                        )}
+                        <br />
+                        {this._renderFilterBy(state, EndpointHelpButtonWidget, EndpointtHelpText)}
                         {this._renderMultipleEndpointSelector(state)}
                     </div>
                 );
 
-            case BMCTab:
+            case IntegrativeAnalysesTab:
+                DatasetHelpText = () => {
+                    if (!this.state.showHelpText) {
+                        return null;
+                    }
+                    return (
+                        <div className="alert alert-info">
+                            <p>
+                                Study abbreviations: Dose range finding study = DRF and Definitive
+                                study = Def. Note: there is no limit to the number of datasets you
+                                can select. More information can be found on the
+                                <a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/">
+                                    {' '}
+                                    Datasets page
+                                </a>
+                                .
+                            </p>
+                        </div>
+                    );
+                };
+                DatasetHelpButtonWidget = () => {
+                    return (
+                        <HelpButtonWidget
+                            stateHolder={this}
+                            headLevel={'label'}
+                            title={'Click to toggle help-text'}
+                        />
+                    );
+                };
                 return (
                     <div>
-                        {this._renderSingleDatasetSelector(state)}
-                        <br />
-                        {this._renderFilterBy(state)}
-                        {this._renderMultipleEndpointSelector(state)}
+                        {this._renderMultipleDatasetSelector(
+                            state,
+                            DatasetHelpButtonWidget,
+                            DatasetHelpText
+                        )}
                     </div>
                 );
-            case IntegrativeAnalysesTab:
-                return <div>{this._renderMultipleDatasetSelector(state)}</div>;
+            default:
+                // Default action or other cases
+                return null;
         }
     }
 }

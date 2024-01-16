@@ -27,6 +27,17 @@ class HelpButtonWidget extends BaseWidget {
 
     handleHelpTextToggle() {
         let stateHolder = this.props.stateHolder;
+        let contentId = this.props.contentId;
+        // const { stateHolder, contentId } = {this.props.stateHolder, this.props.contentId};
+        if (contentId === 'datasetHelp') {
+            stateHolder.setState({
+                showDatasetHelpText: !stateHolder.state.showDatasetHelpText,
+            });
+        } else if (contentId === 'endpointHelp') {
+            stateHolder.setState({
+                showEndpointHelpText: !stateHolder.state.showEndpointHelpText,
+            });
+        }
 
         if (this.props.contentId !== stateHolder.state.helpButtonContentId) {
             stateHolder.setState({
@@ -88,6 +99,8 @@ class HelpButtonWidget extends BaseWidget {
 HelpButtonWidget.propTypes = {
     headLevel: PropTypes.string,
     title: PropTypes.string.isRequired,
+    stateHolder: PropTypes.object,
+    contentId: PropTypes.string,
 };
 
 export default HelpButtonWidget;

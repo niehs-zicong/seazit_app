@@ -2,19 +2,15 @@ import _ from 'lodash';
 import * as d3 from 'd3';
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import styles from './graph.css';
+import styles from '../style.css';
 import Loading from 'utils/Loading';
 import HelpButtonWidget from '../widgets/HelpButtonWidget';
-// import styles from './graph.css';
-import './graph.css';
-
 import Plotly from 'plotly.js-dist';
 // import FileReaderInput from 'react-file-reader';
 
 import {
     printFloat,
     pod_med_processed,
-    integrativeHandleCellClick,
     NO_COLLAPSE,
     URL_SANKEYDATA,
     integrative_General,
@@ -46,11 +42,6 @@ class SankeyPlot extends React.Component {
     }
 
     updateData(data) {
-        // let Sankeydata = loadSankeydata(this);
-        //
-        // //console.log('cells');
-        // //console.log(this.props.cells);
-        // //console.log(data)
         let cells = this.props.cells,
             ontology = data.Seazit_ontology.filter(
                 (item) =>
@@ -103,7 +94,8 @@ class SankeyPlot extends React.Component {
         this.renderPlot(plotData, nodesData);
     }
 
-    renderPlot(d, nodes) {
+    renderPlot(links, nodes) {
+        // console.log(links, nodes)
         //
         // if (this.refs[d.key] === undefined) {
         //     return;
@@ -111,28 +103,53 @@ class SankeyPlot extends React.Component {
         let ontologyType =
             this.props.cells.ontologyType == integrative_Granular ? 'granular' : 'general';
         let getStyledLabel = (node_name, node_level) => {
-            if (node_name == this.props.cells.ontologyGroupName && node_level == ontologyType) {
-                return `<span style='color: red; 
-                font-size: 15px; 
-                font-weight: bold;text-shadow: none;'>${node_name}</span>`;
-            } else {
-                return `<span style=' font-weight: bold; 
-                font-size: 15px; 
-                text-shadow: none;'>${node_name}</span>`;
-            }
+            const style = {
+                'font-weight': 'bold',
+                'font-size': '15px',
+                'text-shadow': 'none',
+                color:
+                    node_name === this.props.cells.ontologyGroupName && node_level === ontologyType
+                        ? 'red'
+                        : 'inherit',
+            };
+
+            const styleString = Object.entries(style)
+                .map(([key, value]) => `${key}: ${value}`)
+                .join(';');
+            return `<span style='${styleString}'>${node_name}</span>`;
+        };
+
+        let getNodeLevelLabel = (node_level) => {
+            const style = {
+                'font-weight': 'bold',
+                'font-size': '15px',
+                'text-shadow': 'none',
+            };
+            const contentMap = {
+                recording: 'Laboratory Specific Recording Term:',
+                term: 'Phenotype Ontology Term:',
+                granular: 'Granular Phenotype Term:',
+                general: 'General Phenotype Term:',
+            };
+
+            const content = contentMap[node_level] || '';
+            const styleString = Object.entries(style)
+                .map(([key, value]) => `${key}: ${value}`)
+                .join(';');
+            return `<span style='${styleString}'>${content}</span>`;
         };
 
         let fig = {
             node_name: nodes.map((item) => getStyledLabel(item.node_name, item.node_level)),
+            node_hovertext: nodes.map((item) => getNodeLevelLabel(item.node_level)),
             node_color: nodes.map((item) => item.node_color),
-            source_id: d.map((item) => parseInt(item.source_id)),
-            target_id: d.map((item) => parseInt(item.target_id)),
-            source_name: d.map((item) => item.source_name),
-            target_name: d.map((item) => item.target_name),
-            value: d.map((item) => item.value),
-            flow_color: d.map((item) => item.flow_color),
+            source_id: links.map((item) => parseInt(item.source_id)),
+            target_id: links.map((item) => parseInt(item.target_id)),
+            source_name: links.map((item) => item.source_name),
+            target_name: links.map((item) => item.target_name),
+            value: links.map((item) => item.value),
+            flow_color: links.map((item) => item.flow_color),
         };
-        //console.log(fig);
 
         var data = {
             type: 'sankey',
@@ -146,6 +163,8 @@ class SankeyPlot extends React.Component {
                 },
                 label: fig.node_name,
                 color: fig.node_color,
+                customdata: fig.node_hovertext,
+                hovertemplate: '%{customdata}<br />%{label}',
             },
 
             link: {
@@ -155,94 +174,22 @@ class SankeyPlot extends React.Component {
                 value: fig.value,
             },
         };
-        //console.log(data);
-
         // Define the layout options for the Sankey plot
         var layout = {
-            title: ` Sankey Diagram of <span style='color: red;font-weight: bold;'>${this.props.cells.ontologyGroupName}</span>`,
+            // title: ` Sankey Diagram of <span style='color: red;font-weight: bold;'>${this.props.cells.ontologyGroupName}</span>`,
             // i use width to be 2400 to avoid node label overlapping.
-            // TODO
-            // width: 1550,
-            // height: 450,
             autosize: true,
             font: {
                 size: 20,
             },
-
             hoverlabel: {
                 font: {
                     size: 20,
                 },
             },
-
-            annotations: [
-                {
-                    text: `<span style='font-weight: bold;text-shadow: none;'>Laboratory specific <br> recording term</span>`,
-                    xref: 'paper',
-                    yref: 'paper',
-                    x: 0,
-                    xanchor: 'left',
-                    y: 0,
-                    yanchor: 'top',
-                    showarrow: false,
-                    bgcolor: 'rgba(97, 97, 97, 0.9)', // Set the background color here
-
-                    font: {
-                        color: '#fff',
-                        size: 20,
-                    },
-                },
-                {
-                    text: `<span style='font-weight: bold;text-shadow: none;'>${this.props.cells.ontologyGroupName}<br>Zebrafish Phenotype Ontology term</span>`,
-                    xref: 'paper',
-                    yref: 'paper',
-                    x: 0.25,
-                    xanchor: 'left',
-                    y: 0,
-                    yanchor: 'top',
-                    showarrow: false,
-                    bgcolor: 'rgba(97, 97, 97, 0.9)', // Set the background color here
-
-                    font: {
-                        color: '#fff',
-                        size: 20,
-                    },
-                },
-                {
-                    text: `<span style='font-weight: bold;text-shadow: none;'>Granular phenotype <br> term</span>`,
-
-                    xref: 'paper',
-                    yref: 'paper',
-                    x: 0.8,
-                    xanchor: 'right',
-                    y: 0,
-                    yanchor: 'top',
-                    showarrow: false,
-                    bgcolor: 'rgba(97, 97, 97, 0.9)', // Set the background color here
-
-                    font: {
-                        color: '#fff',
-                        size: 20,
-                    },
-                },
-                {
-                    text: `<span style='display: flex; flex-direction: column; font-weight: bold;text-shadow: none;'>General phenotype <br> term</span>`,
-                    xref: 'paper',
-                    yref: 'paper',
-                    x: 1,
-                    xanchor: 'right',
-                    y: 0,
-                    yanchor: 'top',
-                    showarrow: false,
-                    font: {
-                        color: '#fff',
-                        size: 20,
-                    },
-                    bgcolor: 'rgba(97, 97, 97, 0.9)', // Set the background color here
-                },
-            ],
         };
 
+        // Now filteredNodes contains only the nodes relevant to your link data
         Plotly.newPlot('SankeyPlot', [data], layout);
     }
 
@@ -295,14 +242,16 @@ class SankeyPlot extends React.Component {
         }
 
         let colNum = Math.ceil(12 / this.props.cols);
-
         return (
             <div>
-                <HelpButtonWidget
-                    stateHolder={this}
-                    headLevel={'h2'}
-                    title={'More information on ontology and phenotype terms'}
-                />
+                <h4 className={`${styles.labelHorizontal}`}>
+                    &nbsp;&nbsp;&nbsp; Sankey Diagram
+                    <HelpButtonWidget
+                        stateHolder={this}
+                        headLevel={'h2'}
+                        title={'More information on ontology and phenotype terms'}
+                    />
+                </h4>
                 {this._renderHelpText()}
                 <br />
                 <div className={'row-fluid'} id="SankeyPlot"></div>
