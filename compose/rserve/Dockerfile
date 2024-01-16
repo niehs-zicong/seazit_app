@@ -1,4 +1,5 @@
-FROM rocker/tidyverse:3.4.3
+FROM rocker/tidyverse:4.0.0
+#FROM rocker/tidyverse:3.4.3
 
 # install R and Rserve
 # r-base and r-base-dev for R
@@ -6,9 +7,15 @@ FROM rocker/tidyverse:3.4.3
 # libssl-dev required for Rserve
 # libcurl4-openssl-dev required for devtools
 # default-jdk & default-jre for CDK
-RUN apt-get update && \
-    apt-get install -y \
-        curl \
+#RUN apt-get update && \
+RUN apt-get update && apt-get install -y apt-transport-https
+RUN echo 'deb http://private-repo-1.hortonworks.com/HDP/ubuntu14/2.x/updates/2.4.2.0 HDP main' >> /et$
+RUN echo 'deb http://private-repo-1.hortonworks.com/HDP-UTILS-1.1.0.20/repos/ubuntu14 HDP-UTILS main'$
+RUN echo 'deb [arch=amd64] https://apt-mo.trafficmanager.net/repos/azurecore/ trusty main' >> /etc/ap$
+#RUN DEBIAN_FRONTEND=noninteractive apt-get -yq install {curl}
+
+RUN apt-get -y install curl
+RUN    apt-get install -y \
         libssl-dev \
         libcurl4-openssl-dev \
         libbz2-dev \

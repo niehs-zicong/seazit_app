@@ -4,16 +4,16 @@
     "chunks": {
         "vendor": [
             {
-                "name": "vendor.e72fc63d69912b083995.js",
-                "publicPath": "http://localhost:3000/dist/vendor.e72fc63d69912b083995.js",
-                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/vendor.e72fc63d69912b083995.js"
+                "name": "vendor.6b3e24b823e39790e1dc.js",
+                "publicPath": "http://localhost:3000/dist/vendor.6b3e24b823e39790e1dc.js",
+                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/vendor.6b3e24b823e39790e1dc.js"
             }
         ],
         "main": [
             {
-                "name": "main.e72fc63d69912b083995.js",
-                "publicPath": "http://localhost:3000/dist/main.e72fc63d69912b083995.js",
-                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/main.e72fc63d69912b083995.js"
+                "name": "main.6b3e24b823e39790e1dc.js",
+                "publicPath": "http://localhost:3000/dist/main.6b3e24b823e39790e1dc.js",
+                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/main.6b3e24b823e39790e1dc.js"
             },
             {
                 "name": "style.css",
@@ -23,12 +23,10 @@
         ],
         "manifest": [
             {
-                "name": "manifest.e72fc63d69912b083995.js",
-                "publicPath": "http://localhost:3000/dist/manifest.e72fc63d69912b083995.js",
-                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/manifest.e72fc63d69912b083995.js"
+                "name": "manifest.6b3e24b823e39790e1dc.js",
+                "publicPath": "http://localhost:3000/dist/manifest.6b3e24b823e39790e1dc.js",
+                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/manifest.6b3e24b823e39790e1dc.js"
             }
         ]
-    },
-    "error": "ModuleBuildError",
-    "message": "Module build failed: SyntaxError: Expected corresponding JSX closing tag for <h4> (327:16)\n\n  325 | \n  326 |                     <br/>\n> 327 |                 </div>\n      |                 ^\n  328 |                 <RankedBarchart\n  329 |                     data={plotData}\n  330 |                     visualization={this.props.visualization}\n"
+    }
 }

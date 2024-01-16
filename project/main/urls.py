@@ -63,7 +63,7 @@ urlpatterns = [
 ]
 
 # serve apps currently under development
-if settings.ENVIRONMENT_NAME != 'Production':
+if settings.ENVIRONMENT_NAME != 'Production' or settings.ENVIRONMENT_NAME != 'Sandbox' :
 
     urlpatterns.extend([       
 
