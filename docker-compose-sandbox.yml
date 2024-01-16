@@ -50,7 +50,7 @@ services:
     restart: always
     build:
       context: ./compose/shiny
-      dockerfile: Dockerfile-dev
+      dockerfile: Dockerfile
     ports:
       - "0.0.0.0:3839:3838"
     volumes:
