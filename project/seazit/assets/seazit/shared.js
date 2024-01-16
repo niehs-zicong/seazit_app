@@ -228,6 +228,11 @@ const AXIS_LINEAR = 1,
         if (protocol_id.length === 0 || readout_ids.length === 0) {
             return null;
         }
+        // console.log(protocol_id, readout_ids)
+        let newReadout = 'Mortality@120' + '_' + protocol_id;
+        readout_ids.push(newReadout); // Modifying the array by adding a new element
+        // console.log(protocol_id, readout_ids)
+
         let id = protocol_id,
             ro = readout_ids.join(',');
         // return url, ro is the readout_id
@@ -300,7 +305,7 @@ const AXIS_LINEAR = 1,
     integrativeHandleCellClick = function(d) {
         console.log(d);
         const headingHtml = `
-        ${d.devtoxEndPointList.length} of endpoints are associated with ${d.ontologyGroupName}
+        ${d.devtoxEndPointList.length} of ${d.endPointList.length} endpoints are associated with ${d.ontologyGroupName}
     `;
         if (d.endPointList) {
             if (d.endPointList && d.endPointList.length > 1) {
@@ -333,24 +338,38 @@ const AXIS_LINEAR = 1,
     },
     BMCHandleCellClick = function(d, clickType) {
         console.log('SingleCurveBody', d);
+        const headingHtml = `
+        ${d.endpoint_name} endpoint has the lowest BMC in selected endpoints
+    `;
         switch (clickType) {
             case 'nonviabilityData':
                 new BootstrapModal(Header, SingleCurveBody, {
-                    title: d.preferred_name + `: ` + d.endpoint_name,
+                    // title: d.preferred_name + `: ` + d.endpoint_name,
+                    title: d.endpoint_name + `+` + d.protocol_name_plot + `+` + d.preferred_name,
                     protocol_id: d.protocol_id,
                     readout_id: d.endpoint_name + '_' + d.protocol_id,
                     casrn: d.casrn,
                     final_dev_call: d.final_dev_call,
+                    heading: headingHtml,
                 });
                 break;
             case 'viabilityData':
                 new BootstrapModal(Header, SingleCurveBody, {
-                    title: d.preferred_name + `: ` + 'Mortality@120',
+                    // title: d.preferred_name + `: ` + 'Mortality@120',
+                    title:
+                        d.endpoint_name +
+                        `+` +
+                        d.protocol_name_plot +
+                        `+` +
+                        d.preferred_name +
+                        `+ ` +
+                        'Mortality@120',
                     protocol_id: d.protocol_id,
                     readout_id: 'Mortality@120' + '_' + d.protocol_id,
                     casrn: d.casrn,
                     CheckBoxDisable: true,
                     final_dev_call: d.final_dev_call,
+                    // heading: headingHtml,
                 });
                 break;
             // Add more cases if needed for different click types
@@ -369,13 +388,20 @@ const AXIS_LINEAR = 1,
         );
     },
     renderNoSelected = function(d) {
+        console.log(d);
         return (
             <div className="alert alert-info">
                 <ul>
-                    {d.hasReadouts !== undefined && !d.hasReadouts ? (
+                    {d.hasAssay !== undefined && !d.hasAssay ? (
                         <li>
-                            No <b>readouts</b> are selected. Please select at least one readout (you
-                            must first select one or more assays).
+                            No <b>endpoints</b> are selected. Please select at least one endpoint
+                            (you must first select one dataset).
+                        </li>
+                    ) : null}
+
+                    {d.hasAssay && !d.hasReadouts ? (
+                        <li>
+                            No <b>endpoints</b> are selected. Please select at least one endpoint.
                         </li>
                     ) : null}
                     {d.hasReadoutCategories !== undefined && !d.hasReadoutCategories ? (

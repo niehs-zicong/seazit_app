@@ -29,6 +29,8 @@ class ReadoutWidget extends BaseWidget {
         this.state = {
             showHelpText: false,
             showCategoryHelpText: null,
+            showDatasetHelpText: false,
+            showEndpointHelpText: false,
         };
     }
 
@@ -275,17 +277,43 @@ class ReadoutWidget extends BaseWidget {
                     </div>
                 );
             case BMCTab:
+                // stateholder
+
+                // Example state holders
+                // const datasetHelpStateHolder = {
+                //     state: {
+                //         showHelpText: false,
+                //         helpButtonContentId: null,
+                //         // ... other properties you might need
+                //     },
+                //     setState: (newState) => {
+                //         datasetHelpStateHolder.state = { ...datasetHelpStateHolder.state, ...newState };
+                //     },
+                // };
+                //
+                // const endpointHelpStateHolder = {
+                //     state: {
+                //         showHelpText: false,
+                //         helpButtonContentId: null,
+                //         // ... other properties you might need
+                //     },
+                //     setState: (newState) => {
+                //         endpointHelpStateHolder.state = { ...endpointHelpStateHolder.state, ...newState };
+                //     },
+                // };
+
                 DatasetHelpButtonWidget = () => {
                     return (
                         <HelpButtonWidget
                             stateHolder={this}
                             headLevel={'label'}
                             title={'Information on datasets'}
+                            contentId="datasetHelp"
                         />
                     );
                 };
                 DatasetHelpText = () => {
-                    if (!this.state.showHelpText) {
+                    if (!this.state.showDatasetHelpText) {
                         return null;
                     }
                     return (
@@ -310,12 +338,13 @@ class ReadoutWidget extends BaseWidget {
                             stateHolder={this}
                             headLevel={'label'}
                             title={'More information on endpoints'}
+                            contentId="endpointHelp"
                         />
                     );
                 };
 
                 EndpointtHelpText = () => {
-                    if (!this.state.showHelpText) {
+                    if (!this.state.showEndpointHelpText) {
                         return null;
                     }
                     return (
@@ -326,6 +355,7 @@ class ReadoutWidget extends BaseWidget {
                                 created two types of developmental defect phenotypes, the general
                                 grouping and the granular grouping. See
                                 <a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/">
+                                    {' '}
                                     Datasets page
                                 </a>{' '}
                                 for more information.

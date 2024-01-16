@@ -37,9 +37,6 @@ class BmdByLabMain extends React.Component {
             // loadMetadata
             metadataLoaded: false,
             metadata: null,
-            // url: null,
-            url:
-                '/seazit/api/seazit_result/bmcByLabResult/?format=json&protocol_ids=6&readouts=Abnormal_heartbeat+Mort@120_6,Abnormal_length+Mort@120_6,Altered_jaw_morphology+Mort@120_6,Altered_snout+Mort@120_6,Mortality@120_6',
             // HelpButtonWidget
             showHelpText: false,
 
@@ -48,8 +45,6 @@ class BmdByLabMain extends React.Component {
             chemicalFilterBy: CHEMFILTER_CATEGORY,
             chemicals: [],
             categories: [],
-
-            // ontologyType: integrative_Granular,
             ontologyType: integrative_General,
             //
             ontologyGroup: [],
@@ -107,14 +102,14 @@ class BmdByLabMain extends React.Component {
         });
     }
 
-    renderSelection() {
+    renderSelection(url) {
         return (
             <RankedBarchartHandler
                 visualization={this.state.visualization}
                 selectivityCutoff={this.state.selectivityCutoff}
                 selectivityList={this.state.selectivityList}
                 selectedAxis={this.state.selectedAxis}
-                url={this.state.url}
+                url={url}
             />
         );
     }
@@ -151,8 +146,13 @@ class BmdByLabMain extends React.Component {
             return <Loading />;
         }
         // for bmc lab case, readout always add Mortality@120.
-        this.state.readouts.push('Mortality@120' + '_' + this.state.assays);
-        // this.state.url = getBmdsUrl(this.state.assays, this.state.readouts);
+        // this.state.readouts.push('Mortality@120' + '_' + this.state.assays);
+        let url = getBmdsUrl(this.state.assays, this.state.readouts);
+
+        // let url2 = getBmdsUrl(this.state.assays, this.state.readouts);
+        console.log(url);
+        // console.log(url2)
+
         return (
             <div className="row-fluid">
                 <div className="col-md-12">
@@ -188,7 +188,7 @@ class BmdByLabMain extends React.Component {
                 </div>
                 <div className="col-md-9">
                     {this._renderHelpText()}
-                    {this.state.url ? this.renderSelection() : this.renderNoSelection()}
+                    {url ? this.renderSelection(url) : this.renderNoSelection()}
                 </div>
             </div>
         );

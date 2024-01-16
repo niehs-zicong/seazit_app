@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { DoseResponse, DoseResponseMort120 } from './DoseResponse';
 import SankeyPlot from './SankeyPlot';
-import styles from './graph.css';
+import styles from '../style.css';
 
 import DoseResponseGridWidget from '../widgets/DoseResponseGridWidget';
 import Plotly from 'Plotly';
@@ -35,7 +35,7 @@ function _renderHelpText(state) {
                 Detailed view of each developmental phenotype incorporated into the selected
                 phenotype group. Specific phenotype terms used per laboratory are included in each
                 figure title. Click an x-axis label of the heatmap to learn more about selected
-                phenotype .
+                phenotype.
             </p>
             <p>
                 Percent mortality at 120 hours post fertilization alone can be visualized in each
@@ -71,6 +71,7 @@ class SingleCurveBody extends React.Component {
             mortalityCheck: false,
             fill: this.props.fill,
             showHelpText: false,
+            vizHeight: 340,
         };
     }
 
@@ -98,8 +99,8 @@ class SingleCurveBody extends React.Component {
                     <DoseResponseMort120
                         stateHolder={this}
                         url={state.url}
-                        cols={2}
-                        height={400}
+                        cols={3}
+                        height={state.vizHeight}
                         collapse={COLLAPSE_WITH_Mortality120}
                         devtoxEndPointList={this.props.devtoxEndPointList}
                         final_dev_call={this.props.final_dev_call}
@@ -108,8 +109,8 @@ class SingleCurveBody extends React.Component {
                     <DoseResponse
                         stateHolder={this}
                         url={state.url}
-                        cols={2}
-                        height={400}
+                        cols={3}
+                        height={state.vizHeight}
                         collapse={NO_COLLAPSE}
                         devtoxEndPointList={this.props.devtoxEndPointList}
                         final_dev_call={this.props.final_dev_call}
@@ -132,8 +133,12 @@ class SingleCurveBody extends React.Component {
         return (
             <div className="row-fluid">
                 <div className="col-sm-2">
-                    <IntegrativeCheckBoxWidget stateHolder={this} />
+                    {/*<IntegrativeCheckBoxWidget stateHolder={this}/>*/}
+                    {this.props.CheckBoxDisable ? null : (
+                        <IntegrativeCheckBoxWidget stateHolder={this} />
+                    )}
                 </div>
+
                 {this._renderDoseResponse(this.state)}
             </div>
         );
@@ -211,6 +216,8 @@ class MultipleCurveBody extends React.Component {
         // console.log(state)
         console.log(this.props);
         console.log('MultipleCurveBody');
+        console.log(state.vizColumns);
+        console.log(state.vizHeight);
 
         const commonHeader = (
             <div className="col-sm-10">

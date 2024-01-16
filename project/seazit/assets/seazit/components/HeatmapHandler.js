@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Modal from 'react-modal';
 //import Popup from 'reactjs-popup';
 import HelpButtonWidget from '../widgets/HelpButtonWidget';
@@ -8,7 +8,6 @@ import _ from 'lodash';
 import Loading from 'utils/Loading';
 import Heatmap from './Heatmap';
 import DevtoxHeatmap from './DevtoxHeatmap';
-// import styles from '../style.css';
 import styles from '../style.css';
 
 import {
@@ -111,7 +110,7 @@ class HeatmapHandler extends React.Component {
                     .scaleLog()
                     .domain(domain)
                     .range([1, 0]),
-                continuousColorScale = function (d) {
+                continuousColorScale = function(d) {
                     return d3.interpolateViridis(scale(d));
                 };
 
@@ -123,7 +122,7 @@ class HeatmapHandler extends React.Component {
         });
     }
 
-    _exportCsv = function (jsonData) {
+    _exportCsv = function(jsonData) {
         if (jsonData.length === 0) {
             return '';
         }
@@ -186,10 +185,10 @@ class HeatmapHandler extends React.Component {
     };
 
     _getFilteredData() {
-        let getFillFunction = function (visualization, continuousColorScale, colorCategory) {
+        let getFillFunction = function(visualization, continuousColorScale, colorCategory) {
             switch (visualization) {
                 case INTVIZ_HEATMAP:
-                    return function (data) {
+                    return function(data) {
                         var color;
                         for (var i of colorCategory) {
                             if (data.final_dev_call == i['key']) {
@@ -199,7 +198,7 @@ class HeatmapHandler extends React.Component {
                         }
                     };
                 case INTVIZ_DevtoxHEATMAP:
-                    return function (data) {
+                    return function(data) {
                         switch (data.final_dev_call) {
                             // case 'dev tox':
                             //     return data.mean_pod
@@ -221,7 +220,7 @@ class HeatmapHandler extends React.Component {
                     throw 'Unknown display type.';
             }
         };
-        let getLegendData = function (visualization, scale, colorScale, colorCategory) {
+        let getLegendData = function(visualization, scale, colorScale, colorCategory) {
             switch (visualization) {
                 case INTVIZ_HEATMAP:
                     return {
@@ -260,9 +259,9 @@ class HeatmapHandler extends React.Component {
                 this.props.ontologyType == integrative_Granular
                     ? 'developmental_defect_grouping_granular'
                     : 'developmental_defect_grouping_general';
-        console.log(data)
+        console.log(data);
 
-        console.log(ontologyGroup)
+        console.log(ontologyGroup);
 
         data = _.chain(data)
             .filter((i) => ontologyGroup.includes(i[ontologyGroupType]))
@@ -289,19 +288,24 @@ class HeatmapHandler extends React.Component {
             .uniq()
             .value();
 
-        function processHeatmapData(data, xgroups, ygroups, fillFunction, selectivityOrder, sortByKey) {
+        function processHeatmapData(
+            data,
+            xgroups,
+            ygroups,
+            fillFunction,
+            selectivityOrder,
+            sortByKey
+        ) {
             const processedData = [];
-
 
             //
 
             // note for this part.
             //
 
-
             for (const x of xgroups) {
                 for (const y of ygroups) {
-                    let result = _.filter(data, {x: x, y: y});
+                    let result = _.filter(data, { x: x, y: y });
                     let endpoints = _.chain(result)
                         .map('endpoint_name')
                         .uniq()
@@ -346,29 +350,41 @@ class HeatmapHandler extends React.Component {
                     }
                 }
             }
-            console.log("plotData")
-            console.log(data)
-            console.log(processedData)
+            console.log('plotData');
+            console.log(data);
+            console.log(processedData);
 
             return processedData;
         }
 
-
         switch (this.props.visualization) {
             case INTVIZ_HEATMAP:
                 return {
-                    data: processHeatmapData(data, xgroups, ygroups, fillFunction, selectivityOrder, 'mean_pod'),
+                    data: processHeatmapData(
+                        data,
+                        xgroups,
+                        ygroups,
+                        fillFunction,
+                        selectivityOrder,
+                        'mean_pod'
+                    ),
                     legendData,
                 };
             case INTVIZ_DevtoxHEATMAP:
                 return {
-                    data: processHeatmapData(data, xgroups, ygroups, fillFunction, selectivityOrder, 'mean_pod'),
+                    data: processHeatmapData(
+                        data,
+                        xgroups,
+                        ygroups,
+                        fillFunction,
+                        selectivityOrder,
+                        'mean_pod'
+                    ),
                     legendData,
                 };
             default:
                 throw 'Error: Unknown display type.';
         }
-
     }
 
     componentWillMount() {
@@ -441,13 +457,12 @@ class HeatmapHandler extends React.Component {
         return (
             <div>
                 <h4 className={`${styles.labelHorizontal} ${styles.labelNormal}`}>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    Developmental Toxicity Heatmap <HelpButtonWidget stateHolder={this} headLevel={'h2'} title={title}/>
+                    {/*<h4>*/}
+                    Developmental Toxicity Heatmap{' '}
+                    <HelpButtonWidget stateHolder={this} headLevel={'h2'} title={title} />
                 </h4>
-                <br/>
-                <div className={styles.buttonRow}>
-                    <h2>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <div>
+                    <h4 className={` ${styles.labelNormal}`}>
                         <button
                             onClick={() => this._exportCsv(d.data)}
                             className={`fa fa-download ${styles['pointer-button']}`}
@@ -459,10 +474,9 @@ class HeatmapHandler extends React.Component {
                             className={`fa fa-camera ${styles['pointer-button']}`}
                         ></button>
                         <span> Image</span>
-                    </h2>
+                    </h4>
                 </div>
             </div>
-
         );
     }
 
@@ -490,7 +504,8 @@ class HeatmapHandler extends React.Component {
 
     render() {
         if (!this.state.data) {
-            return <Loading/>;
+            4;
+            return <Loading />;
         }
         let d;
         d = this._getFilteredData();

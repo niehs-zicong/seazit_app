@@ -171,8 +171,8 @@ class Heatmap extends Component {
             .attr('class', 'axis y')
             .call(yAxis)
             .style('font-size', 15)
-            .selectAll('text')
-            .style('cursor', 'pointer');
+            .selectAll('text');
+        // .style('cursor', 'pointer')
         // .on('click', handleYLabelClick)
 
         axisLayer

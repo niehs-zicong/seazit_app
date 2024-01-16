@@ -4,16 +4,16 @@
     "chunks": {
         "vendor": [
             {
-                "name": "vendor.02cb242fa38c4af7e0f0.js",
-                "publicPath": "http://localhost:3000/dist/vendor.02cb242fa38c4af7e0f0.js",
-                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/vendor.02cb242fa38c4af7e0f0.js"
+                "name": "vendor.e72fc63d69912b083995.js",
+                "publicPath": "http://localhost:3000/dist/vendor.e72fc63d69912b083995.js",
+                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/vendor.e72fc63d69912b083995.js"
             }
         ],
         "main": [
             {
-                "name": "main.02cb242fa38c4af7e0f0.js",
-                "publicPath": "http://localhost:3000/dist/main.02cb242fa38c4af7e0f0.js",
-                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/main.02cb242fa38c4af7e0f0.js"
+                "name": "main.e72fc63d69912b083995.js",
+                "publicPath": "http://localhost:3000/dist/main.e72fc63d69912b083995.js",
+                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/main.e72fc63d69912b083995.js"
             },
             {
                 "name": "style.css",
@@ -23,10 +23,12 @@
         ],
         "manifest": [
             {
-                "name": "manifest.02cb242fa38c4af7e0f0.js",
-                "publicPath": "http://localhost:3000/dist/manifest.02cb242fa38c4af7e0f0.js",
-                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/manifest.02cb242fa38c4af7e0f0.js"
+                "name": "manifest.e72fc63d69912b083995.js",
+                "publicPath": "http://localhost:3000/dist/manifest.e72fc63d69912b083995.js",
+                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/manifest.e72fc63d69912b083995.js"
             }
         ]
-    }
+    },
+    "error": "ModuleBuildError",
+    "message": "Module build failed: SyntaxError: Expected corresponding JSX closing tag for <h4> (327:16)\n\n  325 | \n  326 |                     <br/>\n> 327 |                 </div>\n      |                 ^\n  328 |                 <RankedBarchart\n  329 |                     data={plotData}\n  330 |                     visualization={this.props.visualization}\n"
 }

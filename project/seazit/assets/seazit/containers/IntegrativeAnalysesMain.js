@@ -56,11 +56,11 @@ class IntegrativeAnalysesMain extends React.Component {
             // HelpButtonWidget
             showHelpText: false,
             assays: [],
+            // assays:['1', '2'],
 
             datasetLabName: [],
             url: null,
             // ontologyWidget
-            // ontologyType: integrative_Granular,
             ontologyType: integrative_General,
             //
             ontologyGroup: [],
@@ -69,9 +69,8 @@ class IntegrativeAnalysesMain extends React.Component {
             chemicalFilterBy: CHEMFILTER_CATEGORY,
             // chemicalFilterBy: CHEMFILTER_CHEMICIAL,
 
-            categories: [],
-
             chemicals: [],
+            // chemicals: ['115-86-6', '13674-87-8', '79-94-7'],
 
             // ReadoutSelectorWidget
             readoutType: READOUT_TYPE_CATEGORY,
@@ -140,6 +139,7 @@ class IntegrativeAnalysesMain extends React.Component {
         // let hasChems = this.state.chemicals.length > 0,
         //     hasReadoutCategories = this.state.readoutCategories.length > 0,
         //     requiresFilters = [INTVIZ_HEATMAP, INTVIZ_DevtoxHEATMAP];
+        console.log(this.state);
         return (
             <div>
                 <HeatmapHandler
@@ -151,6 +151,19 @@ class IntegrativeAnalysesMain extends React.Component {
                     url={this.state.url}
                     datasetLabName={this.state.datasetLabName}
                 />
+
+                {/*// for test use. */}
+
+                {/*<HeatmapHandler*/}
+                {/*    assays={['4', '5', '6']}*/}
+                {/*    casrns={['115-86-6', '13674-87-8', '79-94-7']}*/}
+                {/*    visualization={1}*/}
+                {/*    ontologyType={2}*/}
+                {/*    ontologyGroup={['hatching defect', 'head defects']}*/}
+                {/*    url={"/seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=4,5,6&casrns=115-86-6,13674-87-8,79-94-7"}*/}
+                {/*    datasetLabName={['Def_Lab A_SR-DC', 'Def_Lab A_S-C', 'Def_Lab A_S-DC']}*/}
+                {/*/>*/}
+
                 <p className="help-block">
                     <b>Interactivity note:</b> This heatmap is interactive. Click a cell to view
                     individual concentration response curves associated with it. Select x-axis label
@@ -169,8 +182,11 @@ class IntegrativeAnalysesMain extends React.Component {
             .filter((i) => this.state.assays.includes(i.seazit_protocol_id.toString()))
             .map('protocol_name_plot')
             .value();
-
         this.state.url = getIntegrativeUrl(this.state.assays, this.state.chemicals);
+        // this.state.url = '/seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=1,2&casrns=115-86-6,13674-87-8,79-94-7';
+
+        console.log(this.state);
+        console.log(this.state.url);
 
         //heatmap test
         return (

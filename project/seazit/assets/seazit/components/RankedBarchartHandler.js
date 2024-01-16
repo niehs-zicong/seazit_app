@@ -7,6 +7,9 @@ import * as d3 from 'd3';
 import Loading from 'utils/Loading';
 import BmdTable from './BmdTable';
 import RankedBarchart, { submit_download_form } from './RankedBarchart';
+import HelpButtonWidget from '../widgets/HelpButtonWidget';
+import styles from '../style.css';
+
 import {
     getBmdsUrl,
     BMDVIZ_ACTIVITY,
@@ -25,10 +28,6 @@ import {
     INTVIZ_HEATMAP,
     renderNoDataAlert,
 } from '../shared';
-import HelpButtonWidget from '../widgets/HelpButtonWidget';
-import styles from '../style.css';
-import Heatmap from './Heatmap';
-import DevtoxHeatmap from './DevtoxHeatmap';
 
 class RankedBarchartHandler extends React.Component {
     constructor(props) {
@@ -158,74 +157,61 @@ class RankedBarchartHandler extends React.Component {
     }
 
     _exportCsv = function(jsonData) {
-        if (jsonData.length == 0) {
+        if (jsonData.length === 0) {
             return '';
         }
-        let medData = _.sortBy(jsonData.bmd_activity_selectivity, 'med_pod_med');
-        let keys = [
-            'preferred_name',
-            'casrn',
-            'use_category1',
-            'med_pod_med',
-            'min_pod_med',
-            'max_pod_med',
-            'mort_med_pod_med',
-            'mort_min_pod_med',
-            'mort_max_pod_med',
-        ];
-        var filename = 'csvData.csv';
-        let columnDelimiter = ',';
-        let lineDelimiter = '\n';
-        let csvColumnHeader = keys.join(columnDelimiter);
+        const filename = 'bmcData.csv';
+        console.log(jsonData);
+
+        const headerMappings = {
+            casrn: 'casrn',
+            use_category1: 'use category level1',
+            preferred_name: 'preferred_name',
+            combin_ontology: 'combin_ontology',
+            combin_ontology_id: 'combin_ontology_id',
+            malformation: 'malformation',
+            mean_pod: 'ontology group bmc (um)',
+            mean_selectivity: 'selectivity',
+            n_values: 'n_values',
+            // med_pod_med: 'med_pod_med',
+            // min_pod_med: 'min_pod_med',
+            // max_pod_med: 'max_pod_med',
+            // mort_med_pod_med: 'mort_med_pod_med',
+            // mort_min_pod_med: 'mort_min_pod_med',
+            // mort_max_pod_med: 'mort_max_pod_med',
+        };
+
+        const columnDelimiter = ',';
+        const lineDelimiter = '\n';
+        const headerKeys = Object.keys(headerMappings);
+
+        const csvColumnHeader = headerKeys.map((key) => headerMappings[key]).join(columnDelimiter);
         let csvStr = csvColumnHeader + lineDelimiter;
-        medData.forEach((item) => {
-            keys.forEach((key, index) => {
-                if (index > 0 && index < keys.length) {
-                    // if( (index > 0) && (index < keys.length-1) ) {
+
+        jsonData.forEach((item) => {
+            headerKeys.forEach((key, index) => {
+                if (index > 0 && index < headerKeys.length) {
                     csvStr += columnDelimiter;
                 }
-                switch (key) {
-                    case 'preferred_name':
-                        csvStr += `"${item[key]}"`;
-                        break;
-                    case 'casrn':
-                        csvStr += `"${item[key]}"`;
-                        break;
-                    case 'use_category1':
-                        csvStr += `"${item[key]}"`;
-                        break;
-                    case 'med_pod_med':
-                        csvStr += `"${printFloat(pod_med_processed(item[key]))}"`;
-                        break;
-
-                    case 'min_pod_med':
-                        csvStr += `"${printFloat(pod_med_processed(item[key]))}"`;
-                        break;
-
-                    case 'max_pod_med':
-                        csvStr += `"${printFloat(pod_med_processed(item[key]))}"`;
-                        break;
-                    case 'mort_med_pod_med':
-                        csvStr += `"${printFloat(pod_med_processed(item[key]))}"`;
-                        break;
-
-                    case 'mort_min_pod_med':
-                        csvStr += `"${printFloat(pod_med_processed(item[key]))}"`;
-                        break;
-
-                    case 'mort_max_pod_med':
-                        csvStr += `"${printFloat(pod_med_processed(item[key]))}"`;
-                        break;
-                    default:
-                        csvStr += 'undefined';
+                let value = item[key] || '';
+                if (
+                    key === 'med_pod_med' ||
+                    key === 'min_pod_med' ||
+                    key === 'max_pod_med' ||
+                    key === 'mort_med_pod_med' ||
+                    key === 'mort_min_pod_med' ||
+                    key === 'mort_max_pod_med'
+                ) {
+                    value = pod_med_processed(value);
                 }
+                csvStr += `"${value}"`;
             });
             csvStr += lineDelimiter;
         });
         csvStr = encodeURIComponent(csvStr);
 
-        let dataUri = 'data:text/csv;charset=utf-8,' + csvStr;
-        let linkElement = document.createElement('a');
+        const dataUri = 'data:text/csv;charset=utf-8,' + csvStr;
+        const linkElement = document.createElement('a');
         linkElement.setAttribute('href', dataUri);
         linkElement.setAttribute('download', filename);
         linkElement.click();
@@ -297,29 +283,6 @@ class RankedBarchartHandler extends React.Component {
         }
     }
 
-    _renderButtons(d) {
-        return (
-            <div>
-                <div className={styles.buttonRow}>
-                    <h2>
-                        <button
-                            onClick={() => this._exportCsv(d)}
-                            className={`fa fa-download ${styles['pointer-button']}`}
-                        ></button>
-                        <span> Data</span>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <button
-                            onClick={() => svg_download_form('BMC_heatmap01')}
-                            className={`fa fa-camera ${styles['pointer-button']}`}
-                        ></button>
-                        <span> Image</span>
-                    </h2>
-                </div>
-                <br />
-            </div>
-        );
-    }
-
     render() {
         if (!this.state.data) {
             return <Loading />;
@@ -338,15 +301,20 @@ class RankedBarchartHandler extends React.Component {
 
         return (
             <div>
-                <h2 className={`${styles.labelHorizontal} ${styles.labelNormal}`}>
+                <h4 className={`${styles.labelHorizontal} ${styles.labelNormal}`}>
                     BMC values: sorted by {chartName}
                     <HelpButtonWidget stateHolder={this} headLevel={'h2'} title={title} />
-                </h2>
-                {/*<br/>*/}
+                </h4>
                 {this._renderHelpText()}
-
-                {this._renderButtons(plotData)}
-
+                <div>
+                    <h4 className={` ${styles.labelNormal}`}>
+                        <button
+                            onClick={() => svg_download_form('BMC_heatmap01')}
+                            className={`fa fa-camera ${styles['pointer-button']}`}
+                        ></button>
+                        <span> Image</span>
+                    </h4>
+                </div>
                 <RankedBarchart
                     data={plotData}
                     visualization={this.props.visualization}
@@ -354,14 +322,23 @@ class RankedBarchartHandler extends React.Component {
                     selectivityList={this.props.selectivityList}
                 />
                 <p class="help-block">
-                    <b>Interactivity note:</b> This barchart is interactive. Click an item to view
-                    the concentration-response curves from which the BMC was derived.
+                    <b>Interactivity note:</b> This chart is interactive. Click an item to view the
+                    concentration-response curves from which the BMC was derived.
                 </p>
                 <div>
-                    <h2 className={`${styles.labelHorizontal} ${styles.labelNormal}`}>
+                    <h4 className={`${styles.labelHorizontal} ${styles.labelNormal}`}>
                         BMC for {tableName}
                         <HelpButtonWidget stateHolder={this} headLevel={'h2'} title={title} />
-                    </h2>
+                    </h4>
+                    <div>
+                        <h4 className={` ${styles.labelNormal}`}>
+                            <button
+                                onClick={() => this._exportCsv(plotData)}
+                                className={`fa fa-download ${styles['pointer-button']}`}
+                            ></button>
+                            <span> Data</span>
+                        </h4>
+                    </div>
                 </div>
 
                 {/*{this.props.visualization === BMDVIZ_ACTIVITY ? (<BmdTable data={plotData}/>) : (*/}

@@ -61,12 +61,17 @@ let renderPlot = function(el, data, opts) {
     //console.log('data2', data, nonviabilityData, viabilityData);
     // set dimensions and margins
     let elWidth = Math.max(Math.floor($(el).innerWidth()), 800),
-        margin = { top: 40, right: 100, bottom: 25, left: 300 },
+        margin = { top: 40, right: 100, bottom: 50, left: 300, footnote: 200 },
         width = elWidth - margin.left - margin.right,
-        height = data.length * 20 + 100 - margin.top - margin.bottom,
+        height = data.length * 20 - margin.top - margin.bottom + margin.footnote,
+        footnoteHeight = 50,
         categoryWidth = 150,
         categoryPadding = 5,
         barStart = categoryWidth + categoryPadding * 2;
+    // console.log(height)
+    // console.log( height + margin.top + margin.bottom)
+    //
+    // console.log(height + margin.top - margin.bottom)
 
     let xScaleFunction = d3.scaleLog;
 
@@ -247,7 +252,7 @@ let renderPlot = function(el, data, opts) {
         // add footnote
         svg.append('text')
             .attr('x', -margin.left + 10)
-            .attr('y', height + margin.top - margin.bottom)
+            .attr('y', height + margin.top - margin.bottom + footnoteHeight)
             // .attr('y', height + margin.top - margin.bottom + 10)
             .attr('font-size', '1.3em')
             .style('font-family', 'sans-serif')
