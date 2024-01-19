@@ -504,7 +504,6 @@ class HeatmapHandler extends React.Component {
 
     render() {
         if (!this.state.data) {
-            4;
             return <Loading />;
         }
         let d;

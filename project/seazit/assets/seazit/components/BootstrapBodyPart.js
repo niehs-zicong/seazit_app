@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { DoseResponse, DoseResponseMort120 } from './DoseResponse';
+import DoseResponse from './DoseResponse';
 import SankeyPlot from './SankeyPlot';
 import styles from '../style.css';
 
@@ -19,6 +19,7 @@ import {
     BMCTab,
     ConcentrationResponseTab,
     IntegrativeAnalysesTab,
+    integrative_Granular,
 } from '../shared';
 import IntegrativeCheckBoxWidget from '../widgets/IntegrativeCheckBoxWidget';
 import _ from 'lodash';
@@ -69,9 +70,9 @@ class SingleCurveBody extends React.Component {
         // each plot is ~400px for a reasonable start, make sure it's at least 1
         this.state = {
             mortalityCheck: false,
-            fill: this.props.fill,
             showHelpText: false,
             vizHeight: 340,
+            collapse: NO_COLLAPSE, // Set initial collapse state
         };
     }
 
@@ -95,36 +96,25 @@ class SingleCurveBody extends React.Component {
         return (
             <div className="col-sm-10">
                 {commonHeader}
-                {state.mortalityCheck ? (
-                    <DoseResponseMort120
-                        stateHolder={this}
-                        url={state.url}
-                        cols={3}
-                        height={state.vizHeight}
-                        collapse={COLLAPSE_WITH_Mortality120}
-                        devtoxEndPointList={this.props.devtoxEndPointList}
-                        final_dev_call={this.props.final_dev_call}
-                    />
-                ) : (
-                    <DoseResponse
-                        stateHolder={this}
-                        url={state.url}
-                        cols={3}
-                        height={state.vizHeight}
-                        collapse={NO_COLLAPSE}
-                        devtoxEndPointList={this.props.devtoxEndPointList}
-                        final_dev_call={this.props.final_dev_call}
-                    />
-                )}
+                <DoseResponse
+                    stateHolder={this}
+                    url={state.url}
+                    cols={3}
+                    height={state.vizHeight}
+                    collapse={state.collapse}
+                    devtoxEndPointList={this.props.devtoxEndPointList}
+                    // final_dev_call={this.props.final_dev_call}
+                />
             </div>
         );
     }
 
     render() {
+        this.state.collapse = this.state.mortalityCheck ? COLLAPSE_WITH_Mortality120 : NO_COLLAPSE;
+
         let readout_ids = this.state.mortalityCheck
             ? [this.props.readout_id].concat(['Mortality@120' + '_' + this.props.protocol_id])
             : [this.props.readout_id];
-        let collapseFlag = this.state.mortalityCheck ? COLLAPSE_BY_CHEMICAL : NO_COLLAPSE;
         this.state.url = getDoseResponsesUrl(
             [this.props.protocol_id],
             [readout_ids],
@@ -151,7 +141,6 @@ SingleCurveBody.propTypes = {
     casrn: PropTypes.array.isRequired,
     devtoxEndPointList: PropTypes.string,
     CheckBoxDisable: false,
-    fill: PropTypes.string,
     heading: PropTypes.string,
     final_dev_call: PropTypes.string,
 };
@@ -203,21 +192,16 @@ class MultipleCurveBody extends React.Component {
         // each plot is ~400px for a reasonable start, make sure it's at least 1
         let initialCols = Math.max(1, Math.floor((0.75 * window.innerWidth) / 400));
         this.state = {
-            // DoseResponseGridWidget
             vizColumns: initialCols,
             vizHeight: 340,
             mortalityCheck: false,
             showHelpText: false,
-            fill: this.props.fill,
+            collapse: NO_COLLAPSE, // Set initial collapse state
         };
     }
 
     _renderDoseResponse(state) {
         // console.log(state)
-        console.log(this.props);
-        console.log('MultipleCurveBody');
-        console.log(state.vizColumns);
-        console.log(state.vizHeight);
 
         const commonHeader = (
             <div className="col-sm-10">
@@ -237,34 +221,29 @@ class MultipleCurveBody extends React.Component {
         return (
             <div className="col-sm-10">
                 {commonHeader}
-                {state.mortalityCheck ? (
-                    <DoseResponseMort120
-                        stateHolder={this}
-                        url={state.url}
-                        cols={state.vizColumns}
-                        height={state.vizHeight}
-                        collapse={COLLAPSE_WITH_Mortality120}
-                        devtoxEndPointList={this.props.devtoxEndPointList}
-                    />
-                ) : (
-                    <DoseResponse
-                        url={state.url}
-                        cols={state.vizColumns}
-                        height={state.vizHeight}
-                        collapse={NO_COLLAPSE}
-                        devtoxEndPointList={this.props.devtoxEndPointList}
-                    />
-                )}
+                <DoseResponse
+                    stateHolder={this}
+                    url={state.url}
+                    cols={state.vizColumns}
+                    height={state.vizHeight}
+                    collapse={state.collapse}
+                    devtoxEndPointList={this.props.devtoxEndPointList}
+                />
             </div>
         );
     }
 
     render() {
+        this.state.collapse = this.state.mortalityCheck ? COLLAPSE_WITH_Mortality120 : NO_COLLAPSE;
+
+        // let readout_ids2 = this.state.mortalityCheck
+        //     ? this.props.readout_ids.concat(['Mortality@120' + '_' + this.props.protocol_id])
+        //     : [this.props.readout_ids];
         let readout_ids = this.state.mortalityCheck
             ? this.props.readout_ids.concat(['Mortality@120' + '_' + this.props.protocol_id])
             : [this.props.readout_ids];
-        console.log(readout_ids);
-        console.log(this.props.protocol_id);
+        // console.log(readout_ids);
+        // console.log(this.props.protocol_id);
 
         this.state.url = getDoseResponsesUrl(
             [this.props.protocol_id],
@@ -289,8 +268,6 @@ MultipleCurveBody.propTypes = {
     readout_ids: PropTypes.array.isRequired,
     casrns: PropTypes.array.isRequired,
     devtoxEndPointList: PropTypes.array.isRequired,
-    fill: PropTypes.string,
-    ontologyGroupName: PropTypes.ontologyGroupName,
     heading: PropTypes.string,
 };
 

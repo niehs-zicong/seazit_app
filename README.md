@@ -12,7 +12,9 @@ Deploy see: https://gitlab.niehs.nih.gov/ods/deploy-seazit/-/blob/master/readme.
 
 
 For local user development command
+
 Create a conda env named seazit:
 
 conda activate seazit  &&  python manage.py runserver
+
 conda activate seazit  && npm start

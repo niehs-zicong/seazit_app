@@ -19,7 +19,6 @@ import styles from '../style.css';
 import { getLog10AxisFunction } from 'utils/d3';
 import { integrativeHandleCellClick, printFloat, pod_med_processed } from '../shared';
 import DoseResponseGridWidget from '../widgets/DoseResponseGridWidget';
-import { DoseResponseMort120 } from './DoseResponse';
 
 class DevtoxHeatmap extends Component {
     constructor(props) {

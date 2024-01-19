@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Loading from 'utils/Loading';
-import { DoseResponse } from '../components/DoseResponse';
+import DoseResponse from '../components/DoseResponse';
 import FiveOhEight from '../components/FiveOhEight';
 import HelpButtonWidget from '../widgets/HelpButtonWidget';
 import ChemicalWidget from '../widgets/ChemicalWidget';

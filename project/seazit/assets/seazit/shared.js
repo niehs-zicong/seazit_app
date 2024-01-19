@@ -311,8 +311,7 @@ const AXIS_LINEAR = 1,
             if (d.endPointList && d.endPointList.length > 1) {
                 new BootstrapModal(Header, MultipleCurveBody, {
                     title: d.title,
-                    heading: headingHtml,
-                    ontologyGroupName: d.ontologyGroupName,
+                    // ontologyGroupName: d.ontologyGroupName,
                     protocol_id: d.protocol_id,
                     readout_ids: _.map(d.endPointList, function(x) {
                         return x + '_' + d.protocol_id;
@@ -321,17 +320,18 @@ const AXIS_LINEAR = 1,
                     casrns: [d.casrn],
                     devtoxEndPointList: d.devtoxEndPointList,
                     fill: d.fill,
+                    heading: headingHtml,
                 });
             } else {
                 new BootstrapModal(Header, SingleCurveBody, {
                     title: d.title,
-                    heading: headingHtml,
-                    ontologyGroupName: d.ontologyGroupName,
+                    // ontologyGroupName: d.ontologyGroupName,
                     protocol_id: d.protocol_id,
                     readout_id: d.endpoint_name + '_' + d.protocol_id,
                     casrn: d.casrn,
                     devtoxEndPointList: d.devtoxEndPointList,
                     fill: d.fill,
+                    heading: headingHtml,
                 });
             }
         }

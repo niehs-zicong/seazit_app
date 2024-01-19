@@ -98,7 +98,7 @@ class HelpButtonWidget extends BaseWidget {
 
 HelpButtonWidget.propTypes = {
     headLevel: PropTypes.string,
-    title: PropTypes.string.isRequired,
+    title: PropTypes.string,
     stateHolder: PropTypes.object,
     contentId: PropTypes.string,
 };

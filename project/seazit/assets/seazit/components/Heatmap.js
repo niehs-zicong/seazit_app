@@ -26,7 +26,7 @@ import styles from '../style.css';
 
 import { getLog10AxisFunction } from 'utils/d3';
 import DoseResponseGridWidget from '../widgets/DoseResponseGridWidget';
-import { DoseResponseMort120 } from './DoseResponse';
+import DoseResponse from './DoseResponse';
 
 class Heatmap extends Component {
     constructor(props) {

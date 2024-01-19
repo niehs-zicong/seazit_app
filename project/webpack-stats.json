@@ -4,16 +4,16 @@
     "chunks": {
         "vendor": [
             {
-                "name": "vendor.611f4f3ff59b653e5341.js",
-                "publicPath": "http://localhost:3000/dist/vendor.611f4f3ff59b653e5341.js",
-                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/vendor.611f4f3ff59b653e5341.js"
+                "name": "vendor.d57f0927a01f49d27311.js",
+                "publicPath": "http://localhost:3000/dist/vendor.d57f0927a01f49d27311.js",
+                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/vendor.d57f0927a01f49d27311.js"
             }
         ],
         "main": [
             {
-                "name": "main.611f4f3ff59b653e5341.js",
-                "publicPath": "http://localhost:3000/dist/main.611f4f3ff59b653e5341.js",
-                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/main.611f4f3ff59b653e5341.js"
+                "name": "main.d57f0927a01f49d27311.js",
+                "publicPath": "http://localhost:3000/dist/main.d57f0927a01f49d27311.js",
+                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/main.d57f0927a01f49d27311.js"
             },
             {
                 "name": "style.css",
@@ -23,10 +23,12 @@
         ],
         "manifest": [
             {
-                "name": "manifest.611f4f3ff59b653e5341.js",
-                "publicPath": "http://localhost:3000/dist/manifest.611f4f3ff59b653e5341.js",
-                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/manifest.611f4f3ff59b653e5341.js"
+                "name": "manifest.d57f0927a01f49d27311.js",
+                "publicPath": "http://localhost:3000/dist/manifest.d57f0927a01f49d27311.js",
+                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/manifest.d57f0927a01f49d27311.js"
             }
         ]
-    }
+    },
+    "error": "ModuleBuildError",
+    "message": "Module build failed: SyntaxError: Unexpected token, expected , (203:36)\n\n  201 |                 console.log('fetchDoseResponseData');\n  202 |                 console.log(this.state.data)\n> 203 |                 this.setState({data};\n      |                                     ^\n  204 |                 this.updateData(data, this.props.collapse);\n  205 |             });\n  206 |         });\n"
 }
