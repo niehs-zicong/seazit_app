@@ -142,35 +142,34 @@ class IntegrativeAnalysesMain extends React.Component {
         console.log(this.state);
         return (
             <div>
-                {/*<HeatmapHandler*/}
-                {/*    assays={this.state.assays}*/}
-                {/*    casrns={this.state.chemicals}*/}
-                {/*    visualization={this.state.visualization}*/}
-                {/*    ontologyType={this.state.ontologyType}*/}
-                {/*    ontologyGroup={this.state.ontologyGroup}*/}
-                {/*    url={this.state.url}*/}
-                {/*    datasetLabName={this.state.datasetLabName}*/}
-                {/*/>*/}
+                <HeatmapHandler
+                    assays={this.state.assays}
+                    casrns={this.state.chemicals}
+                    visualization={this.state.visualization}
+                    ontologyType={this.state.ontologyType}
+                    ontologyGroup={this.state.ontologyGroup}
+                    url={this.state.url}
+                    datasetLabName={this.state.datasetLabName}
+                />
 
                 {/*// for test use. */}
 
-                <HeatmapHandler
-                    assays={['4', '5', '6']}
-                    casrns={['115-86-6', '13674-87-8', '79-94-7']}
-                    visualization={1}
-                    ontologyType={2}
-                    ontologyGroup={['hatching defect', 'head defects']}
-                    url={
-                        '/seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=4,5,6&casrns=115-86-6,13674-87-8,79-94-7'
-                    }
-                    datasetLabName={['Def_Lab A_SR-DC', 'Def_Lab A_S-C', 'Def_Lab A_S-DC']}
-                />
+                {/*<HeatmapHandler*/}
+                {/*    assays={['4', '5', '6']}*/}
+                {/*    casrns={['115-86-6', '13674-87-8', '79-94-7']}*/}
+                {/*    visualization={1}*/}
+                {/*    ontologyType={2}*/}
+                {/*    ontologyGroup={['hatching defect', 'head defects']}*/}
+                {/*    url={*/}
+                {/*        '/seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=4,5,6&casrns=115-86-6,13674-87-8,79-94-7'*/}
+                {/*    }*/}
+                {/*    datasetLabName={['Def_Lab A_SR-DC', 'Def_Lab A_S-C', 'Def_Lab A_S-DC']}*/}
+                {/*/>*/}
 
                 <p className="help-block">
                     <b>Interactivity note:</b> This heatmap is interactive. Click a cell to view
                     individual concentration response curves associated with it. Select x-axis label
-                    to learn more about selected phenotype. Click a cell to view individual
-                    concentration response curves associated with it.
+                    to learn more about selected phenotype.
                 </p>
             </div>
         );

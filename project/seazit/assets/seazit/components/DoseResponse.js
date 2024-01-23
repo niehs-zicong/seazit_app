@@ -42,12 +42,7 @@ class DoseResponse extends React.Component {
         if (_.isEmpty(data)) {
             return '';
         }
-        let keys,
-            groupKeys,
-            collapsedData,
-            responses,
-            yrange = [0, 100],
-            offset;
+        let keys, groupKeys, collapsedData, responses, yrange, offset;
         if (collapse == COLLAPSE_WITH_Mortality120) {
             (keys = _.chain(data.dose_response)
                 .reject((r) => r.endpoint_name == 'Mortality@120')
@@ -63,6 +58,7 @@ class DoseResponse extends React.Component {
                         return {
                             key: k,
                             groupKeys,
+                            final_dev_call: null,
                             dose_response: _.filter(data.dose_response, { key: k }),
                             bmcoutput: _.filter(data.bmcoutput, { key: k }),
                             mortality120dose_response: _.filter(data.dose_response, {
@@ -75,24 +71,13 @@ class DoseResponse extends React.Component {
                     })
                     .each((d, k) => {
                         let dr = d.dose_response[0];
-
                         (d.title = this.getPlotTitle(dr, collapse)),
                             (d.casrn = dr.casrn),
                             (d.endpoint_name = dr.endpoint_name),
-                            (d.style =
+                            (d.outline =
                                 (this.props.devtoxEndPointList &&
                                     this.props.devtoxEndPointList.includes(d.endpoint_name)) ||
-                                this.props.final_dev_call === 'dev tox'
-                                    ? {
-                                          border: '5px solid #d62976',
-                                          padding: '1px',
-                                          margin: '1px',
-                                      }
-                                    : {
-                                          border: '5px solid transparent',
-                                          padding: '1px',
-                                          margin: '1px',
-                                      }),
+                                this.props.final_dev_call === 'dev tox'),
                             (d.input_ids = _.chain(d.bmcoutput)
                                 .map('input_id')
                                 .uniq()
@@ -122,6 +107,8 @@ class DoseResponse extends React.Component {
                     })
                     .sortBy('endpoint_name')
                     .sortBy('casrn')
+                    .sortBy('title')
+
                     .value());
         } else {
             (keys = _.chain(data.dose_response)
@@ -150,20 +137,10 @@ class DoseResponse extends React.Component {
                                 .map('input_id')
                                 .uniq()
                                 .value()),
-                            (d.style =
+                            (d.outline =
                                 (this.props.devtoxEndPointList &&
                                     this.props.devtoxEndPointList.includes(d.endpoint_name)) ||
-                                this.props.final_dev_call === 'dev tox'
-                                    ? {
-                                          border: '5px solid #d62976',
-                                          padding: '1px',
-                                          margin: '1px',
-                                      }
-                                    : {
-                                          border: '5px solid transparent',
-                                          padding: '1px',
-                                          margin: '1px',
-                                      }),
+                                this.props.final_dev_call === 'dev tox'),
                             // filter with input_ids to filter bmcout into different case
                             (d.bmcoutput = d.bmcoutput.filter((i) =>
                                 d.input_ids.includes(i.input_id)
@@ -177,12 +154,16 @@ class DoseResponse extends React.Component {
                     })
                     .sortBy('endpoint_name')
                     .sortBy('casrn')
+                    .sortBy('title')
+
                     .value());
         }
-        //         yrange = d3.extent(responses);
+        // responses = _.map(data.dose_response, 'normalized_response');
+        // responses.push(0);
+        // yrange = d3.extent(responses);
         // offset = (yrange[1] - yrange[0]) * 0.15 * 0.5;
         // yrange = [yrange[0] - offset, yrange[1] + offset];
-
+        console.log(collapsedData);
         return {
             data,
             collapsedData,
@@ -201,6 +182,7 @@ class DoseResponse extends React.Component {
                 });
                 return;
             }
+            console.log('zw');
             this.updateData(data, this.props.collapse);
         });
     }
@@ -352,6 +334,7 @@ class DoseResponse extends React.Component {
         if (this.refs[d.key] === undefined) {
             return;
         }
+        console.log(d);
 
         let data = [],
             dose_range = [0, 1],
@@ -382,24 +365,60 @@ class DoseResponse extends React.Component {
                 size: 12,
             },
             shapes: [],
+            // xaxis: {
+            //     type: 'log',
+            //     autorange: true,
+            //     title: 'Concentration (µM)',
+            //     dtick: 1,
+            //     // automargin: true,
+            //     linecolor: '#d62976',
+            //     linewidth: 3,
+            //     mirror: true
+            // },
+            // yaxis: {
+            //     type: 'linear',
+            //     title: 'response (%)',
+            //     autorange: false,
+            //     // range should be [0, 100]
+            //     range: [-10, 110],
+            //     // automargin: true,
+            //     // range: yrange,
+            //     linecolor: '#d62976',
+            //     linewidth: 3,
+            //     mirror: true
+            // },
+
             xaxis: {
                 type: 'log',
                 autorange: true,
                 title: 'Concentration (µM)',
                 dtick: 1,
+                ...(d.outline
+                    ? {
+                          linecolor: '#d62976',
+                          linewidth: 3,
+                          mirror: true,
+                      }
+                    : {}),
             },
             yaxis: {
                 type: 'linear',
                 title: 'response (%)',
-                // range should be [0, 100]
+                autorange: false,
                 range: [-10, 110],
+                ...(d.outline
+                    ? {
+                          linecolor: '#d62976',
+                          linewidth: 3,
+                          mirror: true,
+                      }
+                    : {}),
             },
             showlegend: false,
             // add room for collapsed plot legends
             height: this.props.height + d.groupKeys.length * 19 + 20,
-            // width: 470,
-            width: 440,
-            // autosize: true,
+            // width: this.props.height + d.groupKeys.length * 19 + 50,
+            autosize: true,
         };
         if (this.props.collapse == COLLAPSE_WITH_Mortality120) {
             d.groupKeys.map((gk) => {
@@ -412,7 +431,7 @@ class DoseResponse extends React.Component {
                 this.state.labelsDict = [];
                 d.substance_code_input_ids.map((id_flag, index) => {
                     let drs_split = _.chain(drs)
-                        .filter((r) => r.substance_code_input_id == id_flag)
+                        .filter((r) => r.substance_code_input_id === id_flag)
                         .sortBy('dose')
                         .value();
 
@@ -539,7 +558,6 @@ class DoseResponse extends React.Component {
             layout.legend = { orientation: 'h', y: -0.3 };
         }
         // console.log(d)
-        // console.log(data)
 
         Plotly.newPlot(this.refs[d.key], data, layout, svgConfig);
     }
@@ -548,6 +566,8 @@ class DoseResponse extends React.Component {
         console.log('loadDoseResponse');
         this.state.collapsedData.map((d) => this._renderPlot(d, this.state.yrange));
     }
+
+    getDerivedStateFrpmProps;
 
     async componentDidMount() {
         try {
@@ -561,15 +581,16 @@ class DoseResponse extends React.Component {
 
     async componentDidUpdate(prevProps) {
         if (prevProps.url !== this.props.url) {
-            console.log('url');
             await this.fetchDoseResponseData(this.props.url);
             // this.updateData(this.state.data, this.props.collapse);
             return; // Exit early
         }
         if (prevProps.collapse !== this.props.collapse) {
-            console.log('this.state.data');
             await this.fetchDoseResponseData(this.props.url);
             this.updateData(this.state.data, this.props.collapse);
+        }
+        if (prevProps.cols !== this.props.cols || prevProps.height !== this.props.height) {
+            this.loadDoseResponse();
         }
     }
 
@@ -586,22 +607,13 @@ class DoseResponse extends React.Component {
         if (!this.state.data) {
             return <Loading />;
         }
-        if (!this.state.collapsedData) {
-            return <Loading />;
-        }
-        let colNum = Math.ceil(12 / this.props.cols);
-        console.log('render this.state.collapsedData');
 
-        console.log(this.state.collapsedData);
+        let colNum = Math.ceil(12 / this.props.cols);
+        // console.log(this.state.collapsedData)
         return (
             <div>
                 {this.state.collapsedData.map((item) => (
-                    <div
-                        className={`col-xs-${colNum}`}
-                        key={item.key}
-                        ref={item.key}
-                        style={item.style}
-                    />
+                    <div className={`col-xs-${colNum}`} key={item.key} ref={item.key} />
                 ))}
             </div>
         );

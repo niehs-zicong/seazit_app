@@ -123,7 +123,6 @@ class SingleCurveBody extends React.Component {
         return (
             <div className="row-fluid">
                 <div className="col-sm-2">
-                    {/*<IntegrativeCheckBoxWidget stateHolder={this}/>*/}
                     {this.props.CheckBoxDisable ? null : (
                         <IntegrativeCheckBoxWidget stateHolder={this} />
                     )}

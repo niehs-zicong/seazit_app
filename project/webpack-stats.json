@@ -4,16 +4,16 @@
     "chunks": {
         "vendor": [
             {
-                "name": "vendor.d57f0927a01f49d27311.js",
-                "publicPath": "http://localhost:3000/dist/vendor.d57f0927a01f49d27311.js",
-                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/vendor.d57f0927a01f49d27311.js"
+                "name": "vendor.a912a86bffa804c538d1.js",
+                "publicPath": "http://localhost:3000/dist/vendor.a912a86bffa804c538d1.js",
+                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/vendor.a912a86bffa804c538d1.js"
             }
         ],
         "main": [
             {
-                "name": "main.d57f0927a01f49d27311.js",
-                "publicPath": "http://localhost:3000/dist/main.d57f0927a01f49d27311.js",
-                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/main.d57f0927a01f49d27311.js"
+                "name": "main.a912a86bffa804c538d1.js",
+                "publicPath": "http://localhost:3000/dist/main.a912a86bffa804c538d1.js",
+                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/main.a912a86bffa804c538d1.js"
             },
             {
                 "name": "style.css",
@@ -23,12 +23,12 @@
         ],
         "manifest": [
             {
-                "name": "manifest.d57f0927a01f49d27311.js",
-                "publicPath": "http://localhost:3000/dist/manifest.d57f0927a01f49d27311.js",
-                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/manifest.d57f0927a01f49d27311.js"
+                "name": "manifest.a912a86bffa804c538d1.js",
+                "publicPath": "http://localhost:3000/dist/manifest.a912a86bffa804c538d1.js",
+                "path": "/Users/wangz35/Documents/NIEHS/seazit/seazit_app/project/dist/manifest.a912a86bffa804c538d1.js"
             }
         ]
     },
     "error": "ModuleBuildError",
-    "message": "Module build failed: SyntaxError: Unexpected token, expected , (203:36)\n\n  201 |                 console.log('fetchDoseResponseData');\n  202 |                 console.log(this.state.data)\n> 203 |                 this.setState({data};\n      |                                     ^\n  204 |                 this.updateData(data, this.props.collapse);\n  205 |             });\n  206 |         });\n"
+    "message": "Module build failed: SyntaxError: Unexpected token, expected ; (84:100)\n\n  82 |                 return this.colorScale.domain(_.map(data[0].dose_response, 'casrn'));\n  83 |             case COLLAPSE_BY_CHEMICAL:\n> 84 |                 return 'Endpoint: response of all test substances selected per endpoint and dataset');\n     |                                                                                                     ^\n  85 |             case NO_COLLAPSE:\n  86 |                 return 'Test substance + Endpoint: response for each dataset, test substance, and endpoint selected';\n  87 |             default:\n"
 }

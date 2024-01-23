@@ -381,8 +381,8 @@ const AXIS_LINEAR = 1,
         return (
             <div className="alert alert-info">
                 <p>
-                    This combination of <b>endpoints</b> and <b>test substances</b> returned no
-                    data.
+                    This combination of <b>phenotype terms</b> and <b>test substances</b> returned
+                    no data.
                 </p>
             </div>
         );

@@ -259,9 +259,9 @@ class HeatmapHandler extends React.Component {
                 this.props.ontologyType == integrative_Granular
                     ? 'developmental_defect_grouping_granular'
                     : 'developmental_defect_grouping_general';
-        console.log(data);
+        // console.log(data);
 
-        console.log(ontologyGroup);
+        // console.log(ontologyGroup);
 
         data = _.chain(data)
             .filter((i) => ontologyGroup.includes(i[ontologyGroupType]))
