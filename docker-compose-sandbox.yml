@@ -21,8 +21,8 @@ services:
   rabbitmq:
     restart: always
     build: ./compose/rabbitmq
-    ports:
-      - "0.0.0.0:5671:5671"
+    #ports:
+     # - "0.0.0.0:5671:5671"
 
   redis:
     restart: always
