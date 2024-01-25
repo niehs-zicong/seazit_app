@@ -184,11 +184,6 @@ class IntegrativeAnalysesMain extends React.Component {
             .map('protocol_name_plot')
             .value();
         this.state.url = getIntegrativeUrl(this.state.assays, this.state.chemicals);
-        // this.state.url = '/seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=1,2&casrns=115-86-6,13674-87-8,79-94-7';
-
-        console.log(this.state);
-        console.log(this.state.url);
-
         //heatmap test
         return (
             <div className="row-fluid">

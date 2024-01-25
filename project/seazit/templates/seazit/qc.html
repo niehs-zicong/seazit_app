@@ -1,25 +1,27 @@
 {% extends "seazit/base.html" %}
 
-{% block title %}{{block.super}} | Quality Check{% endblock %}
+{% block title %}{{ block.super }} | Quality Check{% endblock %}
 
 {% block content %}
-<div id='main'></div>
-{% if ENVIRONMENT_NAME == 'Production' || ENVIRONMENT_NAME == 'Sandbox' %}
-   
-     <iframe id='iframeApp' frameborder=0 
-        src="https://sandbox-staging.ntp.niehs.nih.gov/rsconnect/seazit_qc/"></iframe>
-    {% else %} 
-     
-     <iframe id='iframeApp' frameborder=0 
-        src="https://sandbox-staging.ntp.niehs.nih.gov/rsconnect/seazit_qc/"></iframe>
-            
-{% endif %}
-     
+    <div id='main'></div>
+    {#{% if ENVIRONMENT_NAME == 'Production' || ENVIRONMENT_NAME == 'Sandbox' %}#}
+    {% if ENVIRONMENT_NAME == 'Production' or ENVIRONMENT_NAME == 'Sandbox' %}
+
+
+        <iframe id='iframeApp' frameborder=0
+                src="https://sandbox-staging.ntp.niehs.nih.gov/rsconnect/seazit_qc/"></iframe>
+    {% else %}
+
+        <iframe id='iframeApp' frameborder=0
+                src="https://sandbox-staging.ntp.niehs.nih.gov/rsconnect/seazit_qc/"></iframe>
+
+    {% endif %}
+
 {% endblock content %}
 
 {% block extra-js %}
-<script>
-  window.apps.seazit.renderQualityControl(document.getElementById('main'));
-  window.apps.resizeIframe(document.getElementById('iframeApp'));
-</script>
+    <script>
+        window.apps.seazit.renderQualityControl(document.getElementById('main'));
+        window.apps.resizeIframe(document.getElementById('iframeApp'));
+    </script>
 {% endblock extra-js %}

@@ -2,6 +2,7 @@ import React from 'react';
 
 import FiveOhEight from '../components/FiveOhEight';
 import HelpButtonWidget from '../widgets/HelpButtonWidget';
+import styles from '../style.css';
 
 class QualityControlMain extends React.Component {
     constructor(props) {
@@ -129,9 +130,13 @@ class QualityControlMain extends React.Component {
         return (
             <div className="row-fluid">
                 <div className="col-md-12">
-                    <h1>
+                    <h1 className={styles.labelHorizontal}>
                         Quality Check
-                        <HelpButtonWidget stateHolder={this} headLevel={'h1'} />
+                        <HelpButtonWidget
+                            stateHolder={this}
+                            headLevel={'h1'}
+                            title={'Click to toggle help-text'}
+                        />
                     </h1>
                     {this._renderHelpText()}
                 </div>

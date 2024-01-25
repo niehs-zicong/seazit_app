@@ -23,7 +23,7 @@ import {
     renderNoDataAlert,
     pod_med_processed,
     svg_download_form,
-    data_exportToJsonFile,
+    exportCsv,
     BMDVIZ_ACTIVITY,
 } from '../shared';
 
@@ -121,68 +121,6 @@ class HeatmapHandler extends React.Component {
             });
         });
     }
-
-    _exportCsv = function(jsonData) {
-        if (jsonData.length === 0) {
-            return '';
-        }
-        const filename = 'IntegrativeAnalysesData.csv';
-
-        const headerMappings = {
-            protocol_name_long: 'dataset name (short)',
-            protocol_name_plot: 'dataset name (long)',
-            chemical_category: 'use category level1',
-            dtxsid: 'dtxsid',
-            casrn: 'casrn',
-            preferred_name: 'preferred_name',
-            use_category1: 'use category level1',
-            ontologyGroupName: 'ontology group',
-            endPointList: 'n endpoints in the ontology group',
-            combin_ontology_id: 'n ontology terms in the ontology group',
-            f_max_dev_call: 'activity decision on ontology',
-            mean_pod: 'ontology group bmc (um)',
-            mort_med_pod_med: 'mortality bmc (um)',
-            mean_selectivity: 'selectivity',
-            min_lowest_conc: 'lowest tested conc (um)',
-            max_highest_conc: 'highest tested conc (um)',
-        };
-
-        const columnDelimiter = ',';
-        const lineDelimiter = '\n';
-        const headerKeys = Object.keys(headerMappings);
-
-        const csvColumnHeader = headerKeys.map((key) => headerMappings[key]).join(columnDelimiter);
-        let csvStr = csvColumnHeader + lineDelimiter;
-
-        jsonData.forEach((item) => {
-            headerKeys.forEach((key, index) => {
-                if (index > 0 && index < headerKeys.length) {
-                    csvStr += columnDelimiter;
-                }
-                let value = item[key] || '';
-                if (key === 'endPointList' || key === 'combin_ontology_id') {
-                    value = value ? value.length : 0;
-                }
-                if (
-                    key === 'mean_pod' ||
-                    key === 'mort_med_pod_med' ||
-                    key === 'min_lowest_conc' ||
-                    key === 'max_highest_conc'
-                ) {
-                    value = pod_med_processed(value);
-                }
-                csvStr += `"${value}"`;
-            });
-            csvStr += lineDelimiter;
-        });
-        csvStr = encodeURIComponent(csvStr);
-
-        const dataUri = 'data:text/csv;charset=utf-8,' + csvStr;
-        const linkElement = document.createElement('a');
-        linkElement.setAttribute('href', dataUri);
-        linkElement.setAttribute('download', filename);
-        linkElement.click();
-    };
 
     _getFilteredData() {
         let getFillFunction = function(visualization, continuousColorScale, colorCategory) {
@@ -297,11 +235,6 @@ class HeatmapHandler extends React.Component {
             sortByKey
         ) {
             const processedData = [];
-
-            //
-
-            // note for this part.
-            //
 
             for (const x of xgroups) {
                 for (const y of ygroups) {
@@ -447,13 +380,83 @@ class HeatmapHandler extends React.Component {
     }
 
     _renderButtons(d) {
+        console.log(d.data);
         const title =
             this.props.visualization === INTVIZ_HEATMAP
                 ? 'More information on developmental toxicity classifications'
                 : 'More information on BMC and specificity';
 
         const svgId = this.props.visualization === INTVIZ_HEATMAP ? 'IA_heatmap01' : 'IA_heatmap02';
-
+        const csvfileName = 'IntegrativeAnalysesData.csv';
+        const csvfileHeader = [
+            {
+                title: 'dataset name (long)',
+                key: 'protocol_name_long',
+            },
+            {
+                title: 'dataset name (short)',
+                key: 'protocol_name_plot',
+            },
+            {
+                title: 'dtxsid',
+                key: 'dtxsid',
+            },
+            {
+                title: 'casrn',
+                key: 'casrn',
+            },
+            {
+                title: 'test substance',
+                key: 'preferred_name',
+            },
+            {
+                title: 'use category',
+                key: 'use_category1',
+            },
+            {
+                title: 'selected phenotype term',
+                key: 'ontologyGroupName',
+            },
+            {
+                title: 'n endpoints in selected phenotype term',
+                key: 'endPointList',
+                method: 'length',
+            },
+            {
+                title: 'n endpoints specific in selected phenotype term',
+                key: 'devtoxEndPointList',
+                method: 'length',
+            },
+            {
+                title: 'phenotype term bmc (microM)',
+                key: 'mean_pod',
+                method: 'processMedPodMed',
+            },
+            {
+                title: 'developmental toxicity classification',
+                key: 'final_dev_call',
+                method: 'map',
+            },
+            {
+                title: 'mortality bmc (microM)',
+                key: 'mort_med_pod_med',
+                method: 'processMedPodMed',
+            },
+            {
+                title: 'specificity',
+                key: 'mean_selectivity',
+            },
+            {
+                title: 'lowest tested conc (microM)',
+                method: 'processMedPodMed',
+                key: 'min_lowest_conc',
+            },
+            {
+                title: 'highest tested conc (microM)',
+                method: 'processMedPodMed',
+                key: 'max_highest_conc',
+            },
+        ];
         return (
             <div>
                 <h4 className={`${styles.labelHorizontal} ${styles.labelNormal}`}>
@@ -464,7 +467,7 @@ class HeatmapHandler extends React.Component {
                 <div>
                     <h4 className={` ${styles.labelNormal}`}>
                         <button
-                            onClick={() => this._exportCsv(d.data)}
+                            onClick={() => exportCsv(d.data, csvfileName, csvfileHeader)}
                             className={`fa fa-download ${styles['pointer-button']}`}
                         ></button>
                         <span> Data</span>

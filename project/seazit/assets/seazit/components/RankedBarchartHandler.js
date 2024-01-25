@@ -27,6 +27,7 @@ import {
     svg_download_form,
     INTVIZ_HEATMAP,
     renderNoDataAlert,
+    exportCsv,
 } from '../shared';
 
 class RankedBarchartHandler extends React.Component {
@@ -90,9 +91,6 @@ class RankedBarchartHandler extends React.Component {
                 .reverse()
                 .value();
         }
-        console.log(this.state.data.bmd_activity_selectivity);
-        console.log(data);
-
         //
         plotData = _.chain(data)
             .groupBy('casrn')
@@ -116,6 +114,7 @@ class RankedBarchartHandler extends React.Component {
                 return {
                     casrn: k[0].casrn,
                     data: k,
+                    endpoint_name: endpoint_names,
                     minimimumNonViability: {
                         ...minimimumNonViability,
                         endpoint_names_list: endpoint_names,
@@ -141,81 +140,10 @@ class RankedBarchartHandler extends React.Component {
         console.log('data');
 
         console.log(data);
-        // if (this.props.visualization === BMDVIZ_ACTIVITY) {
-        //     plotData = _.chain(plotData)
-        //         .sortBy('med_pod_med')
-        //         .value();
-        // } else {
-        //     plotData = _.chain(plotData)
-        //         .sortBy('mean_selectivity')
-        //         .reverse()
-        //         .value();
-        // }
         console.log('plotData');
         console.log(plotData);
         return plotData;
     }
-
-    _exportCsv = function(jsonData) {
-        if (jsonData.length === 0) {
-            return '';
-        }
-        const filename = 'bmcData.csv';
-        console.log(jsonData);
-
-        const headerMappings = {
-            casrn: 'casrn',
-            use_category1: 'use category level1',
-            preferred_name: 'preferred_name',
-            combin_ontology: 'combin_ontology',
-            combin_ontology_id: 'combin_ontology_id',
-            malformation: 'malformation',
-            mean_pod: 'ontology group bmc (um)',
-            mean_selectivity: 'selectivity',
-            n_values: 'n_values',
-            // med_pod_med: 'med_pod_med',
-            // min_pod_med: 'min_pod_med',
-            // max_pod_med: 'max_pod_med',
-            // mort_med_pod_med: 'mort_med_pod_med',
-            // mort_min_pod_med: 'mort_min_pod_med',
-            // mort_max_pod_med: 'mort_max_pod_med',
-        };
-
-        const columnDelimiter = ',';
-        const lineDelimiter = '\n';
-        const headerKeys = Object.keys(headerMappings);
-
-        const csvColumnHeader = headerKeys.map((key) => headerMappings[key]).join(columnDelimiter);
-        let csvStr = csvColumnHeader + lineDelimiter;
-
-        jsonData.forEach((item) => {
-            headerKeys.forEach((key, index) => {
-                if (index > 0 && index < headerKeys.length) {
-                    csvStr += columnDelimiter;
-                }
-                let value = item[key] || '';
-                if (
-                    key === 'med_pod_med' ||
-                    key === 'min_pod_med' ||
-                    key === 'max_pod_med' ||
-                    key === 'mort_med_pod_med' ||
-                    key === 'mort_min_pod_med' ||
-                    key === 'mort_max_pod_med'
-                ) {
-                    value = pod_med_processed(value);
-                }
-                csvStr += `"${value}"`;
-            });
-            csvStr += lineDelimiter;
-        });
-        csvStr = encodeURIComponent(csvStr);
-
-        const dataUri = 'data:text/csv;charset=utf-8,' + csvStr;
-        const linkElement = document.createElement('a');
-        linkElement.setAttribute('href', dataUri);
-        linkElement.setAttribute('download', filename);
-        linkElement.click();
-    };
 
     componentWillMount() {
         this.fetchBmdData(this.props.url);
@@ -297,7 +225,172 @@ class RankedBarchartHandler extends React.Component {
                 this.props.visualization === BMDVIZ_ACTIVITY
                     ? 'More information on BMC by activity'
                     : 'More information on BMC by specificity',
+            csvfileName =
+                this.props.visualization === BMDVIZ_ACTIVITY
+                    ? 'ActivityBMCData.csv'
+                    : 'SpecificityBMCData.csv',
+            csvfileHeader =
+                this.props.visualization === BMDVIZ_ACTIVITY
+                    ? [
+                          {
+                              title: 'dataset name (long)',
+                              section: 'minimimumNonViability',
+                              key: 'protocol_name_long',
+                          },
+                          {
+                              title: 'dataset name (short)',
+                              section: 'minimimumNonViability',
+                              key: 'protocol_name_plot',
+                          },
+                          {
+                              title: 'dtxsid',
+                              section: 'minimimumNonViability',
+                              key: 'dtxsid',
+                          },
+                          {
+                              title: 'casrn',
+                              key: 'casrn',
+                          },
+                          {
+                              title: 'test substance',
+                              key: 'preferred_name',
+                          },
+                          {
+                              title: 'use category',
+                              key: 'use_category1',
+                          },
+                          {
+                              title: 'endpoint',
+                              key: 'endpoint_name',
+                          },
+                          {
+                              title: 'endpoint bmc (microM)',
+                              method: 'processMedPodMed', // Function for processing med_pod_med
+                              section: 'minimimumNonViability',
+                              key: 'med_pod_med',
+                          },
+                          {
+                              title: 'mortality bmc (microM)',
+                              method: 'processMedPodMed', // Function for processing mort_med_pod_med
+                              section: 'minimimumNonViability',
+                              key: 'mort_med_pod_med',
+                          },
+                          {
+                              title: 'lowest tested conc (microM)',
+                              method: 'processMedPodMed', // Function for processing mort_med_pod_med
+                              section: 'minimimumNonViability',
+                              key: 'min_lowest_conc',
+                          },
+                          {
+                              title: 'highest tested conc (microM)',
+                              method: 'processMedPodMed', // Function for processing mort_med_pod_med
+
+                              section: 'minimimumNonViability',
+                              key: 'max_highest_conc',
+                          },
+                          {
+                              title: 'n curves evaluated',
+                              key: 'n_values',
+                          },
+                          {
+                              title: 'n endpoints selected',
+                              method: 'length', // Function for getting length of endpoint_names_list
+                              section: 'minimimumNonViability',
+                              key: 'endpoint_names_list',
+                          },
+                      ]
+                    : [
+                          {
+                              title: 'dataset name (long)',
+                              section: 'minimimumNonViability',
+                              key: 'protocol_name_long',
+                          },
+                          {
+                              title: 'dataset name (short)',
+                              section: 'minimimumNonViability',
+                              key: 'protocol_name_plot',
+                          },
+                          {
+                              title: 'dtxsid',
+                              section: 'minimimumNonViability',
+                              key: 'dtxsid',
+                          },
+                          {
+                              title: 'casrn',
+                              key: 'casrn',
+                          },
+                          {
+                              title: 'test substance',
+                              key: 'preferred_name',
+                          },
+                          {
+                              title: 'use category',
+                              key: 'use_category1',
+                          },
+                          {
+                              title: 'laboratory specific term',
+                              section: 'minimimumNonViability',
+                              key: 'malformation',
+                          },
+                          {
+                              title: 'ontology term',
+                              method: 'cat', // Function for getting length of endpoint_names_list
+                              key: 'combin_ontology',
+                          },
+                          {
+                              title: 'ontology id',
+                              method: 'cat', // Function for getting length of endpoint_names_list
+                              key: 'combin_ontology_id',
+                          },
+                          {
+                              title: 'ontology term bmc (microM)',
+                              method: 'processMedPodMed', // Function for getting length of endpoint_names_list
+                              key: 'mean_pod',
+                          },
+                          {
+                              title: 'developmental toxicity classification',
+                              method: 'map', // Function for getting length of endpoint_names_list
+                              section: 'minimimumNonViability',
+
+                              key: 'final_dev_call',
+                          },
+                          {
+                              title: 'mortality bmc (microM)',
+                              method: 'processMedPodMed', // Function for processing mort_med_pod_med
+                              section: 'minimimumNonViability',
+                              key: 'mort_med_pod_med',
+                          },
+                          {
+                              title: 'specificity',
+                              key: 'mean_selectivity',
+                          },
+                          {
+                              title: 'lowest tested conc (microM)',
+                              method: 'processMedPodMed', // Function for processing mort_med_pod_med
+                              section: 'minimimumNonViability',
+                              key: 'min_lowest_conc',
+                          },
+
+                          {
+                              title: 'highest tested conc (microM)',
+                              method: 'processMedPodMed', // Function for processing mort_med_pod_med
+                              section: 'minimimumNonViability',
+                              key: 'max_highest_conc',
+                          },
+
+                          {
+                              title: 'n curves evaluated',
+                              key: 'n_values',
+                          },
+                          {
+                              title: 'n endpoints selected',
+                              method: 'length',
+                              section: 'minimimumNonViability',
+                              key: 'endpoint_names_list',
+                          },
+                      ],
             plotData = this._getFilteredData();
+        // console.log(plotData)
 
         return (
             <div>
@@ -333,7 +426,7 @@ class RankedBarchartHandler extends React.Component {
                     <div>
                         <h4 className={` ${styles.labelNormal}`}>
                             <button
-                                onClick={() => this._exportCsv(plotData)}
+                                onClick={() => exportCsv(plotData, csvfileName, csvfileHeader)}
                                 className={`fa fa-download ${styles['pointer-button']}`}
                             ></button>
                             <span> Data</span>

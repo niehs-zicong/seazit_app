@@ -92,6 +92,7 @@ const AXIS_LINEAR = 1,
         renderHelpText = null
     ) {
         let size = Math.min(options.length, 11);
+        console.log(options);
         return (
             <div>
                 <label className={styles.labelHorizontal}>
@@ -139,8 +140,6 @@ const AXIS_LINEAR = 1,
     ) {
         return (
             <div>
-                {/*<label>Select one {label}:</label>*/}
-
                 <label className={styles.labelHorizontal}>
                     Select one {label}:{helpButtonWidget && helpButtonWidget()}
                 </label>
@@ -184,9 +183,15 @@ const AXIS_LINEAR = 1,
         renderHelpText = null
     ) {
         let size = 10;
+        console.log(options);
+
         return (
             <div>
-                <label>Select {label}(s):</label>
+                <label className={styles.labelHorizontal}>
+                    Select {label}(s):{helpButtonWidget && helpButtonWidget()}
+                </label>
+                {renderHelpText && renderHelpText()}
+
                 <select
                     name={name}
                     className="form-control"
@@ -196,13 +201,27 @@ const AXIS_LINEAR = 1,
                     value={values}
                 >
                     {_.map(options, (value, category) => {
+                        console.log(value);
+
                         return (
                             <optgroup key={category} label={category}>
-                                {value.map((d) => (
-                                    <option title={d.description} key={d.key} value={d.key}>
-                                        {d.label}
-                                    </option>
-                                ))}
+                                {value.map((d) => {
+                                    if (d.description) {
+                                        return (
+                                            <Tooltip title={d.description} placement="top">
+                                                <option key={d.key} value={d.key}>
+                                                    {d.label}
+                                                </option>
+                                            </Tooltip>
+                                        );
+                                    } else {
+                                        return (
+                                            <option key={d.key} value={d.key}>
+                                                {d.label}
+                                            </option>
+                                        );
+                                    }
+                                })}
                             </optgroup>
                         );
                     })}
@@ -301,6 +320,101 @@ const AXIS_LINEAR = 1,
         document.body.appendChild(element);
         element.click();
         document.body.removeChild(element);
+    },
+    exportCsv = function(jsonData, filename, headerMappings) {
+        if (jsonData.length === 0) {
+            return '';
+        }
+        console.log(jsonData);
+        const columnDelimiter = ',';
+        const lineDelimiter = '\n';
+
+        // Extract keys and sections from headerMappings
+        const selectedKeys = headerMappings.map((mapping) => ({
+            key: mapping.key,
+            section: mapping.section,
+            method: mapping.method,
+        }));
+
+        console.log(selectedKeys);
+
+        const csvColumnHeader = headerMappings
+            .map((mapping) => mapping.title)
+            .join(columnDelimiter);
+        let csvStr = csvColumnHeader + lineDelimiter;
+
+        const extractValue = (item, key, section, method) => {
+            // Handle nested properties within a specific section
+            if (section) {
+                const sectionKeys = section.split('.');
+                let sectionData = item;
+                for (const sectionKey of sectionKeys) {
+                    sectionData = sectionData[sectionKey];
+                    if (sectionData === undefined) {
+                        return '';
+                    }
+                }
+                return applyMethod(sectionData[key], method);
+            } else {
+                // Handle flat properties
+                return applyMethod(item[key], method);
+            }
+        };
+
+        const applyMethod = (value, method) => {
+            // Apply the specified method to the value
+            switch (method) {
+                case 'processMedPodMed':
+                    return pod_med_processed(value);
+                case 'length':
+                    return value.length;
+                case 'cat':
+                    return Array.isArray(value) ? value.join(' | ') : value;
+                // return Array.isArray(value) ? value.map(element => `"${element}"`).join(';') : value;
+                // return value;
+                case 'map':
+                    const mapList = [
+                        {
+                            name: 'dev tox',
+                            label: 'specific',
+                        },
+                        {
+                            name: 'general tox',
+                            label: 'non-specific',
+                        },
+                        {
+                            name: 'inconclusive',
+                            label: 'inconclusive, more tests are needed',
+                        },
+                        {
+                            name: 'inactive',
+                            label: 'non-toxic',
+                        },
+                    ];
+                    const mappedValue = mapList.find((item) => item.name === value);
+                    return mappedValue ? mappedValue.label : value;
+                default:
+                    return value;
+            }
+        };
+
+        jsonData.forEach((item) => {
+            selectedKeys.forEach(({ key, section, method }, index) => {
+                if (index > 0 && index < selectedKeys.length) {
+                    csvStr += columnDelimiter;
+                }
+                let value = extractValue(item, key, section, method);
+                csvStr += `"${value}"`;
+            });
+            csvStr += lineDelimiter;
+        });
+        csvStr = encodeURIComponent(csvStr);
+
+        const dataUri = 'data:text/csv;charset=utf-8,' + csvStr;
+        const linkElement = document.createElement('a');
+        linkElement.setAttribute('href', dataUri);
+        linkElement.setAttribute('download', filename);
+        linkElement.click();
     },
     integrativeHandleCellClick = function(d) {
         console.log(d);
@@ -463,6 +577,7 @@ export {
     renderSelectMultiOptgroupWidget,
     insertIntoDom,
     printFloat,
+    exportCsv,
     renderNoDataAlert,
     renderNoSelected,
     data_exportToJsonFile,

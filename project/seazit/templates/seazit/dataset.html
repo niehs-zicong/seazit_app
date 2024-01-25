@@ -4,7 +4,8 @@
 
 {% block content %}
 <div id='main'></div>
-{% if ENVIRONMENT_NAME == 'Production' || ENVIRONMENT_NAME == 'Sandbox'  %}
+{#{% if ENVIRONMENT_NAME == 'Production' || ENVIRONMENT_NAME == 'Sandbox'  %}#}
+{% if ENVIRONMENT_NAME == 'Production' or ENVIRONMENT_NAME == 'Sandbox'  %}
 
 <iframe id='iframeApp' frameborder=0 
        src="https://sandbox-staging.ntp.niehs.nih.gov/rsconnect/seazit_dataset/"></iframe>
