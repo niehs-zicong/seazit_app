@@ -52,7 +52,7 @@ class Heatmap extends Component {
             yMap = _.groupBy(data, 'y'),
             ontologyType = this.props.ontologyType,
             handleXLabelClick = function(label) {
-                console.log(label);
+                // console.log(label);
                 let cells = xMap[label];
                 let cell = {
                     developmental_defect_grouping_general:
@@ -70,7 +70,7 @@ class Heatmap extends Component {
             },
             // draw y-axis
             handleYLabelClick = function(label) {
-                console.log(label);
+                // console.log(label);
 
                 let cells = yMap[label],
                     casrns = [...new Set(cells.map((item) => item.casrn))],

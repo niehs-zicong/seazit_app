@@ -60,8 +60,8 @@ const AXIS_LINEAR = 1,
     READOUT_TYPE_CATEGORY = 2,
     loadMetadata = function(component) {
         d3.json(URL_METADATA, (d) => {
-            // console.log('d');
-            // console.log(d);
+            // //console.log('d');
+            // //console.log(d);
             component.setState({
                 metadataLoaded: true,
                 protocol_data: d.protocol_data,
@@ -92,7 +92,7 @@ const AXIS_LINEAR = 1,
         renderHelpText = null
     ) {
         let size = Math.min(options.length, 11);
-        console.log(options);
+        //console.log(options);
         return (
             <div>
                 <label className={styles.labelHorizontal}>
@@ -183,7 +183,7 @@ const AXIS_LINEAR = 1,
         renderHelpText = null
     ) {
         let size = 10;
-        console.log(options);
+        //console.log(options);
 
         return (
             <div>
@@ -201,7 +201,7 @@ const AXIS_LINEAR = 1,
                     value={values}
                 >
                     {_.map(options, (value, category) => {
-                        console.log(value);
+                        //console.log(value);
 
                         return (
                             <optgroup key={category} label={category}>
@@ -240,17 +240,17 @@ const AXIS_LINEAR = 1,
             ro = readout_ids.join(','),
             chems = casrns.join(',');
         // return url, ro is the readout_id
-        // console.log(ids, ro, chems);
+        // //console.log(ids, ro, chems);
         return `${URL_CR}?format=json&protocol_ids=${ids}&readouts=${ro}&casrns=${chems}`;
     },
     getBmdsUrl = function(protocol_id, readout_ids) {
         if (protocol_id.length === 0 || readout_ids.length === 0) {
             return null;
         }
-        // console.log(protocol_id, readout_ids)
+        // //console.log(protocol_id, readout_ids)
         let newReadout = 'Mortality@120' + '_' + protocol_id;
         readout_ids.push(newReadout); // Modifying the array by adding a new element
-        // console.log(protocol_id, readout_ids)
+        // //console.log(protocol_id, readout_ids)
 
         let id = protocol_id,
             ro = readout_ids.join(',');
@@ -265,7 +265,7 @@ const AXIS_LINEAR = 1,
         let ids = protocol_ids.join(','),
             chems = casrns.join(',');
         // return url, ro is the readout_id
-        // console.log(ids, ro, chems);
+        // //console.log(ids, ro, chems);
         return `${URL_INTEGRATIVE}?format=json&protocol_ids=${ids}&casrns=${chems}`;
     },
     getSankeyPlotUrl = function(protocol_ids, casrns) {
@@ -275,7 +275,7 @@ const AXIS_LINEAR = 1,
         let ids = protocol_ids.join(','),
             chems = casrns.join(',');
         // return url, ro is the readout_id
-        // console.log(ids, ro, chems);
+        // //console.log(ids, ro, chems);
         return `${URL_INTEGRATIVE}?format=json&protocol_ids=${ids}&casrns=${chems}`;
     },
     printFloat = function(v) {
@@ -325,7 +325,7 @@ const AXIS_LINEAR = 1,
         if (jsonData.length === 0) {
             return '';
         }
-        console.log(jsonData);
+        //console.log(jsonData);
         const columnDelimiter = ',';
         const lineDelimiter = '\n';
 
@@ -336,7 +336,7 @@ const AXIS_LINEAR = 1,
             method: mapping.method,
         }));
 
-        console.log(selectedKeys);
+        //console.log(selectedKeys);
 
         const csvColumnHeader = headerMappings
             .map((mapping) => mapping.title)
@@ -365,13 +365,20 @@ const AXIS_LINEAR = 1,
             // Apply the specified method to the value
             switch (method) {
                 case 'processMedPodMed':
-                    return pod_med_processed(value);
+                    const processedValue = pod_med_processed(value);
+
+                    if (processedValue !== undefined) {
+                        return printFloat(processedValue);
+                    } else {
+                        return processedValue;
+                    }
+
                 case 'length':
-                    return value.length;
+                    // return value.length;
+                    return value && value.length !== undefined ? value.length : 0;
+
                 case 'cat':
                     return Array.isArray(value) ? value.join(' | ') : value;
-                // return Array.isArray(value) ? value.map(element => `"${element}"`).join(';') : value;
-                // return value;
                 case 'map':
                     const mapList = [
                         {
@@ -417,7 +424,7 @@ const AXIS_LINEAR = 1,
         linkElement.click();
     },
     integrativeHandleCellClick = function(d) {
-        console.log(d);
+        //console.log(d);
         const headingHtml = `
         ${d.devtoxEndPointList.length} of ${d.endPointList.length} endpoints are associated with ${d.ontologyGroupName}
     `;
@@ -451,7 +458,7 @@ const AXIS_LINEAR = 1,
         }
     },
     BMCHandleCellClick = function(d, clickType) {
-        console.log('SingleCurveBody', d);
+        //console.log('SingleCurveBody', d);
         const headingHtml = `
         ${d.endpoint_name} endpoint has the lowest BMC in selected endpoints
     `;
@@ -502,7 +509,7 @@ const AXIS_LINEAR = 1,
         );
     },
     renderNoSelected = function(d) {
-        console.log(d);
+        //console.log(d);
         return (
             <div className="alert alert-info">
                 <ul>

@@ -688,13 +688,11 @@ class Seazit_readout_result(models.Model):
             "max_pod_med",
             "med_hitconf",
             "n_values",
-
             "mort_min_pod_med",
             "mort_med_pod_med",
             "mort_max_pod_med",
             "mort_med_hitconf",
             "mort_n_values",
-
             "min_lowest_conc",
             "max_highest_conc",
             "mean_pod",

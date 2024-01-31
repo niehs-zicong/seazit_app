@@ -58,7 +58,7 @@ class IntegrativeAnalysesMain extends React.Component {
             assays: [],
             // assays:['1', '2'],
 
-            datasetLabName: [],
+            labDataset: [],
             url: null,
             // ontologyWidget
             ontologyType: integrative_General,
@@ -149,22 +149,47 @@ class IntegrativeAnalysesMain extends React.Component {
                     ontologyType={this.state.ontologyType}
                     ontologyGroup={this.state.ontologyGroup}
                     url={this.state.url}
-                    datasetLabName={this.state.datasetLabName}
+                    labDataset={this.state.labDataset}
                 />
 
                 {/*// for test use. */}
 
                 {/*<HeatmapHandler*/}
-                {/*    assays={['4', '5', '6']}*/}
-                {/*    casrns={['115-86-6', '13674-87-8', '79-94-7']}*/}
+                {/*    assays={['1', '2']}*/}
+                {/*    casrns={['115-86-6', '13674-87-8']}*/}
                 {/*    visualization={1}*/}
                 {/*    ontologyType={2}*/}
-                {/*    ontologyGroup={['hatching defect', 'head defects']}*/}
+                {/*    ontologyGroup={['hatching defect']}*/}
                 {/*    url={*/}
-                {/*        '/seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=4,5,6&casrns=115-86-6,13674-87-8,79-94-7'*/}
+                {/*        '/seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=1,2&casrns=115-86-6,13674-87-8'*/}
                 {/*    }*/}
-                {/*    datasetLabName={['Def_Lab A_SR-DC', 'Def_Lab A_S-C', 'Def_Lab A_S-DC']}*/}
+                {/*    labDataset={[
+    {
+        "protocol_name": "SEAZIT_DRF_BIOBIDE_R-C",
+        "protocol_type": "DRF",
+        "protocol_source": "biobide",
+        "seazit_protocol_id": 1,
+        "lab_anonymous_code": "Lab A",
+        "study_phase": "Dose Range Finding",
+        "test_condition": "Static Renewal-Chorion (SR-C)",
+        "protocol_name_long": "Dose Range Finding study, Lab A, Static Renewal-Chorion (SR-C)",
+        "protocol_name_plot": "DRF_Lab A_SR-C"
+    },
+    {
+        "protocol_name": "SEAZIT_DRF_OSU_S-DC",
+        "protocol_type": "DRF",
+        "protocol_source": "osu",
+        "seazit_protocol_id": 2,
+        "lab_anonymous_code": "Lab B",
+        "study_phase": "Dose Range Finding",
+        "test_condition": "Static-Dechorion (S-DC)",
+        "protocol_name_long": "Dose Range Finding study, Lab B, Static-Dechorion (S-DC)",
+        "protocol_name_plot": "DRF_Lab B_S-DC"
+    }
+]}*/}
                 {/*/>*/}
+
+                {/*// for test use. */}
 
                 <p className="help-block">
                     <b>Interactivity note:</b> This heatmap is interactive. Click a cell to view
@@ -179,10 +204,15 @@ class IntegrativeAnalysesMain extends React.Component {
         if (!this.state.metadataLoaded) {
             return <Loading />;
         }
-        this.state.datasetLabName = _.chain(this.state.protocol_data)
+        this.state.labDataset = _.chain(this.state.protocol_data)
             .filter((i) => this.state.assays.includes(i.seazit_protocol_id.toString()))
-            .map('protocol_name_plot')
+            // .map('protocol_name_plot')
             .value();
+        // console.log("this.state.labDataset")
+        //
+        // console.log(this.state.protocol_data)
+        // console.log(this.state.labDataset)
+
         this.state.url = getIntegrativeUrl(this.state.assays, this.state.chemicals);
         //heatmap test
         return (

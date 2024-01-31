@@ -261,6 +261,7 @@ class RankedBarchartHandler extends React.Component {
                           },
                           {
                               title: 'endpoint',
+                              section: 'minimimumNonViability',
                               key: 'endpoint_name',
                           },
                           {
