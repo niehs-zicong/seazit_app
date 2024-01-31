@@ -27,8 +27,8 @@ services:
   redis:
     restart: always
     build: ./compose/redis
-    ports:
-      - "0.0.0.0:6380:6379"
+    #ports:
+     # - "0.0.0.0:6380:6379"
 
   django:
     restart: always
