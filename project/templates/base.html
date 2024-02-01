@@ -91,7 +91,7 @@
 <script>
     $(document).foundation();
 </script>
-{% if ENVIRONMENT_NAME == 'Production' %}
+{% if ENVIRONMENT_NAME == 'Production' or ENVIRONMENT_NAME == 'Sandbox' %}
 <script src="{{STATIC_URL}}js/Universal-Federated-Analytics-Min.js?agency=HHS&subagency=NIH"
         id="_fed_an_ua_tag"
         language="javascript"
