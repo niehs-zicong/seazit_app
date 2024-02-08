@@ -163,7 +163,7 @@ class DoseResponse extends React.Component {
         // yrange = d3.extent(responses);
         // offset = (yrange[1] - yrange[0]) * 0.15 * 0.5;
         // yrange = [yrange[0] - offset, yrange[1] + offset];
-        console.log(collapsedData);
+        //console.log(collapsedData);
         return {
             data,
             collapsedData,
@@ -182,7 +182,7 @@ class DoseResponse extends React.Component {
                 });
                 return;
             }
-            console.log('zw');
+            //console.log('zw');
             this.updateData(data, this.props.collapse);
         });
     }
@@ -317,8 +317,8 @@ class DoseResponse extends React.Component {
     }
 
     updateData(data, collapse) {
-        console.log('updateData');
-        console.log(data);
+        //console.log('updateData');
+        //console.log(data);
         this.setKeys(data, collapse);
         let update = this.collapseData(data, collapse);
         let scale = this.getColorScale(update.collapsedData, collapse);
@@ -330,11 +330,11 @@ class DoseResponse extends React.Component {
     }
 
     _renderPlot(d, yrange) {
-        console.log('_renderPlot');
+        //console.log('_renderPlot');
         if (this.refs[d.key] === undefined) {
             return;
         }
-        console.log(d);
+        //console.log(d);
 
         let data = [],
             dose_range = [0, 1],
@@ -557,13 +557,13 @@ class DoseResponse extends React.Component {
             // move legend to bottom of plot
             layout.legend = { orientation: 'h', y: -0.3 };
         }
-        // console.log(d)
+        // //console.log(d)
 
         Plotly.newPlot(this.refs[d.key], data, layout, svgConfig);
     }
 
     loadDoseResponse() {
-        console.log('loadDoseResponse');
+        //console.log('loadDoseResponse');
         this.state.collapsedData.map((d) => this._renderPlot(d, this.state.yrange));
     }
 
@@ -573,7 +573,7 @@ class DoseResponse extends React.Component {
         try {
             await this.fetchDoseResponseData(this.props.url);
         } catch (error) {
-            console.error(error);
+            //console.error(error);
             // Handle error if needed
             this.setState({ error: 'Failed to fetch data.' });
         }
@@ -609,7 +609,7 @@ class DoseResponse extends React.Component {
         }
 
         let colNum = Math.ceil(12 / this.props.cols);
-        // console.log(this.state.collapsedData)
+        // //console.log(this.state.collapsedData)
         return (
             <div>
                 {this.state.collapsedData.map((item) => (

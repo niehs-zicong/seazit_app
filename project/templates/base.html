@@ -67,19 +67,31 @@
 {% include 'includes/footer.html' %}
 {% endblock footer %}
 
-<script src="{{STATIC_URL}}js/ntpweb-shared.min.js"
-        type='text/javascript'></script>
+{#<script src="{{STATIC_URL}}js/ntpweb-shared.min.js"#}
+{#        type='text/javascript'></script>#}
 
-<script src="{{STATIC_URL}}js/ntpweb-bundle-new.min.js"
-        type='text/javascript'></script>
-<script src="{{STATIC_URL}}js/ntpweb-shared-minimal.js"
+<script src="{{STATIC_URL}}js/ntpweb-shared.js"
         type='text/javascript'></script>
 
 
+{#jquery library 3.7.0, and jquery UI 1.13.2#}
+{#if we use
+ntpweb-shared-minimal.js, we should CDN (Content Delivery Network) jquery version.#}
+{#otherwise, jquery, jquery-ui are defined in ntpweb-sahred.js file.#}
+
+{#<script src="{{STATIC_URL}}js/ntpweb-shared.js"#}
+{#        type='text/javascript'></script>#}
+{#<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>#}
+{#<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>#}
+
+
+{#zicong added #}
 <script src='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js'
         type='text/javascript'></script>
 <script src='//cdnjs.cloudflare.com/ajax/libs/plotly.js/1.26.0/plotly.min.js'
         type='text/javascript'></script>
+
+
 
 {% render_bundle 'manifest' %}
 {% render_bundle 'vendor' %}

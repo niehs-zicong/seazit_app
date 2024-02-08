@@ -31,8 +31,8 @@ class DevtoxHeatmap extends Component {
 
     renderPlot = function(el, data, legendData) {
         $(el).empty();
-        console.log(data);
-        console.log(legendData);
+        // console.log(data);
+        // console.log(legendData);
 
         let margin = {
                 top: 40,
@@ -261,73 +261,17 @@ class DevtoxHeatmap extends Component {
         circles
             .append('circle')
             .attr('class', 'circle')
-            // .attr('r', (d) => size(Math.abs(d.mean_selectivity)))
             .attr('r', (d) => {
+                console.log(d.mean_selectivity);
                 return size(Math.abs(d.mean_selectivity));
             })
             .attr('fill', (d) => colorScaleFunction(pod_med_processed(d.mean_pod)))
-            // .attr('fill', '#25838e')
             .style('opacity', 0.8)
             .style('cursor', 'pointer')
             .on('mouseover', mouseover)
             .on('mousemove', mousemove)
             .on('mouseleave', mouseleave)
             .on('click', integrativeHandleCellClick);
-
-        // chartLayer
-        //     .selectAll('path')
-        //     .data(data.filter((d) => d.final_dev_call === 'dev tox'))
-        //     .enter()
-        //     .append('g')
-        //     .attr('class', 'cor')
-        //     .attr('transform', function (d) {
-        //         return `translate(${xScale(d.x) +
-        //         xScale.bandwidth() / 2}, ${yScale(d.y) + yScale.bandwidth() / 2})`;
-        //     })
-        //     .append('circle')
-        //     .attr('r', (d) => {
-        //         return size(Math.abs(d.mean_selectivity));
-        //     })
-        //     // .attr('fill', (d) => d.fill)
-        //     .attr('fill', "#25838e")
-        //
-        //     .style('opacity', 0.8)
-        //
-        //     .style('cursor', 'pointer')
-        //     .on('mouseover', mouseover)
-        //     .on('mousemove', mousemove)
-        //     .on('mouseleave', mouseleave)
-        //     .on('click', integrativeHandleCellClick);
-
-        // chartLayer
-        //     .selectAll('.square')
-        //     .data(data.filter((d) => d.final_dev_call !== 'dev tox' && d.final_dev_call !== null))
-        //     .enter()
-        //     .append('path')
-        //     .attr('class', 'square')
-        //     .attr('d', square)
-        //     .attr('fill', (d) => d.fill)
-        //     .attr('transform', function (d) {
-        //         return `translate(${xScale(d.x) +
-        //         xScale.bandwidth() / 2}, ${yScale(d.y) + yScale.bandwidth() / 2})`;
-        //     })
-        //     .style('stroke', 'black')
-        //     .style('opacity', 0.8);
-        //
-        // chartLayer
-        //     .selectAll('.square')
-        //     .data(data.filter((d) => d.final_dev_call === null))
-        //     .enter()
-        //     .append('path')
-        //     .attr('class', 'square')
-        //     .attr('d', square)
-        //     .attr('fill', '#C9C9C9')
-        //     .attr('transform', function (d) {
-        //         return `translate(${xScale(d.x) +
-        //         xScale.bandwidth() / 2}, ${yScale(d.y) + yScale.bandwidth() / 2})`;
-        //     })
-        //     .style('stroke', 'black')
-        //     .style('stroke-width', '0.8');
 
         let legendLayer = svg
             .append('g')
@@ -481,13 +425,15 @@ class DevtoxHeatmap extends Component {
 
         let legendCircles = legendLayer.append('g').classed('legendCircles', true);
         let spaceBetweenCircles = 10;
-
         legendCircles
             .selectAll('circle')
             .data(legendCirclesSizes)
             .enter()
             .append('circle')
-            .attr('r', (d) => size(d))
+            .attr('r', (d) => {
+                console.log(d);
+                return size(Math.abs(d));
+            })
             .attr('fill', 'none')
             .attr('cx', (d, i) => i * (cellSize + spaceBetweenCircles) + 30)
             .attr('cy', margin.top + margin.axisTop + legendHeight + legendCellSize * 6)
