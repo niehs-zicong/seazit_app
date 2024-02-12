@@ -92,7 +92,6 @@ class SingleCurveBody extends React.Component {
             </div>
         );
 
-        console.log(this.props.final_dev_call);
         return (
             <div className="col-sm-10">
                 {commonHeader}
@@ -103,7 +102,7 @@ class SingleCurveBody extends React.Component {
                     height={state.vizHeight}
                     collapse={state.collapse}
                     devtoxEndPointList={this.props.devtoxEndPointList}
-                    // final_dev_call={this.props.final_dev_call}
+                    final_dev_call={this.props.final_dev_call}
                 />
             </div>
         );

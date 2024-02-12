@@ -95,7 +95,7 @@ class HeatmapHandler extends React.Component {
     }
 
     fetchIntegrativeData(url) {
-        ////console.log(url);
+        //////console.log(url);
         d3.json(url, (error, data) => {
             if (error) {
                 let err = error.target.responseText.replace('["', '').replace('"]', '');
@@ -223,7 +223,7 @@ class HeatmapHandler extends React.Component {
         }
 
         function createYGroups(data) {
-            //console.log(data)
+            ////console.log(data)
             return _.chain(data)
                 .map((item) => ({
                     casrn: item.casrn,
@@ -290,7 +290,7 @@ class HeatmapHandler extends React.Component {
                             fill: '#C9C9C9',
                         });
                     } else {
-                        // //console.log(result)
+                        // ////console.log(result)
 
                         const processedItem = processHeatmapDataItem(
                             result,
@@ -298,7 +298,7 @@ class HeatmapHandler extends React.Component {
                             sortByKey,
                             fillFunction
                         );
-                        // //console.log(processedItem)
+                        // ////console.log(processedItem)
                         processedData.push(processedItem);
                     }
                 }
@@ -315,6 +315,7 @@ class HeatmapHandler extends React.Component {
             .value();
         const xgroups = createXGroups(ontologyGroup, labDataset);
         const ygroups = createYGroups(data);
+        // console.log(data, xgroups, ygroups)
         switch (this.props.visualization) {
             case INTVIZ_HEATMAP:
                 return {
@@ -345,13 +346,15 @@ class HeatmapHandler extends React.Component {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.fetchIntegrativeData(this.props.url);
     }
 
-    UNSAFE_componentWillUpdate(nextProps) {
-        if (nextProps.url !== this.props.url) {
-            this.fetchIntegrativeData(nextProps.url);
+    componentDidUpdate(prevProps) {
+        if (prevProps.url !== this.props.url) {
+            this.setState({ data: null }); // Reset data to trigger loading state
+
+            this.fetchIntegrativeData(this.props.url);
         }
     }
 
@@ -405,7 +408,7 @@ class HeatmapHandler extends React.Component {
     }
 
     _renderButtons(d) {
-        // //console.log(d.data);
+        // ////console.log(d.data);
         const title =
             this.props.visualization === INTVIZ_HEATMAP
                 ? 'More information on developmental toxicity classifications'
@@ -482,7 +485,7 @@ class HeatmapHandler extends React.Component {
                 key: 'max_highest_conc',
             },
         ];
-        //console.log(d.data)
+        ////console.log(d.data)
         return (
             <div>
                 <h4 className={`${styles.labelHorizontal} ${styles.labelNormal}`}>
@@ -510,7 +513,7 @@ class HeatmapHandler extends React.Component {
     }
 
     _renderMain(d) {
-        // //console.log(this.props);
+        // ////console.log(this.props);
 
         if (this.props.visualization === INTVIZ_HEATMAP) {
             return (
@@ -537,7 +540,7 @@ class HeatmapHandler extends React.Component {
         }
         let d;
         d = this._getFilteredData();
-        // this is result, with color name is fill data.
+        // this is res, ult, with color name is fill data.
         if (d.data.length === 0) {
             return renderNoDataAlert();
         }

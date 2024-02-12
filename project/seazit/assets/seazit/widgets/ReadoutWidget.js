@@ -123,7 +123,7 @@ class ReadoutWidget extends BaseWidget {
     }
 
     _renderMultipleEndpointSelector(state, renderHelpButtonWidget, renderHelpText) {
-        //console.log(state.assays);
+        ////console.log(state.assays);
         let assays = Array.isArray(state.assays)
             ? state.assays.map((item) => Number(item))
             : [Number(state.assays)];
@@ -188,9 +188,7 @@ class ReadoutWidget extends BaseWidget {
             .orderBy(0) // Sort by the group key (the first element in each pair)
             .fromPairs()
             .value();
-        // console.log(endPointFilterFun)
-        console.log('state.Seazit_ui_panel', state.Seazit_ui_panel);
-        console.log(opts);
+
         if (_.keys(opts).length === 0) {
             return null;
         }

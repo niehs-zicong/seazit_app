@@ -35,8 +35,8 @@ class SankeyPlot extends React.Component {
 
     fetchSankeyData() {
         d3.json(URL_SANKEYDATA, (d) => {
-            ////console.log('URL_SANKEYDATA');
-            ////console.log(d);
+            //////console.log('URL_SANKEYDATA');
+            //////console.log(d);
             this.updateData(d);
         });
     }
@@ -89,7 +89,7 @@ class SankeyPlot extends React.Component {
         plotData = filterDataFun(flowsData, ontology);
         plotData = joinDataFun(plotData, nodesData);
         plotData = valueCountsFun(plotData);
-        //console.log(plotData)
+        ////console.log(plotData)
 
         this.renderPlot(plotData, nodesData);
     }

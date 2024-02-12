@@ -180,7 +180,7 @@ LOGGING = {
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
         },
-        'console': {
+        '//console': {
             'level': 'INFO',
             'class': 'logging.StreamHandler',
             'formatter': 'basic',
@@ -208,7 +208,7 @@ LOGGING = {
             'propagate': True,
         },
         '': {
-            'handlers': ['file', 'console'],
+            'handlers': ['file', '//console'],
             'level': 'DEBUG',
         },
     }

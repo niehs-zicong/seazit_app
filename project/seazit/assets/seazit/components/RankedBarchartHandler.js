@@ -137,11 +137,11 @@ class RankedBarchartHandler extends React.Component {
                 };
             })
             .value();
-        console.log('data');
-
-        console.log(data);
-        console.log('plotData');
-        console.log(plotData);
+        // console.log('data');
+        //
+        // console.log(data);
+        // console.log('plotData');
+        // console.log(plotData);
         return plotData;
     }
 

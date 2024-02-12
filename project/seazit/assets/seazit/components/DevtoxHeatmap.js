@@ -262,7 +262,6 @@ class DevtoxHeatmap extends Component {
             .append('circle')
             .attr('class', 'circle')
             .attr('r', (d) => {
-                console.log(d.mean_selectivity);
                 return size(Math.abs(d.mean_selectivity));
             })
             .attr('fill', (d) => colorScaleFunction(pod_med_processed(d.mean_pod)))
@@ -431,7 +430,6 @@ class DevtoxHeatmap extends Component {
             .enter()
             .append('circle')
             .attr('r', (d) => {
-                console.log(d);
                 return size(Math.abs(d));
             })
             .attr('fill', 'none')

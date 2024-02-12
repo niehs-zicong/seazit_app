@@ -25,9 +25,7 @@ class DatasetsMain extends React.Component {
                     mapping of laboratory specific recording to phenotype ontology terms (Tab name:
                     Phenotype Ontology).
                 </p>
-                <br />
                 <p>White boxes in each table indicate search boxes.</p>
-                <br />
                 <p>Tables are available to download in each tab.</p>
             </div>
         );
