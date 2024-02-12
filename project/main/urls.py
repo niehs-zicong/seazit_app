@@ -63,7 +63,7 @@ urlpatterns = [
 ]
 
 # serve apps currently under development
-if settings.ENVIRONMENT_NAME != 'Production' or settings.ENVIRONMENT_NAME != 'Sandbox' :
+'''if settings.ENVIRONMENT_NAME != 'Production' or settings.ENVIRONMENT_NAME != 'Sandbox' :
 
     urlpatterns.extend([       
 
@@ -75,7 +75,7 @@ if settings.ENVIRONMENT_NAME != 'Production' or settings.ENVIRONMENT_NAME != 'Sa
             TemplateView.as_view(template_name='shiny/plate-viewer.html'),
             name='plate-viewer'),
     ])
-
+'''
 
 
 # server media-only in debug mode
