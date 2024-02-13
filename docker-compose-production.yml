@@ -1,9 +1,9 @@
 version: '2'
 
 volumes:
-  postgres_data: {}
-  postgres_backup: {}
-  shiny_apps: {}
+  #postgres_data: {}
+  #postgres_backup: {}
+  #shiny_apps: {}
   static_files: {}
 
 services:
@@ -48,19 +48,19 @@ services:
       - static_files:/app/public
       #- postgres_backup:/backups
 
-  rserve:
-    restart: always
-    build: ./compose/rserve
-    ports:
-      - "0.0.0.0:6311:6311"
+  #rserve:
+    #restart: always
+    #build: ./compose/rserve
+    #ports:
+     # - "0.0.0.0:6311:6311"
 
-  shiny:
-    restart: always
-    build: ./compose/shiny
-    ports:
-      - "0.0.0.0:3838:3838"
-    volumes:
-      - shiny_apps:/srv/shiny-apps
+  #shiny:
+   # restart: always
+    #build: ./compose/shiny
+    #ports:
+     # - "0.0.0.0:3838:3838"
+    #volumes:
+     # - shiny_apps:/srv/shiny-apps
 
   nginx:
     restart: always
@@ -69,7 +69,7 @@ services:
       - django
       #- shiny
     ports:
-      - "0.0.0.0:81:80"
+      - "0.0.0.0:80:80"
       - "0.0.0.0:443:443"
     volumes:
       - static_files:/app/public

@@ -33,5 +33,16 @@ INSTALLED_APPS = [
 EMAIL_SUBJECT_PREFIX = '[seazit-sandbox] '
 DEFAULT_FROM_EMAIL = 'webmaster@sandbox-production.com'
 
+PUBLIC_ROOT = os.environ.get('DJANGO_PUBLIC_PATH')
+#STATIC_ROOT = os.path.join(PUBLIC_ROOT, 'static')
+STATIC_ROOT = os.path.join(PUBLIC_ROOT, 'static_seazit')
+MEDIA_ROOT = os.path.join(PUBLIC_ROOT, 'media')
+
+
+LOGGING['handlers']['file'].update(
+    level="INFO",
+    filename=os.environ.get('DJANGO_LOG_FULLPATH')
+)
+
 ENVIRONMENT_NAME = 'Sandbox'
 ENVIRONMENT_COLOR = '#A40000'
