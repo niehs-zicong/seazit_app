@@ -322,6 +322,8 @@ class Seazit_readout_resultViewSet(CachedReadOnlyViewSet):
 
         protocol_ids = protocol_ids.split(",")
         carsns_ids = casrns.split(",")
+        print (protocol_ids)
+        print (carsns_ids)
 
         return Response(models.Seazit_readout_result.integrative_responses(protocol_ids, carsns_ids))
 

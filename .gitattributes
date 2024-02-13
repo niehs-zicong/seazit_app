@@ -1,0 +1,2 @@
+# Set line endings to LF for specific file types
+*.css text eol=lf

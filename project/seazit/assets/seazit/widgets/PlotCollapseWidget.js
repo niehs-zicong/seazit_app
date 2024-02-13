@@ -4,10 +4,15 @@ import PropTypes from 'prop-types';
 import BaseWidget from './BaseWidget';
 
 import { COLLAPSE_BY_CHEMICAL, COLLAPSE_BY_READOUT, NO_COLLAPSE } from '../shared';
+import HelpButtonWidget from './HelpButtonWidget';
+import styles from '../style.css';
 
 class PlotCollapseWidget extends BaseWidget {
     constructor(props) {
         super(props);
+        this.state = {
+            showHelpText: false,
+        };
         this.handleCollapseChange = this.handleCollapseChange.bind(this);
     }
 
@@ -26,11 +31,38 @@ class PlotCollapseWidget extends BaseWidget {
         this.props.stateHolder.setState(d);
     }
 
+    _renderHelpText() {
+        if (!this.state.showHelpText) {
+            return null;
+        }
+        return (
+            <div className="alert alert-info">
+                <p>
+                    Chart by Test substance + Endpoint visualizes the response for each dataset,
+                    test substance, and endpoint selected. Chart by Test substance combines all
+                    datasets and endpoints selected. Chart by Endpoint combines all test substances
+                    selected per endpoint and dataset.
+                </p>
+                <br />
+                <p>Hover over each chart line for additional information.</p>
+            </div>
+        );
+    }
+
     render() {
         let { state } = this.props.stateHolder;
         return (
             <div ref="buttons">
-                <label>One chart for each: </label>
+                <label className={styles.labelHorizontal}>
+                    Select chart display:
+                    <HelpButtonWidget
+                        stateHolder={this}
+                        headLevel={'label'}
+                        title={'More information on chart displays'}
+                    />
+                </label>
+                {this._renderHelpText()}
+
                 <div className="radio">
                     <label
                         data-toggle="tooltip"
@@ -44,7 +76,7 @@ class PlotCollapseWidget extends BaseWidget {
                             value={NO_COLLAPSE}
                             checked={state.plotCollapse === NO_COLLAPSE}
                         />
-                        Chemical + Endpoint
+                        Test substance + Endpoint
                     </label>
 
                     <span style={{ paddingLeft: '0.5em', paddingRight: '0.5em' }}>|</span>
@@ -62,7 +94,7 @@ class PlotCollapseWidget extends BaseWidget {
                             value={COLLAPSE_BY_CHEMICAL}
                             checked={state.plotCollapse === COLLAPSE_BY_CHEMICAL}
                         />
-                        Chemical
+                        Test substance
                     </label>
 
                     <span style={{ paddingLeft: '0.5em', paddingRight: '0.5em' }}>|</span>

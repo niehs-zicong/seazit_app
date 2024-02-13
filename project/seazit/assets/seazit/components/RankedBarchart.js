@@ -40,9 +40,6 @@ let renderPlot = function(el, data, opts) {
         $(el).append('<div class="alert alert-info"><p>No BMC data are available.</p></div>');
         return;
     }
-    console.log(data);
-    console.log(opts);
-
     let nonviabilityData, viabilityData;
 
     nonviabilityData = _.chain(data)
@@ -58,7 +55,7 @@ let renderPlot = function(el, data, opts) {
         .value();
 
     // viabilityData is black dot, NonviabilityData is colored dots.
-    //console.log('data2', data, nonviabilityData, viabilityData);
+    ////console.log('data2', data, nonviabilityData, viabilityData);
     // set dimensions and margins
     let elWidth = Math.max(Math.floor($(el).innerWidth()), 800),
         margin = { top: 40, right: 100, bottom: 50, left: 300, footnote: 200 },

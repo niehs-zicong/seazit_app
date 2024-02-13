@@ -40,7 +40,7 @@ project/main/__pycache__
 project/.DS_Store
 .ipynb_checkpoints
 .vscode
-
+project/webpack-stats.json
 #project/yarn.lock
 #project/static_seazit/bundles/main*
 #project/static_seazit/bundles/vendor*
@@ -48,9 +48,12 @@ project/.DS_Store
 # production environment
 *.log
 seazit_app.log
+seazit_app.log.*
 public/
 .env
 .idea
+
+
 
 # django (keep path, not contents)
 compose/django/drivers/*

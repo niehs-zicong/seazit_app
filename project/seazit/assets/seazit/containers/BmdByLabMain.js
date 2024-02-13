@@ -149,10 +149,6 @@ class BmdByLabMain extends React.Component {
         // this.state.readouts.push('Mortality@120' + '_' + this.state.assays);
         let url = getBmdsUrl(this.state.assays, this.state.readouts);
 
-        // let url2 = getBmdsUrl(this.state.assays, this.state.readouts);
-        console.log(url);
-        // console.log(url2)
-
         return (
             <div className="row-fluid">
                 <div className="col-md-12">

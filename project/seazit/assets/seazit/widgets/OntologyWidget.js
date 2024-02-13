@@ -92,7 +92,9 @@ class OntologyWidget extends BaseWidget {
 
         return renderSelectMultiOptgroupWidget(
             'ontologyGroup',
-            state.ontologyType === integrative_Granular ? 'Granular' : 'General',
+            state.ontologyType === integrative_Granular
+                ? 'Granular phenotype term'
+                : 'General phenotype term',
             opts,
             state.ontologyGroup,
             this.handleSelectMultiChange
@@ -111,7 +113,7 @@ class OntologyWidget extends BaseWidget {
                     developmental defect phenotypes, the general grouping (n = 10) and the granular
                     grouping (n = 18). See{' '}
                     <a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/"> Datasets page</a> for
-                    more information .
+                    more information.
                 </p>
             </div>
         );

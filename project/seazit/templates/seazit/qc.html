@@ -1,6 +1,6 @@
 {% extends "seazit/base.html" %}
 
-{% block title %}{{block.super}} | Quality Check{% endblock %}
+{% block title %}{{ block.super }} | Quality Check{% endblock %}
 
 {% block content %}
 <div id='main'></div>
@@ -18,8 +18,8 @@
 {% endblock content %}
 
 {% block extra-js %}
-<script>
-  window.apps.seazit.renderQualityControl(document.getElementById('main'));
-  window.apps.resizeIframe(document.getElementById('iframeApp'));
-</script>
+    <script>
+        window.apps.seazit.renderQualityControl(document.getElementById('main'));
+        window.apps.resizeIframe(document.getElementById('iframeApp'));
+    </script>
 {% endblock extra-js %}

@@ -23,7 +23,7 @@ import {
     renderNoDataAlert,
     pod_med_processed,
     svg_download_form,
-    data_exportToJsonFile,
+    exportCsv,
     BMDVIZ_ACTIVITY,
 } from '../shared';
 
@@ -95,7 +95,7 @@ class HeatmapHandler extends React.Component {
     }
 
     fetchIntegrativeData(url) {
-        //console.log(url);
+        //////console.log(url);
         d3.json(url, (error, data) => {
             if (error) {
                 let err = error.target.responseText.replace('["', '').replace('"]', '');
@@ -121,68 +121,6 @@ class HeatmapHandler extends React.Component {
             });
         });
     }
-
-    _exportCsv = function(jsonData) {
-        if (jsonData.length === 0) {
-            return '';
-        }
-        const filename = 'IntegrativeAnalysesData.csv';
-
-        const headerMappings = {
-            protocol_name_long: 'dataset name (short)',
-            protocol_name_plot: 'dataset name (long)',
-            chemical_category: 'use category level1',
-            dtxsid: 'dtxsid',
-            casrn: 'casrn',
-            preferred_name: 'preferred_name',
-            use_category1: 'use category level1',
-            ontologyGroupName: 'ontology group',
-            endPointList: 'n endpoints in the ontology group',
-            combin_ontology_id: 'n ontology terms in the ontology group',
-            f_max_dev_call: 'activity decision on ontology',
-            mean_pod: 'ontology group bmc (um)',
-            mort_med_pod_med: 'mortality bmc (um)',
-            mean_selectivity: 'selectivity',
-            min_lowest_conc: 'lowest tested conc (um)',
-            max_highest_conc: 'highest tested conc (um)',
-        };
-
-        const columnDelimiter = ',';
-        const lineDelimiter = '\n';
-        const headerKeys = Object.keys(headerMappings);
-
-        const csvColumnHeader = headerKeys.map((key) => headerMappings[key]).join(columnDelimiter);
-        let csvStr = csvColumnHeader + lineDelimiter;
-
-        jsonData.forEach((item) => {
-            headerKeys.forEach((key, index) => {
-                if (index > 0 && index < headerKeys.length) {
-                    csvStr += columnDelimiter;
-                }
-                let value = item[key] || '';
-                if (key === 'endPointList' || key === 'combin_ontology_id') {
-                    value = value ? value.length : 0;
-                }
-                if (
-                    key === 'mean_pod' ||
-                    key === 'mort_med_pod_med' ||
-                    key === 'min_lowest_conc' ||
-                    key === 'max_highest_conc'
-                ) {
-                    value = pod_med_processed(value);
-                }
-                csvStr += `"${value}"`;
-            });
-            csvStr += lineDelimiter;
-        });
-        csvStr = encodeURIComponent(csvStr);
-
-        const dataUri = 'data:text/csv;charset=utf-8,' + csvStr;
-        const linkElement = document.createElement('a');
-        linkElement.setAttribute('href', dataUri);
-        linkElement.setAttribute('download', filename);
-        linkElement.click();
-    };
 
     _getFilteredData() {
         let getFillFunction = function(visualization, continuousColorScale, colorCategory) {
@@ -232,7 +170,6 @@ class HeatmapHandler extends React.Component {
                     return {
                         legendScale: scale,
                         values: colorCategory,
-
                         colorScaleFunction: colorScale,
                     };
                 default:
@@ -251,42 +188,85 @@ class HeatmapHandler extends React.Component {
                 this.state.continuousColorScale,
                 this.state.INTVIZ_HEATMAP_COLORS
             );
-
         let data = this.state.data.integrative_activity_selectivity,
             ontologyGroup = this.props.ontologyGroup,
+            labDataset = this.props.labDataset,
             selectivityOrder = ['dev tox', 'general tox', 'inconclusive', 'inactive'],
             ontologyGroupType =
-                this.props.ontologyType == integrative_Granular
+                ontologyGroup == integrative_Granular
                     ? 'developmental_defect_grouping_granular'
                     : 'developmental_defect_grouping_general';
-        console.log(data);
-
-        console.log(ontologyGroup);
-
-        data = _.chain(data)
-            .filter((i) => ontologyGroup.includes(i[ontologyGroupType]))
-            .map((d) => {
-                return {
-                    ...d,
-                    x: d[ontologyGroupType] + ': ' + d.protocol_name_plot,
-                    y: d.preferred_name,
-                    ontologyGroupName: d[ontologyGroupType],
-                    title:
-                        d[ontologyGroupType] + '+' + d.protocol_name_plot + '+' + d.preferred_name,
-                };
-            })
-            .sortBy('med_pod_med')
-            .value();
 
         // find xgroups names, and join datasetLabname and ontologyGroup into xGroup.
-        const xgroups = this.props.ontologyGroup.flatMap((k) =>
-            this.props.datasetLabName.map((i) => `${k}: ${i}`)
-        );
 
-        let ygroups = _.chain(data)
-            .map('y')
-            .uniq()
-            .value();
+        function transformDataItem(d, ontologyGroupType) {
+            return {
+                ...d,
+                x: `${d[ontologyGroupType]}: ${d.protocol_name_plot}`,
+                y: d.preferred_name,
+                ontologyGroupName: d[ontologyGroupType],
+                title: `${d[ontologyGroupType]}+${d.protocol_name_plot}+${d.preferred_name}`,
+            };
+        }
+
+        function createXGroups(ontologyGroup, labDataset) {
+            return _.uniqBy(
+                ontologyGroup.flatMap((k) =>
+                    labDataset.map((item) => ({
+                        x: `${k}: ${item.protocol_name_plot}`,
+                        ontologyGroupName: k,
+                        ...item, // Include the rest of the data from labDataset
+                    }))
+                ),
+                'x'
+            );
+        }
+
+        function createYGroups(data) {
+            ////console.log(data)
+            return _.chain(data)
+                .map((item) => ({
+                    casrn: item.casrn,
+                    dtxsid: item.dtxsid,
+                    preferred_name: item.preferred_name,
+                    use_category1: item.use_category1,
+                    y: item.y,
+                }))
+                .uniqBy('y') // Assuming you want unique combinations of x, y, z
+                .value();
+        }
+
+        function processHeatmapDataItem(result, selectivityOrder, sortByKey, fillFunction) {
+            const endpoints = _.chain(result)
+                .map('endpoint_name')
+                .uniq()
+                .value();
+
+            const devtoxEndpoints = _.chain(result)
+                .filter((i) => i.final_dev_call === 'dev tox')
+                .map('endpoint_name')
+                .uniq()
+                .value();
+
+            const topFinal = _.chain(result)
+                .map('final_dev_call')
+                .uniq()
+                .filter((d) => _.includes(selectivityOrder, d))
+                .sort((a, b) => selectivityOrder.indexOf(a) - selectivityOrder.indexOf(b))
+                .first()
+                .value();
+
+            const processedItem = _.chain(result)
+                .filter((i) => i.final_dev_call === topFinal)
+                .sortBy(sortByKey)
+                .first()
+                .value();
+
+            processedItem.fill = fillFunction(processedItem);
+            processedItem.endPointList = endpoints;
+            processedItem.devtoxEndPointList = devtoxEndpoints;
+            return processedItem;
+        }
 
         function processHeatmapData(
             data,
@@ -298,65 +278,44 @@ class HeatmapHandler extends React.Component {
         ) {
             const processedData = [];
 
-            //
-
-            // note for this part.
-            //
-
-            for (const x of xgroups) {
-                for (const y of ygroups) {
-                    let result = _.filter(data, { x: x, y: y });
-                    let endpoints = _.chain(result)
-                        .map('endpoint_name')
-                        .uniq()
-                        .value();
-                    let devtoxEndpoints = _.chain(result)
-                        .filter((i) => i.final_dev_call === 'dev tox')
-                        .map('endpoint_name')
-                        .uniq()
-                        .value();
-
-                    let topFinal = _.chain(result)
-                        .map('final_dev_call')
-                        .uniq()
-                        .filter((d) => _.includes(selectivityOrder, d))
-                        .sort((a, b) => selectivityOrder.indexOf(a) - selectivityOrder.indexOf(b))
-                        .first()
-                        .value();
-                    // console.log(result)
-                    // console.log(devtoxEndpoints)
-                    // console.log(topFinal)
+            for (const xItem of xgroups) {
+                const x = xItem.x;
+                for (const yItem of ygroups) {
+                    const y = yItem.y;
+                    const result = _.filter(data, { x: x, y: y });
                     if (result.length === 0) {
                         processedData.push({
-                            x: x,
-                            y: y,
+                            ...yItem,
+                            ...xItem,
                             fill: '#C9C9C9',
-                            // mean_selectivity: null,
-                            // mean_pod: null,
-                            // final_dev_call: null,
-                            // title: x + '+' + y,
                         });
                     } else {
-                        const processedItem = _.chain(result)
-                            .filter((i) => i.final_dev_call === topFinal)
-                            .sortBy(sortByKey)
-                            .first()
-                            .value();
+                        // ////console.log(result)
 
-                        processedItem.fill = fillFunction(processedItem);
-                        processedItem.endPointList = endpoints;
-                        processedItem.devtoxEndPointList = devtoxEndpoints;
+                        const processedItem = processHeatmapDataItem(
+                            result,
+                            selectivityOrder,
+                            sortByKey,
+                            fillFunction
+                        );
+                        // ////console.log(processedItem)
                         processedData.push(processedItem);
                     }
                 }
             }
-            console.log('plotData');
-            console.log(data);
-            console.log(processedData);
-
             return processedData;
         }
 
+        // Main code
+
+        data = _.chain(data)
+            .filter((item) => ontologyGroup.includes(item[ontologyGroupType]))
+            .map((d) => transformDataItem(d, ontologyGroupType))
+            .sortBy('med_pod_med')
+            .value();
+        const xgroups = createXGroups(ontologyGroup, labDataset);
+        const ygroups = createYGroups(data);
+        // console.log(data, xgroups, ygroups)
         switch (this.props.visualization) {
             case INTVIZ_HEATMAP:
                 return {
@@ -387,13 +346,15 @@ class HeatmapHandler extends React.Component {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.fetchIntegrativeData(this.props.url);
     }
 
-    UNSAFE_componentWillUpdate(nextProps) {
-        if (nextProps.url !== this.props.url) {
-            this.fetchIntegrativeData(nextProps.url);
+    componentDidUpdate(prevProps) {
+        if (prevProps.url !== this.props.url) {
+            this.setState({ data: null }); // Reset data to trigger loading state
+
+            this.fetchIntegrativeData(this.props.url);
         }
     }
 
@@ -447,13 +408,84 @@ class HeatmapHandler extends React.Component {
     }
 
     _renderButtons(d) {
+        // ////console.log(d.data);
         const title =
             this.props.visualization === INTVIZ_HEATMAP
                 ? 'More information on developmental toxicity classifications'
                 : 'More information on BMC and specificity';
 
         const svgId = this.props.visualization === INTVIZ_HEATMAP ? 'IA_heatmap01' : 'IA_heatmap02';
-
+        const csvfileName = 'IntegrativeAnalysesData.csv';
+        const csvfileHeader = [
+            {
+                title: 'dataset name (long)',
+                key: 'protocol_name_long',
+            },
+            {
+                title: 'dataset name (short)',
+                key: 'protocol_name_plot',
+            },
+            {
+                title: 'dtxsid',
+                key: 'dtxsid',
+            },
+            {
+                title: 'casrn',
+                key: 'casrn',
+            },
+            {
+                title: 'test substance',
+                key: 'preferred_name',
+            },
+            {
+                title: 'use category',
+                key: 'use_category1',
+            },
+            {
+                title: 'selected phenotype term',
+                key: 'ontologyGroupName',
+            },
+            {
+                title: 'n endpoints in selected phenotype term',
+                key: 'endPointList',
+                method: 'length',
+            },
+            {
+                title: 'n endpoints specific in selected phenotype term',
+                key: 'devtoxEndPointList',
+                method: 'length',
+            },
+            {
+                title: 'phenotype term bmc (microM)',
+                key: 'mean_pod',
+                method: 'processMedPodMed',
+            },
+            {
+                title: 'developmental toxicity classification',
+                key: 'final_dev_call',
+                method: 'map',
+            },
+            {
+                title: 'mortality bmc (microM)',
+                key: 'mort_med_pod_med',
+                method: 'processMedPodMed',
+            },
+            {
+                title: 'specificity',
+                key: 'mean_selectivity',
+            },
+            {
+                title: 'lowest tested conc (microM)',
+                method: 'processMedPodMed',
+                key: 'min_lowest_conc',
+            },
+            {
+                title: 'highest tested conc (microM)',
+                method: 'processMedPodMed',
+                key: 'max_highest_conc',
+            },
+        ];
+        ////console.log(d.data)
         return (
             <div>
                 <h4 className={`${styles.labelHorizontal} ${styles.labelNormal}`}>
@@ -464,7 +496,7 @@ class HeatmapHandler extends React.Component {
                 <div>
                     <h4 className={` ${styles.labelNormal}`}>
                         <button
-                            onClick={() => this._exportCsv(d.data)}
+                            onClick={() => exportCsv(d.data, csvfileName, csvfileHeader)}
                             className={`fa fa-download ${styles['pointer-button']}`}
                         ></button>
                         <span> Data</span>
@@ -481,7 +513,7 @@ class HeatmapHandler extends React.Component {
     }
 
     _renderMain(d) {
-        // console.log(this.props);
+        // ////console.log(this.props);
 
         if (this.props.visualization === INTVIZ_HEATMAP) {
             return (
@@ -504,12 +536,11 @@ class HeatmapHandler extends React.Component {
 
     render() {
         if (!this.state.data) {
-            4;
             return <Loading />;
         }
         let d;
         d = this._getFilteredData();
-        // this is result, with color name is fill data.
+        // this is res, ult, with color name is fill data.
         if (d.data.length === 0) {
             return renderNoDataAlert();
         }
@@ -531,7 +562,7 @@ HeatmapHandler.propTypes = {
     ontologyGroup: PropTypes.array.isRequired,
     visualization: PropTypes.number.isRequired,
     url: PropTypes.string.isRequired,
-    datasetLabName: PropTypes.array.isRequired,
+    labDataset: PropTypes.array.isRequired,
 };
 
 export default HeatmapHandler;

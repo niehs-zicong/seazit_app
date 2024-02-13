@@ -60,8 +60,8 @@ const AXIS_LINEAR = 1,
     READOUT_TYPE_CATEGORY = 2,
     loadMetadata = function(component) {
         d3.json(URL_METADATA, (d) => {
-            // console.log('d');
-            // console.log(d);
+            // ////console.log('d');
+            // ////console.log(d);
             component.setState({
                 metadataLoaded: true,
                 protocol_data: d.protocol_data,
@@ -92,6 +92,7 @@ const AXIS_LINEAR = 1,
         renderHelpText = null
     ) {
         let size = Math.min(options.length, 11);
+        ////console.log(options);
         return (
             <div>
                 <label className={styles.labelHorizontal}>
@@ -139,8 +140,6 @@ const AXIS_LINEAR = 1,
     ) {
         return (
             <div>
-                {/*<label>Select one {label}:</label>*/}
-
                 <label className={styles.labelHorizontal}>
                     Select one {label}:{helpButtonWidget && helpButtonWidget()}
                 </label>
@@ -184,9 +183,15 @@ const AXIS_LINEAR = 1,
         renderHelpText = null
     ) {
         let size = 10;
+        ////console.log(options);
+
         return (
             <div>
-                <label>Select {label}(s):</label>
+                <label className={styles.labelHorizontal}>
+                    Select {label}(s):{helpButtonWidget && helpButtonWidget()}
+                </label>
+                {renderHelpText && renderHelpText()}
+
                 <select
                     name={name}
                     className="form-control"
@@ -196,13 +201,27 @@ const AXIS_LINEAR = 1,
                     value={values}
                 >
                     {_.map(options, (value, category) => {
+                        ////console.log(value);
+
                         return (
                             <optgroup key={category} label={category}>
-                                {value.map((d) => (
-                                    <option title={d.description} key={d.key} value={d.key}>
-                                        {d.label}
-                                    </option>
-                                ))}
+                                {value.map((d) => {
+                                    if (d.description) {
+                                        return (
+                                            <Tooltip title={d.description} placement="top">
+                                                <option key={d.key} value={d.key}>
+                                                    {d.label}
+                                                </option>
+                                            </Tooltip>
+                                        );
+                                    } else {
+                                        return (
+                                            <option key={d.key} value={d.key}>
+                                                {d.label}
+                                            </option>
+                                        );
+                                    }
+                                })}
                             </optgroup>
                         );
                     })}
@@ -221,17 +240,17 @@ const AXIS_LINEAR = 1,
             ro = readout_ids.join(','),
             chems = casrns.join(',');
         // return url, ro is the readout_id
-        // console.log(ids, ro, chems);
+        // ////console.log(ids, ro, chems);
         return `${URL_CR}?format=json&protocol_ids=${ids}&readouts=${ro}&casrns=${chems}`;
     },
     getBmdsUrl = function(protocol_id, readout_ids) {
         if (protocol_id.length === 0 || readout_ids.length === 0) {
             return null;
         }
-        // console.log(protocol_id, readout_ids)
+        // ////console.log(protocol_id, readout_ids)
         let newReadout = 'Mortality@120' + '_' + protocol_id;
         readout_ids.push(newReadout); // Modifying the array by adding a new element
-        // console.log(protocol_id, readout_ids)
+        // ////console.log(protocol_id, readout_ids)
 
         let id = protocol_id,
             ro = readout_ids.join(',');
@@ -246,7 +265,7 @@ const AXIS_LINEAR = 1,
         let ids = protocol_ids.join(','),
             chems = casrns.join(',');
         // return url, ro is the readout_id
-        // console.log(ids, ro, chems);
+        // ////console.log(ids, ro, chems);
         return `${URL_INTEGRATIVE}?format=json&protocol_ids=${ids}&casrns=${chems}`;
     },
     getSankeyPlotUrl = function(protocol_ids, casrns) {
@@ -256,7 +275,7 @@ const AXIS_LINEAR = 1,
         let ids = protocol_ids.join(','),
             chems = casrns.join(',');
         // return url, ro is the readout_id
-        // console.log(ids, ro, chems);
+        // ////console.log(ids, ro, chems);
         return `${URL_INTEGRATIVE}?format=json&protocol_ids=${ids}&casrns=${chems}`;
     },
     printFloat = function(v) {
@@ -302,8 +321,110 @@ const AXIS_LINEAR = 1,
         element.click();
         document.body.removeChild(element);
     },
+    exportCsv = function(jsonData, filename, headerMappings) {
+        if (jsonData.length === 0) {
+            return '';
+        }
+        ////console.log(jsonData);
+        const columnDelimiter = ',';
+        const lineDelimiter = '\n';
+
+        // Extract keys and sections from headerMappings
+        const selectedKeys = headerMappings.map((mapping) => ({
+            key: mapping.key,
+            section: mapping.section,
+            method: mapping.method,
+        }));
+
+        ////console.log(selectedKeys);
+
+        const csvColumnHeader = headerMappings
+            .map((mapping) => mapping.title)
+            .join(columnDelimiter);
+        let csvStr = csvColumnHeader + lineDelimiter;
+
+        const extractValue = (item, key, section, method) => {
+            // Handle nested properties within a specific section
+            if (section) {
+                const sectionKeys = section.split('.');
+                let sectionData = item;
+                for (const sectionKey of sectionKeys) {
+                    sectionData = sectionData[sectionKey];
+                    if (sectionData === undefined) {
+                        return '';
+                    }
+                }
+                return applyMethod(sectionData[key], method);
+            } else {
+                // Handle flat properties
+                return applyMethod(item[key], method);
+            }
+        };
+
+        const applyMethod = (value, method) => {
+            // Apply the specified method to the value
+            switch (method) {
+                case 'processMedPodMed':
+                    const processedValue = pod_med_processed(value);
+
+                    if (processedValue !== undefined) {
+                        return printFloat(processedValue);
+                    } else {
+                        return processedValue;
+                    }
+
+                case 'length':
+                    // return value.length;
+                    return value && value.length !== undefined ? value.length : 0;
+
+                case 'cat':
+                    return Array.isArray(value) ? value.join(' | ') : value;
+                case 'map':
+                    const mapList = [
+                        {
+                            name: 'dev tox',
+                            label: 'specific',
+                        },
+                        {
+                            name: 'general tox',
+                            label: 'non-specific',
+                        },
+                        {
+                            name: 'inconclusive',
+                            label: 'inconclusive, more tests are needed',
+                        },
+                        {
+                            name: 'inactive',
+                            label: 'non-toxic',
+                        },
+                    ];
+                    const mappedValue = mapList.find((item) => item.name === value);
+                    return mappedValue ? mappedValue.label : value;
+                default:
+                    return value;
+            }
+        };
+
+        jsonData.forEach((item) => {
+            selectedKeys.forEach(({ key, section, method }, index) => {
+                if (index > 0 && index < selectedKeys.length) {
+                    csvStr += columnDelimiter;
+                }
+                let value = extractValue(item, key, section, method);
+                csvStr += `"${value}"`;
+            });
+            csvStr += lineDelimiter;
+        });
+        csvStr = encodeURIComponent(csvStr);
+
+        const dataUri = 'data:text/csv;charset=utf-8,' + csvStr;
+        const linkElement = document.createElement('a');
+        linkElement.setAttribute('href', dataUri);
+        linkElement.setAttribute('download', filename);
+        linkElement.click();
+    },
     integrativeHandleCellClick = function(d) {
-        console.log(d);
+        ////console.log(d);
         const headingHtml = `
         ${d.devtoxEndPointList.length} of ${d.endPointList.length} endpoints are associated with ${d.ontologyGroupName}
     `;
@@ -311,8 +432,7 @@ const AXIS_LINEAR = 1,
             if (d.endPointList && d.endPointList.length > 1) {
                 new BootstrapModal(Header, MultipleCurveBody, {
                     title: d.title,
-                    heading: headingHtml,
-                    ontologyGroupName: d.ontologyGroupName,
+                    // ontologyGroupName: d.ontologyGroupName,
                     protocol_id: d.protocol_id,
                     readout_ids: _.map(d.endPointList, function(x) {
                         return x + '_' + d.protocol_id;
@@ -321,23 +441,24 @@ const AXIS_LINEAR = 1,
                     casrns: [d.casrn],
                     devtoxEndPointList: d.devtoxEndPointList,
                     fill: d.fill,
+                    heading: headingHtml,
                 });
             } else {
                 new BootstrapModal(Header, SingleCurveBody, {
                     title: d.title,
-                    heading: headingHtml,
-                    ontologyGroupName: d.ontologyGroupName,
+                    // ontologyGroupName: d.ontologyGroupName,
                     protocol_id: d.protocol_id,
                     readout_id: d.endpoint_name + '_' + d.protocol_id,
                     casrn: d.casrn,
                     devtoxEndPointList: d.devtoxEndPointList,
                     fill: d.fill,
+                    heading: headingHtml,
                 });
             }
         }
     },
     BMCHandleCellClick = function(d, clickType) {
-        console.log('SingleCurveBody', d);
+        // console.log('SingleCurveBody', d);
         const headingHtml = `
         ${d.endpoint_name} endpoint has the lowest BMC in selected endpoints
     `;
@@ -381,14 +502,14 @@ const AXIS_LINEAR = 1,
         return (
             <div className="alert alert-info">
                 <p>
-                    This combination of <b>endpoints</b> and <b>test substances</b> returned no
-                    data.
+                    This combination of <b>phenotype terms</b> and <b>test substances</b> returned
+                    no data.
                 </p>
             </div>
         );
     },
     renderNoSelected = function(d) {
-        console.log(d);
+        ////console.log(d);
         return (
             <div className="alert alert-info">
                 <ul>
@@ -463,6 +584,7 @@ export {
     renderSelectMultiOptgroupWidget,
     insertIntoDom,
     printFloat,
+    exportCsv,
     renderNoDataAlert,
     renderNoSelected,
     data_exportToJsonFile,

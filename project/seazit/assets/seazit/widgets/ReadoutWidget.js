@@ -39,6 +39,8 @@ class ReadoutWidget extends BaseWidget {
             ...r,
             key: r.seazit_protocol_id,
             label: r.protocol_name_long,
+            // description: 'zw1',
+            description: r.protocol_name_plot,
         };
     };
 
@@ -86,7 +88,6 @@ class ReadoutWidget extends BaseWidget {
         }
         return (
             <div>
-                {/*<label>Filter endpoints by:</label>*/}
                 <label className={styles.labelHorizontal}>
                     Filter endpoints by:
                     {renderHelpButtonWidget && renderHelpButtonWidget()}
@@ -122,7 +123,7 @@ class ReadoutWidget extends BaseWidget {
     }
 
     _renderMultipleEndpointSelector(state, renderHelpButtonWidget, renderHelpText) {
-        //console.log(state.assays);
+        ////console.log(state.assays);
         let assays = Array.isArray(state.assays)
             ? state.assays.map((item) => Number(item))
             : [Number(state.assays)];
@@ -173,6 +174,7 @@ class ReadoutWidget extends BaseWidget {
                     category: r.protocol_name_plot,
                     label: r.endpoint_name,
                     description: r.endpoint_description,
+                    // description: 'zw2',
                 };
             })
             .sortBy('label')
@@ -186,9 +188,7 @@ class ReadoutWidget extends BaseWidget {
             .orderBy(0) // Sort by the group key (the first element in each pair)
             .fromPairs()
             .value();
-        // console.log(endPointFilterFun)
-        // console.log('state.Seazit_ui_panel', state.Seazit_ui_panel);
-        // console.log(opts)
+
         if (_.keys(opts).length === 0) {
             return null;
         }
@@ -212,16 +212,28 @@ class ReadoutWidget extends BaseWidget {
 
         switch (state.tabFlag) {
             case ConcentrationResponseTab:
+                DatasetHelpButtonWidget = () => {
+                    return (
+                        <HelpButtonWidget
+                            stateHolder={this}
+                            headLevel={'label'}
+                            title={'Information on datasets which can be selected for comparison'}
+                            contentId="datasetHelp"
+                        />
+                    );
+                };
+
                 DatasetHelpText = () => {
-                    if (!this.state.showHelpText) {
+                    if (!this.state.showDatasetHelpText) {
                         return null;
                     }
                     return (
                         <div className="alert alert-info">
                             <p>
+                                The short name of the dataset will appear by hovering over the text.
                                 Study abbreviations: Dose range finding study = DRF and Definitive
-                                study = Def. Note: there is no limit to the number of datasets you
-                                can select. More information can be found on the
+                                study = Def. Note that there is no limit to the number of datasets
+                                you can select. More information can be found on the
                                 <a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/">
                                     {' '}
                                     Datasets page
@@ -232,33 +244,42 @@ class ReadoutWidget extends BaseWidget {
                     );
                 };
 
-                DatasetHelpButtonWidget = () => {
-                    return (
-                        <HelpButtonWidget
-                            stateHolder={this}
-                            headLevel={'label'}
-                            title={'Information on datasets'}
-                        />
-                    );
-                };
-
-                EndpointtHelpText = () => {
-                    if (!this.state.showHelpText) {
-                        return null;
-                    }
-                    return (
-                        <div className="alert alert-info">
-                            <p>Custom help text for ConcentrationResponseTab.</p>
-                        </div>
-                    );
-                };
                 EndpointHelpButtonWidget = () => {
                     return (
                         <HelpButtonWidget
                             stateHolder={this}
                             headLevel={'label'}
                             title={'More information on endpoints'}
+                            contentId="endpointHelp"
                         />
+                    );
+                };
+
+                EndpointtHelpText = () => {
+                    if (!this.state.showEndpointHelpText) {
+                        return null;
+                    }
+                    return (
+                        <div className="alert alert-info">
+                            <p>
+                                Hover over each endpoint for a description (including the associated
+                                ontology terms). Each endpoint is derived from mortality score at
+                                two time points (24 and 120 hours post fertilization (hpf)) or in
+                                combination with each laboratory specific recording term.
+                                MalformedAny refers to the percent of affected embryo (either
+                                mortality or malformation). See
+                                <a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/">
+                                    {' '}
+                                    Datasets page
+                                </a>{' '}
+                                for more information.
+                            </p>
+                            <br />
+                            <p>
+                                All endpoints must be selected individually and are organized by
+                                dataset name.
+                            </p>
+                        </div>
                     );
                 };
                 return (
@@ -278,29 +299,6 @@ class ReadoutWidget extends BaseWidget {
                 );
             case BMCTab:
                 // stateholder
-
-                // Example state holders
-                // const datasetHelpStateHolder = {
-                //     state: {
-                //         showHelpText: false,
-                //         helpButtonContentId: null,
-                //         // ... other properties you might need
-                //     },
-                //     setState: (newState) => {
-                //         datasetHelpStateHolder.state = { ...datasetHelpStateHolder.state, ...newState };
-                //     },
-                // };
-                //
-                // const endpointHelpStateHolder = {
-                //     state: {
-                //         showHelpText: false,
-                //         helpButtonContentId: null,
-                //         // ... other properties you might need
-                //     },
-                //     setState: (newState) => {
-                //         endpointHelpStateHolder.state = { ...endpointHelpStateHolder.state, ...newState };
-                //     },
-                // };
 
                 DatasetHelpButtonWidget = () => {
                     return (
