@@ -208,7 +208,7 @@ LOGGING = {
             'propagate': True,
         },
         '': {
-            'handlers': ['file', '//console'],
+            'handlers': ['file', 'console'],
             'level': 'DEBUG',
         },
     }

@@ -12,7 +12,7 @@ MIDDLEWARE += (
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
-EMAIL_BACKEND = 'django.core.mail.backends.//console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 RSERVE_HOST = '10.98.105.92'
 
