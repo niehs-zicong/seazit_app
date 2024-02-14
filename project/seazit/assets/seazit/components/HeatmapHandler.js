@@ -95,7 +95,7 @@ class HeatmapHandler extends React.Component {
     }
 
     fetchIntegrativeData(url) {
-        //////console.log(url);
+        ////console.log(url);
         d3.json(url, (error, data) => {
             if (error) {
                 let err = error.target.responseText.replace('["', '').replace('"]', '');
@@ -223,7 +223,7 @@ class HeatmapHandler extends React.Component {
         }
 
         function createYGroups(data) {
-            ////console.log(data)
+            //console.log(data)
             return _.chain(data)
                 .map((item) => ({
                     casrn: item.casrn,
@@ -290,7 +290,7 @@ class HeatmapHandler extends React.Component {
                             fill: '#C9C9C9',
                         });
                     } else {
-                        // ////console.log(result)
+                        // //console.log(result)
 
                         const processedItem = processHeatmapDataItem(
                             result,
@@ -298,7 +298,7 @@ class HeatmapHandler extends React.Component {
                             sortByKey,
                             fillFunction
                         );
-                        // ////console.log(processedItem)
+                        // //console.log(processedItem)
                         processedData.push(processedItem);
                     }
                 }
@@ -408,7 +408,7 @@ class HeatmapHandler extends React.Component {
     }
 
     _renderButtons(d) {
-        // ////console.log(d.data);
+        // //console.log(d.data);
         const title =
             this.props.visualization === INTVIZ_HEATMAP
                 ? 'More information on developmental toxicity classifications'
@@ -485,7 +485,7 @@ class HeatmapHandler extends React.Component {
                 key: 'max_highest_conc',
             },
         ];
-        ////console.log(d.data)
+        //console.log(d.data)
         return (
             <div>
                 <h4 className={`${styles.labelHorizontal} ${styles.labelNormal}`}>
@@ -513,7 +513,7 @@ class HeatmapHandler extends React.Component {
     }
 
     _renderMain(d) {
-        // ////console.log(this.props);
+        // //console.log(this.props);
 
         if (this.props.visualization === INTVIZ_HEATMAP) {
             return (
