@@ -4,14 +4,15 @@
 
 {% block content %}
 <div id='main'></div>
-{% if ENVIRONMENT_NAME == 'Production' %}
+{% if ENVIRONMENT_NAME == 'PSandbox' %}
    
      <iframe id='iframeApp' frameborder=0 
-        src="https://sandbox-staging.ntp.niehs.nih.gov/rsconnect/seazit_qc/"></iframe>
+      src="https://rstudio.niehs.nih.gov/seazit_qc/"></iframe>
+        
     {% else %} 
      
      <iframe id='iframeApp' frameborder=0 
-        src="https://rstudio.niehs.nih.gov/seazit_qc/"></iframe>
+       src="https://sandbox-staging.ntp.niehs.nih.gov/rsconnect/seazit_qc/"></iframe>
             
 {% endif %}
      
