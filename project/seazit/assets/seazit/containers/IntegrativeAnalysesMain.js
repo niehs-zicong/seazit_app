@@ -1,6 +1,5 @@
 import React from 'react';
 import Modal from 'react-modal';
-//import Popup from 'reactjs-popup';
 import _ from 'lodash';
 import BmdBoxplot from '../components/BmdBoxplot';
 import BmdAssayPca from '../components/BmdAssayPca';
@@ -37,6 +36,7 @@ import {
     integrative_Granular,
     integrative_General,
     loadMetadata,
+    loadBaseUrl,
     renderNoSelected,
     getIntegrativeUrl,
 } from '../shared';
@@ -115,7 +115,12 @@ class IntegrativeAnalysesMain extends React.Component {
                     Multiple features can be selected at once. Once the user has selected at least
                     one item within each feature, interactive heatmaps will appear if data are
                     available. More information on each dataset can be viewed on the{' '}
-                    <a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/">Datasets tool page</a>.
+                    {/*<a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/">*/}
+                    <a href={loadBaseUrl('/seazit/dataset/')}>
+                        {/*<a href={this.state.dynamicUrl + "/seazit/dataset/"}>*/}
+                        Datasets tool page
+                    </a>
+                    .
                 </p>
                 <br />
                 <p>
@@ -206,11 +211,6 @@ class IntegrativeAnalysesMain extends React.Component {
             .filter((i) => this.state.assays.includes(i.seazit_protocol_id.toString()))
             // .map('protocol_name_plot')
             .value();
-        // console.log("this.state.labDataset")
-        //
-        // console.log(this.state.protocol_data)
-        // console.log(this.state.labDataset)
-
         this.state.url = getIntegrativeUrl(this.state.assays, this.state.chemicals);
         //heatmap test
         return (

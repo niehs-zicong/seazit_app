@@ -15,6 +15,7 @@ import {
     IntegrativeAnalysesTab,
     integrative_Granular,
     integrative_General,
+    loadBaseUrl,
 } from '../shared';
 import styles from '../style.css';
 
@@ -204,7 +205,10 @@ class ReadoutWidget extends BaseWidget {
     }
 
     render() {
+        // loadBaseUrl(this);
+
         let state = this.props.stateHolder.state;
+
         let DatasetHelpText = null;
         let EndpointtHelpText = null;
         let DatasetHelpButtonWidget = null;
@@ -234,9 +238,10 @@ class ReadoutWidget extends BaseWidget {
                                 Study abbreviations: Dose range finding study = DRF and Definitive
                                 study = Def. Note that there is no limit to the number of datasets
                                 you can select. More information can be found on the
-                                <a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/">
-                                    {' '}
-                                    Datasets page
+                                {/*<a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/">*/}
+                                <a href={loadBaseUrl('/seazit/dataset/')}>
+                                    {/*<a href={state.dynamicUrl + "/seazit/dataset/"}>*/} Datasets
+                                    page
                                 </a>
                                 .
                             </p>
@@ -268,11 +273,10 @@ class ReadoutWidget extends BaseWidget {
                                 combination with each laboratory specific recording term.
                                 MalformedAny refers to the percent of affected embryo (either
                                 mortality or malformation). See
-                                <a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/">
-                                    {' '}
-                                    Datasets page
-                                </a>{' '}
-                                for more information.
+                                {/*<a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/">*/}
+                                {/*<a href={this.state.dynamicUrl + "/seazit/dataset/"}>*/}
+                                <a href={loadBaseUrl('/seazit/dataset/')}> Datasets page</a> for
+                                more information.
                             </p>
                             <br />
                             <p>
@@ -320,11 +324,9 @@ class ReadoutWidget extends BaseWidget {
                                 Study abbreviations: Dose range finding study = DRF and Definitive
                                 study = Def. Note that only one dateset can be selected at one time.
                                 More information can be found on the
-                                <a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/">
-                                    {' '}
-                                    Datasets page
-                                </a>
-                                .
+                                {/*<a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/">*/}
+                                {/*<a href={this.state.dynamicUrl + "/seazit/dataset/"}>*/}
+                                <a href={loadBaseUrl('/seazit/dataset/')}> Datasets page</a>.
                             </p>
                         </div>
                     );
@@ -352,11 +354,10 @@ class ReadoutWidget extends BaseWidget {
                                 corresponding higher level developmental defect phenotype groups. We
                                 created two types of developmental defect phenotypes, the general
                                 grouping and the granular grouping. See
-                                <a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/">
-                                    {' '}
-                                    Datasets page
-                                </a>{' '}
-                                for more information.
+                                {/*<a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/">*/}
+                                {/*<a href={this.state.dynamicUrl + "/seazit/dataset/"}>*/}
+                                <a href={loadBaseUrl('/seazit/dataset/')}> Datasets page</a> for
+                                more information.
                             </p>
                         </div>
                     );
@@ -385,11 +386,8 @@ class ReadoutWidget extends BaseWidget {
                                 Study abbreviations: Dose range finding study = DRF and Definitive
                                 study = Def. Note: there is no limit to the number of datasets you
                                 can select. More information can be found on the
-                                <a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/">
-                                    {' '}
-                                    Datasets page
-                                </a>
-                                .
+                                {/*<a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/">*/}
+                                <a href={loadBaseUrl('/seazit/dataset/')}> Datasets page</a>.
                             </p>
                         </div>
                     );

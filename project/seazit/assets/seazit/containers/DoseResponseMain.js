@@ -18,6 +18,7 @@ import {
     NO_COLLAPSE,
     getDoseResponsesUrl,
     loadMetadata,
+    loadBaseUrl,
     renderNoSelected,
     CHEMFILTER_CHEMICIAL,
     ConcentrationResponseTab,
@@ -37,6 +38,7 @@ class DoseResponseMain extends React.Component {
             // loadMetadata
             metadataLoaded: false,
             metadata: null,
+            // dynamicUrl: null,
 
             // HelpButtonWidget
             showHelpText: false,
@@ -65,7 +67,9 @@ class DoseResponseMain extends React.Component {
     }
 
     componentWillMount() {
+        // loadBaseUrl(this);
         loadMetadata(this);
+        // console.log(this.state)
     }
 
     renderNoSelection() {
@@ -142,11 +146,13 @@ class DoseResponseMain extends React.Component {
                     {' '}
                     These concentration response curves have been integrated into other SEAZIT-DIVER
                     tools including the{' '}
-                    <a href="https://ods.ntp.niehs.nih.gov/seazit/seazit_integrative/">
+                    {/*<a href="https://ods.ntp.niehs.nih.gov/seazit/seazit_integrative/">*/}
+                    <a href={loadBaseUrl('/seazit/seazit_integrative/')}>
                         Integrative Analyses
                     </a>{' '}
                     and{' '}
-                    <a href="https://ods.ntp.niehs.nih.gov/seazit/seazit_bmcByLab/">
+                    <a href={loadBaseUrl('/seazit/seazit_bmcByLab/')}>
+                        {/*<a href="https://ods.ntp.niehs.nih.gov/seazit/seazit_bmcByLab/">*/}
                         BMC by dataset
                     </a>
                     .

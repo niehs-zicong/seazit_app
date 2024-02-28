@@ -13,6 +13,7 @@ import {
     URL_CHEMXLSX,
     renderSelectMultiWidget,
     renderSelectMultiOptgroupWidget,
+    loadBaseUrl,
 } from '../shared';
 import HelpButtonWidget from './HelpButtonWidget';
 
@@ -70,11 +71,18 @@ class ChemicalWidget extends BaseWidget {
         if (!this.state.showHelpText) {
             return null;
         }
+
         return (
             <div className="alert alert-info">
                 <p>
                     More information on use categories and test substance name can be found on{' '}
-                    <a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/">Datasets page</a>.
+                    {/*<a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/">*/}
+                    {/*<a href={this.state.dynamicUrl + "/seazit/dataset/"}>*/}
+                    <a href={loadBaseUrl('/seazit/dataset/')}>
+                        {/*<a href={path}>*/}
+                        Datasets page
+                    </a>
+                    .
                 </p>
             </div>
         );
@@ -176,7 +184,6 @@ class ChemicalWidget extends BaseWidget {
 
     render() {
         let state = this.props.stateHolder.state;
-
         return (
             <div className="clearfix">
                 {this._renderFilterBy(state)}

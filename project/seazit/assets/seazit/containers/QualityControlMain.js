@@ -25,6 +25,7 @@ class QualityControlMain extends React.Component {
                     A, and valproic acid) across datasets. Particularly, the data from the three
                     endpoints are compared:
                 </p>
+                <br />
                 {/*<ol>*/}
                 <ol style={{ paddingLeft: '40px' }}>
                     <li>
