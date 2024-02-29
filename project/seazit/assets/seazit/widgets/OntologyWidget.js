@@ -9,6 +9,7 @@ import {
     renderSelectMultiOptgroupWidget,
     integrative_Granular,
     integrative_General,
+    loadBaseUrl,
 } from '../shared';
 import PropTypes from 'prop-types';
 import HelpButtonWidget from './HelpButtonWidget';
@@ -112,15 +113,20 @@ class OntologyWidget extends BaseWidget {
                     level developmental defect phenotype groups. We created two types of
                     developmental defect phenotypes, the general grouping (n = 10) and the granular
                     grouping (n = 18). See{' '}
-                    <a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/"> Datasets page</a> for
-                    more information.
+                    {/*<a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/">*/}
+                    {/*                        <a href={this.state.dynamicUrl + "/seazit/dataset/"}>*/}
+                    <a href={loadBaseUrl('/seazit/dataset/')}>Datasets page</a> for more
+                    information.
                 </p>
             </div>
         );
     }
 
     render() {
+        // loadBaseUrl(this);
+
         let state = this.props.stateHolder.state;
+        // console.log(state)
         return (
             <div className="clearfix">
                 {this._renderFilterBy(state)}

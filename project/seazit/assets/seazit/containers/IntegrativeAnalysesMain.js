@@ -1,6 +1,5 @@
 import React from 'react';
 import Modal from 'react-modal';
-//import Popup from 'reactjs-popup';
 import _ from 'lodash';
 import BmdBoxplot from '../components/BmdBoxplot';
 import BmdAssayPca from '../components/BmdAssayPca';
@@ -37,6 +36,7 @@ import {
     integrative_Granular,
     integrative_General,
     loadMetadata,
+    loadBaseUrl,
     renderNoSelected,
     getIntegrativeUrl,
 } from '../shared';
@@ -115,7 +115,12 @@ class IntegrativeAnalysesMain extends React.Component {
                     Multiple features can be selected at once. Once the user has selected at least
                     one item within each feature, interactive heatmaps will appear if data are
                     available. More information on each dataset can be viewed on the{' '}
-                    <a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/">Datasets tool page</a>.
+                    {/*<a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/">*/}
+                    <a href={loadBaseUrl('/seazit/dataset/')}>
+                        {/*<a href={this.state.dynamicUrl + "/seazit/dataset/"}>*/}
+                        Datasets tool page
+                    </a>
+                    .
                 </p>
                 <br />
                 <p>
@@ -157,39 +162,37 @@ class IntegrativeAnalysesMain extends React.Component {
                 {/*<HeatmapHandler*/}
                 {/*    assays={['1', '2']}*/}
                 {/*    casrns={['115-86-6', '13674-87-8']}*/}
-                {/*    visualization={1}*/}
+                {/*    visualization={2}*/}
                 {/*    ontologyType={2}*/}
                 {/*    ontologyGroup={['hatching defect']}*/}
                 {/*    url={*/}
                 {/*        '/seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=1,2&casrns=115-86-6,13674-87-8'*/}
                 {/*    }*/}
-                {/*    labDataset={[
-    {
-        "protocol_name": "SEAZIT_DRF_BIOBIDE_R-C",
-        "protocol_type": "DRF",
-        "protocol_source": "biobide",
-        "seazit_protocol_id": 1,
-        "lab_anonymous_code": "Lab A",
-        "study_phase": "Dose Range Finding",
-        "test_condition": "Static Renewal-Chorion (SR-C)",
-        "protocol_name_long": "Dose Range Finding study, Lab A, Static Renewal-Chorion (SR-C)",
-        "protocol_name_plot": "DRF_Lab A_SR-C"
-    },
-    {
-        "protocol_name": "SEAZIT_DRF_OSU_S-DC",
-        "protocol_type": "DRF",
-        "protocol_source": "osu",
-        "seazit_protocol_id": 2,
-        "lab_anonymous_code": "Lab B",
-        "study_phase": "Dose Range Finding",
-        "test_condition": "Static-Dechorion (S-DC)",
-        "protocol_name_long": "Dose Range Finding study, Lab B, Static-Dechorion (S-DC)",
-        "protocol_name_plot": "DRF_Lab B_S-DC"
-    }
-]}*/}
+                {/*    labDataset={[*/}
+                {/*        {*/}
+                {/*            "protocol_name": "SEAZIT_DRF_BIOBIDE_R-C",*/}
+                {/*            "protocol_type": "DRF",*/}
+                {/*            "protocol_source": "biobide",*/}
+                {/*            "seazit_protocol_id": 1,*/}
+                {/*            "lab_anonymous_code": "Lab A",*/}
+                {/*            "study_phase": "Dose Range Finding",*/}
+                {/*            "test_condition": "Static Renewal-Chorion (SR-C)",*/}
+                {/*            "protocol_name_long": "Dose Range Finding study, Lab A, Static Renewal-Chorion (SR-C)",*/}
+                {/*            "protocol_name_plot": "DRF_Lab A_SR-C"*/}
+                {/*        },*/}
+                {/*        {*/}
+                {/*            "protocol_name": "SEAZIT_DRF_OSU_S-DC",*/}
+                {/*            "protocol_type": "DRF",*/}
+                {/*            "protocol_source": "osu",*/}
+                {/*            "seazit_protocol_id": 2,*/}
+                {/*            "lab_anonymous_code": "Lab B",*/}
+                {/*            "study_phase": "Dose Range Finding",*/}
+                {/*            "test_condition": "Static-Dechorion (S-DC)",*/}
+                {/*            "protocol_name_long": "Dose Range Finding study, Lab B, Static-Dechorion (S-DC)",*/}
+                {/*            "protocol_name_plot": "DRF_Lab B_S-DC"*/}
+                {/*        }*/}
+                {/*    ]}*/}
                 {/*/>*/}
-
-                {/*// for test use. */}
 
                 <p className="help-block">
                     <b>Interactivity note:</b> This heatmap is interactive. Click a cell to view
@@ -208,11 +211,6 @@ class IntegrativeAnalysesMain extends React.Component {
             .filter((i) => this.state.assays.includes(i.seazit_protocol_id.toString()))
             // .map('protocol_name_plot')
             .value();
-        // console.log("this.state.labDataset")
-        //
-        // console.log(this.state.protocol_data)
-        // console.log(this.state.labDataset)
-
         this.state.url = getIntegrativeUrl(this.state.assays, this.state.chemicals);
         //heatmap test
         return (

@@ -111,6 +111,10 @@ class HeatmapHandler extends React.Component {
                     .domain(domain)
                     .range([1, 0]),
                 continuousColorScale = function(d) {
+                    // console.log('d  and scale(d)')
+                    // console.log(d)
+                    // console.log(scale(d));
+                    // console.log(d3.interpolateViridis(scale(d)));
                     return d3.interpolateViridis(scale(d));
                 };
 

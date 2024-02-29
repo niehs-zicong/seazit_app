@@ -1,0 +1,106 @@
+# NTP Shared Header/Footer Update and Jquery Update
+
+The NTP Public Website features a common shared header/footer across multiple websites and applications.
+Reference: https://wiki.niehs.nih.gov/pages/viewpage.action?pageId=1850994.
+
+There are two implementation options (I personal suggest use Shared version):
+
+- Shared: contains only the CSS and JavaScript files necessary for duplicating the look and functionality of the NTP
+  Public Website's header and footer, minimizing unnecessary dependencies and potential style conflicts.
+- Full: utilizes all bundled CSS and JavaScript files used on the NTP Public Website. It provides functionality beyond
+  the header and footer, enabling all features in the NTP Style Guide & Pattern Library.
+
+Both implementations utilize:
+
+- Foundation - responsive framework (version 6.7.4 as of the 04/2022 release)
+- jQuery - JavaScript library (version 3.7.0 as of the 07/2023 release)
+- jQuery UI - UI interactions for search autocomplete (version 1.13.2 as of the 07/2023 release)
+- FontAwesome - CSS font icon library (version 4.7.0 as of the 01/2018 release)
+
+Lastest version download:
+
+- https://wiki.niehs.nih.gov/pages/viewpage.action?pageId=1850994
+
+## Shared Release Version Update to Code.
+
+An example to update files with Shared Release Version. If you download latest Zip file (such as 2023-07 Shared
+Release.zip), after unzip it,
+you should see those files, I will explain how to use them:
+
+- footer.txt:
+    - Copy & Paste & Replace footer.html (seazit_app/project/templates/includes/footer.html)
+    - Check if this line exists in seazit_app/project/templates/base.html
+  ```
+         {% block footer %}
+         {% include 'includes/footer.html' %}
+         {% endblock footer %} 
+  ```
+- header.txt
+    - Copy & Paste & Replace header.html (seazit_app/project/templates/includes/header.html)
+    - Check if this line exists in seazit_app/project/templates/base.html
+  ```
+         {% block header %}
+         {% include 'includes/header.html' %}
+         {% endblock header %} 
+  ```
+- css folder:
+    - Copy & Paste & Replace ntpweb-shared.css (seazit_app/project/static_seazit/css/ntpweb-shared.css)
+    - Check if this line exists in seazit_app/project/templates/base.html
+  ```
+         <link href="{{STATIC_URL}}css/ntpweb-shared.css"
+          rel="stylesheet" type="text/css"/>
+  ```
+
+- js folder: this js folder is a little complicated, I will explain it. The js folder contains those:
+    - element folder:
+        - jquery-3.7.0
+        - jquery-ui-1.13.2
+    - minimal-no-frameworks folder:
+        - ntpweb-shared-minimal.js
+        - ntpweb-shared-minimal.min.js
+    - ntpweb-shared.js
+    - ntpweb-shared.min.js
+
+js folder files are used for updating javascript necessary scripts (such as jquery). If we want to update jqeury for
+example, we have 2 methods to do that with given files, I personally suggest to use method 1.
+
+1. First method: only update ntpweb-shared.js, this file contain jquery updated content.
+    - a. Copy & Paste & Replace ntpweb-shared.js (seazit_app/project/static_seazit/js/ntpweb-shared.js)
+    - b. Checkout this file seazit_app/project/templates/base.html, check if ntpweb-shared.js file is script
+      implemented. Such as this code:
+      ```
+      <script src="{{STATIC_URL}}js/ntpweb-shared.js"
+      type='text/javascript'></script>
+      ```
+2. Second method: update ntpweb-shared-minimal.js and element folder. ntpweb-shared-minimal.js does not contain jquery
+   script, so you need to script jquery files.
+    - a. Copy & Paste & Replace ntpweb-shared-minimal.js (seazit_app/project/static_seazit/js/ntpweb-shared-minimal.js)
+    - b. Checkout this file seazit_app/project/templates/base.html, check if ntpweb-shared.js file is script
+      implemented. Such as this code:
+      ```
+      <script src="{{STATIC_URL}}js/ntpweb-shared-minimal.js"
+      type='text/javascript'></script>
+      ```
+    - c. Copy & Paste & Replace /jquery-3.7.0 and /jquery-ui-1.13.2 into this directory:
+      seazit_app/project/static_seazit/js/
+
+If you check those 2 methods, you will find out they are different method and can not work together. Yes. They can not.
+So keep in
+mind do you script both files. If you used both files or more files inside base.html, that could cause code not working:
+
+## Full Release Version Update to Code.
+
+The full release version update is quite similar to shared release. It contains more html, javascript script, however,
+it could cause more trouble because duplicated script implemented. The update method can follow as shared method, each
+file inforamtion can be found in this link:
+https://wiki.niehs.nih.gov/pages/viewpage.action?pageId=1850994
+
+
+## Quest. 
+If you have questions, you can contain me via email.
+### Zicong Wang [C]
+Software Engineer, DNTP
+
+- **Email:** zicong.wang@nih.gov
+- **Office:** 9842874494
+- **Address:** 530 DAVIS DR, Bldg: Keystone Building Rm: 2098, Durham, NC 27713

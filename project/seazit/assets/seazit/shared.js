@@ -71,6 +71,18 @@ const AXIS_LINEAR = 1,
             });
         });
     },
+    loadBaseUrl = function(inputPath) {
+        var currentUrl = window.location.href;
+
+        // Extract the base URL containing just the protocol, hostname, and port
+        var baseUrl = currentUrl.split('/', 3).join('/');
+
+        // Construct the dynamic URL by appending the input path to the base URL
+        // var result = baseUrl + inputPath;
+
+        // Return the result
+        return baseUrl + inputPath;
+    },
     data_exportToJsonFile = function(jsonData) {
         let filename = 'jsonData.json';
 
@@ -579,6 +591,7 @@ export {
     getIntegrativeUrl,
     getSankeyPlotUrl,
     loadMetadata,
+    loadBaseUrl,
     renderSelectMultiWidget,
     renderSelectSingleWidget,
     renderSelectMultiOptgroupWidget,

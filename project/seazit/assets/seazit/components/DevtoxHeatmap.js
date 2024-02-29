@@ -31,8 +31,10 @@ class DevtoxHeatmap extends Component {
 
     renderPlot = function(el, data, legendData) {
         $(el).empty();
-        // console.log(data);
-        // console.log(legendData);
+        console.log(data);
+        console.log(legendData);
+        console.log(legendData.colorScaleFunction);
+        console.log(legendData.legendScale);
 
         let margin = {
                 top: 40,
@@ -168,6 +170,8 @@ class DevtoxHeatmap extends Component {
             .domain(yasix)
             .range([0, chartHeight]);
 
+        // console.log(colorScaleFunction)
+        // console.log(legendScale)
         let xAxis = d3.axisTop(xScale).tickSizeOuter(0);
         let yAxis = d3.axisLeft(yScale).tickSizeOuter(0);
         axisLayer
@@ -278,7 +282,6 @@ class DevtoxHeatmap extends Component {
             .attr('transform', `translate(${width - margin.legend},${margin.top})`);
 
         let legendCirclesWidth = 6 * cellSize,
-            legendHeight = 6 * cellSize,
             legend = legendLayer
                 .append('defs')
                 .append('linearGradient')
@@ -287,21 +290,31 @@ class DevtoxHeatmap extends Component {
                 .attr('y1', '100%')
                 .attr('x2', '0%')
                 .attr('y2', '0%')
-                .attr('spreadMethod', 'pad');
+                .attr('spreadMethod', 'pad'),
+            legendHeight = 6 * cellSize;
+        console.log(legendScale);
+        let ticks = legendScale.ticks();
+        let maxIndex = ticks.length - 1; // Maximum index of ticks array
 
+        console.log(legendScale, ticks, maxIndex);
         legendScale.ticks().map((d, i) => {
+            let offset = (i / maxIndex) * 100; // Calculate offset as a percentage
+
             legend
                 .append('stop')
-                .attr('offset', `${i}%`)
+                // .attr('offset', `${i}%`)
+                .attr('offset', `${offset}%`) // Set offset based on index
                 .attr('stop-color', colorScaleFunction(d))
                 .attr('stop-opacity', 1);
         });
-
+        // Append rectangle to display gradient
+        //         legend
         legendLayer
             .append('rect')
             .attr('width', legendCellSize)
             .attr('height', legendHeight)
             .style('fill', 'url(#gradient)')
+            // .style('fill', 'url(#legend-gradient)')
             .style('stroke', 'black')
             .attr('transform', `translate(20,${margin.top + margin.axisTop})`);
 

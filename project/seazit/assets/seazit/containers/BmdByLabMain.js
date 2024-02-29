@@ -4,7 +4,6 @@ import Loading from 'utils/Loading';
 import FiveOhEight from '../components/FiveOhEight';
 import HelpButtonWidget from '../widgets/HelpButtonWidget';
 import BmdByLabPlotWidget from '../widgets/BmdByLabPlotWidget';
-// import BmdWidget from '../widgets/BmdWidget';
 import ReadoutWidget from '../widgets/ReadoutWidget';
 import SelectorSliderWidget from '../widgets/SelectorSliderWidget';
 import BmdCheckBoxWidget from '../widgets/BmdCheckBoxWidget';
@@ -12,7 +11,6 @@ import OntologyTypeWidget from '../widgets/OntologyTypeWidget';
 import OntologyWidget from '../widgets/OntologyWidget';
 import styles from '../style.css';
 
-// import AxisSelectorWidget from '../widgets/AxisSelectorWidget';
 import RankedBarchartHandler from '../components/RankedBarchartHandler';
 
 import {
@@ -24,6 +22,7 @@ import {
     BMDVIZ_ACTIVITY,
     BMDVIZ_SELECTIVITY,
     loadMetadata,
+    loadBaseUrl,
     renderNoSelected,
     BMCTab,
     integrative_Granular,
@@ -128,7 +127,12 @@ class BmdByLabMain extends React.Component {
                 <p>
                     The Use Categories of test substances are color coded next to substance name.
                     More information on Use Category can be viewed on the{' '}
-                    <a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/">Datasets tool page</a>.
+                    {/*<a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/">*/}
+                    <a href={loadBaseUrl('/seazit/dataset/')}>
+                        {/*<a href={this.state.dynamicUrl + "/seazit/dataset/"}>*/}
+                        Datasets tool page
+                    </a>
+                    .
                 </p>
                 <p>A table will appear underneath each visual with additional information.</p>
                 <p>
