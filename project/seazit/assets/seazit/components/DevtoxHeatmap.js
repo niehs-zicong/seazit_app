@@ -31,10 +31,10 @@ class DevtoxHeatmap extends Component {
 
     renderPlot = function(el, data, legendData) {
         $(el).empty();
-        console.log(data);
-        console.log(legendData);
-        console.log(legendData.colorScaleFunction);
-        console.log(legendData.legendScale);
+        //console.log(data);
+        //console.log(legendData);
+        //console.log(legendData.colorScaleFunction);
+        //console.log(legendData.legendScale);
 
         let margin = {
                 top: 40,
@@ -170,8 +170,8 @@ class DevtoxHeatmap extends Component {
             .domain(yasix)
             .range([0, chartHeight]);
 
-        // console.log(colorScaleFunction)
-        // console.log(legendScale)
+        // //console.log(colorScaleFunction)
+        // //console.log(legendScale)
         let xAxis = d3.axisTop(xScale).tickSizeOuter(0);
         let yAxis = d3.axisLeft(yScale).tickSizeOuter(0);
         axisLayer
@@ -292,11 +292,11 @@ class DevtoxHeatmap extends Component {
                 .attr('y2', '0%')
                 .attr('spreadMethod', 'pad'),
             legendHeight = 6 * cellSize;
-        console.log(legendScale);
+        //console.log(legendScale);
         let ticks = legendScale.ticks();
         let maxIndex = ticks.length - 1; // Maximum index of ticks array
 
-        console.log(legendScale, ticks, maxIndex);
+        //console.log(legendScale, ticks, maxIndex);
         legendScale.ticks().map((d, i) => {
             let offset = (i / maxIndex) * 100; // Calculate offset as a percentage
 

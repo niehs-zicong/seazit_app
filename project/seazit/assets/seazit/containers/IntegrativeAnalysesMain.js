@@ -62,7 +62,8 @@ class IntegrativeAnalysesMain extends React.Component {
             url: null,
             // ontologyWidget
             ontologyType: integrative_General,
-            //
+            // ontologyType: integrative_Granular,
+
             ontologyGroup: [],
 
             // ChemicalSelectorWidget
@@ -144,7 +145,7 @@ class IntegrativeAnalysesMain extends React.Component {
         // let hasChems = this.state.chemicals.length > 0,
         //     hasReadoutCategories = this.state.readoutCategories.length > 0,
         //     requiresFilters = [INTVIZ_HEATMAP, INTVIZ_DevtoxHEATMAP];
-        // console.log(this.state);
+        console.log(this.state);
         return (
             <div>
                 <HeatmapHandler
@@ -160,13 +161,13 @@ class IntegrativeAnalysesMain extends React.Component {
                 {/*// for test use. */}
 
                 {/*<HeatmapHandler*/}
-                {/*    assays={['1', '2']}*/}
-                {/*    casrns={['115-86-6', '13674-87-8']}*/}
-                {/*    visualization={2}*/}
-                {/*    ontologyType={2}*/}
-                {/*    ontologyGroup={['hatching defect']}*/}
+                {/*    assays={['1']}*/}
+                {/*    casrns={['115-86-6', '13674-87-8','79-94-7']}*/}
+                {/*    visualization={1}*/}
+                {/*                        ontologyType={this.state.ontologyType}*/}
+                {/*    ontologyGroup={this.state.ontologyGroup}*/}
                 {/*    url={*/}
-                {/*        '/seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=1,2&casrns=115-86-6,13674-87-8'*/}
+                {/*        '/seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=1&casrns=115-86-6,13674-87-8,79-94-7'*/}
                 {/*    }*/}
                 {/*    labDataset={[*/}
                 {/*        {*/}
@@ -179,17 +180,6 @@ class IntegrativeAnalysesMain extends React.Component {
                 {/*            "test_condition": "Static Renewal-Chorion (SR-C)",*/}
                 {/*            "protocol_name_long": "Dose Range Finding study, Lab A, Static Renewal-Chorion (SR-C)",*/}
                 {/*            "protocol_name_plot": "DRF_Lab A_SR-C"*/}
-                {/*        },*/}
-                {/*        {*/}
-                {/*            "protocol_name": "SEAZIT_DRF_OSU_S-DC",*/}
-                {/*            "protocol_type": "DRF",*/}
-                {/*            "protocol_source": "osu",*/}
-                {/*            "seazit_protocol_id": 2,*/}
-                {/*            "lab_anonymous_code": "Lab B",*/}
-                {/*            "study_phase": "Dose Range Finding",*/}
-                {/*            "test_condition": "Static-Dechorion (S-DC)",*/}
-                {/*            "protocol_name_long": "Dose Range Finding study, Lab B, Static-Dechorion (S-DC)",*/}
-                {/*            "protocol_name_plot": "DRF_Lab B_S-DC"*/}
                 {/*        }*/}
                 {/*    ]}*/}
                 {/*/>*/}
