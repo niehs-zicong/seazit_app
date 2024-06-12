@@ -138,11 +138,6 @@ class OntologyWidget extends BaseWidget {
 
 OntologyWidget.propTypes = {
     stateHolder: PropTypes.instanceOf(React.Component).isRequired,
-    // hideViability: PropTypes.bool.isRequired,
-    // hideNonViability: PropTypes.bool.isRequired,
-    // multiAssaySelector: PropTypes.bool.isRequired,
-    // multiReadoutSelector: PropTypes.bool.isRequired,
-    // tabName: PropTypes.string.isRequired,
 };
 
 export default OntologyWidget;

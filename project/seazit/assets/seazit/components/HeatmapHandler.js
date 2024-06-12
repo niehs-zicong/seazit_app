@@ -95,7 +95,7 @@ class HeatmapHandler extends React.Component {
     }
 
     fetchIntegrativeData(url) {
-        ////console.log(url);
+        //console.log(url);
         d3.json(url, (error, data) => {
             if (error) {
                 let err = error.target.responseText.replace('["', '').replace('"]', '');
@@ -117,7 +117,7 @@ class HeatmapHandler extends React.Component {
                     // console.log(d3.interpolateViridis(scale(d)));
                     return d3.interpolateViridis(scale(d));
                 };
-
+            //console.log("first render data", data)
             this.setState({
                 data,
                 scale,
@@ -133,7 +133,7 @@ class HeatmapHandler extends React.Component {
                     return function(data) {
                         var color;
                         for (var i of colorCategory) {
-                            if (data.final_dev_call == i['key']) {
+                            if (data.final_dev_call === i['key']) {
                                 color = i['fill'];
                                 return color;
                             }
@@ -194,14 +194,23 @@ class HeatmapHandler extends React.Component {
             );
         let data = this.state.data.integrative_activity_selectivity,
             ontologyGroup = this.props.ontologyGroup,
+            ontologyType = this.props.ontologyType,
             labDataset = this.props.labDataset,
             selectivityOrder = ['dev tox', 'general tox', 'inconclusive', 'inactive'],
             ontologyGroupType =
-                ontologyGroup == integrative_Granular
+                ontologyType === integrative_Granular
                     ? 'developmental_defect_grouping_granular'
                     : 'developmental_defect_grouping_general';
-
-        // find xgroups names, and join datasetLabname and ontologyGroup into xGroup.
+        //console.log('before plot')
+        //console.log(this.props)
+        //console.log(data)
+        //console.log(ontologyGroup)
+        //console.log(ontologyGroupType)
+        // const a = _.uniq(_.map(data, 'developmental_defect_grouping_granular'));
+        // const b = _.uniq(_.map(data, 'developmental_defect_grouping_general'));
+        //
+        // console.log('developmental_defect_grouping_general', b)
+        // console.log('developmental_defect_grouping_granular', a)
 
         function transformDataItem(d, ontologyGroupType) {
             return {
@@ -317,6 +326,7 @@ class HeatmapHandler extends React.Component {
             .map((d) => transformDataItem(d, ontologyGroupType))
             .sortBy('med_pod_med')
             .value();
+
         const xgroups = createXGroups(ontologyGroup, labDataset);
         const ygroups = createYGroups(data);
         // console.log(data, xgroups, ygroups)
@@ -520,6 +530,7 @@ class HeatmapHandler extends React.Component {
         // //console.log(this.props);
 
         if (this.props.visualization === INTVIZ_HEATMAP) {
+            //console.log("heatmap", d.data)
             return (
                 <Heatmap
                     data={d.data}

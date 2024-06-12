@@ -54,6 +54,10 @@ let renderPlot = function(el, data, opts) {
         .compact()
         .value();
 
+    // console.log("data", data)
+    // console.log("nonviabilityData", nonviabilityData)
+    // console.log("viabilityData", viabilityData)
+
     // viabilityData is black dot, NonviabilityData is colored dots.
     //console.log('data2', data, nonviabilityData, viabilityData);
     // set dimensions and margins

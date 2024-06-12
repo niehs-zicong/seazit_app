@@ -139,8 +139,8 @@ class RankedBarchartHandler extends React.Component {
             .value();
         // console.log('data');
         //
-        // console.log(data);
-        // console.log('plotData');
+        //console.log('data',data);
+        // console.log('plotData',plotData);
         // console.log(plotData);
         return plotData;
     }
@@ -391,8 +391,6 @@ class RankedBarchartHandler extends React.Component {
                           },
                       ],
             plotData = this._getFilteredData();
-        // console.log(plotData)
-
         return (
             <div>
                 <h4 className={`${styles.labelHorizontal} ${styles.labelNormal}`}>
