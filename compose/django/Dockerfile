@@ -1,4 +1,4 @@
-FROM continuumio/miniconda3:4.4.10
+FROM continuumio/miniconda3:22.11.1
 
 # Install wkhtmltopdf for python pdfkit library
 # Install libaio1; required for oracle client
