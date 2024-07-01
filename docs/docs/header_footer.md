@@ -84,7 +84,7 @@ example, we have 2 methods to do that with given files, I personally suggest to 
     - c. Copy & Paste & Replace /jquery-3.7.0 and /jquery-ui-1.13.2 into this directory:
       seazit_app/project/static_seazit/js/
 
-If you check those 2 methods, you will find out they are different method and can not work together. Yes. They can not.
+If you check those 2 methods, you will find out they are different method and can not work together. Right.  They can not.
 So keep in
 mind do you script both files. If you used both files or more files inside base.html, that could cause code not working:
 
