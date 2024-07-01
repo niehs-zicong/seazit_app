@@ -1,4 +1,5 @@
-﻿@charset "UTF-8"; /*! normalize.css v8.0.0 | MIT License | github.com/necolas/normalize.css */
+@charset "UTF-8";
+
 html {
     line-height: 1.15;
     -webkit-text-size-adjust: 100%;
@@ -789,10 +790,8 @@ header#top .row:not(.expanded) .row {
 
 footer#footer .row.collapse > .column,
 footer#footer .row.collapse > .columns,
-footer#footer header#top .row.collapse > .columns,
 header#top .row.collapse > .column,
-header#top .row.collapse > .columns,
-header#top footer#footer .row.collapse > .columns {
+header#top .row.collapse > .columns {
     padding-right: 0;
     padding-left: 0;
 }
@@ -800,11 +799,9 @@ header#top footer#footer .row.collapse > .columns {
 footer#footer .row.collapse > .column > .row,
 footer#footer .row.collapse > .columns > .row,
 footer#footer .row.is-collapse-child,
-footer#footer header#top .row.collapse > .columns > .row,
 header#top .row.collapse > .column > .row,
 header#top .row.collapse > .columns > .row,
-header#top .row.is-collapse-child,
-header#top footer#footer .row.collapse > .columns > .row {
+header#top .row.is-collapse-child {
     margin-right: 0;
     margin-left: 0;
 }
@@ -851,9 +848,9 @@ header#top .row .row.row.columns {
 footer#footer .small-1,
 header#top .small-1 {
     -webkit-box-flex: 0;
-    -ms-flex: 0 0 8.33333%;
-    flex: 0 0 8.33333%;
-    max-width: 8.33333%;
+    -ms-flex: 0 0 8.3333333333%;
+    flex: 0 0 8.3333333333%;
+    max-width: 8.3333333333%;
 }
 
 footer#footer .small-offset-0,
@@ -864,14 +861,14 @@ header#top .small-offset-0 {
 footer#footer .small-2,
 header#top .small-2 {
     -webkit-box-flex: 0;
-    -ms-flex: 0 0 16.66667%;
-    flex: 0 0 16.66667%;
-    max-width: 16.66667%;
+    -ms-flex: 0 0 16.6666666667%;
+    flex: 0 0 16.6666666667%;
+    max-width: 16.6666666667%;
 }
 
 footer#footer .small-offset-1,
 header#top .small-offset-1 {
-    margin-left: 8.33333%;
+    margin-left: 8.3333333333%;
 }
 
 footer#footer .small-3,
@@ -884,15 +881,15 @@ header#top .small-3 {
 
 footer#footer .small-offset-2,
 header#top .small-offset-2 {
-    margin-left: 16.66667%;
+    margin-left: 16.6666666667%;
 }
 
 footer#footer .small-4,
 header#top .small-4 {
     -webkit-box-flex: 0;
-    -ms-flex: 0 0 33.33333%;
-    flex: 0 0 33.33333%;
-    max-width: 33.33333%;
+    -ms-flex: 0 0 33.3333333333%;
+    flex: 0 0 33.3333333333%;
+    max-width: 33.3333333333%;
 }
 
 footer#footer .small-offset-3,
@@ -903,14 +900,14 @@ header#top .small-offset-3 {
 footer#footer .small-5,
 header#top .small-5 {
     -webkit-box-flex: 0;
-    -ms-flex: 0 0 41.66667%;
-    flex: 0 0 41.66667%;
-    max-width: 41.66667%;
+    -ms-flex: 0 0 41.6666666667%;
+    flex: 0 0 41.6666666667%;
+    max-width: 41.6666666667%;
 }
 
 footer#footer .small-offset-4,
 header#top .small-offset-4 {
-    margin-left: 33.33333%;
+    margin-left: 33.3333333333%;
 }
 
 footer#footer .small-6,
@@ -923,15 +920,15 @@ header#top .small-6 {
 
 footer#footer .small-offset-5,
 header#top .small-offset-5 {
-    margin-left: 41.66667%;
+    margin-left: 41.6666666667%;
 }
 
 footer#footer .small-7,
 header#top .small-7 {
     -webkit-box-flex: 0;
-    -ms-flex: 0 0 58.33333%;
-    flex: 0 0 58.33333%;
-    max-width: 58.33333%;
+    -ms-flex: 0 0 58.3333333333%;
+    flex: 0 0 58.3333333333%;
+    max-width: 58.3333333333%;
 }
 
 footer#footer .small-offset-6,
@@ -942,14 +939,14 @@ header#top .small-offset-6 {
 footer#footer .small-8,
 header#top .small-8 {
     -webkit-box-flex: 0;
-    -ms-flex: 0 0 66.66667%;
-    flex: 0 0 66.66667%;
-    max-width: 66.66667%;
+    -ms-flex: 0 0 66.6666666667%;
+    flex: 0 0 66.6666666667%;
+    max-width: 66.6666666667%;
 }
 
 footer#footer .small-offset-7,
 header#top .small-offset-7 {
-    margin-left: 58.33333%;
+    margin-left: 58.3333333333%;
 }
 
 footer#footer .small-9,
@@ -962,15 +959,15 @@ header#top .small-9 {
 
 footer#footer .small-offset-8,
 header#top .small-offset-8 {
-    margin-left: 66.66667%;
+    margin-left: 66.6666666667%;
 }
 
 footer#footer .small-10,
 header#top .small-10 {
     -webkit-box-flex: 0;
-    -ms-flex: 0 0 83.33333%;
-    flex: 0 0 83.33333%;
-    max-width: 83.33333%;
+    -ms-flex: 0 0 83.3333333333%;
+    flex: 0 0 83.3333333333%;
+    max-width: 83.3333333333%;
 }
 
 footer#footer .small-offset-9,
@@ -981,14 +978,14 @@ header#top .small-offset-9 {
 footer#footer .small-11,
 header#top .small-11 {
     -webkit-box-flex: 0;
-    -ms-flex: 0 0 91.66667%;
-    flex: 0 0 91.66667%;
-    max-width: 91.66667%;
+    -ms-flex: 0 0 91.6666666667%;
+    flex: 0 0 91.6666666667%;
+    max-width: 91.6666666667%;
 }
 
 footer#footer .small-offset-10,
 header#top .small-offset-10 {
-    margin-left: 83.33333%;
+    margin-left: 83.3333333333%;
 }
 
 footer#footer .small-12,
@@ -1001,7 +998,7 @@ header#top .small-12 {
 
 footer#footer .small-offset-11,
 header#top .small-offset-11 {
-    margin-left: 91.66667%;
+    margin-left: 91.6666666667%;
 }
 
 footer#footer .small-up-1,
@@ -1012,10 +1009,8 @@ header#top .small-up-1 {
 
 footer#footer .small-up-1 > .column,
 footer#footer .small-up-1 > .columns,
-footer#footer header#top .small-up-1 > .columns,
 header#top .small-up-1 > .column,
-header#top .small-up-1 > .columns,
-header#top footer#footer .small-up-1 > .columns {
+header#top .small-up-1 > .columns {
     -webkit-box-flex: 0;
     -ms-flex: 0 0 100%;
     flex: 0 0 100%;
@@ -1030,10 +1025,8 @@ header#top .small-up-2 {
 
 footer#footer .small-up-2 > .column,
 footer#footer .small-up-2 > .columns,
-footer#footer header#top .small-up-2 > .columns,
 header#top .small-up-2 > .column,
-header#top .small-up-2 > .columns,
-header#top footer#footer .small-up-2 > .columns {
+header#top .small-up-2 > .columns {
     -webkit-box-flex: 0;
     -ms-flex: 0 0 50%;
     flex: 0 0 50%;
@@ -1048,14 +1041,12 @@ header#top .small-up-3 {
 
 footer#footer .small-up-3 > .column,
 footer#footer .small-up-3 > .columns,
-footer#footer header#top .small-up-3 > .columns,
 header#top .small-up-3 > .column,
-header#top .small-up-3 > .columns,
-header#top footer#footer .small-up-3 > .columns {
+header#top .small-up-3 > .columns {
     -webkit-box-flex: 0;
-    -ms-flex: 0 0 33.33333%;
-    flex: 0 0 33.33333%;
-    max-width: 33.33333%;
+    -ms-flex: 0 0 33.3333333333%;
+    flex: 0 0 33.3333333333%;
+    max-width: 33.3333333333%;
 }
 
 footer#footer .small-up-4,
@@ -1066,10 +1057,8 @@ header#top .small-up-4 {
 
 footer#footer .small-up-4 > .column,
 footer#footer .small-up-4 > .columns,
-footer#footer header#top .small-up-4 > .columns,
 header#top .small-up-4 > .column,
-header#top .small-up-4 > .columns,
-header#top footer#footer .small-up-4 > .columns {
+header#top .small-up-4 > .columns {
     -webkit-box-flex: 0;
     -ms-flex: 0 0 25%;
     flex: 0 0 25%;
@@ -1084,10 +1073,8 @@ header#top .small-up-5 {
 
 footer#footer .small-up-5 > .column,
 footer#footer .small-up-5 > .columns,
-footer#footer header#top .small-up-5 > .columns,
 header#top .small-up-5 > .column,
-header#top .small-up-5 > .columns,
-header#top footer#footer .small-up-5 > .columns {
+header#top .small-up-5 > .columns {
     -webkit-box-flex: 0;
     -ms-flex: 0 0 20%;
     flex: 0 0 20%;
@@ -1102,14 +1089,12 @@ header#top .small-up-6 {
 
 footer#footer .small-up-6 > .column,
 footer#footer .small-up-6 > .columns,
-footer#footer header#top .small-up-6 > .columns,
 header#top .small-up-6 > .column,
-header#top .small-up-6 > .columns,
-header#top footer#footer .small-up-6 > .columns {
+header#top .small-up-6 > .columns {
     -webkit-box-flex: 0;
-    -ms-flex: 0 0 16.66667%;
-    flex: 0 0 16.66667%;
-    max-width: 16.66667%;
+    -ms-flex: 0 0 16.6666666667%;
+    flex: 0 0 16.6666666667%;
+    max-width: 16.6666666667%;
 }
 
 footer#footer .small-up-7,
@@ -1120,14 +1105,12 @@ header#top .small-up-7 {
 
 footer#footer .small-up-7 > .column,
 footer#footer .small-up-7 > .columns,
-footer#footer header#top .small-up-7 > .columns,
 header#top .small-up-7 > .column,
-header#top .small-up-7 > .columns,
-header#top footer#footer .small-up-7 > .columns {
+header#top .small-up-7 > .columns {
     -webkit-box-flex: 0;
-    -ms-flex: 0 0 14.28571%;
-    flex: 0 0 14.28571%;
-    max-width: 14.28571%;
+    -ms-flex: 0 0 14.2857142857%;
+    flex: 0 0 14.2857142857%;
+    max-width: 14.2857142857%;
 }
 
 footer#footer .small-up-8,
@@ -1138,10 +1121,8 @@ header#top .small-up-8 {
 
 footer#footer .small-up-8 > .column,
 footer#footer .small-up-8 > .columns,
-footer#footer header#top .small-up-8 > .columns,
 header#top .small-up-8 > .column,
-header#top .small-up-8 > .columns,
-header#top footer#footer .small-up-8 > .columns {
+header#top .small-up-8 > .columns {
     -webkit-box-flex: 0;
     -ms-flex: 0 0 12.5%;
     flex: 0 0 12.5%;
@@ -1150,20 +1131,16 @@ header#top footer#footer .small-up-8 > .columns {
 
 footer#footer .small-collapse > .column,
 footer#footer .small-collapse > .columns,
-footer#footer header#top .small-collapse > .columns,
 header#top .small-collapse > .column,
-header#top .small-collapse > .columns,
-header#top footer#footer .small-collapse > .columns {
+header#top .small-collapse > .columns {
     padding-right: 0;
     padding-left: 0;
 }
 
 footer#footer .small-uncollapse > .column,
 footer#footer .small-uncollapse > .columns,
-footer#footer header#top .small-uncollapse > .columns,
 header#top .small-uncollapse > .column,
-header#top .small-uncollapse > .columns,
-header#top footer#footer .small-uncollapse > .columns {
+header#top .small-uncollapse > .columns {
     padding-right: 0.625rem;
     padding-left: 0.625rem;
 }
@@ -1172,9 +1149,9 @@ header#top footer#footer .small-uncollapse > .columns {
     footer#footer .medium-1,
     header#top .medium-1 {
         -webkit-box-flex: 0;
-        -ms-flex: 0 0 8.33333%;
-        flex: 0 0 8.33333%;
-        max-width: 8.33333%;
+        -ms-flex: 0 0 8.3333333333%;
+        flex: 0 0 8.3333333333%;
+        max-width: 8.3333333333%;
     }
 
     footer#footer .medium-offset-0,
@@ -1185,14 +1162,14 @@ header#top footer#footer .small-uncollapse > .columns {
     footer#footer .medium-2,
     header#top .medium-2 {
         -webkit-box-flex: 0;
-        -ms-flex: 0 0 16.66667%;
-        flex: 0 0 16.66667%;
-        max-width: 16.66667%;
+        -ms-flex: 0 0 16.6666666667%;
+        flex: 0 0 16.6666666667%;
+        max-width: 16.6666666667%;
     }
 
     footer#footer .medium-offset-1,
     header#top .medium-offset-1 {
-        margin-left: 8.33333%;
+        margin-left: 8.3333333333%;
     }
 
     footer#footer .medium-3,
@@ -1205,15 +1182,15 @@ header#top footer#footer .small-uncollapse > .columns {
 
     footer#footer .medium-offset-2,
     header#top .medium-offset-2 {
-        margin-left: 16.66667%;
+        margin-left: 16.6666666667%;
     }
 
     footer#footer .medium-4,
     header#top .medium-4 {
         -webkit-box-flex: 0;
-        -ms-flex: 0 0 33.33333%;
-        flex: 0 0 33.33333%;
-        max-width: 33.33333%;
+        -ms-flex: 0 0 33.3333333333%;
+        flex: 0 0 33.3333333333%;
+        max-width: 33.3333333333%;
     }
 
     footer#footer .medium-offset-3,
@@ -1224,14 +1201,14 @@ header#top footer#footer .small-uncollapse > .columns {
     footer#footer .medium-5,
     header#top .medium-5 {
         -webkit-box-flex: 0;
-        -ms-flex: 0 0 41.66667%;
-        flex: 0 0 41.66667%;
-        max-width: 41.66667%;
+        -ms-flex: 0 0 41.6666666667%;
+        flex: 0 0 41.6666666667%;
+        max-width: 41.6666666667%;
     }
 
     footer#footer .medium-offset-4,
     header#top .medium-offset-4 {
-        margin-left: 33.33333%;
+        margin-left: 33.3333333333%;
     }
 
     footer#footer .medium-6,
@@ -1244,15 +1221,15 @@ header#top footer#footer .small-uncollapse > .columns {
 
     footer#footer .medium-offset-5,
     header#top .medium-offset-5 {
-        margin-left: 41.66667%;
+        margin-left: 41.6666666667%;
     }
 
     footer#footer .medium-7,
     header#top .medium-7 {
         -webkit-box-flex: 0;
-        -ms-flex: 0 0 58.33333%;
-        flex: 0 0 58.33333%;
-        max-width: 58.33333%;
+        -ms-flex: 0 0 58.3333333333%;
+        flex: 0 0 58.3333333333%;
+        max-width: 58.3333333333%;
     }
 
     footer#footer .medium-offset-6,
@@ -1263,14 +1240,14 @@ header#top footer#footer .small-uncollapse > .columns {
     footer#footer .medium-8,
     header#top .medium-8 {
         -webkit-box-flex: 0;
-        -ms-flex: 0 0 66.66667%;
-        flex: 0 0 66.66667%;
-        max-width: 66.66667%;
+        -ms-flex: 0 0 66.6666666667%;
+        flex: 0 0 66.6666666667%;
+        max-width: 66.6666666667%;
     }
 
     footer#footer .medium-offset-7,
     header#top .medium-offset-7 {
-        margin-left: 58.33333%;
+        margin-left: 58.3333333333%;
     }
 
     footer#footer .medium-9,
@@ -1283,15 +1260,15 @@ header#top footer#footer .small-uncollapse > .columns {
 
     footer#footer .medium-offset-8,
     header#top .medium-offset-8 {
-        margin-left: 66.66667%;
+        margin-left: 66.6666666667%;
     }
 
     footer#footer .medium-10,
     header#top .medium-10 {
         -webkit-box-flex: 0;
-        -ms-flex: 0 0 83.33333%;
-        flex: 0 0 83.33333%;
-        max-width: 83.33333%;
+        -ms-flex: 0 0 83.3333333333%;
+        flex: 0 0 83.3333333333%;
+        max-width: 83.3333333333%;
     }
 
     footer#footer .medium-offset-9,
@@ -1302,14 +1279,14 @@ header#top footer#footer .small-uncollapse > .columns {
     footer#footer .medium-11,
     header#top .medium-11 {
         -webkit-box-flex: 0;
-        -ms-flex: 0 0 91.66667%;
-        flex: 0 0 91.66667%;
-        max-width: 91.66667%;
+        -ms-flex: 0 0 91.6666666667%;
+        flex: 0 0 91.6666666667%;
+        max-width: 91.6666666667%;
     }
 
     footer#footer .medium-offset-10,
     header#top .medium-offset-10 {
-        margin-left: 83.33333%;
+        margin-left: 83.3333333333%;
     }
 
     footer#footer .medium-12,
@@ -1322,7 +1299,7 @@ header#top footer#footer .small-uncollapse > .columns {
 
     footer#footer .medium-offset-11,
     header#top .medium-offset-11 {
-        margin-left: 91.66667%;
+        margin-left: 91.6666666667%;
     }
 
     footer#footer .medium-up-1,
@@ -1333,10 +1310,8 @@ header#top footer#footer .small-uncollapse > .columns {
 
     footer#footer .medium-up-1 > .column,
     footer#footer .medium-up-1 > .columns,
-    footer#footer header#top .medium-up-1 > .columns,
     header#top .medium-up-1 > .column,
-    header#top .medium-up-1 > .columns,
-    header#top footer#footer .medium-up-1 > .columns {
+    header#top .medium-up-1 > .columns {
         -webkit-box-flex: 0;
         -ms-flex: 0 0 100%;
         flex: 0 0 100%;
@@ -1351,10 +1326,8 @@ header#top footer#footer .small-uncollapse > .columns {
 
     footer#footer .medium-up-2 > .column,
     footer#footer .medium-up-2 > .columns,
-    footer#footer header#top .medium-up-2 > .columns,
     header#top .medium-up-2 > .column,
-    header#top .medium-up-2 > .columns,
-    header#top footer#footer .medium-up-2 > .columns {
+    header#top .medium-up-2 > .columns {
         -webkit-box-flex: 0;
         -ms-flex: 0 0 50%;
         flex: 0 0 50%;
@@ -1369,14 +1342,12 @@ header#top footer#footer .small-uncollapse > .columns {
 
     footer#footer .medium-up-3 > .column,
     footer#footer .medium-up-3 > .columns,
-    footer#footer header#top .medium-up-3 > .columns,
     header#top .medium-up-3 > .column,
-    header#top .medium-up-3 > .columns,
-    header#top footer#footer .medium-up-3 > .columns {
+    header#top .medium-up-3 > .columns {
         -webkit-box-flex: 0;
-        -ms-flex: 0 0 33.33333%;
-        flex: 0 0 33.33333%;
-        max-width: 33.33333%;
+        -ms-flex: 0 0 33.3333333333%;
+        flex: 0 0 33.3333333333%;
+        max-width: 33.3333333333%;
     }
 
     footer#footer .medium-up-4,
@@ -1387,10 +1358,8 @@ header#top footer#footer .small-uncollapse > .columns {
 
     footer#footer .medium-up-4 > .column,
     footer#footer .medium-up-4 > .columns,
-    footer#footer header#top .medium-up-4 > .columns,
     header#top .medium-up-4 > .column,
-    header#top .medium-up-4 > .columns,
-    header#top footer#footer .medium-up-4 > .columns {
+    header#top .medium-up-4 > .columns {
         -webkit-box-flex: 0;
         -ms-flex: 0 0 25%;
         flex: 0 0 25%;
@@ -1405,10 +1374,8 @@ header#top footer#footer .small-uncollapse > .columns {
 
     footer#footer .medium-up-5 > .column,
     footer#footer .medium-up-5 > .columns,
-    footer#footer header#top .medium-up-5 > .columns,
     header#top .medium-up-5 > .column,
-    header#top .medium-up-5 > .columns,
-    header#top footer#footer .medium-up-5 > .columns {
+    header#top .medium-up-5 > .columns {
         -webkit-box-flex: 0;
         -ms-flex: 0 0 20%;
         flex: 0 0 20%;
@@ -1423,14 +1390,12 @@ header#top footer#footer .small-uncollapse > .columns {
 
     footer#footer .medium-up-6 > .column,
     footer#footer .medium-up-6 > .columns,
-    footer#footer header#top .medium-up-6 > .columns,
     header#top .medium-up-6 > .column,
-    header#top .medium-up-6 > .columns,
-    header#top footer#footer .medium-up-6 > .columns {
+    header#top .medium-up-6 > .columns {
         -webkit-box-flex: 0;
-        -ms-flex: 0 0 16.66667%;
-        flex: 0 0 16.66667%;
-        max-width: 16.66667%;
+        -ms-flex: 0 0 16.6666666667%;
+        flex: 0 0 16.6666666667%;
+        max-width: 16.6666666667%;
     }
 
     footer#footer .medium-up-7,
@@ -1441,14 +1406,12 @@ header#top footer#footer .small-uncollapse > .columns {
 
     footer#footer .medium-up-7 > .column,
     footer#footer .medium-up-7 > .columns,
-    footer#footer header#top .medium-up-7 > .columns,
     header#top .medium-up-7 > .column,
-    header#top .medium-up-7 > .columns,
-    header#top footer#footer .medium-up-7 > .columns {
+    header#top .medium-up-7 > .columns {
         -webkit-box-flex: 0;
-        -ms-flex: 0 0 14.28571%;
-        flex: 0 0 14.28571%;
-        max-width: 14.28571%;
+        -ms-flex: 0 0 14.2857142857%;
+        flex: 0 0 14.2857142857%;
+        max-width: 14.2857142857%;
     }
 
     footer#footer .medium-up-8,
@@ -1459,10 +1422,8 @@ header#top footer#footer .small-uncollapse > .columns {
 
     footer#footer .medium-up-8 > .column,
     footer#footer .medium-up-8 > .columns,
-    footer#footer header#top .medium-up-8 > .columns,
     header#top .medium-up-8 > .column,
-    header#top .medium-up-8 > .columns,
-    header#top footer#footer .medium-up-8 > .columns {
+    header#top .medium-up-8 > .columns {
         -webkit-box-flex: 0;
         -ms-flex: 0 0 12.5%;
         flex: 0 0 12.5%;
@@ -1479,8 +1440,9 @@ header#top footer#footer .small-uncollapse > .columns {
     }
 }
 
-.row.medium-unstack > .column,
+footer#footer .row.medium-unstack > .column,
 footer#footer .row.medium-unstack > .columns,
+header#top .row.medium-unstack > .column,
 header#top .row.medium-unstack > .columns {
     -webkit-box-flex: 0;
     -ms-flex: 0 0 100%;
@@ -1488,32 +1450,27 @@ header#top .row.medium-unstack > .columns {
 }
 
 @media print, screen and (min-width: 40em) {
-    .row.medium-unstack > .column,
+    footer#footer .row.medium-unstack > .column,
     footer#footer .row.medium-unstack > .columns,
+    header#top .row.medium-unstack > .column,
     header#top .row.medium-unstack > .columns {
         -webkit-box-flex: 1;
         -ms-flex: 1 1 0px;
         flex: 1 1 0px;
     }
-}
 
-@media print, screen and (min-width: 40em) {
     footer#footer .medium-collapse > .column,
     footer#footer .medium-collapse > .columns,
-    footer#footer header#top .medium-collapse > .columns,
     header#top .medium-collapse > .column,
-    header#top .medium-collapse > .columns,
-    header#top footer#footer .medium-collapse > .columns {
+    header#top .medium-collapse > .columns {
         padding-right: 0;
         padding-left: 0;
     }
 
     footer#footer .medium-uncollapse > .column,
     footer#footer .medium-uncollapse > .columns,
-    footer#footer header#top .medium-uncollapse > .columns,
     header#top .medium-uncollapse > .column,
-    header#top .medium-uncollapse > .columns,
-    header#top footer#footer .medium-uncollapse > .columns {
+    header#top .medium-uncollapse > .columns {
         padding-right: 0.9375rem;
         padding-left: 0.9375rem;
     }
@@ -1523,9 +1480,9 @@ header#top .row.medium-unstack > .columns {
     footer#footer .large-1,
     header#top .large-1 {
         -webkit-box-flex: 0;
-        -ms-flex: 0 0 8.33333%;
-        flex: 0 0 8.33333%;
-        max-width: 8.33333%;
+        -ms-flex: 0 0 8.3333333333%;
+        flex: 0 0 8.3333333333%;
+        max-width: 8.3333333333%;
     }
 
     footer#footer .large-offset-0,
@@ -1536,14 +1493,14 @@ header#top .row.medium-unstack > .columns {
     footer#footer .large-2,
     header#top .large-2 {
         -webkit-box-flex: 0;
-        -ms-flex: 0 0 16.66667%;
-        flex: 0 0 16.66667%;
-        max-width: 16.66667%;
+        -ms-flex: 0 0 16.6666666667%;
+        flex: 0 0 16.6666666667%;
+        max-width: 16.6666666667%;
     }
 
     footer#footer .large-offset-1,
     header#top .large-offset-1 {
-        margin-left: 8.33333%;
+        margin-left: 8.3333333333%;
     }
 
     footer#footer .large-3,
@@ -1556,15 +1513,15 @@ header#top .row.medium-unstack > .columns {
 
     footer#footer .large-offset-2,
     header#top .large-offset-2 {
-        margin-left: 16.66667%;
+        margin-left: 16.6666666667%;
     }
 
     footer#footer .large-4,
     header#top .large-4 {
         -webkit-box-flex: 0;
-        -ms-flex: 0 0 33.33333%;
-        flex: 0 0 33.33333%;
-        max-width: 33.33333%;
+        -ms-flex: 0 0 33.3333333333%;
+        flex: 0 0 33.3333333333%;
+        max-width: 33.3333333333%;
     }
 
     footer#footer .large-offset-3,
@@ -1575,14 +1532,14 @@ header#top .row.medium-unstack > .columns {
     footer#footer .large-5,
     header#top .large-5 {
         -webkit-box-flex: 0;
-        -ms-flex: 0 0 41.66667%;
-        flex: 0 0 41.66667%;
-        max-width: 41.66667%;
+        -ms-flex: 0 0 41.6666666667%;
+        flex: 0 0 41.6666666667%;
+        max-width: 41.6666666667%;
     }
 
     footer#footer .large-offset-4,
     header#top .large-offset-4 {
-        margin-left: 33.33333%;
+        margin-left: 33.3333333333%;
     }
 
     footer#footer .large-6,
@@ -1595,15 +1552,15 @@ header#top .row.medium-unstack > .columns {
 
     footer#footer .large-offset-5,
     header#top .large-offset-5 {
-        margin-left: 41.66667%;
+        margin-left: 41.6666666667%;
     }
 
     footer#footer .large-7,
     header#top .large-7 {
         -webkit-box-flex: 0;
-        -ms-flex: 0 0 58.33333%;
-        flex: 0 0 58.33333%;
-        max-width: 58.33333%;
+        -ms-flex: 0 0 58.3333333333%;
+        flex: 0 0 58.3333333333%;
+        max-width: 58.3333333333%;
     }
 
     footer#footer .large-offset-6,
@@ -1614,14 +1571,14 @@ header#top .row.medium-unstack > .columns {
     footer#footer .large-8,
     header#top .large-8 {
         -webkit-box-flex: 0;
-        -ms-flex: 0 0 66.66667%;
-        flex: 0 0 66.66667%;
-        max-width: 66.66667%;
+        -ms-flex: 0 0 66.6666666667%;
+        flex: 0 0 66.6666666667%;
+        max-width: 66.6666666667%;
     }
 
     footer#footer .large-offset-7,
     header#top .large-offset-7 {
-        margin-left: 58.33333%;
+        margin-left: 58.3333333333%;
     }
 
     footer#footer .large-9,
@@ -1634,15 +1591,15 @@ header#top .row.medium-unstack > .columns {
 
     footer#footer .large-offset-8,
     header#top .large-offset-8 {
-        margin-left: 66.66667%;
+        margin-left: 66.6666666667%;
     }
 
     footer#footer .large-10,
     header#top .large-10 {
         -webkit-box-flex: 0;
-        -ms-flex: 0 0 83.33333%;
-        flex: 0 0 83.33333%;
-        max-width: 83.33333%;
+        -ms-flex: 0 0 83.3333333333%;
+        flex: 0 0 83.3333333333%;
+        max-width: 83.3333333333%;
     }
 
     footer#footer .large-offset-9,
@@ -1653,14 +1610,14 @@ header#top .row.medium-unstack > .columns {
     footer#footer .large-11,
     header#top .large-11 {
         -webkit-box-flex: 0;
-        -ms-flex: 0 0 91.66667%;
-        flex: 0 0 91.66667%;
-        max-width: 91.66667%;
+        -ms-flex: 0 0 91.6666666667%;
+        flex: 0 0 91.6666666667%;
+        max-width: 91.6666666667%;
     }
 
     footer#footer .large-offset-10,
     header#top .large-offset-10 {
-        margin-left: 83.33333%;
+        margin-left: 83.3333333333%;
     }
 
     footer#footer .large-12,
@@ -1673,7 +1630,7 @@ header#top .row.medium-unstack > .columns {
 
     footer#footer .large-offset-11,
     header#top .large-offset-11 {
-        margin-left: 91.66667%;
+        margin-left: 91.6666666667%;
     }
 
     footer#footer .large-up-1,
@@ -1684,10 +1641,8 @@ header#top .row.medium-unstack > .columns {
 
     footer#footer .large-up-1 > .column,
     footer#footer .large-up-1 > .columns,
-    footer#footer header#top .large-up-1 > .columns,
     header#top .large-up-1 > .column,
-    header#top .large-up-1 > .columns,
-    header#top footer#footer .large-up-1 > .columns {
+    header#top .large-up-1 > .columns {
         -webkit-box-flex: 0;
         -ms-flex: 0 0 100%;
         flex: 0 0 100%;
@@ -1702,10 +1657,8 @@ header#top .row.medium-unstack > .columns {
 
     footer#footer .large-up-2 > .column,
     footer#footer .large-up-2 > .columns,
-    footer#footer header#top .large-up-2 > .columns,
     header#top .large-up-2 > .column,
-    header#top .large-up-2 > .columns,
-    header#top footer#footer .large-up-2 > .columns {
+    header#top .large-up-2 > .columns {
         -webkit-box-flex: 0;
         -ms-flex: 0 0 50%;
         flex: 0 0 50%;
@@ -1720,14 +1673,12 @@ header#top .row.medium-unstack > .columns {
 
     footer#footer .large-up-3 > .column,
     footer#footer .large-up-3 > .columns,
-    footer#footer header#top .large-up-3 > .columns,
     header#top .large-up-3 > .column,
-    header#top .large-up-3 > .columns,
-    header#top footer#footer .large-up-3 > .columns {
+    header#top .large-up-3 > .columns {
         -webkit-box-flex: 0;
-        -ms-flex: 0 0 33.33333%;
-        flex: 0 0 33.33333%;
-        max-width: 33.33333%;
+        -ms-flex: 0 0 33.3333333333%;
+        flex: 0 0 33.3333333333%;
+        max-width: 33.3333333333%;
     }
 
     footer#footer .large-up-4,
@@ -1738,10 +1689,8 @@ header#top .row.medium-unstack > .columns {
 
     footer#footer .large-up-4 > .column,
     footer#footer .large-up-4 > .columns,
-    footer#footer header#top .large-up-4 > .columns,
     header#top .large-up-4 > .column,
-    header#top .large-up-4 > .columns,
-    header#top footer#footer .large-up-4 > .columns {
+    header#top .large-up-4 > .columns {
         -webkit-box-flex: 0;
         -ms-flex: 0 0 25%;
         flex: 0 0 25%;
@@ -1756,10 +1705,8 @@ header#top .row.medium-unstack > .columns {
 
     footer#footer .large-up-5 > .column,
     footer#footer .large-up-5 > .columns,
-    footer#footer header#top .large-up-5 > .columns,
     header#top .large-up-5 > .column,
-    header#top .large-up-5 > .columns,
-    header#top footer#footer .large-up-5 > .columns {
+    header#top .large-up-5 > .columns {
         -webkit-box-flex: 0;
         -ms-flex: 0 0 20%;
         flex: 0 0 20%;
@@ -1774,14 +1721,12 @@ header#top .row.medium-unstack > .columns {
 
     footer#footer .large-up-6 > .column,
     footer#footer .large-up-6 > .columns,
-    footer#footer header#top .large-up-6 > .columns,
     header#top .large-up-6 > .column,
-    header#top .large-up-6 > .columns,
-    header#top footer#footer .large-up-6 > .columns {
+    header#top .large-up-6 > .columns {
         -webkit-box-flex: 0;
-        -ms-flex: 0 0 16.66667%;
-        flex: 0 0 16.66667%;
-        max-width: 16.66667%;
+        -ms-flex: 0 0 16.6666666667%;
+        flex: 0 0 16.6666666667%;
+        max-width: 16.6666666667%;
     }
 
     footer#footer .large-up-7,
@@ -1792,14 +1737,12 @@ header#top .row.medium-unstack > .columns {
 
     footer#footer .large-up-7 > .column,
     footer#footer .large-up-7 > .columns,
-    footer#footer header#top .large-up-7 > .columns,
     header#top .large-up-7 > .column,
-    header#top .large-up-7 > .columns,
-    header#top footer#footer .large-up-7 > .columns {
+    header#top .large-up-7 > .columns {
         -webkit-box-flex: 0;
-        -ms-flex: 0 0 14.28571%;
-        flex: 0 0 14.28571%;
-        max-width: 14.28571%;
+        -ms-flex: 0 0 14.2857142857%;
+        flex: 0 0 14.2857142857%;
+        max-width: 14.2857142857%;
     }
 
     footer#footer .large-up-8,
@@ -1810,10 +1753,8 @@ header#top .row.medium-unstack > .columns {
 
     footer#footer .large-up-8 > .column,
     footer#footer .large-up-8 > .columns,
-    footer#footer header#top .large-up-8 > .columns,
     header#top .large-up-8 > .column,
-    header#top .large-up-8 > .columns,
-    header#top footer#footer .large-up-8 > .columns {
+    header#top .large-up-8 > .columns {
         -webkit-box-flex: 0;
         -ms-flex: 0 0 12.5%;
         flex: 0 0 12.5%;
@@ -1830,8 +1771,9 @@ header#top .row.medium-unstack > .columns {
     }
 }
 
-.row.large-unstack > .column,
+footer#footer .row.large-unstack > .column,
 footer#footer .row.large-unstack > .columns,
+header#top .row.large-unstack > .column,
 header#top .row.large-unstack > .columns {
     -webkit-box-flex: 0;
     -ms-flex: 0 0 100%;
@@ -1839,32 +1781,27 @@ header#top .row.large-unstack > .columns {
 }
 
 @media print, screen and (min-width: 64em) {
-    .row.large-unstack > .column,
+    footer#footer .row.large-unstack > .column,
     footer#footer .row.large-unstack > .columns,
+    header#top .row.large-unstack > .column,
     header#top .row.large-unstack > .columns {
         -webkit-box-flex: 1;
         -ms-flex: 1 1 0px;
         flex: 1 1 0px;
     }
-}
 
-@media print, screen and (min-width: 64em) {
     footer#footer .large-collapse > .column,
     footer#footer .large-collapse > .columns,
-    footer#footer header#top .large-collapse > .columns,
     header#top .large-collapse > .column,
-    header#top .large-collapse > .columns,
-    header#top footer#footer .large-collapse > .columns {
+    header#top .large-collapse > .columns {
         padding-right: 0;
         padding-left: 0;
     }
 
     footer#footer .large-uncollapse > .column,
     footer#footer .large-uncollapse > .columns,
-    footer#footer header#top .large-uncollapse > .columns,
     header#top .large-uncollapse > .column,
-    header#top .large-uncollapse > .columns,
-    header#top footer#footer .large-uncollapse > .columns {
+    header#top .large-uncollapse > .columns {
         padding-right: 0.9375rem;
         padding-left: 0.9375rem;
     }
@@ -1902,8 +1839,6 @@ header#top .column-block > :last-child {
 
 footer#footer #registrationForm div.notes .h4,
 footer#footer #registrationForm div.notes h4,
-footer#footer #registrationForm div.notes header#top .h4,
-footer#footer #registrationForm div.notes header#top h4,
 footer#footer .h1,
 footer#footer .h2,
 footer#footer .h3,
@@ -1930,8 +1865,6 @@ footer#footer td,
 footer#footer th,
 footer#footer ul,
 header#top #registrationForm div.notes .h4,
-header#top #registrationForm div.notes footer#footer .h4,
-header#top #registrationForm div.notes footer#footer h4,
 header#top #registrationForm div.notes h4,
 header#top .h1,
 header#top .h2,
@@ -1994,8 +1927,6 @@ header#top small {
 
 footer#footer #registrationForm div.notes .h4,
 footer#footer #registrationForm div.notes h4,
-footer#footer #registrationForm div.notes header#top .h4,
-footer#footer #registrationForm div.notes header#top h4,
 footer#footer .h1,
 footer#footer .h2,
 footer#footer .h3,
@@ -2009,8 +1940,6 @@ footer#footer h4,
 footer#footer h5,
 footer#footer h6,
 header#top #registrationForm div.notes .h4,
-header#top #registrationForm div.notes footer#footer .h4,
-header#top #registrationForm div.notes footer#footer h4,
 header#top #registrationForm div.notes h4,
 header#top .h1,
 header#top .h2,
@@ -2033,8 +1962,6 @@ header#top h6 {
 
 footer#footer #registrationForm div.notes .h4 small,
 footer#footer #registrationForm div.notes h4 small,
-footer#footer #registrationForm div.notes header#top .h4 small,
-footer#footer #registrationForm div.notes header#top h4 small,
 footer#footer .h1 small,
 footer#footer .h2 small,
 footer#footer .h3 small,
@@ -2048,8 +1975,6 @@ footer#footer h4 small,
 footer#footer h5 small,
 footer#footer h6 small,
 header#top #registrationForm div.notes .h4 small,
-header#top #registrationForm div.notes footer#footer .h4 small,
-header#top #registrationForm div.notes footer#footer h4 small,
 header#top #registrationForm div.notes h4 small,
 header#top .h1 small,
 header#top .h2 small,
@@ -2109,13 +2034,9 @@ header#top h4 {
 
 footer#footer #registrationForm div.notes .h4,
 footer#footer #registrationForm div.notes h4,
-footer#footer #registrationForm div.notes header#top .h4,
-footer#footer #registrationForm div.notes header#top h4,
 footer#footer .h5,
 footer#footer h5,
 header#top #registrationForm div.notes .h4,
-header#top #registrationForm div.notes footer#footer .h4,
-header#top #registrationForm div.notes footer#footer h4,
 header#top #registrationForm div.notes h4,
 header#top .h5,
 header#top h5 {
@@ -2166,13 +2087,9 @@ header#top h6 {
 
     footer#footer #registrationForm div.notes .h4,
     footer#footer #registrationForm div.notes h4,
-    footer#footer #registrationForm div.notes header#top .h4,
-    footer#footer #registrationForm div.notes header#top h4,
     footer#footer .h5,
     footer#footer h5,
     header#top #registrationForm div.notes .h4,
-    header#top #registrationForm div.notes footer#footer .h4,
-    header#top #registrationForm div.notes footer#footer h4,
     header#top #registrationForm div.notes h4,
     header#top .h5,
     header#top h5 {
@@ -2351,8 +2268,10 @@ header#top ul.no-bullet {
 
 footer#footer .cite-block,
 footer#footer cite,
+footer#footer header#top cite,
 header#top .cite-block,
-header#top cite {
+header#top cite,
+header#top footer#footer cite {
     display: block;
     color: #545454;
     font-size: 0.8125rem;
@@ -2360,15 +2279,19 @@ header#top cite {
 
 footer#footer .cite-block:before,
 footer#footer cite:before,
+footer#footer header#top cite:before,
 header#top .cite-block:before,
-header#top cite:before {
+header#top cite:before,
+header#top footer#footer cite:before {
     content: '— ';
 }
 
 footer#footer .code-inline,
 footer#footer code,
+footer#footer header#top code,
 header#top .code-inline,
-header#top code {
+header#top code,
+header#top footer#footer code {
     border: 1px solid #d9d9d9;
     background-color: #f0f0f0;
     font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', Courier, monospace;
@@ -2468,8 +2391,7 @@ header#top .show-for-print {
     header#top * {
         background: 0 0 !important;
         color: #000 !important;
-        -webkit-print-color-adjust: economy;
-        color-adjust: economy;
+        print-color-adjust: economy;
         -webkit-box-shadow: none !important;
         box-shadow: none !important;
         text-shadow: none !important;
@@ -2849,10 +2771,6 @@ header#top .input-group > :last-child.input-group-button > * {
 footer#footer .input-group-button,
 footer#footer .input-group-button a,
 footer#footer .input-group-button button,
-footer#footer .input-group-button header#top a,
-footer#footer .input-group-button header#top button,
-footer#footer .input-group-button header#top input,
-footer#footer .input-group-button header#top label,
 footer#footer .input-group-button input,
 footer#footer .input-group-button label,
 footer#footer .input-group-field,
@@ -2860,10 +2778,6 @@ footer#footer .input-group-label,
 header#top .input-group-button,
 header#top .input-group-button a,
 header#top .input-group-button button,
-header#top .input-group-button footer#footer a,
-header#top .input-group-button footer#footer button,
-header#top .input-group-button footer#footer input,
-header#top .input-group-button footer#footer label,
 header#top .input-group-button input,
 header#top .input-group-button label,
 header#top .input-group-field,
@@ -3088,8 +3002,14 @@ header#top .form-error.is-visible {
     display: block;
 }
 
+footer#footer #registrationForm [type='reset'],
+footer#footer #registrationForm header#top [type='reset'],
 footer#footer .button,
-header#top .button {
+footer#footer header#top #registrationForm [type='reset'],
+header#top #registrationForm [type='reset'],
+header#top #registrationForm footer#footer [type='reset'],
+header#top .button,
+header#top footer#footer #registrationForm [type='reset'] {
     display: inline-block;
     vertical-align: middle;
     margin: 0;
@@ -3106,27 +3026,39 @@ header#top .button {
     cursor: pointer;
 }
 
+[data-whatinput='mouse'] footer#footer #registrationForm [type='reset'],
 [data-whatinput='mouse'] footer#footer .button,
-[data-whatinput='mouse'] header#top .button {
+[data-whatinput='mouse'] header#top #registrationForm [type='reset'],
+[data-whatinput='mouse'] header#top .button,
+footer#footer #registrationForm [data-whatinput='mouse'] header#top [type='reset'],
+header#top #registrationForm [data-whatinput='mouse'] footer#footer [type='reset'] {
     outline: 0;
 }
 
+footer#footer #registrationForm .tiny[type='reset'],
 footer#footer .button.tiny,
+header#top #registrationForm .tiny[type='reset'],
 header#top .button.tiny {
     font-size: 0.6rem;
 }
 
+footer#footer #registrationForm .small[type='reset'],
 footer#footer .button.small,
+header#top #registrationForm .small[type='reset'],
 header#top .button.small {
     font-size: 0.875rem;
 }
 
+footer#footer #registrationForm .large[type='reset'],
 footer#footer .button.large,
+header#top #registrationForm .large[type='reset'],
 header#top .button.large {
     font-size: 1.25rem;
 }
 
+footer#footer #registrationForm .expanded[type='reset'],
 footer#footer .button.expanded,
+header#top #registrationForm .expanded[type='reset'],
 header#top .button.expanded {
     display: block;
     width: 100%;
@@ -3134,6 +3066,10 @@ header#top .button.expanded {
     margin-left: 0;
 }
 
+footer#footer #registrationForm .disabled[type='reset'],
+footer#footer #registrationForm [disabled][type='reset'],
+footer#footer #registrationForm [type='reset'],
+footer#footer #registrationForm header#top [type='reset'],
 footer#footer .button,
 footer#footer .button.disabled,
 footer#footer .button.disabled:focus,
@@ -3141,25 +3077,36 @@ footer#footer .button.disabled:hover,
 footer#footer .button[disabled],
 footer#footer .button[disabled]:focus,
 footer#footer .button[disabled]:hover,
+footer#footer header#top #registrationForm [type='reset'],
+header#top #registrationForm .disabled[type='reset'],
+header#top #registrationForm [disabled][type='reset'],
+header#top #registrationForm [type='reset'],
+header#top #registrationForm footer#footer [type='reset'],
 header#top .button,
 header#top .button.disabled,
 header#top .button.disabled:focus,
 header#top .button.disabled:hover,
 header#top .button[disabled],
 header#top .button[disabled]:focus,
-header#top .button[disabled]:hover {
+header#top .button[disabled]:hover,
+header#top footer#footer #registrationForm [type='reset'] {
     background-color: #527f24;
     color: #fff;
 }
 
+footer#footer #registrationForm [type='reset']:focus,
+footer#footer #registrationForm [type='reset']:hover,
 footer#footer .button:focus,
 footer#footer .button:hover,
+header#top #registrationForm [type='reset']:focus,
+header#top #registrationForm [type='reset']:hover,
 header#top .button:focus,
 header#top .button:hover {
     background-color: #466c1f;
     color: #fff;
 }
 
+footer#footer #registrationForm .primary[type='reset'],
 footer#footer .button.primary,
 footer#footer .button.primary.disabled,
 footer#footer .button.primary.disabled:focus,
@@ -3167,6 +3114,7 @@ footer#footer .button.primary.disabled:hover,
 footer#footer .button.primary[disabled],
 footer#footer .button.primary[disabled]:focus,
 footer#footer .button.primary[disabled]:hover,
+header#top #registrationForm .primary[type='reset'],
 header#top .button.primary,
 header#top .button.primary.disabled,
 header#top .button.primary.disabled:focus,
@@ -3178,14 +3126,19 @@ header#top .button.primary[disabled]:hover {
     color: #fff;
 }
 
+footer#footer #registrationForm .primary[type='reset']:focus,
+footer#footer #registrationForm .primary[type='reset']:hover,
 footer#footer .button.primary:focus,
 footer#footer .button.primary:hover,
+header#top #registrationForm .primary[type='reset']:focus,
+header#top #registrationForm .primary[type='reset']:hover,
 header#top .button.primary:focus,
 header#top .button.primary:hover {
     background-color: #093a7a;
     color: #fff;
 }
 
+footer#footer #registrationForm .secondary[type='reset'],
 footer#footer .button.secondary,
 footer#footer .button.secondary.disabled,
 footer#footer .button.secondary.disabled:focus,
@@ -3193,6 +3146,7 @@ footer#footer .button.secondary.disabled:hover,
 footer#footer .button.secondary[disabled],
 footer#footer .button.secondary[disabled]:focus,
 footer#footer .button.secondary[disabled]:hover,
+header#top #registrationForm .secondary[type='reset'],
 header#top .button.secondary,
 header#top .button.secondary.disabled,
 header#top .button.secondary.disabled:focus,
@@ -3204,14 +3158,19 @@ header#top .button.secondary[disabled]:hover {
     color: #fff;
 }
 
+footer#footer #registrationForm .secondary[type='reset']:focus,
+footer#footer #registrationForm .secondary[type='reset']:hover,
 footer#footer .button.secondary:focus,
 footer#footer .button.secondary:hover,
+header#top #registrationForm .secondary[type='reset']:focus,
+header#top #registrationForm .secondary[type='reset']:hover,
 header#top .button.secondary:focus,
 header#top .button.secondary:hover {
     background-color: #434343;
     color: #fff;
 }
 
+footer#footer #registrationForm .success[type='reset'],
 footer#footer .button.success,
 footer#footer .button.success.disabled,
 footer#footer .button.success.disabled:focus,
@@ -3219,6 +3178,7 @@ footer#footer .button.success.disabled:hover,
 footer#footer .button.success[disabled],
 footer#footer .button.success[disabled]:focus,
 footer#footer .button.success[disabled]:hover,
+header#top #registrationForm .success[type='reset'],
 header#top .button.success,
 header#top .button.success.disabled,
 header#top .button.success.disabled:focus,
@@ -3230,14 +3190,19 @@ header#top .button.success[disabled]:hover {
     color: #fff;
 }
 
+footer#footer #registrationForm .success[type='reset']:focus,
+footer#footer #registrationForm .success[type='reset']:hover,
 footer#footer .button.success:focus,
 footer#footer .button.success:hover,
+header#top #registrationForm .success[type='reset']:focus,
+header#top #registrationForm .success[type='reset']:hover,
 header#top .button.success:focus,
 header#top .button.success:hover {
     background-color: #42661d;
     color: #fff;
 }
 
+footer#footer #registrationForm .warning[type='reset'],
 footer#footer .button.warning,
 footer#footer .button.warning.disabled,
 footer#footer .button.warning.disabled:focus,
@@ -3245,6 +3210,7 @@ footer#footer .button.warning.disabled:hover,
 footer#footer .button.warning[disabled],
 footer#footer .button.warning[disabled]:focus,
 footer#footer .button.warning[disabled]:hover,
+header#top #registrationForm .warning[type='reset'],
 header#top .button.warning,
 header#top .button.warning.disabled,
 header#top .button.warning.disabled:focus,
@@ -3256,14 +3222,19 @@ header#top .button.warning[disabled]:hover {
     color: #fff;
 }
 
+footer#footer #registrationForm .warning[type='reset']:focus,
+footer#footer #registrationForm .warning[type='reset']:hover,
 footer#footer .button.warning:focus,
 footer#footer .button.warning:hover,
+header#top #registrationForm .warning[type='reset']:focus,
+header#top #registrationForm .warning[type='reset']:hover,
 header#top .button.warning:focus,
 header#top .button.warning:hover {
     background-color: #923b12;
     color: #fff;
 }
 
+footer#footer #registrationForm .alert[type='reset'],
 footer#footer .button.alert,
 footer#footer .button.alert.disabled,
 footer#footer .button.alert.disabled:focus,
@@ -3271,6 +3242,7 @@ footer#footer .button.alert.disabled:hover,
 footer#footer .button.alert[disabled],
 footer#footer .button.alert[disabled]:focus,
 footer#footer .button.alert[disabled]:hover,
+header#top #registrationForm .alert[type='reset'],
 header#top .button.alert,
 header#top .button.alert.disabled,
 header#top .button.alert.disabled:focus,
@@ -3282,14 +3254,19 @@ header#top .button.alert[disabled]:hover {
     color: #fff;
 }
 
+footer#footer #registrationForm .alert[type='reset']:focus,
+footer#footer #registrationForm .alert[type='reset']:hover,
 footer#footer .button.alert:focus,
 footer#footer .button.alert:hover,
+header#top #registrationForm .alert[type='reset']:focus,
+header#top #registrationForm .alert[type='reset']:hover,
 header#top .button.alert:focus,
 header#top .button.alert:hover {
     background-color: #a40000;
     color: #fff;
 }
 
+footer#footer #registrationForm .hollow[type='reset'],
 footer#footer .button.hollow,
 footer#footer .button.hollow.disabled,
 footer#footer .button.hollow.disabled:focus,
@@ -3299,6 +3276,7 @@ footer#footer .button.hollow:hover,
 footer#footer .button.hollow[disabled],
 footer#footer .button.hollow[disabled]:focus,
 footer#footer .button.hollow[disabled]:hover,
+header#top #registrationForm .hollow[type='reset'],
 header#top .button.hollow,
 header#top .button.hollow.disabled,
 header#top .button.hollow.disabled:focus,
@@ -3311,6 +3289,7 @@ header#top .button.hollow[disabled]:hover {
     background-color: transparent;
 }
 
+footer#footer #registrationForm .hollow[type='reset'],
 footer#footer .button.hollow,
 footer#footer .button.hollow.disabled,
 footer#footer .button.hollow.disabled:focus,
@@ -3318,6 +3297,7 @@ footer#footer .button.hollow.disabled:hover,
 footer#footer .button.hollow[disabled],
 footer#footer .button.hollow[disabled]:focus,
 footer#footer .button.hollow[disabled]:hover,
+header#top #registrationForm .hollow[type='reset'],
 header#top .button.hollow,
 header#top .button.hollow.disabled,
 header#top .button.hollow.disabled:focus,
@@ -3329,14 +3309,19 @@ header#top .button.hollow[disabled]:hover {
     color: #527f24;
 }
 
+footer#footer #registrationForm .hollow[type='reset']:focus,
+footer#footer #registrationForm .hollow[type='reset']:hover,
 footer#footer .button.hollow:focus,
 footer#footer .button.hollow:hover,
+header#top #registrationForm .hollow[type='reset']:focus,
+header#top #registrationForm .hollow[type='reset']:hover,
 header#top .button.hollow:focus,
 header#top .button.hollow:hover {
     border-color: #294012;
     color: #294012;
 }
 
+footer#footer #registrationForm .hollow.primary[type='reset'],
 footer#footer .button.hollow.primary,
 footer#footer .button.hollow.primary.disabled,
 footer#footer .button.hollow.primary.disabled:focus,
@@ -3344,6 +3329,7 @@ footer#footer .button.hollow.primary.disabled:hover,
 footer#footer .button.hollow.primary[disabled],
 footer#footer .button.hollow.primary[disabled]:focus,
 footer#footer .button.hollow.primary[disabled]:hover,
+header#top #registrationForm .hollow.primary[type='reset'],
 header#top .button.hollow.primary,
 header#top .button.hollow.primary.disabled,
 header#top .button.hollow.primary.disabled:focus,
@@ -3355,14 +3341,19 @@ header#top .button.hollow.primary[disabled]:hover {
     color: #0b4898;
 }
 
+footer#footer #registrationForm .hollow.primary[type='reset']:focus,
+footer#footer #registrationForm .hollow.primary[type='reset']:hover,
 footer#footer .button.hollow.primary:focus,
 footer#footer .button.hollow.primary:hover,
+header#top #registrationForm .hollow.primary[type='reset']:focus,
+header#top #registrationForm .hollow.primary[type='reset']:hover,
 header#top .button.hollow.primary:focus,
 header#top .button.hollow.primary:hover {
     border-color: #06244c;
     color: #06244c;
 }
 
+footer#footer #registrationForm .hollow.secondary[type='reset'],
 footer#footer .button.hollow.secondary,
 footer#footer .button.hollow.secondary.disabled,
 footer#footer .button.hollow.secondary.disabled:focus,
@@ -3370,6 +3361,7 @@ footer#footer .button.hollow.secondary.disabled:hover,
 footer#footer .button.hollow.secondary[disabled],
 footer#footer .button.hollow.secondary[disabled]:focus,
 footer#footer .button.hollow.secondary[disabled]:hover,
+header#top #registrationForm .hollow.secondary[type='reset'],
 header#top .button.hollow.secondary,
 header#top .button.hollow.secondary.disabled,
 header#top .button.hollow.secondary.disabled:focus,
@@ -3381,14 +3373,19 @@ header#top .button.hollow.secondary[disabled]:hover {
     color: #545454;
 }
 
+footer#footer #registrationForm .hollow.secondary[type='reset']:focus,
+footer#footer #registrationForm .hollow.secondary[type='reset']:hover,
 footer#footer .button.hollow.secondary:focus,
 footer#footer .button.hollow.secondary:hover,
+header#top #registrationForm .hollow.secondary[type='reset']:focus,
+header#top #registrationForm .hollow.secondary[type='reset']:hover,
 header#top .button.hollow.secondary:focus,
 header#top .button.hollow.secondary:hover {
     border-color: #2a2a2a;
     color: #2a2a2a;
 }
 
+footer#footer #registrationForm .hollow.success[type='reset'],
 footer#footer .button.hollow.success,
 footer#footer .button.hollow.success.disabled,
 footer#footer .button.hollow.success.disabled:focus,
@@ -3396,6 +3393,7 @@ footer#footer .button.hollow.success.disabled:hover,
 footer#footer .button.hollow.success[disabled],
 footer#footer .button.hollow.success[disabled]:focus,
 footer#footer .button.hollow.success[disabled]:hover,
+header#top #registrationForm .hollow.success[type='reset'],
 header#top .button.hollow.success,
 header#top .button.hollow.success.disabled,
 header#top .button.hollow.success.disabled:focus,
@@ -3407,14 +3405,19 @@ header#top .button.hollow.success[disabled]:hover {
     color: #527f24;
 }
 
+footer#footer #registrationForm .hollow.success[type='reset']:focus,
+footer#footer #registrationForm .hollow.success[type='reset']:hover,
 footer#footer .button.hollow.success:focus,
 footer#footer .button.hollow.success:hover,
+header#top #registrationForm .hollow.success[type='reset']:focus,
+header#top #registrationForm .hollow.success[type='reset']:hover,
 header#top .button.hollow.success:focus,
 header#top .button.hollow.success:hover {
     border-color: #294012;
     color: #294012;
 }
 
+footer#footer #registrationForm .hollow.warning[type='reset'],
 footer#footer .button.hollow.warning,
 footer#footer .button.hollow.warning.disabled,
 footer#footer .button.hollow.warning.disabled:focus,
@@ -3422,6 +3425,7 @@ footer#footer .button.hollow.warning.disabled:hover,
 footer#footer .button.hollow.warning[disabled],
 footer#footer .button.hollow.warning[disabled]:focus,
 footer#footer .button.hollow.warning[disabled]:hover,
+header#top #registrationForm .hollow.warning[type='reset'],
 header#top .button.hollow.warning,
 header#top .button.hollow.warning.disabled,
 header#top .button.hollow.warning.disabled:focus,
@@ -3433,14 +3437,19 @@ header#top .button.hollow.warning[disabled]:hover {
     color: #b64a17;
 }
 
+footer#footer #registrationForm .hollow.warning[type='reset']:focus,
+footer#footer #registrationForm .hollow.warning[type='reset']:hover,
 footer#footer .button.hollow.warning:focus,
 footer#footer .button.hollow.warning:hover,
+header#top #registrationForm .hollow.warning[type='reset']:focus,
+header#top #registrationForm .hollow.warning[type='reset']:hover,
 header#top .button.hollow.warning:focus,
 header#top .button.hollow.warning:hover {
     border-color: #5b250c;
     color: #5b250c;
 }
 
+footer#footer #registrationForm .hollow.alert[type='reset'],
 footer#footer .button.hollow.alert,
 footer#footer .button.hollow.alert.disabled,
 footer#footer .button.hollow.alert.disabled:focus,
@@ -3448,6 +3457,7 @@ footer#footer .button.hollow.alert.disabled:hover,
 footer#footer .button.hollow.alert[disabled],
 footer#footer .button.hollow.alert[disabled]:focus,
 footer#footer .button.hollow.alert[disabled]:hover,
+header#top #registrationForm .hollow.alert[type='reset'],
 header#top .button.hollow.alert,
 header#top .button.hollow.alert.disabled,
 header#top .button.hollow.alert.disabled:focus,
@@ -3459,14 +3469,19 @@ header#top .button.hollow.alert[disabled]:hover {
     color: #cd0000;
 }
 
+footer#footer #registrationForm .hollow.alert[type='reset']:focus,
+footer#footer #registrationForm .hollow.alert[type='reset']:hover,
 footer#footer .button.hollow.alert:focus,
 footer#footer .button.hollow.alert:hover,
+header#top #registrationForm .hollow.alert[type='reset']:focus,
+header#top #registrationForm .hollow.alert[type='reset']:hover,
 header#top .button.hollow.alert:focus,
 header#top .button.hollow.alert:hover {
     border-color: #670000;
     color: #670000;
 }
 
+footer#footer #registrationForm .clear[type='reset'],
 footer#footer .button.clear,
 footer#footer .button.clear.disabled,
 footer#footer .button.clear.disabled:focus,
@@ -3476,6 +3491,7 @@ footer#footer .button.clear:hover,
 footer#footer .button.clear[disabled],
 footer#footer .button.clear[disabled]:focus,
 footer#footer .button.clear[disabled]:hover,
+header#top #registrationForm .clear[type='reset'],
 header#top .button.clear,
 header#top .button.clear.disabled,
 header#top .button.clear.disabled:focus,
@@ -3489,6 +3505,7 @@ header#top .button.clear[disabled]:hover {
     background-color: transparent;
 }
 
+footer#footer #registrationForm .clear[type='reset'],
 footer#footer .button.clear,
 footer#footer .button.clear.disabled,
 footer#footer .button.clear.disabled:focus,
@@ -3496,6 +3513,7 @@ footer#footer .button.clear.disabled:hover,
 footer#footer .button.clear[disabled],
 footer#footer .button.clear[disabled]:focus,
 footer#footer .button.clear[disabled]:hover,
+header#top #registrationForm .clear[type='reset'],
 header#top .button.clear,
 header#top .button.clear.disabled,
 header#top .button.clear.disabled:focus,
@@ -3506,13 +3524,18 @@ header#top .button.clear[disabled]:hover {
     color: #527f24;
 }
 
+footer#footer #registrationForm .clear[type='reset']:focus,
+footer#footer #registrationForm .clear[type='reset']:hover,
 footer#footer .button.clear:focus,
 footer#footer .button.clear:hover,
+header#top #registrationForm .clear[type='reset']:focus,
+header#top #registrationForm .clear[type='reset']:hover,
 header#top .button.clear:focus,
 header#top .button.clear:hover {
     color: #294012;
 }
 
+footer#footer #registrationForm .clear.primary[type='reset'],
 footer#footer .button.clear.primary,
 footer#footer .button.clear.primary.disabled,
 footer#footer .button.clear.primary.disabled:focus,
@@ -3520,6 +3543,7 @@ footer#footer .button.clear.primary.disabled:hover,
 footer#footer .button.clear.primary[disabled],
 footer#footer .button.clear.primary[disabled]:focus,
 footer#footer .button.clear.primary[disabled]:hover,
+header#top #registrationForm .clear.primary[type='reset'],
 header#top .button.clear.primary,
 header#top .button.clear.primary.disabled,
 header#top .button.clear.primary.disabled:focus,
@@ -3530,13 +3554,18 @@ header#top .button.clear.primary[disabled]:hover {
     color: #0b4898;
 }
 
+footer#footer #registrationForm .clear.primary[type='reset']:focus,
+footer#footer #registrationForm .clear.primary[type='reset']:hover,
 footer#footer .button.clear.primary:focus,
 footer#footer .button.clear.primary:hover,
+header#top #registrationForm .clear.primary[type='reset']:focus,
+header#top #registrationForm .clear.primary[type='reset']:hover,
 header#top .button.clear.primary:focus,
 header#top .button.clear.primary:hover {
     color: #06244c;
 }
 
+footer#footer #registrationForm .clear.secondary[type='reset'],
 footer#footer .button.clear.secondary,
 footer#footer .button.clear.secondary.disabled,
 footer#footer .button.clear.secondary.disabled:focus,
@@ -3544,6 +3573,7 @@ footer#footer .button.clear.secondary.disabled:hover,
 footer#footer .button.clear.secondary[disabled],
 footer#footer .button.clear.secondary[disabled]:focus,
 footer#footer .button.clear.secondary[disabled]:hover,
+header#top #registrationForm .clear.secondary[type='reset'],
 header#top .button.clear.secondary,
 header#top .button.clear.secondary.disabled,
 header#top .button.clear.secondary.disabled:focus,
@@ -3554,13 +3584,18 @@ header#top .button.clear.secondary[disabled]:hover {
     color: #545454;
 }
 
+footer#footer #registrationForm .clear.secondary[type='reset']:focus,
+footer#footer #registrationForm .clear.secondary[type='reset']:hover,
 footer#footer .button.clear.secondary:focus,
 footer#footer .button.clear.secondary:hover,
+header#top #registrationForm .clear.secondary[type='reset']:focus,
+header#top #registrationForm .clear.secondary[type='reset']:hover,
 header#top .button.clear.secondary:focus,
 header#top .button.clear.secondary:hover {
     color: #2a2a2a;
 }
 
+footer#footer #registrationForm .clear.success[type='reset'],
 footer#footer .button.clear.success,
 footer#footer .button.clear.success.disabled,
 footer#footer .button.clear.success.disabled:focus,
@@ -3568,6 +3603,7 @@ footer#footer .button.clear.success.disabled:hover,
 footer#footer .button.clear.success[disabled],
 footer#footer .button.clear.success[disabled]:focus,
 footer#footer .button.clear.success[disabled]:hover,
+header#top #registrationForm .clear.success[type='reset'],
 header#top .button.clear.success,
 header#top .button.clear.success.disabled,
 header#top .button.clear.success.disabled:focus,
@@ -3578,13 +3614,18 @@ header#top .button.clear.success[disabled]:hover {
     color: #527f24;
 }
 
+footer#footer #registrationForm .clear.success[type='reset']:focus,
+footer#footer #registrationForm .clear.success[type='reset']:hover,
 footer#footer .button.clear.success:focus,
 footer#footer .button.clear.success:hover,
+header#top #registrationForm .clear.success[type='reset']:focus,
+header#top #registrationForm .clear.success[type='reset']:hover,
 header#top .button.clear.success:focus,
 header#top .button.clear.success:hover {
     color: #294012;
 }
 
+footer#footer #registrationForm .clear.warning[type='reset'],
 footer#footer .button.clear.warning,
 footer#footer .button.clear.warning.disabled,
 footer#footer .button.clear.warning.disabled:focus,
@@ -3592,6 +3633,7 @@ footer#footer .button.clear.warning.disabled:hover,
 footer#footer .button.clear.warning[disabled],
 footer#footer .button.clear.warning[disabled]:focus,
 footer#footer .button.clear.warning[disabled]:hover,
+header#top #registrationForm .clear.warning[type='reset'],
 header#top .button.clear.warning,
 header#top .button.clear.warning.disabled,
 header#top .button.clear.warning.disabled:focus,
@@ -3602,13 +3644,18 @@ header#top .button.clear.warning[disabled]:hover {
     color: #b64a17;
 }
 
+footer#footer #registrationForm .clear.warning[type='reset']:focus,
+footer#footer #registrationForm .clear.warning[type='reset']:hover,
 footer#footer .button.clear.warning:focus,
 footer#footer .button.clear.warning:hover,
+header#top #registrationForm .clear.warning[type='reset']:focus,
+header#top #registrationForm .clear.warning[type='reset']:hover,
 header#top .button.clear.warning:focus,
 header#top .button.clear.warning:hover {
     color: #5b250c;
 }
 
+footer#footer #registrationForm .clear.alert[type='reset'],
 footer#footer .button.clear.alert,
 footer#footer .button.clear.alert.disabled,
 footer#footer .button.clear.alert.disabled:focus,
@@ -3616,6 +3663,7 @@ footer#footer .button.clear.alert.disabled:hover,
 footer#footer .button.clear.alert[disabled],
 footer#footer .button.clear.alert[disabled]:focus,
 footer#footer .button.clear.alert[disabled]:hover,
+header#top #registrationForm .clear.alert[type='reset'],
 header#top .button.clear.alert,
 header#top .button.clear.alert.disabled,
 header#top .button.clear.alert.disabled:focus,
@@ -3626,22 +3674,32 @@ header#top .button.clear.alert[disabled]:hover {
     color: #cd0000;
 }
 
+footer#footer #registrationForm .clear.alert[type='reset']:focus,
+footer#footer #registrationForm .clear.alert[type='reset']:hover,
 footer#footer .button.clear.alert:focus,
 footer#footer .button.clear.alert:hover,
+header#top #registrationForm .clear.alert[type='reset']:focus,
+header#top #registrationForm .clear.alert[type='reset']:hover,
 header#top .button.clear.alert:focus,
 header#top .button.clear.alert:hover {
     color: #670000;
 }
 
+footer#footer #registrationForm .disabled[type='reset'],
+footer#footer #registrationForm [disabled][type='reset'],
 footer#footer .button.disabled,
 footer#footer .button[disabled],
+header#top #registrationForm .disabled[type='reset'],
+header#top #registrationForm [disabled][type='reset'],
 header#top .button.disabled,
 header#top .button[disabled] {
     opacity: 0.25;
     cursor: not-allowed;
 }
 
+footer#footer #registrationForm .dropdown[type='reset']::after,
 footer#footer .button.dropdown::after,
+header#top #registrationForm .dropdown[type='reset']::after,
 header#top .button.dropdown::after {
     display: block;
     width: 0;
@@ -3658,57 +3716,87 @@ header#top .button.dropdown::after {
     margin-left: 1.2em;
 }
 
+footer#footer #registrationForm .dropdown.clear[type='reset']::after,
+footer#footer #registrationForm .dropdown.hollow[type='reset']::after,
 footer#footer .button.dropdown.clear::after,
 footer#footer .button.dropdown.hollow::after,
+header#top #registrationForm .dropdown.clear[type='reset']::after,
+header#top #registrationForm .dropdown.hollow[type='reset']::after,
 header#top .button.dropdown.clear::after,
 header#top .button.dropdown.hollow::after {
     border-top-color: #527f24;
 }
 
+footer#footer #registrationForm .dropdown.clear.primary[type='reset']::after,
+footer#footer #registrationForm .dropdown.hollow.primary[type='reset']::after,
 footer#footer .button.dropdown.clear.primary::after,
 footer#footer .button.dropdown.hollow.primary::after,
+header#top #registrationForm .dropdown.clear.primary[type='reset']::after,
+header#top #registrationForm .dropdown.hollow.primary[type='reset']::after,
 header#top .button.dropdown.clear.primary::after,
 header#top .button.dropdown.hollow.primary::after {
     border-top-color: #0b4898;
 }
 
+footer#footer #registrationForm .dropdown.clear.secondary[type='reset']::after,
+footer#footer #registrationForm .dropdown.hollow.secondary[type='reset']::after,
 footer#footer .button.dropdown.clear.secondary::after,
 footer#footer .button.dropdown.hollow.secondary::after,
+header#top #registrationForm .dropdown.clear.secondary[type='reset']::after,
+header#top #registrationForm .dropdown.hollow.secondary[type='reset']::after,
 header#top .button.dropdown.clear.secondary::after,
 header#top .button.dropdown.hollow.secondary::after {
     border-top-color: #545454;
 }
 
+footer#footer #registrationForm .dropdown.clear.success[type='reset']::after,
+footer#footer #registrationForm .dropdown.hollow.success[type='reset']::after,
 footer#footer .button.dropdown.clear.success::after,
 footer#footer .button.dropdown.hollow.success::after,
+header#top #registrationForm .dropdown.clear.success[type='reset']::after,
+header#top #registrationForm .dropdown.hollow.success[type='reset']::after,
 header#top .button.dropdown.clear.success::after,
 header#top .button.dropdown.hollow.success::after {
     border-top-color: #527f24;
 }
 
+footer#footer #registrationForm .dropdown.clear.warning[type='reset']::after,
+footer#footer #registrationForm .dropdown.hollow.warning[type='reset']::after,
 footer#footer .button.dropdown.clear.warning::after,
 footer#footer .button.dropdown.hollow.warning::after,
+header#top #registrationForm .dropdown.clear.warning[type='reset']::after,
+header#top #registrationForm .dropdown.hollow.warning[type='reset']::after,
 header#top .button.dropdown.clear.warning::after,
 header#top .button.dropdown.hollow.warning::after {
     border-top-color: #b64a17;
 }
 
+footer#footer #registrationForm .dropdown.clear.alert[type='reset']::after,
+footer#footer #registrationForm .dropdown.hollow.alert[type='reset']::after,
 footer#footer .button.dropdown.clear.alert::after,
 footer#footer .button.dropdown.hollow.alert::after,
+header#top #registrationForm .dropdown.clear.alert[type='reset']::after,
+header#top #registrationForm .dropdown.hollow.alert[type='reset']::after,
 header#top .button.dropdown.clear.alert::after,
 header#top .button.dropdown.hollow.alert::after {
     border-top-color: #cd0000;
 }
 
+footer#footer #registrationForm .arrow-only[type='reset']::after,
 footer#footer .button.arrow-only::after,
+header#top #registrationForm .arrow-only[type='reset']::after,
 header#top .button.arrow-only::after {
     top: -0.1em;
     float: none;
     margin-left: 0;
 }
 
+footer#footer #registrationForm a[type='reset']:focus,
+footer#footer #registrationForm a[type='reset']:hover,
 footer#footer a.button:focus,
 footer#footer a.button:hover,
+header#top #registrationForm a[type='reset']:focus,
+header#top #registrationForm a[type='reset']:hover,
 header#top a.button:focus,
 header#top a.button:hover {
     text-decoration: none;
@@ -3732,8 +3820,12 @@ header#top .menu {
     outline: 0;
 }
 
+footer#footer #registrationForm .menu [type='reset'],
+footer#footer .menu #registrationForm [type='reset'],
 footer#footer .menu .button,
 footer#footer .menu a,
+header#top #registrationForm .menu [type='reset'],
+header#top .menu #registrationForm [type='reset'],
 header#top .menu .button,
 header#top .menu a {
     line-height: 1;
@@ -6368,7 +6460,7 @@ a.ui-button:active {
 .callout.outage a.read-more::after,
 footer#footer a.read-more::after,
 header#top a.read-more::after {
-    content: '\0020\00BB';
+    content: ' »';
 }
 
 .callout.outage a.bmp::after,
@@ -6794,6 +6886,8 @@ header#top .no-icon::after {
 .callout.outage header#top .h6,
 footer#footer #registrationForm div.notes .callout.outage .h4,
 footer#footer #registrationForm div.notes .callout.outage h4,
+footer#footer .callout.outage #registrationForm div.notes .h4,
+footer#footer .callout.outage #registrationForm div.notes h4,
 footer#footer .callout.outage .h1,
 footer#footer .callout.outage .h2,
 footer#footer .callout.outage .h3,
@@ -6802,6 +6896,8 @@ footer#footer .callout.outage .h5,
 footer#footer .callout.outage .h6,
 header#top #registrationForm div.notes .callout.outage .h4,
 header#top #registrationForm div.notes .callout.outage h4,
+header#top .callout.outage #registrationForm div.notes .h4,
+header#top .callout.outage #registrationForm div.notes h4,
 header#top .callout.outage .h1,
 header#top .callout.outage .h2,
 header#top .callout.outage .h3,
@@ -7149,7 +7245,7 @@ header#top blockquote {
 
 footer#footer blockquote::before,
 header#top blockquote::before {
-    content: '\201C';
+    content: '“';
     font-size: 3rem;
     font-weight: 700;
     position: absolute;
@@ -7166,7 +7262,7 @@ header#top blockquote::before {
 
 footer#footer blockquote::after,
 header#top blockquote::after {
-    content: '\201D';
+    content: '”';
 }
 
 footer#footer blockquote + cite,
@@ -7198,21 +7294,30 @@ header#top p {
     hyphens: manual;
 }
 
+footer#footer #registrationForm [type='reset'],
+footer#footer #registrationForm header#top [type='reset'],
 footer#footer .button,
 footer#footer .button-styles,
+footer#footer header#top #registrationForm [type='reset'],
+header#top #registrationForm [type='reset'],
+header#top #registrationForm footer#footer [type='reset'],
 header#top .button,
-header#top .button-styles {
+header#top .button-styles,
+header#top footer#footer #registrationForm [type='reset'] {
     font-weight: 700;
     text-decoration: none !important;
     text-transform: uppercase;
     padding: 0.75rem;
 }
 
+footer#footer #registrationForm [type='reset']:hover,
 footer#footer .button:hover,
+header#top #registrationForm [type='reset']:hover,
 header#top .button:hover {
     text-decoration: none !important;
 }
 
+footer#footer #registrationForm [type='reset']:hover,
 footer#footer .button:hover,
 footer#footer .button:hover.disabled,
 footer#footer .button:hover.disabled:focus,
@@ -7220,6 +7325,7 @@ footer#footer .button:hover.disabled:hover,
 footer#footer .button:hover[disabled],
 footer#footer .button:hover[disabled]:focus,
 footer#footer .button:hover[disabled]:hover,
+header#top #registrationForm [type='reset']:hover,
 header#top .button:hover,
 header#top .button:hover.disabled,
 header#top .button:hover.disabled:focus,
@@ -7231,35 +7337,51 @@ header#top .button:hover[disabled]:hover {
     color: #fff;
 }
 
+footer#footer #registrationForm [type='reset']:hover:hover,
 footer#footer .button:hover:focus,
 footer#footer .button:hover:hover,
+header#top #registrationForm [type='reset']:hover:hover,
 header#top .button:hover:focus,
 header#top .button:hover:hover {
     background-color: #466c1f;
     color: #fff;
 }
 
+footer#footer #registrationForm .external-link.pdf[type='reset']::after,
+footer#footer #registrationForm .external.pdf[type='reset']::after,
 footer#footer .button.external-link.pdf::after,
 footer#footer .button.external.pdf::after,
+header#top #registrationForm .external-link.pdf[type='reset']::after,
+header#top #registrationForm .external.pdf[type='reset']::after,
 header#top .button.external-link.pdf::after,
 header#top .button.external.pdf::after {
     content: '\f1c1';
 }
 
 @media print, screen and (max-width: 39.99875em) {
+    footer#footer #registrationForm [type='reset'],
+    footer#footer #registrationForm header#top [type='reset'],
     footer#footer .button,
-    header#top .button {
+    footer#footer header#top #registrationForm [type='reset'],
+    header#top #registrationForm [type='reset'],
+    header#top #registrationForm footer#footer [type='reset'],
+    header#top .button,
+    header#top footer#footer #registrationForm [type='reset'] {
         display: block;
     }
 }
 
+footer#footer #registrationForm .default[type='reset'],
 footer#footer .button.default,
+header#top #registrationForm .default[type='reset'],
 header#top .button.default {
     font-weight: 400;
     text-transform: none;
 }
 
+footer#footer #registrationForm .aggregate[type='reset'],
 footer#footer .button.aggregate,
+header#top #registrationForm .aggregate[type='reset'],
 header#top .button.aggregate {
     font-size: 0.9375rem;
     font-weight: 900;
@@ -7267,23 +7389,31 @@ header#top .button.aggregate {
     border-style: solid;
 }
 
+footer#footer #registrationForm .transparent[type='reset'],
 footer#footer .button.transparent,
+header#top #registrationForm .transparent[type='reset'],
 header#top .button.transparent {
     font-size: 0.9375rem;
     font-weight: 900;
 }
 
+footer#footer #registrationForm .transparent[type='reset'] .fa,
 footer#footer .button.transparent .fa,
+header#top #registrationForm .transparent[type='reset'] .fa,
 header#top .button.transparent .fa {
     font-size: 1rem;
 }
 
+footer#footer #registrationForm .transparent[type='reset']:hover .fa,
 footer#footer .button.transparent:hover .fa,
+header#top #registrationForm .transparent[type='reset']:hover .fa,
 header#top .button.transparent:hover .fa {
     opacity: 0.8;
 }
 
+footer#footer #registrationForm .transparent.back-to-top[type='reset']::before,
 footer#footer .button.transparent.back-to-top::before,
+header#top #registrationForm .transparent.back-to-top[type='reset']::before,
 header#top .button.transparent.back-to-top::before {
     content: '\f062';
     font-family: FontAwesome;
@@ -7292,13 +7422,17 @@ header#top .button.transparent.back-to-top::before {
     margin-right: 0.625rem;
 }
 
+footer#footer #registrationForm .icon[type='reset'] .fa,
 footer#footer .button.icon .fa,
+header#top #registrationForm .icon[type='reset'] .fa,
 header#top .button.icon .fa {
     margin-right: 0.35rem;
     font-size: 110%;
 }
 
+footer#footer #registrationForm .utility[type='reset'],
 footer#footer .button.utility,
+header#top #registrationForm .utility[type='reset'],
 header#top .button.utility {
     border-radius: 6px;
     font-size: 0.625rem;
@@ -7307,39 +7441,53 @@ header#top .button.utility {
     padding: 0.2rem 0.4rem;
 }
 
+footer#footer #registrationForm .utility[type='reset'] .fa,
 footer#footer .button.utility .fa,
+header#top #registrationForm .utility[type='reset'] .fa,
 header#top .button.utility .fa {
     margin-right: 0.25rem;
 }
 
+footer#footer #registrationForm .register[type='reset']::before,
 footer#footer .button.register::before,
+header#top #registrationForm .register[type='reset']::before,
 header#top .button.register::before {
     font-family: FontAwesome;
     font-weight: 400 !important;
     margin-right: 0.65rem;
 }
 
+footer#footer #registrationForm .register.attend[type='reset']::before,
 footer#footer .button.register.attend::before,
+header#top #registrationForm .register.attend[type='reset']::before,
 header#top .button.register.attend::before {
     content: '\f271';
 }
 
+footer#footer #registrationForm .register.webinar[type='reset']::before,
 footer#footer .button.register.webinar::before,
+header#top #registrationForm .register.webinar[type='reset']::before,
 header#top .button.register.webinar::before {
     content: '\f130';
 }
 
+footer#footer #registrationForm .register.webcast[type='reset']::before,
 footer#footer .button.register.webcast::before,
+header#top #registrationForm .register.webcast[type='reset']::before,
 header#top .button.register.webcast::before {
     content: '\f109';
 }
 
+footer#footer #registrationForm .button[type='reset'],
+footer#footer #registrationForm .reset[type='reset'],
 footer#footer #registrationForm [type='reset'],
-footer#footer #registrationForm header#top [type='reset'],
 footer#footer .button.reset,
+footer#footer header#top #registrationForm [type='reset'],
+header#top #registrationForm .button[type='reset'],
+header#top #registrationForm .reset[type='reset'],
 header#top #registrationForm [type='reset'],
-header#top #registrationForm footer#footer [type='reset'],
-header#top .button.reset {
+header#top .button.reset,
+header#top footer#footer #registrationForm [type='reset'] {
     font-size: 0.875rem;
     font-weight: 400;
     text-decoration: underline;
@@ -7348,12 +7496,16 @@ header#top .button.reset {
     margin: 0;
 }
 
+footer#footer #registrationForm a[href$='.zip'].utility[type='reset'],
 footer#footer a[href$='.zip'].button.utility,
+header#top #registrationForm a[href$='.zip'].utility[type='reset'],
 header#top a[href$='.zip'].button.utility {
     background-image: none;
 }
 
+footer#footer #registrationForm a[href$='.zip'].utility[type='reset']::after,
 footer#footer a[href$='.zip'].button.utility::after,
+header#top #registrationForm a[href$='.zip'].utility[type='reset']::after,
 header#top a[href$='.zip'].button.utility::after {
     content: '';
     margin: 0;
@@ -7511,10 +7663,6 @@ header#top select {
 
 footer#footer #registrationForm div.notes .form-box header .h4,
 footer#footer #registrationForm div.notes .form-box header h4,
-footer#footer #registrationForm div.notes header#top .form-box header .h4,
-footer#footer #registrationForm div.notes header#top .form-box header h4,
-footer#footer .form-box #registrationForm div.notes header#top .h4,
-footer#footer .form-box #registrationForm div.notes header#top h4,
 footer#footer .form-box header #registrationForm div.notes .h4,
 footer#footer .form-box header #registrationForm div.notes h4,
 footer#footer .form-box header .h1,
@@ -7705,21 +7853,15 @@ header#top .hidden508 {
 }
 
 footer#footer .required-asterisk,
-footer#footer fieldset header#top legend.required::after,
 footer#footer fieldset legend .required::after,
-footer#footer fieldset legend header#top .required::after,
 footer#footer fieldset legend.required::after,
 footer#footer label .required::after,
-footer#footer label header#top .required::after,
 footer#footer label.required::after,
 footer#footer span.required::after,
 header#top .required-asterisk,
-header#top fieldset footer#footer legend.required::after,
 header#top fieldset legend .required::after,
-header#top fieldset legend footer#footer .required::after,
 header#top fieldset legend.required::after,
 header#top label .required::after,
-header#top label footer#footer .required::after,
 header#top label.required::after,
 header#top span.required::after {
     content: '*';
@@ -7873,7 +8015,6 @@ header#top .input-group-label {
     padding: 0;
 }
 
-footer#footer #altbib .search-options #registrationForm div.notes .h4,
 footer#footer #altbib .search-options #registrationForm div.notes h4,
 footer#footer #altbib .search-options .h2,
 footer#footer #altbib .search-options .h3,
@@ -7885,11 +8026,7 @@ footer#footer #altbib .search-options h3,
 footer#footer #altbib .search-options h4,
 footer#footer #altbib .search-options h5,
 footer#footer #altbib .search-options h6,
-footer#footer #registrationForm div.notes #altbib .search-options .h4,
 footer#footer #registrationForm div.notes #altbib .search-options h4,
-footer#footer #registrationForm div.notes header#top #altbib .search-options .h4,
-footer#footer #registrationForm div.notes header#top #altbib .search-options h4,
-header#top #altbib .search-options #registrationForm div.notes .h4,
 header#top #altbib .search-options #registrationForm div.notes h4,
 header#top #altbib .search-options .h2,
 header#top #altbib .search-options .h3,
@@ -7901,10 +8038,7 @@ header#top #altbib .search-options h3,
 header#top #altbib .search-options h4,
 header#top #altbib .search-options h5,
 header#top #altbib .search-options h6,
-header#top #registrationForm div.notes #altbib .search-options .h4,
-header#top #registrationForm div.notes #altbib .search-options h4,
-header#top #registrationForm div.notes footer#footer #altbib .search-options .h4,
-header#top #registrationForm div.notes footer#footer #altbib .search-options h4 {
+header#top #registrationForm div.notes #altbib .search-options h4 {
     font-size: 1.25rem;
     font-weight: 700;
     margin: 1.75rem 0 1rem;
@@ -8110,6 +8244,9 @@ header#top .header-nav .menu > li > a:hover {
     }
 }
 
+footer#footer #registrationForm header#top .header-search [type='reset'],
+header#top #registrationForm .header-search [type='reset'],
+header#top .header-search #registrationForm [type='reset'],
 header#top .header-search .button {
     padding: 0.625rem 0.75rem;
 }
@@ -8124,6 +8261,9 @@ header#top .header-search .input-group {
     margin: 1rem 0;
 }
 
+footer#footer #registrationForm header#top .header-search .input-group [type='reset'],
+header#top #registrationForm .header-search .input-group [type='reset'],
+header#top .header-search .input-group #registrationForm [type='reset'],
 header#top .header-search .input-group .button {
     padding: 0.625rem 0.75rem;
 }
@@ -8246,12 +8386,18 @@ footer#footer .footer-updates {
     padding: 0.2rem 0;
 }
 
-footer#footer .footer-updates .button {
+footer#footer #registrationForm .footer-updates [type='reset'],
+footer#footer .footer-updates #registrationForm [type='reset'],
+footer#footer .footer-updates .button,
+header#top #registrationForm footer#footer .footer-updates [type='reset'] {
     padding-left: 0;
     text-align: left;
 }
 
-footer#footer .footer-updates .button.back-to-top::before {
+footer#footer #registrationForm .footer-updates .back-to-top[type='reset']::before,
+footer#footer .footer-updates #registrationForm .back-to-top[type='reset']::before,
+footer#footer .footer-updates .button.back-to-top::before,
+header#top #registrationForm footer#footer .footer-updates .back-to-top[type='reset']::before {
     content: '\f0aa';
     font-size: 1rem;
 }
@@ -8726,6 +8872,9 @@ header#top .header-identity {
     background-color: #232b5f;
 }
 
+footer#footer #registrationForm header#top .header-search [type='reset'],
+header#top #registrationForm .header-search [type='reset'],
+header#top .header-search #registrationForm [type='reset'],
 header#top .header-search .button {
     background-color: #527f24;
 }
@@ -8910,35 +9059,47 @@ footer#footer .footer-links a:visited.external::after {
     content: url(/sites/default/files/images/icons/icon_external_white.svg);
 }
 
+footer#footer #registrationForm .transparent[type='reset'],
 footer#footer .button.transparent,
-footer#footer .button.transparent:visited {
+footer#footer .button.transparent:visited,
+header#top #registrationForm footer#footer .transparent[type='reset'] {
     color: #232b5f !important;
     background: 0 0;
 }
 
+footer#footer #registrationForm .transparent[type='reset'] .fa,
 footer#footer .button.transparent .fa,
-footer#footer .button.transparent:visited .fa {
+footer#footer .button.transparent:visited .fa,
+header#top #registrationForm footer#footer .transparent[type='reset'] .fa {
     color: #527f24;
 }
 
+footer#footer #registrationForm .transparent[type='reset']:hover,
 footer#footer .button.transparent:hover,
-footer#footer .button.transparent:visited:hover {
+footer#footer .button.transparent:visited:hover,
+header#top #registrationForm footer#footer .transparent[type='reset']:hover {
     color: inherit;
     background: 0 0;
 }
 
+footer#footer #registrationForm .transparent[type='reset']:hover .fa,
 footer#footer .button.transparent:hover .fa,
-footer#footer .button.transparent:visited:hover .fa {
+footer#footer .button.transparent:visited:hover .fa,
+header#top #registrationForm footer#footer .transparent[type='reset']:hover .fa {
     opacity: 0.8;
 }
 
+footer#footer #registrationForm .transparent[type='reset']:hover.back-to-top::before,
 footer#footer .button.transparent:hover.back-to-top::before,
-footer#footer .button.transparent:visited:hover.back-to-top::before {
+footer#footer .button.transparent:visited:hover.back-to-top::before,
+header#top #registrationForm footer#footer .transparent[type='reset']:hover.back-to-top::before {
     opacity: 0.75;
 }
 
+footer#footer #registrationForm .transparent.back-to-top[type='reset']::before,
 footer#footer .button.transparent.back-to-top::before,
-footer#footer .button.transparent:visited.back-to-top::before {
+footer#footer .button.transparent:visited.back-to-top::before,
+header#top #registrationForm footer#footer .transparent.back-to-top[type='reset']::before {
     color: #527f24;
 }
 
@@ -12246,7 +12407,10 @@ header#top div.alert.site-wide a.external.pdf::after {
     #footer #request-update,
     #footer .button,
     #footer .footer-nav,
-    #footer .hide-for-medium {
+    #footer .hide-for-medium,
+    #footer header#top #registrationForm [type='reset'],
+    footer#footer #registrationForm [type='reset'],
+    header#top #registrationForm #footer [type='reset'] {
         display: none;
     }
 
