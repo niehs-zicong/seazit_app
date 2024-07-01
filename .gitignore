@@ -1,6 +1,9 @@
 # python
 *.py[cod]
 
+#kube
+.kube/
+
 # javascript
 project/.happypack
 project/node_modules
