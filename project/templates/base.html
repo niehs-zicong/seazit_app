@@ -108,11 +108,11 @@
     $(document).foundation();
 </script>
 {% if ENVIRONMENT_NAME == 'Production' or ENVIRONMENT_NAME == 'vm_prod' %}
-<script src="{{STATIC_URL}}js/Universal-Federated-Analytics-Min.js?agency=HHS&subagency=NIH"
+<script async src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=HHS&subagency=NIH"
         id="_fed_an_ua_tag"
         language="javascript"
         id="_fed_an_ua_tag"
-        type="text/javascript"></script>
+        type="text/javascript">
 
 
     <script src="{{ STATIC_URL }}js/webtrends.js"
