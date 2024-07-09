@@ -142,10 +142,7 @@ class IntegrativeAnalysesMain extends React.Component {
     }
 
     _renderMainBody() {
-        // let hasChems = this.state.chemicals.length > 0,
-        //     hasReadoutCategories = this.state.readoutCategories.length > 0,
-        //     requiresFilters = [INTVIZ_HEATMAP, INTVIZ_DevtoxHEATMAP];
-        console.log(this.state);
+        // console.log(this.state);
         return (
             <div>
                 <HeatmapHandler
