@@ -95,6 +95,37 @@ it could cause more trouble because duplicated script implemented. The update me
 file inforamtion can be found in this link:
 https://wiki.niehs.nih.gov/pages/viewpage.action?pageId=1850994
 
+## CSS Release Version Update to Code.
+ntpweb-shared.css file is updated for each release version. 
+There are 2 ways to use NTP css files. One is to download file and use in the local project directory. Another is link to NTP website server. See below. 
+See below.
+
+
+    <link href="{{ STATIC_URL }}css/ntpweb-shared.css"
+          rel="stylesheet" type="text/css"/>
+
+    <link rel="stylesheet" type="text/css"
+            href="https://ntp.niehs.nih.gov/themes/ntp/dist/css/ntpweb-shared.css"/>
+
+
+CSS file will use some image file, font format file, and svg files. There are times it can not access those files.
+I figured out solutions for 2 methods, and they are still in test version. 
+
+1.  Local implement method (I personally do not like)
+When I download css file into local directory, some code in css file not working. Mostly this kind. 'url()' 
+For example. Below not working, because app can not find this file. 
+`
+    background-image: url(/sites/default/files/images/template/logo_bg.png);
+`
+Then I downloaded this file, and saved it in project directory (/seazit_app/project/static_seazit/img/seazit/logo_bg.png)). Eventually changed it in css code, it works.
+`
+    background-image: url(../img/seazit/logo_bg.png);
+
+`
+Then I downloaded font files and images one by one. That is very long time job. 
+
+2. Directly link NTP server. (Recommend)
+This method is not tested yet, but it can save us time in the future.
 
 ## Quest. 
 If you have questions, you can contain me via email.

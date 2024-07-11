@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
     <meta name='robots' content='NONE,NOARCHIVE'></meta>
-    <link rel="shortcut icon" type="image/x-icon" href="{{ STATIC_URL }}img/ntp.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="{{STATIC_URL}}img/ntp.ico">
     <title>{% block title %}{% endblock %}</title>
     <meta name='description' content='{% block meta-description %}{% endblock %}'>
     <meta name='author' content='{% block meta-author %}{% endblock %}'>
@@ -19,82 +19,60 @@
           rel='stylesheet' type='text/css'>
     <link href='//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'
           rel='stylesheet' type='text/css'>
-    <link href="{{ STATIC_URL }}css/ntpweb-shared.css"
-          rel="stylesheet" type="text/css"/>
     <link href="{{ STATIC_URL }}css/base.css"
           rel="stylesheet" type="text/css"/>
     <link href="{{ STATIC_URL }}css/ntpweb.css"
           rel="stylesheet" type="text/css"/>
 
+
     {% block extra-css %}{% endblock %}
     {% if ENVIRONMENT_NAME and ENVIRONMENT_COLOR and ENVIRONMENT_NAME != 'Production' %}
-        {% include 'includes/environment_banner.html' %}
+    {% include 'includes/environment_banner.html' %}
     {% endif %}
 </head>
 <body>
 <div class='wrap'>
 
     {% block header %}
-        {% include 'includes/header.html' %}
+    {% include 'includes/header.html' %}
     {% endblock header %}
 
     {% if messages %}
-        <div class='row-fluid'>
-            {% block messages-outer %}
-                <div id='messages' class='span12'>
-                    {% block messages %}
-                        {% for msg in messages %}
-                            {% include 'includes/message.html' with msg=msg %}
-                        {% endfor %}
-                    {% endblock messages %}
-                </div>
-            {% endblock messages-outer %}
+    <div class='row-fluid'>
+        {% block messages-outer %}
+        <div id='messages' class='span12'>
+            {% block messages %}
+            {% for msg in messages %}
+            {% include 'includes/message.html' with msg=msg %}
+            {% endfor %}
+            {% endblock messages %}
         </div>
+        {% endblock messages-outer %}
+    </div>
     {% endif %}
 
     {% block content_container %}
-        <div class='container-fluid'>
-            {% if request.user.is_authenticated %}
-                <span class="label label-info pull-right username-label">{{ request.user.username }}</span>
-            {% endif %}
-            {% block crumbs %}{% endblock crumbs %}
-            {% block content %}{% endblock content %}
-        </div>
+    <div class='container-fluid'>
+        {% if request.user.is_authenticated %}
+        <span class="label label-info pull-right username-label">{{request.user.username}}</span>
+        {% endif %}
+        {% block crumbs %}{% endblock crumbs %}
+        {% block content %}{% endblock content %}
+    </div>
     {% endblock content_container %}
 </div>
 
 {% block footer %}
-    {% include 'includes/footer.html' %}
+{% include 'includes/footer.html' %}
 {% endblock footer %}
 
-<script src="{{ STATIC_URL }}js/ntpweb-shared.js"
+<script src="{{STATIC_URL}}js/ntpweb-shared.js"
         type='text/javascript'></script>
-
 
 <script src='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js'
         type='text/javascript'></script>
 <script src='//cdnjs.cloudflare.com/ajax/libs/plotly.js/1.26.0/plotly.min.js'
         type='text/javascript'></script>
-
-{#local DAP local and server method use one of them#}
-{# 1# full js file #}
-
-{#<script async#}
-{#<script async#}
-{#        src="{{ STATIC_URL }}js/Universal-Federated-Analytics.js?agency=HHS&subagency=NIH"#}
-{#        language="javascript"#}
-{#        id="_fed_an_ua_tag"#}
-{#        type="text/javascript"></script>#}
-
-
-
-// {#Server DAP (recommended)#}
-{<script async}
-{        src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=HHS&subagency=NIH"}
-{        language="javascript"}
-{        id="_fed_an_ua_tag"}
-{        type="text/javascript"></script>}
-
 
 
 {% render_bundle 'manifest' %}
@@ -107,21 +85,18 @@
 <script>
     $(document).foundation();
 </script>
-{% if ENVIRONMENT_NAME == 'production' or ENVIRONMENT_NAME == 'vm_prod' %}
-<script async src="https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=HHS&subagency=NIH"
+{% if ENVIRONMENT_NAME == 'Production' or ENVIRONMENT_NAME == 'Sandbox' %}
+<script src="{{STATIC_URL}}js/Universal-Federated-Analytics-Min.js?agency=HHS&subagency=NIH"
         id="_fed_an_ua_tag"
         language="javascript"
-        id="_fed_an_ua_tag"
-        type="text/javascript">
-
-
-    <script src="{{ STATIC_URL }}js/webtrends.js"
-            type="text/javascript"></script>
-    <script type="text/javascript">
-        var _tag = new WebTrends();
-        _tag.dcsGetId();
-        _tag.dcsCollect();
-    </script>
+        type="text/javascript"></script>
+<script src="{{STATIC_URL}}js/webtrends.js"
+        type="text/javascript"></script>
+<script type="text/javascript">
+    var _tag = new WebTrends();
+    _tag.dcsGetId();
+    _tag.dcsCollect();
+</script>
 {% endif %}
 </body>
 </html>
