@@ -11303,7 +11303,7 @@ table + .anchor-top {
     top: 0;
     position: fixed;
     z-index: 9999;
-    background: transparent url(/sites/default/files/images/template/cornerTest.gif) fixed;
+    background: transparent url(../images/template/cornerTest.gif) fixed;
     filter: alpha(opacity=60);
     opacity: 0.6;
     overflow: visible;
@@ -11312,7 +11312,7 @@ table + .anchor-top {
 }
 
 .restricted {
-    background: transparent url(/sites/default/files/images/template/cornerrestricted.gif) fixed;
+    background: transparent url(../images/template/cornerrestricted.gif) fixed;
     filter: alpha(opacity=100);
     opacity: 1;
 }
@@ -12405,7 +12405,7 @@ table .rocBoxTitle caption {
     text-decoration: none;
     display: inline-block;
     border: none;
-    background: transparent url(/sites/default/files/images/icons/up.gif) 5px center no-repeat;
+    background: transparent url(../images/icons/up.gif) 5px center no-repeat;
 }
 
 .rocBox a.expanded {
@@ -12418,7 +12418,7 @@ table .rocBoxTitle caption {
 }
 
 .rocBox a.toggle.expanded {
-    background-image: url(/sites/default/files/images/icons/down.gif);
+    background-image: url(../images/icons/down.gif);
 }
 
 .rocBox a.toggle.expanded::after {
@@ -12428,7 +12428,7 @@ table .rocBoxTitle caption {
 .rocBox a.expanded {
     border-width: 1px 1px 0 1px;
     border-style: solid solid none solid;
-    background-image: url(/sites/default/files/images/icons/down.gif);
+    background-image: url(../images/icons/down.gif);
     background-position: 5px center;
     background-repeat: no-repeat;
 }
@@ -13492,7 +13492,7 @@ a[href$='.zip']::after {
 
 a.external-link::after,
 a.external::after {
-    content: url(/sites/default/files/images/icons/icon_external.svg);
+    content: url(../images/icons/icon_external.svg);
     width: 10px;
     height: 9px;
 }
@@ -13501,7 +13501,7 @@ a.external-link.code::after,
 a.external-link.pdf::after,
 a.external.code::after,
 a.external.pdf::after {
-    background: url(/sites/default/files/images/icons/icon_external.svg) center right no-repeat;
+    background: url(../images/icons/icon_external.svg) center right no-repeat;
     background-size: 10px 9px;
     padding-right: 15px;
     width: auto;
@@ -13510,7 +13510,7 @@ a.external.pdf::after {
 
 a.external-link.pdf::after,
 a.external.pdf::after {
-    content: url(/sites/default/files/images/icons/icon_pdf.svg);
+    content: url(../images/icons/icon_pdf.svg);
 }
 
 a.external-link.code::after,
@@ -13520,18 +13520,18 @@ a.external.code::after {
 
 a.external-link.white::after,
 a.external.white::after {
-    content: url(/sites/default/files/images/icons/icon_external_white.svg);
+    content: url(../images/icons/icon_external_white.svg);
 }
 
 a.external-link.white.pdf::after,
 a.external.white.pdf::after {
-    background-image: url(/sites/default/files/images/icons/icon_external_white.svg);
+    background-image: url(../images/icons/icon_external_white.svg);
 }
 
 a.pdf::after,
 a[href$='.PDF']::after,
 a[href$='.pdf']::after {
-    content: url(/sites/default/files/images/icons/icon_pdf.svg);
+    content: url(../images/icons/icon_pdf.svg);
     width: 13px;
     height: 9px;
 }
@@ -13609,7 +13609,7 @@ a.code::after {
 }
 
 a.maintenance::after {
-    content: url(/sites/default/files/images/notify.png);
+    content: url(../images/notify.png);
     width: 15px;
     height: 14px;
 }
@@ -15563,7 +15563,7 @@ footer#footer .footer-nav {
 
 footer#footer .footer-nav .row {
     padding: 2.5rem 0;
-    background-image: url(/sites/default/files/images/template/logo_bg.png);
+    background-image: url(../images/template/logo_bg.png);
     background-repeat: no-repeat;
     background-position: center right;
 }
@@ -17392,7 +17392,7 @@ header#top .menu > li > a {
 
 @media print, screen and (min-width: 64em) {
     .environment.dev {
-        background-image: url(/sites/default/files/images/template/corner_environment_dev.png);
+        background-image: url(../images/template/corner_environment_dev.png);
     }
 }
 
@@ -17405,7 +17405,7 @@ header#top .menu > li > a {
 
 @media print, screen and (min-width: 64em) {
     .environment.test {
-        background-image: url(/sites/default/files/images/template/corner_environment_test.png);
+        background-image: url(../images/template/corner_environment_test.png);
     }
 }
 
@@ -18211,14 +18211,13 @@ li > .toggleContent {
 
 .nav-left li a.external-link::after,
 .nav-left li a.external::after {
-    content: url(/sites/default/files/images/icons/icon_external_white.svg);
+    content: url(../images/icons/icon_external_white.svg);
 }
 
 .nav-left li a.external-link.pdf::after,
 .nav-left li a.external.pdf::after {
     content: '\f1c1';
-    background: url(/sites/default/files/images/icons/icon_external_white.svg) center right
-        no-repeat;
+    background: url(../images/icons/icon_external_white.svg) center right no-repeat;
 }
 
 .nav-left li.nav-left-title {
@@ -18239,12 +18238,12 @@ li > .toggleContent {
 
 .nav-left .nested li a.external-link::after,
 .nav-left .nested li a.external::after {
-    content: url(/sites/default/files/images/icons/icon_external.svg);
+    content: url(../images/icons/icon_external.svg);
 }
 
 .nav-left .nested li a.pdf::after {
     content: '\f1c1';
-    background: url(/sites/default/files/images/icons/icon_external.svg) center right no-repeat;
+    background: url(../images/icons/icon_external.svg) center right no-repeat;
 }
 
 @media print, screen and (min-width: 40em) {
@@ -21735,27 +21734,27 @@ table .slider.orbit-carousel .carousel-container .carousel-slide .page-listing .
 }
 
 .status.ref1 {
-    background-image: url(/sites/default/files/images/icons/icon_status_ref1.svg);
+    background-image: url(../images/icons/icon_status_ref1.svg);
 }
 
 .status.ref2 {
-    background-image: url(/sites/default/files/images/icons/icon_status_ref2.svg);
+    background-image: url(../images/icons/icon_status_ref2.svg);
 }
 
 .status.ref3 {
-    background-image: url(/sites/default/files/images/icons/icon_status_ref3.svg);
+    background-image: url(../images/icons/icon_status_ref3.svg);
 }
 
 .status.ref4 {
-    background-image: url(/sites/default/files/images/icons/icon_status_ref4.svg);
+    background-image: url(../images/icons/icon_status_ref4.svg);
 }
 
 .status.ref5 {
-    background-image: url(/sites/default/files/images/icons/icon_status_ref5.svg);
+    background-image: url(../images/icons/icon_status_ref5.svg);
 }
 
 .status.ref6 {
-    background-image: url(/sites/default/files/images/icons/icon_status_ref6.svg);
+    background-image: url(../images/icons/icon_status_ref6.svg);
 }
 
 .status.positive::before {
@@ -24148,7 +24147,7 @@ footer#footer .footer-logos a.external-link::after,
 footer#footer .footer-logos a.external::after,
 footer#footer .footer-logos a:visited.external-link::after,
 footer#footer .footer-logos a:visited.external::after {
-    content: url(/sites/default/files/images/icons/icon_external.svg);
+    content: url(../images/icons/icon_external.svg);
 }
 
 @media print, screen and (max-width: 39.99875em) {
@@ -24156,7 +24155,7 @@ footer#footer .footer-logos a:visited.external::after {
     footer#footer .footer-logos a.external::after,
     footer#footer .footer-logos a:visited.external-link::after,
     footer#footer .footer-logos a:visited.external::after {
-        content: url(/sites/default/files/images/icons/icon_external_white.svg);
+        content: url(../images/icons/icon_external_white.svg);
     }
 }
 
@@ -24176,7 +24175,7 @@ footer#footer .footer-links a.external-link::after,
 footer#footer .footer-links a.external::after,
 footer#footer .footer-links a:visited.external-link::after,
 footer#footer .footer-links a:visited.external::after {
-    content: url(/sites/default/files/images/icons/icon_external_white.svg);
+    content: url(../images/icons/icon_external_white.svg);
 }
 
 #registrationForm footer#footer .transparent[type='reset'],
@@ -25863,8 +25862,7 @@ table
     .slide-caption
     caption
     a.external.pdf::after {
-    background: url(/sites/default/files/images/icons/icon_external_white.svg) center right
-        no-repeat !important;
+    background: url(../images/icons/icon_external_white.svg) center right no-repeat !important;
 }
 
 #registrationForm .aggregate.external-link.pdf[type='reset']::after,
@@ -25880,7 +25878,7 @@ table
 .button.transparent.external-link.pdf::after,
 .button.transparent.external.pdf::after,
 .external-pdf-dark {
-    background: url(/sites/default/files/images/icons/icon_external.svg) center right no-repeat !important;
+    background: url(../images/icons/icon_external.svg) center right no-repeat !important;
 }
 
 #registrationForm [type='reset']::after,
@@ -25893,13 +25891,13 @@ table
 .button.external-link::after,
 .button.external::after {
     color: #fff;
-    content: url(/sites/default/files/images/icons/icon_external_white.svg);
+    content: url(../images/icons/icon_external_white.svg);
 }
 
 #registrationForm a[href$='.pdf'][type='reset']::after,
 a.button[href$='.pdf']::after,
 a[href$='.PDF']::after {
-    content: url(/sites/default/files/images/icons/icon_pdf_white.svg);
+    content: url(../images/icons/icon_pdf_white.svg);
 }
 
 #registrationForm .default[type='reset'],
@@ -26118,7 +26116,7 @@ a[href$='.PDF']::after {
 .outage.grayCalloutBox a.external::after,
 .outage.yellowCalloutBox a.external-link::after,
 .outage.yellowCalloutBox a.external::after {
-    content: url(/sites/default/files/images/icons/icon_external_white.svg);
+    content: url(../images/icons/icon_external_white.svg);
 }
 
 .callout.outage a.external-link.pdf::after,
@@ -26129,7 +26127,7 @@ a[href$='.PDF']::after {
 .outage.grayCalloutBox a.external.pdf::after,
 .outage.yellowCalloutBox a.external-link.pdf::after,
 .outage.yellowCalloutBox a.external.pdf::after {
-    background-image: url(/sites/default/files/images/icons/icon_external_white.svg);
+    background-image: url(../images/icons/icon_external_white.svg);
 }
 
 .callout.outage abbr[title],
@@ -26226,13 +26224,12 @@ header#top div.alert.site-wide a::after {
 header#top div.alert.site-wide a.external-link::after,
 header#top div.alert.site-wide a.external::after {
     color: #fff;
-    content: url(/sites/default/files/images/icons/icon_external_white.svg);
+    content: url(../images/icons/icon_external_white.svg);
 }
 
 header#top div.alert.site-wide a.external-link.pdf::after,
 header#top div.alert.site-wide a.external.pdf::after {
-    background: url(/sites/default/files/images/icons/icon_external_white.svg) center right
-        no-repeat;
+    background: url(../images/icons/icon_external_white.svg) center right no-repeat;
 }
 
 .callout.yellow,
@@ -26601,12 +26598,12 @@ table .page-listing .overview .slider.orbit-carousel .carousel-container .carous
 .tree-chart .tree-level1 > span a.external-link::after,
 .tree-chart .tree-level1 > span a.external::after {
     color: #fff;
-    content: url(/sites/default/files/images/icons/icon_external_white.svg);
+    content: url(../images/icons/icon_external_white.svg);
 }
 
 .tree-chart .tree-level1 > span a.external-link.pdf::after,
 .tree-chart .tree-level1 > span a.external.pdf::after {
-    background-image: url(/sites/default/files/images/icons/icon_external_white.svg);
+    background-image: url(../images/icons/icon_external_white.svg);
 }
 
 @media print, screen and (max-width: 39.99875em) {
@@ -26961,12 +26958,12 @@ table .ntpHome #section-about caption {
 
 .img-caption a.external-link::after,
 .img-caption a.external::after {
-    content: url(/sites/default/files/images/icons/icon_external_white.svg);
+    content: url(../images/icons/icon_external_white.svg);
 }
 
 .img-caption a.external-link.pdf::after,
 .img-caption a.external.pdf::after {
-    background-image: url(/sites/default/files/images/icons/icon_external_white.svg);
+    background-image: url(../images/icons/icon_external_white.svg);
 }
 
 .img-framed,
@@ -27032,7 +27029,7 @@ table .page-listing .overview .img-box caption {
 
 .darkbanner .banner-caption a.external-link::after,
 .darkbanner .banner-caption a.external::after {
-    content: url(/sites/default/files/images/icons/icon_external_white.svg);
+    content: url(../images/icons/icon_external_white.svg);
 }
 
 .darkbanner .banner-caption a.bmp::after,
@@ -27359,14 +27356,14 @@ table .page-listing .overview caption {
 
     #main-nav #mobile-nav li a.external-link::after,
     #main-nav #mobile-nav li a.external::after {
-        content: url(/sites/default/files/images/icons/icon_external_white.svg);
+        content: url(../images/icons/icon_external_white.svg);
     }
 
     #main-nav #mobile-nav li a.external-link.pdf::after,
     #main-nav #mobile-nav li a.external.pdf::after {
         content: '\f1c1';
         color: #fff;
-        background-image: url(/sites/default/files/images/icons/icon_external_white.svg);
+        background-image: url(../images/icons/icon_external_white.svg);
     }
 
     #main-nav #mobile-nav .js-drilldown-back a::before {
@@ -27406,7 +27403,7 @@ table .page-listing .overview caption {
 .nav-left li a.pdf::after,
 .nav-left li a[href$='.PDF']::after,
 .nav-left li a[href$='.pdf']::after {
-    content: url(/sites/default/files/images/icons/icon_pdf_white.svg);
+    content: url(../images/icons/icon_pdf_white.svg);
 }
 
 .nav-left .menu > li {
@@ -27430,7 +27427,7 @@ table .page-listing .overview caption {
 .nav-left .nested li a.pdf::after,
 .nav-left .nested li a[href$='.PDF']::after,
 .nav-left .nested li a[href$='.pdf']::after {
-    content: url(/sites/default/files/images/icons/icon_pdf.svg);
+    content: url(../images/icons/icon_pdf.svg);
 }
 
 li.nav-left-current > span {
@@ -30347,7 +30344,7 @@ table
     caption
     a.external::after {
     color: #fff;
-    content: url(/sites/default/files/images/icons/icon_external_white.svg);
+    content: url(../images/icons/icon_external_white.svg);
 }
 
 .slider:not(.orbit-carousel)
@@ -30375,7 +30372,7 @@ table
     .slide-text
     a.external::after {
     color: #fff;
-    content: url(/sites/default/files/images/icons/icon_external_white.svg);
+    content: url(../images/icons/icon_external_white.svg);
 }
 
 .slider:not(.orbit-carousel) .orbit-slider .orbit-navigation::before {
@@ -30822,7 +30819,7 @@ table .milestones > li:nth-child(4n + 4) caption::before {
 .tooltip a.external-link::after,
 .tooltip a.external::after {
     color: #fff;
-    content: url(/sites/default/files/images/icons/icon_external_white.svg);
+    content: url(../images/icons/icon_external_white.svg);
 }
 
 .page-listing .overview .tooltip.substance-profile .h2,
@@ -34684,7 +34681,7 @@ table #block-atlasheaderus caption {
 #block-atlasheaderus table caption::before,
 table #block-atlasheader caption::before,
 table #block-atlasheaderus caption::before {
-    content: url(/sites/default/files/2019-07/rodent-img.png);
+    content: url(../2019-07/rodent-img.png);
     position: relative;
     left: -1rem;
     top: 0.33rem;
@@ -35341,7 +35338,7 @@ table .page-listing .overview #atlas-facets caption {
 
 .maintenance-page footer a.external-link::after,
 .maintenance-page footer a.external::after {
-    content: url(/sites/default/files/images/icons/icon_external_white.svg);
+    content: url(../images/icons/icon_external_white.svg);
 }
 
 .maintenance-page footer p {
@@ -35397,7 +35394,7 @@ table .page-listing .overview #atlas-facets caption {
 
     .maintenance-page footer ul li a.external-link::after,
     .maintenance-page footer ul li a.external::after {
-        content: url(/sites/default/files/images/icons/icon_external.svg);
+        content: url(../images/icons/icon_external.svg);
     }
 }
 
@@ -38625,7 +38622,7 @@ table
     caption
     a.external-link::after,
 table .slider-wrapper .slider.feature.cycle-slideshow .slider-caption caption a.external::after {
-    content: url(/sites/default/files/images/icons/icon_external_white.svg);
+    content: url(../images/icons/icon_external_white.svg);
 }
 
 .slider-wrapper .slider.feature.cycle-slideshow .slider-caption .slider-text {
@@ -39655,7 +39652,7 @@ main .messages {
 .ui-accordion .ui-accordion-header .ui-state-active .ui-icon,
 .ui-accordion .ui-accordion-header .ui-state-focus .ui-icon,
 .ui-accordion .ui-accordion-header .ui-state-hover .ui-icon {
-    background-image: url(../../images/ui-icons_ffffff_256x240.png);
+    background-image: url(../images/ui-icons_ffffff_256x240.png);
     outline: 0;
 }
 
