@@ -210,5 +210,20 @@ Add a line:
 
 in file: ~/.matplotlib/matplotlibrc
 
+---------------
+remove the conda env
+conda deactivate
+conda remove --name seazit --all
+
+ yarn -v
+4.3.1
+(seazit) ALMBP02246215:seazit_app noltesz$ npm -v
+10.8.2
+(seazit) ALMBP02246215:seazit_app noltesz$ node -v
+v22.5.1
+(seazit) ALMBP02246215:seazit_app noltesz$
+
+update local npm version
+npm update -g npm
 
 

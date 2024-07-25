@@ -1,11 +1,11 @@
-name: seazit
+name: seazit_test
 channels:
   - anaconda-platform
   - conda-forge
   - defaults
 dependencies:
-  - yarnpkg=1.3.2
-  - nodejs=8.10.0
+  - yarn=4.3.1
+  - nodejs=22.5.1
   - python=3.8
 
   #- python=3.6.1  # required per https://www.mail-archive.com/rdkit-discuss@lists.sourceforge.net/msg07315.html

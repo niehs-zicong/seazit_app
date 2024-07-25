@@ -18,3 +18,7 @@ Create a conda env named seazit:
 conda activate seazit  &&  python manage.py runserver
 
 conda activate seazit  && npm start
+
+-----
+update npm version
+npm update -g npm
