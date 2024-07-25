@@ -17,8 +17,7 @@ COPY ./compose/django/gunicorn.sh /gunicorn.sh
 COPY ./compose/django/cull_backups.py /cull_backups.py
 COPY ./compose/django/supervisord.conf /supervisord.conf
 
-#COPY ./conda.env /conda.env
-COPY ./env_seazit.yml /env_seazit.yml
+COPY ./conda.yml /conda.yml
 COPY ./requirements /requirements
 
 # 1) install start-scripts
@@ -44,11 +43,7 @@ RUN \
 #    pip install -U pip && \
 #    pip install -r /requirements/production.txt
 
-#RUN conda env create -f /env_seazit.yml
-#RUN /bin/bash -c ". activate seazit && \
-#    pip install -U pip && \
-#    pip install -r /requirements/production.txt"
-
+ 
 RUN conda env create -f /env_seazit.yml  && \
     \
     . /opt/conda/etc/profile.d/conda.sh && \
