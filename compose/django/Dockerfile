@@ -44,7 +44,7 @@ RUN \
 #    pip install -r /requirements/production.txt
 
  
-RUN conda env create -f /env_seazit.yml  && \
+RUN conda env create -f /conda.yml  && \
     \
     . /opt/conda/etc/profile.d/conda.sh && \
     conda activate seazit && \
