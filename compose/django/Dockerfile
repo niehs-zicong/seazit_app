@@ -1,4 +1,4 @@
-FROM continuumio/miniconda3:22.11.1
+FROM continuumio/miniconda3
 
 # Install wkhtmltopdf for python pdfkit library
 # Install libaio1; required for oracle client
@@ -47,7 +47,6 @@ RUN \
 RUN conda env create -f /conda.yml  && \
     \
     . /opt/conda/etc/profile.d/conda.sh && \
-    apt upgrade libcurl4 && \
     conda activate seazit && \
     pip install -U pip && \
     pip install -r /requirements/production.txt
