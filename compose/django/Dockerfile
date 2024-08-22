@@ -8,7 +8,7 @@ RUN apt-get update && \
     apt-get install -y \
         zip unzip wget \
         wkhtmltopdf libaio1 \
-        libpq-dev supervisor && \
+        libpq-dev supervisor && \    
     apt-get clean
 
 # Requirements have to be pulled and installed here, otherwise caching won't work
@@ -47,10 +47,11 @@ RUN \
 RUN conda env create -f /conda.yml  && \
     \
     . /opt/conda/etc/profile.d/conda.sh && \
+    apt upgrade libcurl4 && \
     conda activate seazit && \
     pip install -U pip && \
     pip install -r /requirements/production.txt
-
+    
 #RUN apt-get install nano
 
 
