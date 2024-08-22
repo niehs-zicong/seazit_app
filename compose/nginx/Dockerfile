@@ -1,13 +1,10 @@
 FROM nginx:1.25.5-alpine
 
 RUN apk --no-cache upgrade && \
-    if ! apk info -e curl=8.9.1-r0; then \
-        apk add --no-cache curl=8.9.1; \
-    else \
-        echo "curl 8.9.1 is already installed"; \
-    fi
+    # Install curl without specifying the version
+    apk add --no-cache curl
 
+# Add SSL certificates and .htpasswd file
 ADD ./ssl /etc/nginx/ssl
 ADD ./conf/.htpasswd /etc/nginx/.htpasswd
 ADD ./conf/nginx.conf /etc/nginx/nginx.conf
-
