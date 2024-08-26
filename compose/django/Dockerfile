@@ -42,8 +42,11 @@ RUN \
 #    conda activate seazit && \
 #    pip install -U pip && \
 #    pip install -r /requirements/production.txt
+#CONDA:
 
- 
+# Ensure base environment has the correct certifi version
+RUN conda install -n base certifi=2024.07.04 -y
+#conda env seazit :
 RUN conda env create -f /conda.yml  && \
     \
     . /opt/conda/etc/profile.d/conda.sh && \
@@ -51,7 +54,16 @@ RUN conda env create -f /conda.yml  && \
     pip install -U pip && \
     pip install -r /requirements/production.txt
     
-#RUN apt-get install nano
+# Download, compile, and install curl 8.9.1
+
+RUN curl -LO https://curl.se/download/curl-8.9.1.tar.gz && \
+    tar -xzf curl-8.9.1.tar.gz && \
+    cd curl-8.9.1 && \
+    ./configure --with-ssl && \
+    make && \
+    make install && \
+    cd .. && \
+    rm -rf curl-8.9.1 curl-8.9.1.tar.gz
 
 
 # fix the django 2.0 import error
