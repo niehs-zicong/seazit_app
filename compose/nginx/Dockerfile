@@ -1,4 +1,4 @@
-FROM nginx:1.25.5-alpine
+FROM nginx:stable-alpine
 
 RUN apk --no-cache upgrade && \
     # Install curl without specifying the version
