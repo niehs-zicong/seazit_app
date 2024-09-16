@@ -14,8 +14,6 @@ import {
     molecularGraphBody,
 } from './BootstrapBodyPart';
 
-import styles from '../style.css';
-
 import { getLog10AxisFunction } from 'utils/d3';
 import { integrativeHandleCellClick, printFloat, pod_med_processed } from '../shared';
 import DoseResponseGridWidget from '../widgets/DoseResponseGridWidget';
@@ -326,7 +324,7 @@ class DevtoxHeatmap extends Component {
 
         legendLayer
             .append('text')
-            .attr('class', styles.legendText)
+            .attr('class', 'legend-text')
             .attr('x', 0)
             .attr('y', 0)
             .attr('transform', `translate(20, ${margin.axisTop + legendCellSize / 2})`)
@@ -351,7 +349,7 @@ class DevtoxHeatmap extends Component {
 
         legendLayer
             .append('text')
-            .attr('class', styles.legendText)
+            .attr('class', 'legend-text')
             .attr('x', 0)
             .attr('y', 0)
             .attr(
@@ -408,7 +406,7 @@ class DevtoxHeatmap extends Component {
 
         legendLayer
             .append('text')
-            .attr('class', styles.legendText)
+            .attr('class', 'legend-text')
             .attr('x', 0)
             .attr('y', 0)
             .attr(
@@ -424,7 +422,7 @@ class DevtoxHeatmap extends Component {
         //
         legendLayer
             .append('text')
-            .attr('class', styles.legendText)
+            .attr('class', 'legend-text')
             .attr('x', 0)
             .attr('y', 0)
             .attr(
@@ -456,7 +454,7 @@ class DevtoxHeatmap extends Component {
             .data(legendCirclesSizes)
             .enter()
             .append('text')
-            .attr('class', styles.legendText)
+            .attr('class', 'legend-text')
             .attr('x', (d, i) => i * (cellSize + spaceBetweenCircles) + 20)
             .attr('y', margin.top + margin.axisTop + legendHeight + legendCellSize * 8) // Adjusted y-coordinate
             // .attr('text-anchor', 'middle') // Center the text horizontally
@@ -501,7 +499,7 @@ class DevtoxHeatmap extends Component {
     }
 
     render() {
-        return <div id="IA_heatmap02" className="row-fluid" ref="svg" />;
+        return <div id="IA_heatmap02" className="row row-full-width" ref="svg" />;
     }
 }
 

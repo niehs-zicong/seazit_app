@@ -69,20 +69,28 @@ username icon
 /*
 Big bootstrap modals
 ====================
-*/
+
+/* Modal Dialog */
 .modal-dialog {
+    max-width: 80vw; /* Set the maximum width to 80% of the viewport width */
+    width: 95%; /* Ensure it takes full width up to max-width */
+    margin: 1.75rem auto; /* Center the modal vertically with margin */
     height: 95%;
-    padding: 0;
-    width: 95%;
 }
+
+/* Modal Content */
 .modal-content {
+    width: 100%; /* Full width of the dialog */
     height: 100%;
-    width: 100%;
+    border-radius: 0.3rem; /* Optional: adds border radius */
 }
+
+/* Modal Header */
 .modal-header {
-    height: 50px;
-    width: 100%;
+    padding: 1rem; /* Adds padding around header content */
+    border-bottom: 1px solid #dee2e6; /* Optional: adds border for separation */
 }
+
 .modal-body {
     height: calc(100% - 50px);
     overflow-y: auto;
@@ -172,4 +180,94 @@ D3 tooltips
 .acronym-letter {
     font-weight: bold;
     color: #232b5f;
+}
+
+/*style*/
+.label-horizontal {
+    display: flex;
+    align-items: center;
+}
+.label-normal {
+    font-weight: normal;
+}
+
+.pointer-button {
+    cursor: pointer;
+}
+
+.custom-select-height {
+    height: auto; /* Set it to auto to adjust based on content or set a specific height */
+    min-height: 250px; /* Increase the minimum height */
+    overflow: auto; /* Ensure it scrolls if needed */
+    overflow-x: hidden; /* Hide horizontal scroll */
+}
+
+.centered-table-body {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.legend-text {
+    /*font-size: 0.7rem;*/
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.tooltip {
+    position: absolute;
+    width: 120;
+    height: auto;
+    font-family: simsun;
+    font-size: 14px;
+    text-align: center;
+    border-style: solid;
+    border-width: 1px;
+    background-color: white;
+    border-radius: 5px;
+}
+
+.box {
+    float: left;
+    height: 20px;
+    width: 20px;
+    margin-bottom: 15px;
+    /*border: 1px solid;*/
+}
+
+.red {
+    background-color: red;
+}
+
+.yellow {
+    background-color: yellow;
+}
+
+.magentaBox {
+    /*background-color: #d62976;*/
+    float: left;
+    height: 20px;
+    width: 20px;
+    margin-bottom: 15px;
+    border: 2px solid #d62976;
+}
+
+.green {
+    background-color: green;
+}
+
+.blue {
+    background-color: blue;
+}
+
+.label-normal {
+    font-weight: normal;
+}
+
+.flex-container {
+    display: flex;
+    /* Additional styles for the flex container, if needed */
+}
+
+.row-full-width {
+    max-width: 85% !important; /* Use !important if necessary */
 }

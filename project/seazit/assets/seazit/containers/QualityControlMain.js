@@ -2,7 +2,6 @@ import React from 'react';
 
 import FiveOhEight from '../components/FiveOhEight';
 import HelpButtonWidget from '../widgets/HelpButtonWidget';
-import styles from '../style.css';
 
 class QualityControlMain extends React.Component {
     constructor(props) {
@@ -26,7 +25,6 @@ class QualityControlMain extends React.Component {
                     endpoints are compared:
                 </p>
                 <br />
-                {/*<ol>*/}
                 <ol style={{ paddingLeft: '40px' }}>
                     <li>
                         MalformedAny+Mort@120 (i.e., percent of affected embryo [the embryo is
@@ -51,9 +49,9 @@ class QualityControlMain extends React.Component {
 
     render() {
         return (
-            <div className="row-fluid">
-                <div className="col-md-12">
-                    <h1 className={styles.labelHorizontal}>
+            <div className="row row-full-width">
+                <div className="col-12">
+                    <h1 className="label-horizontal">
                         Quality Check
                         <HelpButtonWidget
                             stateHolder={this}
@@ -63,7 +61,7 @@ class QualityControlMain extends React.Component {
                     </h1>
                     {this._renderHelpText()}
                 </div>
-                <div className="col-md-12">
+                <div className="col-12">
                     <FiveOhEight />
                 </div>
             </div>

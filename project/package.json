@@ -68,7 +68,7 @@
         "unexpected-react": "^5.0.1",
         "webpack": "^3.10.0",
         "webpack-bundle-tracker": "^0.2.0",
-        "webpack-dashboard": "^0.2.0",
+        "webpack-dashboard": "^0.2.1",
         "webpack-dev-middleware": "^1.12.2"
     },
     "dependencies": {

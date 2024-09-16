@@ -4,7 +4,7 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-8">
             <h2>
                 <span class="acronym-letter">S</span>ystematic <span class="acronym-letter">E</span>valuation of the
                 <span class="acronym-letter">A</span>pplication of
@@ -17,10 +17,6 @@
                 <span class="acronym-letter">R</span>esource
                 <span class="acronym-letter"> (<span class="acronym-letter">SEAZIT-DIVER</span>)
             </h2>
-            <p>
-            </p>
-            <!--            <img class="img-responsive center-block" src="{{STATIC_URL}}img/seazit/logo-2.jpg"-->
-            <!--                 alt="Logo: a zebrafish, neurons firing, data and charts"/>-->
 
             <br/>
 
@@ -31,7 +27,7 @@
                 areas hinder the broader adoption of the embryonic zebrafish model for toxicological screening:
             </p>
 
-            <ul style="padding: 1px 10px 0px 30px;">
+            <ul class="ps-4">
                 <li>Consistent experimental protocol elements</li>
                 <li>Consistent informatics approaches used for classification of outcomes</li>
                 <li>Clear understanding of mechanisms of chemical absorption, distribution, metabolism, and excretion
@@ -39,7 +35,6 @@
             </ul>
 
             <p>
-
                 To facilitate broader acceptance and increase confidence for toxicological screening, the Division of
                 Translational Toxicology (formerly Division of the National Toxicology Program, DNTP) at NIEHS
                 established the Systematic Evaluation of the Application of Zebrafish in Toxicology (<a
@@ -48,7 +43,6 @@
                 Toxicological Methods (NICEATM). Information gathering sessions and workshops hosted by SEAZIT led to
                 the development of several projects to specifically address the impact of protocol design and
                 informatics approaches used for classification of toxicity outcomes.
-
             </p>
 
             <h2>Interlaboratory Study:</h2>
@@ -57,11 +51,11 @@
                 to evaluate a defined set of test substances while varying the two protocol elements which are
                 anticipated to influence toxicity outcomes (<a
                     href="https://www.altex.org/index.php/altex/article/view/997">Hamm et al 2019</a>):
-            <ul style="padding: 1px 10px 0px 30px;">
+            </p>
+            <ul class="ps-4">
                 <li>Intact chorion vs embryo dechorionation prior to exposure to a test substance</li>
                 <li>Static (i.e., one-time) vs static-renewal exposure (i.e., daily) over the 5-day study period</li>
             </ul>
-            </p>
             <p>
                 Test substances were selected based upon 1) overlap with other DTT studies, 2) available reference data
                 from rodent and other zebrafish developmental toxicity studies representing a range of potencies, and 3)
@@ -72,6 +66,7 @@
                 controls, respectively, within and across experimental runs. For more details regarding substance
                 information, please refer to the Test Substances tab in the Dataset page on this website.
             </p>
+
             <p>
                 Toxicity endpoints evaluated include mortality and the development of altered phenotypes (i.e.,
                 malformations). A dose-range finding (DRF) study was conducted to establish a concentration range to
@@ -82,9 +77,9 @@
                 static-renewal exposure following dechorionation).
             </p>
 
-            <div style="text-align: center; display: flex; flex-direction: column; align-items: center;">
-                <img style="width: 800px; height: auto;" src="{{STATIC_URL}}img/seazit/logo-4.png" alt="Figure 1"/>
-                <p style="font-weight: bold; margin-top: 10px;">Figure 1</p>
+            <div class="text-center d-flex flex-column align-items-center">
+                <img class="img-fluid mx-auto" style="width: 800px; height: auto;" src="{{STATIC_URL}}img/seazit/logo-4.png" alt="Figure 1"/>
+                <p class="fw-bold mt-3">Figure 1</p>
             </div>
 
             <p>
@@ -104,8 +99,8 @@
                 benchmark concentration (BMC) value for each test substance and endpoint under investigation (<a
                     href="https://www.mdpi.com/2305-6304/11/5/407">Hsieh et
                 al 2023</a>).
-
             </p>
+
             <p>
                 SEAZIT-DIVER was developed to analyze, compare, and visualize intra- and inter-laboratory data in an
                 interactive web-application. Within SEAZIT-DIVER, comparisons are organized on different tabs including
@@ -113,15 +108,14 @@
                 of chemical toxicity per lab/assay, and comparison of results across assays and laboratories.
             </p>
 
-            <h2>
-                Suggestions?
-            </h2>
+            <h2>Suggestions?</h2>
             <p>
                 We are currently refining assays, analyses, and visualizations, and would appreciate your input! Please
-                direct questions or suggestions to Kristen Ryan (<a href="kristen.ryan@nih.gov">kristen.ryan@nih.gov</a>).
+                direct questions or suggestions to Kristen Ryan (<a href="mailto:kristen.ryan@nih.gov">kristen.ryan@nih.gov</a>).
+            </p>
 
         </div>
-        </p>
     </div>
 </div>
+
 {% endblock content %}

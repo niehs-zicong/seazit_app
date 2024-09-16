@@ -14,7 +14,6 @@ import {
 } from '../shared';
 import HelpButtonWidget from './HelpButtonWidget';
 import _ from 'lodash';
-import styles from '../style.css';
 
 class IntegrativePlotWidget extends BaseWidget {
     /*
@@ -82,8 +81,8 @@ class IntegrativePlotWidget extends BaseWidget {
                         contentId: 'B',
                     },
                 ].map((option) => (
-                    <div className={`radio ${styles.labelHorizontal}`} key={option.value}>
-                        <label className={styles.labelHorizontal}>
+                    <div className={`radio label-horizontal`} key={option.value}>
+                        <label className="label-horizontal">
                             <input
                                 type="radio"
                                 name="visualization"

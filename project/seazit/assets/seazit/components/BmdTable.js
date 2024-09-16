@@ -4,7 +4,6 @@ import BootstrapModal from 'utils/BootstrapModal';
 import { Header, SingleCurveBody } from './BootstrapBodyPart';
 import { BMDVIZ_ACTIVITY, BMDVIZ_SELECTIVITY, pod_med_processed, printFloat } from '../shared';
 import _ from 'lodash';
-import styles from '../style.css';
 
 class BmdTable extends React.Component {
     constructor(props) {
@@ -170,7 +169,7 @@ class BmdTable extends React.Component {
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody className={styles['centered-table-body']}>
+                            <tbody className="centered-table-body">
                                 {medData.map(this.renderRow)}
                             </tbody>
                         </table>
@@ -201,7 +200,7 @@ class BmdTable extends React.Component {
                                     <th style={this.tableStyle()}>Specificity</th>
                                 </tr>
                             </thead>
-                            <tbody className={styles['centered-table-body']}>
+                            <tbody className="centered-table-body">
                                 {medData.map(this.renderRow)}
                             </tbody>
                         </table>

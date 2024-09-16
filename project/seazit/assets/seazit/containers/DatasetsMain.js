@@ -2,7 +2,6 @@ import React from 'react';
 
 import FiveOhEight from '../components/FiveOhEight';
 import HelpButtonWidget from '../widgets/HelpButtonWidget';
-import styles from '../style.css';
 
 class DatasetsMain extends React.Component {
     constructor(props) {
@@ -33,9 +32,9 @@ class DatasetsMain extends React.Component {
 
     render() {
         return (
-            <div className="row-fluid">
-                <div className="col-md-12">
-                    <h1 className={styles.labelHorizontal}>
+            <div className="row row-full-width">
+                <div className="col-12">
+                    <h1 className="label-horizontal">
                         Data
                         <HelpButtonWidget
                             stateHolder={this}
@@ -45,7 +44,7 @@ class DatasetsMain extends React.Component {
                     </h1>
                     {this._renderHelpText()}
                 </div>
-                <div className="col-md-12">
+                <div className="col-12">
                     <FiveOhEight />
                 </div>
             </div>

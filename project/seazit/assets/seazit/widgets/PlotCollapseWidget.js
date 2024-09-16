@@ -5,7 +5,6 @@ import BaseWidget from './BaseWidget';
 
 import { COLLAPSE_BY_CHEMICAL, COLLAPSE_BY_READOUT, NO_COLLAPSE } from '../shared';
 import HelpButtonWidget from './HelpButtonWidget';
-import styles from '../style.css';
 
 class PlotCollapseWidget extends BaseWidget {
     constructor(props) {
@@ -43,7 +42,6 @@ class PlotCollapseWidget extends BaseWidget {
                     datasets and endpoints selected. Chart by Endpoint combines all test substances
                     selected per endpoint and dataset.
                 </p>
-                <br />
                 <p>Hover over each chart line for additional information.</p>
             </div>
         );
@@ -53,7 +51,7 @@ class PlotCollapseWidget extends BaseWidget {
         let { state } = this.props.stateHolder;
         return (
             <div ref="buttons">
-                <label className={styles.labelHorizontal}>
+                <label className="label-horizontal">
                     Select chart display:
                     <HelpButtonWidget
                         stateHolder={this}
@@ -115,7 +113,7 @@ class PlotCollapseWidget extends BaseWidget {
                         Endpoint
                     </label>
                 </div>
-                <p className="help-block">Hover for more details on each option.</p>
+                <p className="form-text">Hover for more details on each option.</p>
             </div>
         );
     }

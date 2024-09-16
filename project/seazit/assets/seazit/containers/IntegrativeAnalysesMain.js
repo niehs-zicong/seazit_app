@@ -20,7 +20,6 @@ import OntologyTypeWidget from '../widgets/OntologyTypeWidget';
 import ReadoutWidget from '../widgets/ReadoutWidget';
 import ReadoutCategoryWidget from '../widgets/ReadoutCategoryWidget';
 import ReadoutTypeWidget from '../widgets/ReadoutTypeWidget';
-import styles from '../style.css';
 
 import {
     HEATMAP_ACTIVITY,
@@ -105,13 +104,11 @@ class IntegrativeAnalysesMain extends React.Component {
                     results determined by alteration of zebrafish larva phenotypes after test
                     substance exposure.
                 </p>
-                <br />
                 <p>
                     The developmental toxicity results include three main elements: test substance
                     classification, activity, and specificity related to the associated
                     developmental phenotype group.
                 </p>
-                <br />
                 <p>
                     Multiple features can be selected at once. Once the user has selected at least
                     one item within each feature, interactive heatmaps will appear if data are
@@ -123,14 +120,12 @@ class IntegrativeAnalysesMain extends React.Component {
                     </a>
                     .
                 </p>
-                <br />
                 <p>
                     Options for editing or saving images are provided by toggling over the upper
                     right side of each image. If the edit/save toolbar is not available, it was a
                     custom visualization created specifically for this application. Please take a
                     screenshot to save, or if you need a higher resolution image, please contact us.
                 </p>
-                <br />
                 <p>
                     <i>
                         Disclaimer: The use of two different methods of analysis will be reflected
@@ -201,9 +196,9 @@ class IntegrativeAnalysesMain extends React.Component {
         this.state.url = getIntegrativeUrl(this.state.assays, this.state.chemicals);
         //heatmap test
         return (
-            <div className="row-fluid">
-                <div className="col-md-12">
-                    <h1 className={styles.labelHorizontal}>
+            <div className="row row-full-width">
+                <div className="col-12">
+                    <h1 className="label-horizontal">
                         Integrative Analyses
                         <HelpButtonWidget
                             stateHolder={this}
@@ -212,10 +207,10 @@ class IntegrativeAnalysesMain extends React.Component {
                         />
                     </h1>
                 </div>
-                <div className="col-md-12">
+                <div className="col-12">
                     <FiveOhEight />
                 </div>
-                <div className="col-md-3">
+                <div className="col-3">
                     <IntegrativePlotWidget stateHolder={this} />
                     <hr />
 
@@ -236,7 +231,7 @@ class IntegrativeAnalysesMain extends React.Component {
                     <ChemicalWidget stateHolder={this} />
                 </div>
 
-                <div className="col-md-9">
+                <div className="col-9">
                     {this._renderHelpText()}
                     {this._renderMainBody()}
                 </div>

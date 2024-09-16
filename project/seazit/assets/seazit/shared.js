@@ -5,7 +5,6 @@ import ReactDOM from 'react-dom';
 import Tooltip from '@material-ui/core/Tooltip';
 import { Header, MultipleCurveBody, SingleCurveBody } from './components/BootstrapBodyPart';
 import BootstrapModal from 'utils/BootstrapModal';
-import styles from './style.css';
 
 const AXIS_LINEAR = 1,
     AXIS_LOG10 = 2,
@@ -107,7 +106,7 @@ const AXIS_LINEAR = 1,
         //console.log(options);
         return (
             <div>
-                <label className={styles.labelHorizontal}>
+                <label className="label-horizontal">
                     Select {label}(s):
                     {helpButtonWidget && helpButtonWidget()}
                 </label>
@@ -150,27 +149,27 @@ const AXIS_LINEAR = 1,
         helpButtonWidget = null,
         renderHelpText = null
     ) {
+        let size = 10;
+        //console.log(options)
+
         return (
             <div>
-                <label className={styles.labelHorizontal}>
-                    Select one {label}:{helpButtonWidget && helpButtonWidget()}
+                <label className="label-horizontal">
+                    Select one {label}: {helpButtonWidget && helpButtonWidget()}
                 </label>
                 {renderHelpText && renderHelpText()}
-
                 <select
                     name={name}
-                    className="row form-control"
+                    className={`form-control custom-select-height`}
                     onChange={handleChange}
-                    size={Math.min(options.length, 11)}
+                    size={size}
                     value={values}
                 >
                     {options.map((d) => {
                         if (d.description) {
                             return (
-                                <Tooltip title={d.description} placement="top">
-                                    <option key={d.key} value={d.key}>
-                                        {d.label}
-                                    </option>
+                                <Tooltip key={d.key} title={d.description} placement="top">
+                                    <option value={d.key}>{d.label}</option>
                                 </Tooltip>
                             );
                         } else {
@@ -195,26 +194,22 @@ const AXIS_LINEAR = 1,
         renderHelpText = null
     ) {
         let size = 10;
-        //console.log(options);
-
         return (
             <div>
-                <label className={styles.labelHorizontal}>
+                <label className="label-horizontal">
                     Select {label}(s):{helpButtonWidget && helpButtonWidget()}
                 </label>
                 {renderHelpText && renderHelpText()}
 
                 <select
                     name={name}
-                    className="form-control"
-                    multiple={true}
+                    className="form-select"
                     size={size}
                     onChange={handleChange}
                     value={values}
+                    multiple={true}
                 >
                     {_.map(options, (value, category) => {
-                        //console.log(value);
-
                         return (
                             <optgroup key={category} label={category}>
                                 {value.map((d) => {
