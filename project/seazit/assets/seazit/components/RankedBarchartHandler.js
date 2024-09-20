@@ -170,6 +170,7 @@ class RankedBarchartHandler extends React.Component {
                         triplicate testing and is shown as the colored dot. The range of lowest BMC
                         and the highest BMC is shown as the colored bar.
                     </p>
+                    <br />
 
                     <p>
                         Additionally, the BMC values of the corresponding mortality (median, min and
@@ -177,6 +178,8 @@ class RankedBarchartHandler extends React.Component {
                         the substance is inactive in either the non-mortality endpoints or the
                         mortality endpoint, no dots or bars will be shown.
                     </p>
+                    <br />
+
                     <p>
                         The BMC values of all substances of the endpoint with the lowest median BMC
                         are listed below in tabular form (“-“ for inactive).
@@ -192,7 +195,7 @@ class RankedBarchartHandler extends React.Component {
                         substances are color coded next to each test substance name. The user can
                         select more than one non-mortality endpoint.
                     </p>
-
+                    <br />
                     <p>
                         BMC value of the altered phenotype with the lowest summarized BMC among the
                         selected non-mortality endpoints is shown as the colored dot, and the
@@ -201,6 +204,8 @@ class RankedBarchartHandler extends React.Component {
                         non-mortality endpoints or the mortality endpoint, no dots or bars will be
                         shown.
                     </p>
+                    <br />
+
                     <p>
                         The BMC values of test substances with specific effect (default, but other
                         types can be toggled) listed below in tabular form (“-“ for inactive).
@@ -412,7 +417,7 @@ class RankedBarchartHandler extends React.Component {
                     selectedAxis={this.props.selectedAxis}
                     selectivityList={this.props.selectivityList}
                 />
-                <p className="help-block">
+                <p className=" form-text">
                     <b>Interactivity note:</b> This chart is interactive. Click an item to view the
                     concentration-response curves from which the BMC was derived.
                 </p>

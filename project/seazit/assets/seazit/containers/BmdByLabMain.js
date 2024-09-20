@@ -99,12 +99,23 @@ class BmdByLabMain extends React.Component {
                     the Activity or Specificity of selected altered laboratory defined phenotype(s)
                     within a single dataset.
                 </p>
+                <br />
+
                 <p>
                     The Use Categories of test substances are color coded next to substance name.
                     More information on Use Category can be viewed on the{' '}
-                    <a href={loadBaseUrl('/seazit/dataset/')}>Datasets tool page</a>.
+                    {/*<a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/">*/}
+                    <a href={loadBaseUrl('/seazit/dataset/')}>
+                        {/*<a href={this.state.dynamicUrl + "/seazit/dataset/"}>*/}
+                        Datasets tool page
+                    </a>
+                    .
                 </p>
+                <br />
+
                 <p>A table will appear underneath each visual with additional information.</p>
+                <br />
+
                 <p>
                     Options for editing or saving images are provided by toggling over the upper
                     right side of each image. If the edit/save toolbar is not available, it was a
@@ -123,7 +134,7 @@ class BmdByLabMain extends React.Component {
         let url = getBmdsUrl(this.state.assays, this.state.readouts);
 
         return (
-            <div className="row row-full-width">
+            <div className="row  row-full-width">
                 <div className="col-12">
                     <h1 className="label-horizontal">
                         Benchmark concentration (BMC) summary by dataset

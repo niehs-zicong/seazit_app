@@ -25,6 +25,7 @@ class QualityControlMain extends React.Component {
                     endpoints are compared:
                 </p>
                 <br />
+                {/*<ol>*/}
                 <ol style={{ paddingLeft: '40px' }}>
                     <li>
                         MalformedAny+Mort@120 (i.e., percent of affected embryo [the embryo is
@@ -49,7 +50,7 @@ class QualityControlMain extends React.Component {
 
     render() {
         return (
-            <div className="row row-full-width">
+            <div className="row  row-full-width">
                 <div className="col-12">
                     <h1 className="label-horizontal">
                         Quality Check

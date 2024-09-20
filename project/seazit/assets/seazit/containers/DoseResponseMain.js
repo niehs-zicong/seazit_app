@@ -97,11 +97,12 @@ class DoseResponseMain extends React.Component {
             return null;
         }
         return (
-            <div className="alert alert-info">
+            <div className="alert alert-info ">
                 <p>
                     This page allows for the visualization of concentration-response curves. Panels
                     on the left provide the options to select data of user’s interests.
                 </p>
+                <br />
                 <p>
                     Concentration response curves can be visualized in different ways to focus on
                     (1) a single test substance and endpoint, (2) all endpoints per test substance,
@@ -115,12 +116,25 @@ class DoseResponseMain extends React.Component {
                     concentration (BMC) will appear if the respective curve is considered active in
                     the analysis. Some selections may result in an overlap of data point or plot.
                 </p>
+                <br />
+
                 <p>
+                    {' '}
                     These concentration response curves have been integrated into other SEAZIT-DIVER
                     tools including the{' '}
-                    <a href={loadBaseUrl('/seazit/seazit_integrative/')}>Integrative Analyses</a>{' '}
-                    and <a href={loadBaseUrl('/seazit/seazit_bmcByLab/')}>BMC by dataset</a>.
+                    {/*<a href="https://ods.ntp.niehs.nih.gov/seazit/seazit_integrative/">*/}
+                    <a href={loadBaseUrl('/seazit/seazit_integrative/')}>
+                        Integrative Analyses
+                    </a>{' '}
+                    and{' '}
+                    <a href={loadBaseUrl('/seazit/seazit_bmcByLab/')}>
+                        {/*<a href="https://ods.ntp.niehs.nih.gov/seazit/seazit_bmcByLab/">*/}
+                        BMC by dataset
+                    </a>
+                    .
                 </p>
+                <br />
+
                 <p>
                     Options for editing or saving charts are provided by toggling over the upper
                     right side of each chart. A maximum of 40 charts can be viewed at once.
@@ -136,7 +150,7 @@ class DoseResponseMain extends React.Component {
         let url = getDoseResponsesUrl(this.state.assays, this.state.readouts, this.state.chemicals);
 
         return (
-            <div className="row row-full-width">
+            <div className="row  row-full-width">
                 <div className="col-12">
                     <h1 className="label-horizontal">
                         Concentration Response

@@ -268,6 +268,26 @@ D3 tooltips
     /* Additional styles for the flex container, if needed */
 }
 
+.alert > p,
+.alert > ul {
+    margin-bottom: 0;
+}
 .row-full-width {
-    max-width: 85% !important; /* Use !important if necessary */
+    max-width: 96% !important; /* Use !important if necessary */
+}
+.radio label {
+    /*min-height: 20px;*/
+    /*padding-left: 20px;*/
+    /*margin-bottom: 0;*/
+    font-weight: 400;
+    cursor: pointer;
+}
+/*.callout_yellow,.yellow.blueCalloutBox,.yellow.grayCalloutBox,.yellowCalloutBox {*/
+/*      border-color: #e0d2b5;*/
+/*      background-color: #fff1d4*/
+/*  }*/
+
+.row h1,
+.row h2 {
+    font-weight: inherit !important;
 }

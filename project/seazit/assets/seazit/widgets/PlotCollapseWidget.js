@@ -42,6 +42,7 @@ class PlotCollapseWidget extends BaseWidget {
                     datasets and endpoints selected. Chart by Endpoint combines all test substances
                     selected per endpoint and dataset.
                 </p>
+                <br />
                 <p>Hover over each chart line for additional information.</p>
             </div>
         );

@@ -12,11 +12,6 @@ import {
 import PropTypes from 'prop-types';
 
 class OntologyTypeWidget extends BaseWidget {
-    /*
-    IntegrativePlotWidget requires the following state properties:
-        - stateHolder.state.readoutType is one of the enumerations above
-    */
-
     render() {
         let state = this.props.stateHolder.state;
         // console.log(state);

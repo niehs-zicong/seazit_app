@@ -30,6 +30,8 @@ class BmdByLabPlotWidget extends BaseWidget {
                     Activity: the potency value of the benchmark concentration (BMC) of a selected
                     endpoint; lower BMC value represents a more potent effect.
                 </p>
+                <br />
+
                 <p>
                     Specificity: the fold change of the BMC values between the mortality endpoint
                     and the selected endpoint. The fold change value is log10-transformed; higher

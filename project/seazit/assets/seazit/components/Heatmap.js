@@ -315,7 +315,7 @@ class Heatmap extends Component {
     }
 
     render() {
-        return <div id="IA_heatmap01" className="row row-full-width" ref="svg" />;
+        return <div id="IA_heatmap01" className="row  row-full-width" ref="svg" />;
     }
 }
 

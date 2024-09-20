@@ -37,6 +37,8 @@ function _renderHelpText(state) {
                 figure title. Click an x-axis label of the heatmap to learn more about selected
                 phenotype.
             </p>
+            <br />
+
             <p>
                 Percent mortality at 120 hours post fertilization alone can be visualized in each
                 figure by selecting the “add mortality@120” box. Effects that were driven by altered
@@ -44,6 +46,8 @@ function _renderHelpText(state) {
                 effect) have backgrounds highlighted using a magenta box. Dotted line is the
                 benchmark response (BMR) visualized when looking at altered phenotype data.
             </p>
+            <br />
+
             <p>
                 Figures are interactive: the user can zoom in and out using curser and hover over
                 each line for information per plate.
@@ -120,7 +124,7 @@ class SingleCurveBody extends React.Component {
         );
 
         return (
-            <div className="row row-full-width">
+            <div className="row  row-full-width">
                 <div className="col-2">
                     {this.props.CheckBoxDisable ? null : (
                         <IntegrativeCheckBoxWidget stateHolder={this} />
@@ -241,7 +245,7 @@ class MultipleCurveBody extends React.Component {
             [this.props.casrns]
         );
         return (
-            <div className="row row-full-width">
+            <div className="row  row-full-width">
                 <div className="col-2">
                     <DoseResponseGridWidget stateHolder={this} />
                     <br />

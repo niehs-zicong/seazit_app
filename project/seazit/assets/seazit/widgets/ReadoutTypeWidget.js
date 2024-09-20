@@ -4,11 +4,6 @@ import BaseWidget from './BaseWidget';
 import { READOUT_TYPE_READOUT, READOUT_TYPE_CATEGORY } from '../shared';
 
 class ReadoutTypeWidget extends BaseWidget {
-    /*
-    IntegrativePlotWidget requires the following state properties:
-        - stateHolder.state.readoutType is one of the enumerations above
-    */
-
     render() {
         let state = this.props.stateHolder.state;
         return (

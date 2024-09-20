@@ -50,7 +50,7 @@ class SelectInput extends Component {
                             );
                         })}
                     </select>
-                    {helpText ? <p className="help-block">{this.props.helpText}</p> : null}
+                    {helpText ? <p className=" form-text">{this.props.helpText}</p> : null}
                 </div>
             </div>
         );

@@ -272,6 +272,7 @@ class ReadoutWidget extends BaseWidget {
                                 <a href={loadBaseUrl('/seazit/dataset/')}> Datasets page</a> for
                                 more information.
                             </p>
+                            <br />
                             <p>
                                 All endpoints must be selected individually and are organized by
                                 dataset name.
