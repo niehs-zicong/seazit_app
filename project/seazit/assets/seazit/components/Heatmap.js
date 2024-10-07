@@ -21,9 +21,6 @@ import {
     NO_COLLAPSE,
 } from '../shared';
 
-import styles from '../style.css';
-// import styles from './ResponseFigure.css';
-
 import { getLog10AxisFunction } from 'utils/d3';
 import DoseResponse from './DoseResponse';
 
@@ -88,10 +85,13 @@ class Heatmap extends Component {
                 if (d.endPointList) {
                     tooltip
                         .html(
-                            `${d.devtoxEndPointList.length} out of ${d.endPointList.length} endpoints are significant`
+                            // `${d.devtoxEndPointList.length} out of ${d.endPointList.length} endpoints are significant`
+                            `<span style="font-size: 15px; font-weight: bold;">
+                    ${d.devtoxEndPointList.length} out of ${d.endPointList.length} endpoints are significant
+                </span>`
                         )
-                        .style('left', d3.event.pageX - 400 + 'px')
-                        .style('top', d3.event.pageY - 300 + 'px')
+                        .style('left', d3.event.pageX - 200 + 'px')
+                        .style('top', d3.event.pageY - 30 + 'px')
                         .style('opacity', 1.0);
                 }
             },
@@ -242,7 +242,7 @@ class Heatmap extends Component {
 
         legendLayer
             .append('text')
-            .attr('class', styles.legendText)
+            .attr('className', 'legend-text')
             .attr('x', 0)
             .attr('y', 0)
             .attr('transform', (d, i) => `translate(25, ${margin.axisTop + (cellSize - 20) / 2})`)
@@ -254,7 +254,7 @@ class Heatmap extends Component {
             .data(legendData.values)
             .enter()
             .append('text')
-            .attr('class', styles.legendText)
+            .attr('className', 'legend-text')
             .attr(
                 'transform',
                 (d, i) =>
@@ -315,7 +315,7 @@ class Heatmap extends Component {
     }
 
     render() {
-        return <div id="IA_heatmap01" className="row-fluid" ref="svg" />;
+        return <div id="IA_heatmap01" className="row  row-full-width" ref="svg" />;
     }
 }
 

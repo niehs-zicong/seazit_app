@@ -4,7 +4,6 @@ import * as d3 from 'd3';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import RankedBarchartHandler from '../components/RankedBarchartHandler';
-import styles from '../style.css';
 import HelpButtonWidget from './HelpButtonWidget';
 
 class BmdCheckBoxWidget extends BaseWidget {
@@ -58,7 +57,7 @@ class BmdCheckBoxWidget extends BaseWidget {
         let state = this.props.stateHolder.state;
         return (
             <div>
-                <label className={styles.labelHorizontal}>
+                <label className="label-horizontal">
                     Developmental Toxicity Classification:
                     <HelpButtonWidget
                         stateHolder={this}

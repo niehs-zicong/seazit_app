@@ -2,7 +2,6 @@ import _ from 'lodash';
 import * as d3 from 'd3';
 import React from 'react';
 import PropTypes from 'prop-types';
-import styles from './graph.css';
 import Loading from 'utils/Loading';
 
 import Plotly from 'Plotly';
@@ -589,11 +588,10 @@ class DoseResponse extends React.Component {
         }
 
         let colNum = Math.ceil(12 / this.props.cols);
-        // //console.log(this.state.collapsedData)
         return (
-            <div>
+            <div className="row">
                 {this.state.collapsedData.map((item) => (
-                    <div className={`col-xs-${colNum}`} key={item.key} ref={item.key} />
+                    <div className={`col-${colNum}`} key={item.key} ref={item.key} />
                 ))}
             </div>
         );

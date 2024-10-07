@@ -1,6 +1,5 @@
 import React from 'react';
 import BaseWidget from './BaseWidget';
-import styles from '../style.css';
 
 class DoseResponseGridWidget extends BaseWidget {
     /*
@@ -16,34 +15,34 @@ class DoseResponseGridWidget extends BaseWidget {
         let state = this.props.stateHolder.state;
         return (
             <div>
-                <label>Number of columns [1-4] to view:</label>
-                <input
-                    className="form-control"
-                    type="range"
-                    name="vizColumns"
-                    min="1"
-                    max="4"
-                    onChange={this.handleIntegerInputChange}
-                    value={state.vizColumns}
-                />
-                <span>{state.vizColumns} columns selected</span>
+                <div className="mb-3">
+                    <label className="form-label">Number of columns [1-4] to view:</label>
+                    <input
+                        className="form-range" // Updated for Bootstrap 5 range input style
+                        type="range"
+                        name="vizColumns"
+                        min="1"
+                        max="4"
+                        onChange={this.handleIntegerInputChange}
+                        value={state.vizColumns}
+                    />
+                    <span>{state.vizColumns} columns selected</span>
+                </div>
 
-                <br />
-
-                <label>Image height [350-700px]:</label>
-                <input
-                    className="form-control"
-                    type="range"
-                    name="vizHeight"
-                    min="350"
-                    max="700"
-                    step="50"
-                    onChange={this.handleIntegerInputChange}
-                    value={state.vizHeight}
-                />
-                <span>{state.vizHeight} px selected</span>
-
-                <br />
+                <div className="mb-3">
+                    <label className="form-label">Image height [350-700px]:</label>
+                    <input
+                        className="form-range" // Updated for Bootstrap 5 range input style
+                        type="range"
+                        name="vizHeight"
+                        min="350"
+                        max="700"
+                        step="50"
+                        onChange={this.handleIntegerInputChange}
+                        value={state.vizHeight}
+                    />
+                    <span>{state.vizHeight} px selected</span>
+                </div>
             </div>
         );
     }

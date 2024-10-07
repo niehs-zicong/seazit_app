@@ -1,29 +1,52 @@
+
 {% extends "base.html" %}
 
 {% block title %}SEAZIT-DIVER{% endblock %}
 
 {% block crumbs %}
-<ul class="nav nav-tabs" style="margin: 0.5em 0">
+<ul class="nav nav-tabs my-2">
 
-    <li role="presentation" class="{% if active_view_name == 'home' %}active{% endif %}">
-        <a href="{% url 'seazit:home' %}"><i class="fa fa-home fa-lg"></i>&nbsp;About</a></li>
-<li role="presentation" class="{% if active_view_name == 'dataset' %}active{% endif %}">
-        <a href="{% url 'seazit:dataset' %}">Datasets</a></li>
+    <li class="nav-item">
+        <a class="nav-link {% if active_view_name == 'home' %}active{% endif %}" href="{% url 'seazit:home' %}">
+            <i class="fa fa-home fa-lg"></i>&nbsp;About
+        </a>
+    </li>
 
-    <li role="presentation" class="{% if active_view_name == 'qc' %}active{% endif %}">
-        <a href="{% url 'seazit:qc' %}">Quality Check</a></li>
+    <li class="nav-item">
+        <a class="nav-link {% if active_view_name == 'dataset' %}active{% endif %}" href="{% url 'seazit:dataset' %}">
+            Datasets
+        </a>
+    </li>
 
-    <li role="presentation" class="{% if active_view_name == 'seazit_cr' %}active{% endif %}">
-        <a href="{% url 'seazit:seazit_cr' %}">Concentration Response</a></li>
+    <li class="nav-item">
+        <a class="nav-link {% if active_view_name == 'qc' %}active{% endif %}" href="{% url 'seazit:qc' %}">
+            Quality Check
+        </a>
+    </li>
 
+    <li class="nav-item">
+        <a class="nav-link {% if active_view_name == 'seazit_cr' %}active{% endif %}" href="{% url 'seazit:seazit_cr' %}">
+            Concentration Response
+        </a>
+    </li>
 
-     <li role="presentation" class="{% if active_view_name == 'seazit_bmcByLab' %}active{% endif %}">
-         <a href="{% url 'seazit:seazit_bmcByLab' %}">BMC by Dataset</a></li>
+    <li class="nav-item">
+        <a class="nav-link {% if active_view_name == 'seazit_bmcByLab' %}active{% endif %}" href="{% url 'seazit:seazit_bmcByLab' %}">
+            BMC by Dataset
+        </a>
+    </li>
 
-    <li role="presentation" class="{% if active_view_name == 'seazit_integrative' %}active{% endif %}">
-        <a href="{% url 'seazit:seazit_integrative' %}">Integrative Analyses</a></li>
+    <li class="nav-item">
+        <a class="nav-link {% if active_view_name == 'seazit_integrative' %}active{% endif %}" href="{% url 'seazit:seazit_integrative' %}">
+            Integrative Analyses
+        </a>
+    </li>
 
-    <li role="presentation" class="{% if active_view_name == 'resources' %}active{% endif %}">
-        <a href="{% url 'seazit:resources' %}">Resources</a></li>
+    <li class="nav-item">
+        <a class="nav-link {% if active_view_name == 'resources' %}active{% endif %}" href="{% url 'seazit:resources' %}">
+            Resources
+        </a>
+    </li>
+
 </ul>
 {% endblock crumbs %}

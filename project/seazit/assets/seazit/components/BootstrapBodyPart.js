@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import DoseResponse from './DoseResponse';
 import SankeyPlot from './SankeyPlot';
-import styles from '../style.css';
 
 import DoseResponseGridWidget from '../widgets/DoseResponseGridWidget';
 import Plotly from 'Plotly';
@@ -38,6 +37,8 @@ function _renderHelpText(state) {
                 figure title. Click an x-axis label of the heatmap to learn more about selected
                 phenotype.
             </p>
+            <br />
+
             <p>
                 Percent mortality at 120 hours post fertilization alone can be visualized in each
                 figure by selecting the “add mortality@120” box. Effects that were driven by altered
@@ -45,6 +46,8 @@ function _renderHelpText(state) {
                 effect) have backgrounds highlighted using a magenta box. Dotted line is the
                 benchmark response (BMR) visualized when looking at altered phenotype data.
             </p>
+            <br />
+
             <p>
                 Figures are interactive: the user can zoom in and out using curser and hover over
                 each line for information per plate.
@@ -78,8 +81,8 @@ class SingleCurveBody extends React.Component {
 
     _renderDoseResponse(state) {
         const commonHeader = (
-            <div className="col-sm-10">
-                <h4 className={styles.labelHorizontal}>
+            <div className="col-10">
+                <h4 className="label-horizontal">
                     Developmental Toxicity Concentration Response Figures
                     <HelpButtonWidget
                         stateHolder={this}
@@ -93,7 +96,7 @@ class SingleCurveBody extends React.Component {
         );
 
         return (
-            <div className="col-sm-10">
+            <div className="col-10">
                 {commonHeader}
                 <DoseResponse
                     stateHolder={this}
@@ -119,14 +122,14 @@ class SingleCurveBody extends React.Component {
             [readout_ids],
             [this.props.casrn]
         );
+
         return (
-            <div className="row-fluid">
-                <div className="col-sm-2">
+            <div className="row  row-full-width">
+                <div className="col-2">
                     {this.props.CheckBoxDisable ? null : (
                         <IntegrativeCheckBoxWidget stateHolder={this} />
                     )}
                 </div>
-
                 {this._renderDoseResponse(this.state)}
             </div>
         );
@@ -153,7 +156,7 @@ class molecularGraphBody extends React.Component {
     render() {
         let srcUrl = `https://comptox.epa.gov/dashboard-api/ccdapp1/chemical-files/image/by-dtxsid/${this.props.dtxsid}`;
         return (
-            <div className="col-sm-10">
+            <div className="col-10">
                 <iframe src={srcUrl} width="400" height="400"></iframe>
             </div>
         );
@@ -171,7 +174,7 @@ class sankeyPlotGraphBody extends React.Component {
 
     render() {
         return (
-            <div className="col-sm-10">
+            <div className="col-10">
                 <SankeyPlot cells={this.props.cells} />
             </div>
         );
@@ -202,8 +205,8 @@ class MultipleCurveBody extends React.Component {
         // console.log(state)
 
         const commonHeader = (
-            <div className="col-sm-10">
-                <h4 className={styles.labelHorizontal}>
+            <div className="col-10">
+                <h4 className="label-horizontal">
                     Developmental Toxicity Concentration Response Figures
                     <HelpButtonWidget
                         stateHolder={this}
@@ -217,7 +220,7 @@ class MultipleCurveBody extends React.Component {
         );
 
         return (
-            <div className="col-sm-10">
+            <div className="col-10">
                 {commonHeader}
                 <DoseResponse
                     stateHolder={this}
@@ -233,24 +236,17 @@ class MultipleCurveBody extends React.Component {
 
     render() {
         this.state.collapse = this.state.mortalityCheck ? COLLAPSE_WITH_Mortality120 : NO_COLLAPSE;
-
-        // let readout_ids2 = this.state.mortalityCheck
-        //     ? this.props.readout_ids.concat(['Mortality@120' + '_' + this.props.protocol_id])
-        //     : [this.props.readout_ids];
         let readout_ids = this.state.mortalityCheck
             ? this.props.readout_ids.concat(['Mortality@120' + '_' + this.props.protocol_id])
             : [this.props.readout_ids];
-        // console.log(readout_ids);
-        // console.log(this.props.protocol_id);
-
         this.state.url = getDoseResponsesUrl(
             [this.props.protocol_id],
             [readout_ids],
             [this.props.casrns]
         );
         return (
-            <div className="row-fluid">
-                <div className="col-sm-2">
+            <div className="row  row-full-width">
+                <div className="col-2">
                     <DoseResponseGridWidget stateHolder={this} />
                     <br />
                     <IntegrativeCheckBoxWidget stateHolder={this} />

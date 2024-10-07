@@ -2,7 +2,6 @@ import _ from 'lodash';
 import * as d3 from 'd3';
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import styles from '../style.css';
 import Loading from 'utils/Loading';
 import HelpButtonWidget from '../widgets/HelpButtonWidget';
 import Plotly from 'plotly.js-dist';
@@ -244,7 +243,7 @@ class SankeyPlot extends React.Component {
         let colNum = Math.ceil(12 / this.props.cols);
         return (
             <div>
-                <h4 className={`${styles.labelHorizontal}`}>
+                <h4 className="label-horizontal">
                     &nbsp;&nbsp;&nbsp; Sankey Diagram
                     <HelpButtonWidget
                         stateHolder={this}
@@ -254,7 +253,7 @@ class SankeyPlot extends React.Component {
                 </h4>
                 {this._renderHelpText()}
                 <br />
-                <div className={'row-fluid'} id="SankeyPlot"></div>
+                <div className="row  row-full-width" id="SankeyPlot"></div>
             </div>
         );
     }

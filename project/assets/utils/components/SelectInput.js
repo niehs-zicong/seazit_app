@@ -20,7 +20,7 @@ class SelectInput extends Component {
             return null;
         }
         return (
-            <label htmlFor={`id_${this.props.name}`} className="control-label">
+            <label htmlFor={`id_${this.props.name}`} className="form-label">
                 {this.props.label}
                 {this.props.required ? <span className="asteriskField">*</span> : null}
             </label>
@@ -50,7 +50,7 @@ class SelectInput extends Component {
                             );
                         })}
                     </select>
-                    {helpText ? <p className="help-block">{this.props.helpText}</p> : null}
+                    {helpText ? <p className=" form-text">{this.props.helpText}</p> : null}
                 </div>
             </div>
         );

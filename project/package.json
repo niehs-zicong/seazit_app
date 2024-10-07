@@ -68,12 +68,11 @@
         "unexpected-react": "^5.0.1",
         "webpack": "^3.10.0",
         "webpack-bundle-tracker": "^0.2.0",
-        "webpack-dashboard": "^0.2.0",
+        "webpack-dashboard": "^0.2.1",
         "webpack-dev-middleware": "^1.12.2"
     },
     "dependencies": {
         "@material-ui/core": "^4.12.4",
-        "bootstrap": "^5.3.2",
         "d3": "^4.13.0",
         "es6-promise": "^4.1.1",
         "filesaver.js": "^0.2.0",

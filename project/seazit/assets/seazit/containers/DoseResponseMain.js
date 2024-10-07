@@ -24,42 +24,25 @@ import {
     ConcentrationResponseTab,
     integrative_Granular,
 } from '../shared';
-import styles from '../style.css';
 import _ from 'lodash';
 
 class DoseResponseMain extends React.Component {
     // lifecycle
     constructor(props) {
         super(props);
-        // take 75% of the screen width since main body is col-9 size; assume
-        // each plot is ~400px for a reasonable start, make sure it's at least 1
         let initialCols = Math.max(1, Math.floor((0.75 * window.innerWidth) / 400));
         this.state = {
-            // loadMetadata
             metadataLoaded: false,
             metadata: null,
-            // dynamicUrl: null,
-
-            // HelpButtonWidget
             showHelpText: false,
-
-            // ChemicalSelectorWidget
             chemList: CHEMLIST_80,
             chemicalFilterBy: CHEMFILTER_CATEGORY,
-            // chemicalFilterBy: CHEMFILTER_CHEMICIAL,
-
             chemicals: [],
             categories: [],
             ontologyType: integrative_Granular,
-
-            // ReadoutSelectorWidget
             assays: [],
             readouts: [],
-
-            // PlotCollapseWidget
             plotCollapse: NO_COLLAPSE,
-
-            // DoseResponseGridWidget
             vizColumns: initialCols,
             vizHeight: 350,
             tabFlag: ConcentrationResponseTab,
@@ -67,9 +50,7 @@ class DoseResponseMain extends React.Component {
     }
 
     componentWillMount() {
-        // loadBaseUrl(this);
         loadMetadata(this);
-        // console.log(this.state)
     }
 
     renderNoSelection() {
@@ -85,25 +66,20 @@ class DoseResponseMain extends React.Component {
             case COLLAPSE_BY_READOUT:
                 title =
                     'Endpoint: response of all test substances selected per endpoint and dataset';
-
                 break;
-
             case COLLAPSE_BY_CHEMICAL:
                 title =
                     'Test substance: response for all datasets and endpoints selected per substance';
-
                 break;
-
             case NO_COLLAPSE:
                 title =
                     'Test substance + Endpoint: response for each dataset, test substance, and endpoint selected';
                 break;
-
             default:
                 title = '';
         }
         return (
-            <div className="col-md-12">
+            <div className="col-12">
                 <h3 className="text-center">{title}</h3>
                 <br />
                 <DoseResponse
@@ -121,7 +97,7 @@ class DoseResponseMain extends React.Component {
             return null;
         }
         return (
-            <div className="alert alert-info">
+            <div className="alert alert-info ">
                 <p>
                     This page allows for the visualization of concentration-response curves. Panels
                     on the left provide the options to select data of user’s interests.
@@ -167,19 +143,16 @@ class DoseResponseMain extends React.Component {
         );
     }
 
-    // https://gitlab.niehs.nih.gov/ods/seazit_app.git/';
-
     render() {
         if (!this.state.metadataLoaded) {
             return <Loading />;
         }
         let url = getDoseResponsesUrl(this.state.assays, this.state.readouts, this.state.chemicals);
 
-        // console.log(url);
         return (
-            <div className="row-fluid">
-                <div className="col-md-12">
-                    <h1 className={styles.labelHorizontal}>
+            <div className="row  row-full-width">
+                <div className="col-12">
+                    <h1 className="label-horizontal">
                         Concentration Response
                         <HelpButtonWidget
                             stateHolder={this}
@@ -188,11 +161,11 @@ class DoseResponseMain extends React.Component {
                         />
                     </h1>
                 </div>
-                <div className="col-md-12">
+                <div className="col-12">
                     <FiveOhEight />
                 </div>
 
-                <div className="col-md-3">
+                <div className="col-3">
                     <ReadoutWidget
                         stateHolder={this}
                         hideViability={false}
@@ -207,7 +180,7 @@ class DoseResponseMain extends React.Component {
                     <hr />
                     <DoseResponseGridWidget stateHolder={this} />
                 </div>
-                <div className="col-md-9">
+                <div className="col-9">
                     {this._renderHelpText()}
                     {url ? this.renderSelection(url) : this.renderNoSelection()}
                 </div>

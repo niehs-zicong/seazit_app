@@ -17,7 +17,6 @@ import {
     integrative_General,
     loadBaseUrl,
 } from '../shared';
-import styles from '../style.css';
 
 class ReadoutWidget extends BaseWidget {
     /*
@@ -40,7 +39,6 @@ class ReadoutWidget extends BaseWidget {
             ...r,
             key: r.seazit_protocol_id,
             label: r.protocol_name_long,
-            // description: 'zw1',
             description: r.protocol_name_plot,
         };
     };
@@ -89,7 +87,7 @@ class ReadoutWidget extends BaseWidget {
         }
         return (
             <div>
-                <label className={styles.labelHorizontal}>
+                <label className="label-horizontal">
                     Filter endpoints by:
                     {renderHelpButtonWidget && renderHelpButtonWidget()}
                 </label>
@@ -208,9 +206,8 @@ class ReadoutWidget extends BaseWidget {
         // loadBaseUrl(this);
 
         let state = this.props.stateHolder.state;
-
         let DatasetHelpText = null;
-        let EndpointtHelpText = null;
+        let EndpointHelpText = null;
         let DatasetHelpButtonWidget = null;
         let EndpointHelpButtonWidget = null;
 
@@ -238,7 +235,6 @@ class ReadoutWidget extends BaseWidget {
                                 Study abbreviations: Dose range finding study = DRF and Definitive
                                 study = Def. Note that there is no limit to the number of datasets
                                 you can select. More information can be found on the
-                                {/*<a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/">*/}
                                 <a href={loadBaseUrl('/seazit/dataset/')}>
                                     {/*<a href={state.dynamicUrl + "/seazit/dataset/"}>*/} Datasets
                                     page
@@ -260,7 +256,7 @@ class ReadoutWidget extends BaseWidget {
                     );
                 };
 
-                EndpointtHelpText = () => {
+                EndpointHelpText = () => {
                     if (!this.state.showEndpointHelpText) {
                         return null;
                     }
@@ -273,8 +269,6 @@ class ReadoutWidget extends BaseWidget {
                                 combination with each laboratory specific recording term.
                                 MalformedAny refers to the percent of affected embryo (either
                                 mortality or malformation). See
-                                {/*<a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/">*/}
-                                {/*<a href={this.state.dynamicUrl + "/seazit/dataset/"}>*/}
                                 <a href={loadBaseUrl('/seazit/dataset/')}> Datasets page</a> for
                                 more information.
                             </p>
@@ -297,7 +291,7 @@ class ReadoutWidget extends BaseWidget {
                         {this._renderMultipleEndpointSelector(
                             state,
                             EndpointHelpButtonWidget,
-                            EndpointtHelpText
+                            EndpointHelpText
                         )}
                     </div>
                 );
@@ -324,8 +318,6 @@ class ReadoutWidget extends BaseWidget {
                                 Study abbreviations: Dose range finding study = DRF and Definitive
                                 study = Def. Note that only one dateset can be selected at one time.
                                 More information can be found on the
-                                {/*<a href="https://ods.ntp.niehs.nih.gov/seazit/dataset/">*/}
-                                {/*<a href={this.state.dynamicUrl + "/seazit/dataset/"}>*/}
                                 <a href={loadBaseUrl('/seazit/dataset/')}> Datasets page</a>.
                             </p>
                         </div>
@@ -343,7 +335,7 @@ class ReadoutWidget extends BaseWidget {
                     );
                 };
 
-                EndpointtHelpText = () => {
+                EndpointHelpText = () => {
                     if (!this.state.showEndpointHelpText) {
                         return null;
                     }
@@ -370,7 +362,7 @@ class ReadoutWidget extends BaseWidget {
                             DatasetHelpText
                         )}
                         <br />
-                        {this._renderFilterBy(state, EndpointHelpButtonWidget, EndpointtHelpText)}
+                        {this._renderFilterBy(state, EndpointHelpButtonWidget, EndpointHelpText)}
                         {this._renderMultipleEndpointSelector(state)}
                     </div>
                 );

@@ -8,7 +8,6 @@ import _ from 'lodash';
 import Loading from 'utils/Loading';
 import Heatmap from './Heatmap';
 import DevtoxHeatmap from './DevtoxHeatmap';
-import styles from '../style.css';
 
 import {
     READOUT_TYPE_READOUT,
@@ -502,22 +501,22 @@ class HeatmapHandler extends React.Component {
         //console.log(d.data)
         return (
             <div>
-                <h4 className={`${styles.labelHorizontal} ${styles.labelNormal}`}>
+                <h4 className={`label-horizontal label-normal`}>
                     {/*<h4>*/}
                     Developmental Toxicity Heatmap{' '}
                     <HelpButtonWidget stateHolder={this} headLevel={'h2'} title={title} />
                 </h4>
                 <div>
-                    <h4 className={` ${styles.labelNormal}`}>
+                    <h4 className="label-normal">
                         <button
                             onClick={() => exportCsv(d.data, csvfileName, csvfileHeader)}
-                            className={`fa fa-download ${styles['pointer-button']}`}
+                            className={`fa fa-download pointer-button`}
                         ></button>
                         <span> Data</span>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <button
                             onClick={() => svg_download_form(svgId)}
-                            className={`fa fa-camera ${styles['pointer-button']}`}
+                            className={`fa fa-camera pointer-button`}
                         ></button>
                         <span> Image</span>
                     </h4>
