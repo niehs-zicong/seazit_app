@@ -41,6 +41,7 @@ project/utils/__pycache__
 project/main/__pycache__
 
 project/.DS_Store
+project/.yarn
 .ipynb_checkpoints
 .vscode
 project/webpack-stats.json
