@@ -56,7 +56,8 @@ RUN conda env create -f /conda.yml  && \
     
 # Download, compile, and install curl 8.9.1
 
-RUN curl -LO https://curl.se/download/curl-8.9.1.tar.gz && \
+#RUN curl -LO https://curl.se/download/curl-8.9.1.tar.gz && \
+RUN wget https://curl.se/download/curl-8.9.1.tar.gz && \
     tar -xzf curl-8.9.1.tar.gz && \
     cd curl-8.9.1 && \
     ./configure --with-ssl && \
