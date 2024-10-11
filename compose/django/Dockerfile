@@ -55,16 +55,16 @@ RUN conda env create -f /conda.yml  && \
     pip install -r /requirements/production.txt
     
 # Download, compile, and install curl 8.9.1
-
+#for security scan django don't use curl 
 #RUN curl -LO https://curl.se/download/curl-8.9.1.tar.gz && \
-RUN wget https://curl.se/download/curl-8.9.1.tar.gz && \
-    tar -xzf curl-8.9.1.tar.gz && \
-    cd curl-8.9.1 && \
-    ./configure --with-ssl && \
-    make && \
-    make install && \
-    cd .. && \
-    rm -rf curl-8.9.1 curl-8.9.1.tar.gz
+#RUN wget https://curl.se/download/curl-8.9.1.tar.gz && \
+#    tar -xzf curl-8.9.1.tar.gz && \
+#    cd curl-8.9.1 && \
+#    ./configure --with-ssl && \
+#    make && \
+#    make install && \
+#    cd .. && \
+#    rm -rf curl-8.9.1 curl-8.9.1.tar.gz
 
 
 # fix the django 2.0 import error
