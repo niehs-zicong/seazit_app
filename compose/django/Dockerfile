@@ -1,4 +1,4 @@
-FROM continuumio/miniconda3:22.11.1
+FROM continuumio/miniconda3
 
 # Install wkhtmltopdf for python pdfkit library
 # Install libaio1; required for oracle client
@@ -8,7 +8,7 @@ RUN apt-get update && \
     apt-get install -y \
         zip unzip wget \
         wkhtmltopdf libaio1 \
-        libpq-dev supervisor && \
+        libpq-dev supervisor && \    
     apt-get clean
 
 # Requirements have to be pulled and installed here, otherwise caching won't work
@@ -42,16 +42,29 @@ RUN \
 #    conda activate seazit && \
 #    pip install -U pip && \
 #    pip install -r /requirements/production.txt
+#CONDA:
 
- 
+# Ensure base environment has the correct certifi version
+RUN conda install -n base certifi=2024.07.04 -y
+#conda env seazit :
 RUN conda env create -f /conda.yml  && \
     \
     . /opt/conda/etc/profile.d/conda.sh && \
     conda activate seazit && \
     pip install -U pip && \
     pip install -r /requirements/production.txt
-
-#RUN apt-get install nano
+    
+# Download, compile, and install curl 8.9.1
+#for security scan django don't use curl 
+#RUN curl -LO https://curl.se/download/curl-8.9.1.tar.gz && \
+#RUN wget https://curl.se/download/curl-8.9.1.tar.gz && \
+#    tar -xzf curl-8.9.1.tar.gz && \
+#    cd curl-8.9.1 && \
+#    ./configure --with-ssl && \
+#    make && \
+#    make install && \
+#    cd .. && \
+#    rm -rf curl-8.9.1 curl-8.9.1.tar.gz
 
 
 # fix the django 2.0 import error
@@ -61,13 +74,14 @@ RUN conda env create -f /conda.yml  && \
 #from django.urls import reverse, NoReverseMatch
 RUN sed -e 's/core.urlresolvers/urls/g' /opt/conda/envs/seazit/lib/python3.8/site-packages/selectable/base.py>/opt/conda/envs/seazit/lib/python3.8/site-packages/selectable/base.py.new
 RUN mv /opt/conda/envs/seazit/lib/python3.8/site-packages/selectable/base.py.new /opt/conda/envs/seazit/lib/python3.8/site-packages/selectable/base.py
+RUN chmod 644 /opt/conda/envs/seazit/lib/python3.8/site-packages/selectable/base.py
 
 #fix markdown property vision from markdown.version
 #to: markdown.__version__
 RUN sed -e 's/markdown.version/markdown.__version__/g' /opt/conda/envs/seazit/lib/python3.8/site-packages/rest_framework/compat.py > /opt/conda/envs/seazit/lib/python3.8/site-packages/rest_framework/new_compat.py
 #replace compat.py with new_compat.py
 RUN mv /opt/conda/envs/seazit/lib/python3.8/site-packages/rest_framework/new_compat.py /opt/conda/envs/seazit/lib/python3.8/site-packages/rest_framework/compat.py
-
+RUN chmod 644 opt/conda/envs/seazit/lib/python3.8/site-packages/rest_framework/compat.py
 
 #RUN pip install -U pip
 #RUN pip install -r /requirements/production.txt
