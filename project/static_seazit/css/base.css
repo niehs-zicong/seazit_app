@@ -272,9 +272,12 @@ D3 tooltips
 .alert > ul {
     margin-bottom: 0;
 }
-.row-full-width {
-    max-width: 96% !important; /* Use !important if necessary */
-}
+/*. {*/
+/*    max-width: 96% !important; !* Use !important if necessary *!*/
+/*        overflow-x: auto; !* Allow horizontal scrolling *!*/
+
+/*}*/
+
 .radio label {
     /*min-height: 20px;*/
     /*padding-left: 20px;*/

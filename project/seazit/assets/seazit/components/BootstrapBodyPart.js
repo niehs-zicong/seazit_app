@@ -124,7 +124,7 @@ class SingleCurveBody extends React.Component {
         );
 
         return (
-            <div className="row  row-full-width">
+            <div className="row  ">
                 <div className="col-2">
                     {this.props.CheckBoxDisable ? null : (
                         <IntegrativeCheckBoxWidget stateHolder={this} />
@@ -245,7 +245,7 @@ class MultipleCurveBody extends React.Component {
             [this.props.casrns]
         );
         return (
-            <div className="row  row-full-width">
+            <div className="row  ">
                 <div className="col-2">
                     <DoseResponseGridWidget stateHolder={this} />
                     <br />
