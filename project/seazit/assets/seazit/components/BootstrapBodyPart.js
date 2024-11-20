@@ -74,7 +74,7 @@ class SingleCurveBody extends React.Component {
         this.state = {
             mortalityCheck: false,
             showHelpText: false,
-            vizHeight: 340,
+            vizHeight: 350,
             collapse: NO_COLLAPSE, // Set initial collapse state
         };
     }
@@ -155,7 +155,7 @@ class MultipleCurveBody extends React.Component {
         let initialCols = Math.max(1, Math.floor((0.75 * window.innerWidth) / 400));
         this.state = {
             vizColumns: initialCols,
-            vizHeight: 340,
+            vizHeight: 350,
             mortalityCheck: false,
             showHelpText: false,
             collapse: NO_COLLAPSE, // Set initial collapse state
