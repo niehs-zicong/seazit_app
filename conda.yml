@@ -7,3 +7,12 @@ dependencies:
   - yarn=4.3.1
   - nodejs=22.5.1
   - python=3.8
+  - django==4.2.16
+  - djangorestframework==3.14.0
+  - psycopg2==2.9.6
+  - gunicorn==20.1.0
+  - django-debug-toolbar==3.2
+  - pytest==6.2.4
+  - pytest-django==3.1.2
+  - pytest-watch==4.1.0
+  - mypy==0.812

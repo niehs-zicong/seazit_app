@@ -2,11 +2,9 @@
 
 A django web-application for the NTP. This is designed to be an area for rapid development and prototyping of new ideas; 
 
-The public website is here(SEAZIT coming soon): https://sandbox.ntp.niehs.nih.gov/
+The public website is here(SEAZIT coming soon): https://orio.niehs.nih.gov/seazit/
 
-The staging website is here(SEAZIT coming soon): https://sandbox-staging.ntp.niehs.nih.gov/
-
-Read the docs (SEAZIT coming soon): https://sandbox-staging.ntp.niehs.nih.gov/docs/
+The staging website is here(SEAZIT coming soon): https://ods.ntp.niehs.nih.gov/seazit
 
 Deploy see: https://gitlab.niehs.nih.gov/ods/deploy-seazit/-/blob/master/readme.md
 
@@ -20,5 +18,3 @@ conda activate seazit  &&  python manage.py runserver
 conda activate seazit  && npm start
 
 -----
-update npm version
-npm update -g npm

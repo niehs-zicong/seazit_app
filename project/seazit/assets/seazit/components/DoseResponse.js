@@ -589,7 +589,8 @@ class DoseResponse extends React.Component {
 
         let colNum = Math.ceil(12 / this.props.cols);
         return (
-            <div className="row">
+            // <div className="row">
+            <div className="d-flex flex-wrap">
                 {this.state.collapsedData.map((item) => (
                     <div className={`col-${colNum}`} key={item.key} ref={item.key} />
                 ))}

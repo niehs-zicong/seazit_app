@@ -1,13 +1,13 @@
 -r seazit_base.txt
 
 # typing
-mypy==0.812
+mypy==1.13.0
 
 # testing
-pytest==6.2.4
-pytest-django==3.1.2
-pytest-watch==4.1.0
+pytest==8.3.3
+pytest-django==4.9.0
+pytest-watch==4.2.0
 
 # web
-django-debug-toolbar==1.8
+django-debug-toolbar== 4.4.6
 bpython==0.17
