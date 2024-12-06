@@ -3,12 +3,24 @@ from main.settings.base import *  # noqa
 DEBUG = True
 INTERNAL_IPS = ('10.98.105.92', )
 
-INSTALLED_APPS += (
+# INSTALLED_APPS += (
+#     'debug_toolbar',
+#     'django_extensions',
+# )
+INSTALLED_APPS = INSTALLED_APPS + (
     'debug_toolbar',
     'django_extensions',
 )
 
-MIDDLEWARE += (
+
+# MIDDLEWARE += (
+#     'debug_toolbar.middleware.DebugToolbarMiddleware',
+# )
+
+# MIDDLEWARE = MIDDLEWARE + [
+#     'debug_toolbar.middleware.DebugToolbarMiddleware',
+# ]
+MIDDLEWARE = MIDDLEWARE + (
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
