@@ -253,7 +253,7 @@ class SankeyPlot extends React.Component {
                 </h4>
                 {this._renderHelpText()}
                 <br />
-                <div className="row  " id="SankeyPlot"></div>
+                <div className="row  row-full-width" id="SankeyPlot"></div>
             </div>
         );
     }

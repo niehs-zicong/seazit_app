@@ -10,10 +10,9 @@ from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.urls import reverse, NoReverseMatch
 from django.http import JsonResponse
 from django.db.models import Q, Model
-from django.utils.encoding import smart_str
+from django.utils.encoding import smart_text
 from django.utils.html import conditional_escape
-# from django.utils.translation import ugettext as _
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import ugettext as _
 
 from selectable.forms import BaseLookupForm
 
@@ -45,13 +44,13 @@ class LookupBase(object):
         return []
 
     def get_item_label(self, item):
-        return smart_str(item)
+        return smart_text(item)
 
     def get_item_id(self, item):
-        return smart_str(item)
+        return smart_text(item)
 
     def get_item_value(self, item):
-        return smart_str(item)
+        return smart_text(item)
 
     def get_item(self, value):
         return value
