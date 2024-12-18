@@ -19,44 +19,38 @@ SERVER_EMAIL = 'webmaster@sandbox.ntp.niehs.gov'
 
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'ENGINE': 'django.db.backends.postgresql',
-
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': DB_NAME,
         'OPTIONS': {
             'options': '-c search_path=schema_seazit'
         },
-    },
+    },  
 
 }
 
 DATABASE_ROUTERS = [
-    # 'cebs.routers.CebsRouter',
+    #'cebs.routers.CebsRouter',
 ]
 
 TIME_ZONE = 'America/New_York'
 LANGUAGE_CODE = 'en-us'
 
 USE_I18N = True
+USE_L10N = True
 USE_TZ = True
 
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'public', 'media')
 MEDIA_URL = '/media/'
 
-# STATIC_ROOT = os.path.join(PROJECT_ROOT, 'public', 'static')
-# STATIC_URL = '/static/'
+#STATIC_ROOT = os.path.join(PROJECT_ROOT, 'public', 'static')
+#STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'public', 'static_seazit')
 STATIC_URL = '/static_seazit/'
 
 # Additional locations of static files
-# STATICFILES_DIRS = (
-#     os.path.join(PROJECT_PATH, 'static_seazit'),
-#     # os.path.join(PROJECT_PATH, 'static'),
-# )
-
 STATICFILES_DIRS = (
     os.path.join(PROJECT_PATH, 'static_seazit'),
-    os.path.join(PROJECT_PATH, 'seazit_app/project/dist'),
+    #os.path.join(PROJECT_PATH, 'static'),
 )
 
 STATICFILES_FINDERS = (
@@ -65,6 +59,7 @@ STATICFILES_FINDERS = (
 )
 
 SECRET_KEY = 'a-wv-x8(e&z!3kry8zq2-apy(u8%6m7k2b80%h8wb57zmo&6v0'
+
 
 MIDDLEWARE = (
     'django.middleware.security.SecurityMiddleware',
@@ -110,7 +105,7 @@ TEMPLATES = [
         'NAME': 'jinja2',
         'BACKEND': 'django.template.backends.jinja2.Jinja2',
         'DIRS': [
-            # os.path.join(PROJECT_PATH, 'fiveday', 'templates'),
+            #os.path.join(PROJECT_PATH, 'fiveday', 'templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {'environment': 'main.jinja.environment'},
@@ -142,7 +137,7 @@ INSTALLED_APPS = (
     'selectable',
     'webpack_loader',
     'corsheaders',
-    'drf_yasg',
+    'drf_yasg',     
     'seazit',
     'utils',
 )
@@ -219,6 +214,7 @@ LOGGING = {
     }
 }
 
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.SessionAuthentication',
@@ -246,22 +242,12 @@ SWAGGER_SETTINGS = {
     }
 }
 
-# WEBPACK_LOADER = {
-#     'DEFAULT': {
-#         'BUNDLE_DIR_NAME': 'bundles/',
-#         'STATS_FILE': os.path.join(PROJECT_PATH, 'webpack-stats.json'),
-#         'POLL_INTERVAL': 0.1,
-#         # 'IGNORE': ['.+/.map']
-#         'IGNORES': ['.+/.map', r'.*\.map$', r'.*\.jpg$', r'.*\.png$', r'.*\.woff$', r'.*\.woff2$']
-#
-#     }
-# }
-
 WEBPACK_LOADER = {
     'DEFAULT': {
-        'BUNDLE_DIR_NAME': 'bundles/',  # Directory where your bundles are stored
-        'STATS_FILE': os.path.join(PROJECT_PATH, 'webpack-stats.json'),  # Path to the webpack-stats.json file
-        'IGNORE': [r'.+\.hot-update.js', r'.+\.map','.+/.map']  # List of regex patterns to ignore
+        'BUNDLE_DIR_NAME': 'bundles/',
+        'STATS_FILE': os.path.join(PROJECT_PATH, 'webpack-stats.json'),
+        'POLL_INTERVAL': 0.1,
+        'IGNORE': ['.+/.map']
     }
 }
 
@@ -277,3 +263,5 @@ MARKDOWN_DEUX_STYLES = {
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_URLS_REGEX = r'/(tox21|seazit)/api/.*$'
+
+ 

@@ -18,18 +18,13 @@ class BootstrapModal {
 
     render() {
         // Show the modal
-        // Remove existing event listener to prevent duplicates
-        this.modal.removeEventListener('shown.bs.modal', this._renderContent);
-
-        // Add the new event listener
-        this._renderContent = () => {
+        this.modal.addEventListener('shown.bs.modal', () => {
             ReactDOM.render(
                 React.createElement(this.headerComponent, this.args, null),
                 this.header
             );
             ReactDOM.render(React.createElement(this.bodyComponent, this.args, null), this.body);
-        };
-        this.modal.addEventListener('shown.bs.modal', this._renderContent);
+        });
 
         // Unmount the React components when the modal is hidden
         this.modal.addEventListener('hide.bs.modal', () => {
@@ -42,23 +37,28 @@ class BootstrapModal {
     }
 
     _getModalContainer() {
-        const modalId = `modal-${Date.now()}`; // Unique ID for each modal
-        const modalHTML = `
-        <div id="${modalId}" class="modal fade" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Modal Title</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
+        let modal = document.querySelector('.modal');
+        if (!modal) {
+            document.body.insertAdjacentHTML(
+                'beforeend',
+                `
+            <div class="modal fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Modal Title</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    `;
-        document.body.insertAdjacentHTML('beforeend', modalHTML);
-        return document.getElementById(modalId);
+        `
+            );
+            modal = document.querySelector('.modal');
+        }
+        return modal;
     }
 }
 

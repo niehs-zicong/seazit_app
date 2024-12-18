@@ -50,7 +50,7 @@ class QualityControlMain extends React.Component {
 
     render() {
         return (
-            <div className="d-flex flex-wrap mx-5 my-3">
+            <div className="row  row-full-width">
                 <div className="col-12">
                     <h1 className="label-horizontal">
                         Quality Check

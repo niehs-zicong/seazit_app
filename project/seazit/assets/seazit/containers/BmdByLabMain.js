@@ -134,7 +134,7 @@ class BmdByLabMain extends React.Component {
         let url = getBmdsUrl(this.state.assays, this.state.readouts);
 
         return (
-            <div className="d-flex flex-wrap mx-5 my-3">
+            <div className="row  row-full-width">
                 <div className="col-12">
                     <h1 className="label-horizontal">
                         Benchmark concentration (BMC) summary by dataset
@@ -148,7 +148,7 @@ class BmdByLabMain extends React.Component {
                 <div className="col-12">
                     <FiveOhEight />
                 </div>
-                <div className="col-3 pe-3">
+                <div className="col-3">
                     <ReadoutWidget
                         stateHolder={this}
                         hideViability={true}
