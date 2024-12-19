@@ -84,7 +84,7 @@ class AnalysisBmcOutput(models.Model):
     protocol_id = models.IntegerField(blank=True, null=True)
     substance_id = models.IntegerField(blank=True, null=True)
     input_id = models.IntegerField(blank=True, primary_key=True)
-    screen_hours = models.IntegerField(blank=True)
+    screen_hours = models.IntegerField(blank=True, primary_key=True)
     endpoint_name_only = models.TextField(blank=True, null=True)
 
     class Meta:
@@ -775,7 +775,7 @@ class Seazit_bmc_readout_result(models.Model):
     protocol_id = models.IntegerField(blank=True, null=True)
     substance_id = models.IntegerField(blank=True, null=True)
     input_id = models.IntegerField(blank=True, primary_key=True)
-    screen_hours = models.IntegerField(blank=True)
+    screen_hours = models.IntegerField(blank=True, primary_key=True)
     endpoint_name_only = models.TextField(blank=True, null=True)
     casrn = models.TextField(blank=True, null=True)
     dtxsid = models.TextField(blank=True, null=True)

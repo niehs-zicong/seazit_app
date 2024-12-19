@@ -150,7 +150,7 @@ class DoseResponseMain extends React.Component {
         let url = getDoseResponsesUrl(this.state.assays, this.state.readouts, this.state.chemicals);
 
         return (
-            <div className="d-flex flex-wrap mx-5 my-3">
+            <div className="row  row-full-width">
                 <div className="col-12">
                     <h1 className="label-horizontal">
                         Concentration Response
@@ -165,7 +165,7 @@ class DoseResponseMain extends React.Component {
                     <FiveOhEight />
                 </div>
 
-                <div className="col-3 pe-3">
+                <div className="col-3">
                     <ReadoutWidget
                         stateHolder={this}
                         hideViability={false}
