@@ -12,7 +12,7 @@ django-extensions==3.2.3
 # django-webpack-loader==3.1.1    # too advanced for Django 4.2
 django-webpack-loader==0.7.0
 django-markdown-deux==1.0.6
-django-selectable==1.4.0
+django-selectable==1.4.0     # too advanced for python 3, TODO
 
 # tox21
 jupyter==1.1.1
