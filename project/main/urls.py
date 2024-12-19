@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.conf.urls import include, url
+from django.urls import include, path, re_path
 from django.urls import reverse_lazy
 from django.contrib.auth.views import LogoutView
 from django.views.generic import TemplateView, RedirectView
@@ -31,63 +31,54 @@ schema_view = get_schema_view(
 
 # serve production apps
 urlpatterns = [
-    url(r'^$', Home.as_view(), name='home'),
-    url(r'^selectable/', include('selectable.urls')),
-    #url(r'^neurotox/', include(('neurotox.urls', 'neurotox'), namespace='neurotox')),
-    url(r'^seazit/', include(('seazit.urls', 'seazit'), namespace='seazit')),
+    path('', Home.as_view(), name='home'),
+    path('selectable/', include('selectable.urls')),
+    path('seazit/', include(('seazit.urls', 'seazit'), namespace='seazit')),
 
-     
-    # api schema docs
-    url(r'^api/$',
+    # API schema docs
+    path('api/',
         RedirectView.as_view(url=reverse_lazy('schema-swagger-ui'), permanent=False),
         name='api-schema'),
-    url(r'^api/swagger/$',
+    path('api/swagger/',
         schema_view.with_ui('swagger', cache_timeout=settings.TIMEOUT),
         name='schema-swagger-ui'),
-    url(r'^api/redoc/$',
+    path('api/redoc/',
         schema_view.with_ui('redoc', cache_timeout=settings.TIMEOUT),
         name='schema-redoc'),
-    url(r'^api/swagger(?P<format>.json|.yaml)$',
+    re_path(r'^api/swagger(?P<format>.json|.yaml)$',
         schema_view.without_ui(cache_timeout=settings.TIMEOUT),
         name='schema-json'),
 
-    # general accounts
-    url(r'accounts/', include('django.contrib.auth.urls')),
+    # General accounts
+    path('accounts/', include('django.contrib.auth.urls')),
 
-    # login & logout
-    url(r'^login/$', LoginView.as_view(), name='login'),
-    url(r'^logout/$', LogoutView.as_view(), name='logout'),
+    # Login & logout
+    path('login/', LoginView.as_view(), name='login'),
+    path('logout/', LogoutView.as_view(), name='logout'),
 
-    # admin
-    url(r'^batcave/', admin_site.urls),
+    # Admin
+    re_path(r'^batcave/', admin_site.urls),
 ]
 
-# serve apps currently under development
-'''if settings.ENVIRONMENT_NAME != 'Production' or settings.ENVIRONMENT_NAME != 'Sandbox' :
-
+# Serve apps under development (uncomment to enable)
+'''
+if settings.ENVIRONMENT_NAME != 'Production' or settings.ENVIRONMENT_NAME != 'Sandbox' :
     urlpatterns.extend([       
-
-        url(r'^react-pfc/$',
-            TemplateView.as_view(template_name='shiny/react-pfc.html'),
-            name='react-pfc'),
-
-        url(r'^plate-viewer/$',
-            TemplateView.as_view(template_name='shiny/plate-viewer.html'),
-            name='plate-viewer'),
+        path('react-pfc/', TemplateView.as_view(template_name='shiny/react-pfc.html'), name='react-pfc'),
+        path('plate-viewer/', TemplateView.as_view(template_name='shiny/plate-viewer.html'), name='plate-viewer'),
     ])
 '''
 
-
-# server media-only in debug mode
+# Server media-only in debug mode
 if settings.DEBUG:
     from django.views import static
     import debug_toolbar
     urlpatterns.extend([
-        url(r'^__debug__/', include(debug_toolbar.urls)),
-        url(r'^media/(?P<path>.*)$',
+        path('__debug__/', include(debug_toolbar.urls)),
+        re_path(r'^media/(?P<path>.*)$',
             static.serve,
             {'document_root': settings.MEDIA_ROOT, }),
-        url(r'^403/$', TemplateView.as_view(template_name="403.html")),
-        url(r'^404/$', TemplateView.as_view(template_name="404.html")),
-        url(r'^500/$', TemplateView.as_view(template_name="500.html")),
+        path('403/', TemplateView.as_view(template_name="403.html")),
+        path('404/', TemplateView.as_view(template_name="404.html")),
+        path('500/', TemplateView.as_view(template_name="500.html")),
     ])
