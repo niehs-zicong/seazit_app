@@ -286,7 +286,6 @@ except ImportError:
 try:
     from django.urls import include, path, re_path, register_converter  # noqa
 except ImportError:
-    from django.conf.urls import include, url # noqa
     path = None
     register_converter = None
     re_path = url
@@ -335,7 +334,4 @@ class MaxLengthValidator(CustomValidatorMessage, validators.MaxLengthValidator):
 
 def authenticate(request=None, **credentials):
     from django.contrib.auth import authenticate
-    if django.VERSION < (1, 11):
-        return authenticate(**credentials)
-    else:
-        return authenticate(request=request, **credentials)
+    return authenticate(request=request, **credentials)
