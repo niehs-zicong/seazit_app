@@ -11,7 +11,7 @@ Read the docs (SEAZIT coming soon): https://sandbox-staging.ntp.niehs.nih.gov/do
 Deploy see: https://gitlab.niehs.nih.gov/ods/deploy-seazit/-/blob/master/readme.md
 
 
-For local user development command
+For local user development command:
 
 Create a conda env named seazit:
 
@@ -19,6 +19,13 @@ conda activate seazit  &&  python manage.py runserver
 
 conda activate seazit  && npm start
 
+540  conda env remove -n SEAZIT_backup
+  541  conda env create -f conda.yml
+  542  conda activate SEAZIT
+  543  pip install -r requirements/dev.txt
+  544  conda install pygraphviz
+  545  cd project/
+  546  yarn install
+  547  npm start
+  548  history
 -----
-update npm version
-npm update -g npm

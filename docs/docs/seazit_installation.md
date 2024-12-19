@@ -201,6 +201,13 @@ cd /opt/anaconda3/envs/seazit/lib/python3.8/site-packages/selectable/base.py
 from django.core.urlresolvers import reverse, NoReverseMatch
 
 from django.urls import reverse, NoReverseMatch
+
+
+1. Solution option 1.
+
+
+2. pip unisntall markdown
+
 *******
 ##matplotlib RuntimeError: 
 "Python is not installed as a framework.""
