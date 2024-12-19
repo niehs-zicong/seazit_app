@@ -1,59 +1,38 @@
 # web
-Django==2.0
-djangorestframework==3.7.7
-  coreapi==2.3.3
-  drf-yasg[validation]==1.3.1
-  django-filter==1.0.4
-  django-cors-headers==2.1.0
-  drf-extensions==0.3.1
-django-crispy-forms==1.7.0
-django-extensions==1.8.1
-django-selectable==1.1.0
-django-webpack-loader==0.5.0
-django-markdown-deux==1.0.5
+Django==4.2.16
+djangorestframework>=3.12,<4.0
+coreapi==2.3.3  # Remove or replace if not needed
+
+  drf-yasg[validation]==1.21.8
+django-filter==24.3         # Compatible with Django 4.2
+django-cors-headers==4.0.0  # Compatible with Django 4.2
+drf-extensions==0.7.1
+django-crispy-forms==2.3    # Compatible with Django 4.2
+django-extensions==3.2.3
+
+# django-webpack-loader==3.1.1    # too advanced for Django 4.2
+django-webpack-loader==0.7.0
+django-markdown-deux==1.0.6
+django-selectable==1.4.0     # too advanced for python 3, TODO
 
 # tox21
-jupyter==1.0.0
-#numpy==1.13.0
-numpy==1.19.5
-#pandas==0.20.2
-pandas==1.1.4
-xlrd==1.0.0
-openpyxl==2.4.7
-#psycopg2==2.8.4
-#psycopg2=2.9.1
+jupyter==1.1.1
+numpy==1.23.5
+pandas==1.3.5
+
+xlrd==2.0.1
+openpyxl==3.1.5
 psycopg2-binary
-#psycopg2>=2.8
 
 # docs
-#mkdocs==0.17.2
-mkdocs==1.2.2
-
-# enricher
-# rdkit==2017.09.3  # install via conda not pip
-#cython==0.28.2
-#git+http://github.com/rdkit/django-rdkit@30cac1f61a1d401a5020a5e410a648fd4b2bfbda
+mkdocs==1.6.1
 
 # fiveday
-#bmds==0.10.0
-#jinja2==2.9.5
-#pdfkit==0.6.1
-matplotlib==3.1.3
-#beautifulsoup4==4.5.3
+matplotlib==3.7.3
 scipy==1.5.4
 scikit-learn>=0.22
-docxtpl==0.3.5
-#jsonschema==2.5.1
-#seaborn==0.7.1
-seaborn==0.11.1
-
-# CEBS
-#cx-Oracle==6.0.2
+docxtpl==0.19.0
+seaborn==0.13.2
 
 # neurotox
-plotly==2.0.12
-
-# job_runner
-#celery==4.2.0
-#kombu==4.2.1
-#pyRserve==0.9.1
+plotly==5.24.1
