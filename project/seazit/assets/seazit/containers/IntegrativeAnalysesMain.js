@@ -145,7 +145,9 @@ class IntegrativeAnalysesMain extends React.Component {
     }
 
     _renderMainBody() {
-        // console.log(this.state);
+        // console.log(this.state.ontologyType);
+        // console.log(this.state.ontologyGroup);
+
         return (
             <div>
                 <HeatmapHandler
@@ -162,12 +164,12 @@ class IntegrativeAnalysesMain extends React.Component {
 
                 {/*<HeatmapHandler*/}
                 {/*    assays={['1']}*/}
-                {/*    casrns={['115-86-6', '13674-87-8','79-94-7']}*/}
+                {/*    casrns={['115-86-6', '13674-87-8','79-94-7','87-86-5','53-70-3','3380-34-5']}*/}
                 {/*    visualization={1}*/}
                 {/*                        ontologyType={this.state.ontologyType}*/}
-                {/*    ontologyGroup={this.state.ontologyGroup}*/}
+                {/*    ontologyGroup={['hatching defect', 'head defects', 'fin defects', 'heart defects', 'arrested heart contraction', 'torso defects', 'abnormal pigmentation', 'swim bladder defect', 'yolk defects']}*/}
                 {/*    url={*/}
-                {/*        '/seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=1&casrns=115-86-6,13674-87-8,79-94-7'*/}
+                {/*        '/seazit/api/seazit_result/integrativeResult/?format=json&protocol_ids=1&casrns=115-86-6,13674-87-8,79-94-7,87-86-5,53-70-3,3380-34-5'*/}
                 {/*    }*/}
                 {/*    labDataset={[*/}
                 {/*        {*/}
@@ -204,8 +206,7 @@ class IntegrativeAnalysesMain extends React.Component {
         this.state.url = getIntegrativeUrl(this.state.assays, this.state.chemicals);
         //heatmap test
         return (
-            // <div className="row">
-            <div className="row row-full-width">
+            <div className="d-flex flex-wrap mx-5 my-3">
                 <div className="col-12">
                     <h1 className="label-horizontal">
                         Integrative Analyses
@@ -219,11 +220,9 @@ class IntegrativeAnalysesMain extends React.Component {
                 <div className="col-12">
                     <FiveOhEight />
                 </div>
-                <div className="col-3">
+                <div className="col-3 pe-3">
                     <IntegrativePlotWidget stateHolder={this} />
                     <hr />
-
-                    {/*<hr/>*/}
                     <ReadoutWidget
                         stateHolder={this}
                         hideViability={false}
@@ -233,7 +232,6 @@ class IntegrativeAnalysesMain extends React.Component {
                     />
                     <hr />
                     <div>
-                        {/*<OntologyTypeWidget stateHolder={this} />*/}
                         <OntologyWidget stateHolder={this} />
                         <hr />
                     </div>

@@ -29,10 +29,6 @@ class DevtoxHeatmap extends Component {
 
     renderPlot = function(el, data, legendData) {
         $(el).empty();
-        //console.log(data);
-        //console.log(legendData);
-        //console.log(legendData.colorScaleFunction);
-        //console.log(legendData.legendScale);
 
         let margin = {
                 top: 40,
@@ -84,11 +80,13 @@ class DevtoxHeatmap extends Component {
             mousemove = function(d) {
                 tooltip
                     .html(
-                        `Potency: ${printFloat(pod_med_processed(d.mean_pod))} μM  \n
-                 Specificity: ${printFloat(d.mean_selectivity)}`
+                        `<span style="font-size: 15px; font-weight: bold;">
+                Potency: ${printFloat(pod_med_processed(d.mean_pod))} μM \n
+                Specificity: ${printFloat(d.mean_selectivity)}
+            </span>`
                     )
-                    .style('left', d3.event.pageX - 400 + 'px')
-                    .style('top', d3.event.pageY - 300 + 'px')
+                    .style('left', d3.event.pageX - 200 + 'px')
+                    .style('top', d3.event.pageY - 30 + 'px')
                     .style('opacity', 1.0);
             },
             mouseleave = function(d) {
@@ -239,11 +237,6 @@ class DevtoxHeatmap extends Component {
             )
             .style('stroke', 'black')
             .style('stroke-width', '0.8');
-        // .style('cursor', 'pointer')
-        // .on('mouseover', mouseover)
-        // .on('mousemove', mousemove)
-        // .on('mouseleave', mouseleave)
-        // .on('click', integrativeHandleCellClick)
 
         const filteredData = data.filter((d) => d.final_dev_call === 'dev tox');
 
@@ -499,7 +492,7 @@ class DevtoxHeatmap extends Component {
     }
 
     render() {
-        return <div id="IA_heatmap02" className="row  row-full-width" ref="svg" />;
+        return <div id="IA_heatmap02" ref="svg" />;
     }
 }
 

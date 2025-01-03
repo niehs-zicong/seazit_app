@@ -85,7 +85,6 @@ class Heatmap extends Component {
                 if (d.endPointList) {
                     tooltip
                         .html(
-                            // `${d.devtoxEndPointList.length} out of ${d.endPointList.length} endpoints are significant`
                             `<span style="font-size: 15px; font-weight: bold;">
                     ${d.devtoxEndPointList.length} out of ${d.endPointList.length} endpoints are significant
                 </span>`
@@ -315,7 +314,7 @@ class Heatmap extends Component {
     }
 
     render() {
-        return <div id="IA_heatmap01" className="row  row-full-width" ref="svg" />;
+        return <div id="IA_heatmap01" ref="svg" />;
     }
 }
 
