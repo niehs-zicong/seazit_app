@@ -19,13 +19,4 @@ conda activate seazit  &&  python manage.py runserver
 
 conda activate seazit  && npm start
 
-540  conda env remove -n SEAZIT_backup
-  541  conda env create -f conda.yml
-  542  conda activate SEAZIT
-  543  pip install -r requirements/dev.txt
-  544  conda install pygraphviz
-  545  cd project/
-  546  yarn install
-  547  npm start
-  548  history
 -----

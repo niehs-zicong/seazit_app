@@ -58,7 +58,7 @@ function _renderHelpText(state) {
 
 class Header extends React.Component {
     render() {
-        return <h4>{this.props.title}</h4>;
+        return <h4 className="d-flex flex-wrap mx-5 my-3">{this.props.title}</h4>;
     }
 }
 
@@ -74,7 +74,7 @@ class SingleCurveBody extends React.Component {
         this.state = {
             mortalityCheck: false,
             showHelpText: false,
-            vizHeight: 340,
+            vizHeight: 350,
             collapse: NO_COLLAPSE, // Set initial collapse state
         };
     }
@@ -124,8 +124,9 @@ class SingleCurveBody extends React.Component {
         );
 
         return (
-            <div className="row  row-full-width">
-                <div className="col-2">
+            // <div className="row  ">
+            <div className="d-flex flex-wrap mx-5 my-3">
+                <div className="col-2  pe-3">
                     {this.props.CheckBoxDisable ? null : (
                         <IntegrativeCheckBoxWidget stateHolder={this} />
                     )}
@@ -146,46 +147,6 @@ SingleCurveBody.propTypes = {
     final_dev_call: PropTypes.string,
 };
 
-class molecularGraphBody extends React.Component {
-    constructor(props) {
-        super(props);
-        // take 75% of the screen width since main body is col-9 size; assume
-        // each plot is ~400px for a reasonable start, make sure it's at least 1
-    }
-
-    render() {
-        let srcUrl = `https://comptox.epa.gov/dashboard-api/ccdapp1/chemical-files/image/by-dtxsid/${this.props.dtxsid}`;
-        return (
-            <div className="col-10">
-                <iframe src={srcUrl} width="400" height="400"></iframe>
-            </div>
-        );
-    }
-}
-
-molecularGraphBody.propTypes = {
-    dtxsid: PropTypes.string.isRequired,
-};
-
-class sankeyPlotGraphBody extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        return (
-            <div className="col-10">
-                <SankeyPlot cells={this.props.cells} />
-            </div>
-        );
-    }
-}
-
-sankeyPlotGraphBody.propTypes = {
-    title: PropTypes.string.isRequired,
-    cells: PropTypes.array.isRequired,
-};
-
 class MultipleCurveBody extends React.Component {
     constructor(props) {
         super(props);
@@ -194,7 +155,7 @@ class MultipleCurveBody extends React.Component {
         let initialCols = Math.max(1, Math.floor((0.75 * window.innerWidth) / 400));
         this.state = {
             vizColumns: initialCols,
-            vizHeight: 340,
+            vizHeight: 350,
             mortalityCheck: false,
             showHelpText: false,
             collapse: NO_COLLAPSE, // Set initial collapse state
@@ -245,8 +206,9 @@ class MultipleCurveBody extends React.Component {
             [this.props.casrns]
         );
         return (
-            <div className="row  row-full-width">
-                <div className="col-2">
+            // <div className="row">
+            <div className="d-flex flex-wrap mx-5 my-3">
+                <div className="col-2  pe-3">
                     <DoseResponseGridWidget stateHolder={this} />
                     <br />
                     <IntegrativeCheckBoxWidget stateHolder={this} />
@@ -263,6 +225,46 @@ MultipleCurveBody.propTypes = {
     casrns: PropTypes.array.isRequired,
     devtoxEndPointList: PropTypes.array.isRequired,
     heading: PropTypes.string,
+};
+
+class molecularGraphBody extends React.Component {
+    constructor(props) {
+        super(props);
+        // take 75% of the screen width since main body is col-9 size; assume
+        // each plot is ~400px for a reasonable start, make sure it's at least 1
+    }
+
+    render() {
+        let srcUrl = `https://comptox.epa.gov/dashboard-api/ccdapp1/chemical-files/image/by-dtxsid/${this.props.dtxsid}`;
+        return (
+            <div className="col-10">
+                <iframe src={srcUrl} width="400" height="400"></iframe>
+            </div>
+        );
+    }
+}
+
+molecularGraphBody.propTypes = {
+    dtxsid: PropTypes.string.isRequired,
+};
+
+class sankeyPlotGraphBody extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <div className="col-10">
+                <SankeyPlot cells={this.props.cells} />
+            </div>
+        );
+    }
+}
+
+sankeyPlotGraphBody.propTypes = {
+    title: PropTypes.string.isRequired,
+    cells: PropTypes.array.isRequired,
 };
 
 export { Header, SingleCurveBody, MultipleCurveBody, molecularGraphBody, sankeyPlotGraphBody };
