@@ -8,5 +8,5 @@ dependencies:
   - nodejs=8.10.0
   - python=3.8
   #- python=3.6.1  # required per https://www.mail-archive.com/rdkit-discuss@lists.sourceforge.net/msg07315.html
-
+  # test git
    
