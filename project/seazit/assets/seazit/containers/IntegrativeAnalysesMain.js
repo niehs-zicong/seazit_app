@@ -18,8 +18,6 @@ import OntologyWidget from '../widgets/OntologyWidget';
 import OntologyTypeWidget from '../widgets/OntologyTypeWidget';
 
 import ReadoutWidget from '../widgets/ReadoutWidget';
-import ReadoutCategoryWidget from '../widgets/ReadoutCategoryWidget';
-import ReadoutTypeWidget from '../widgets/ReadoutTypeWidget';
 
 import {
     HEATMAP_ACTIVITY,
@@ -208,15 +206,24 @@ class IntegrativeAnalysesMain extends React.Component {
         return (
             <div className="d-flex flex-wrap mx-5 my-3">
                 <div className="col-12">
-                    <h1 className="label-horizontal">
-                        Integrative Analyses
-                        <HelpButtonWidget
-                            stateHolder={this}
-                            headLevel={'h1'}
-                            title={'Click to toggle help-text'}
-                        />
-                    </h1>
+                    <div className="d-flex align-items-center">
+                        <h1 className="label-horizontal">
+                            <img
+                                src="/static_seazit/img/seazit/logo-5.png"
+                                alt="Logo"
+                                className="img-fluid"
+                                style={{ marginRight: '10px', height: '50px' }}
+                            />
+                            Integrative Analyses
+                            <HelpButtonWidget
+                                stateHolder={this}
+                                headLevel={'h1'}
+                                title={'Click to toggle help-text'}
+                            />
+                        </h1>
+                    </div>
                 </div>
+
                 <div className="col-12">
                     <FiveOhEight />
                 </div>

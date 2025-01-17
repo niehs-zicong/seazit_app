@@ -39,6 +39,12 @@ class DatasetsMain extends React.Component {
             <div className="d-flex flex-wrap mx-5 my-3">
                 <div className="col-12">
                     <h1 className="label-horizontal">
+                        <img
+                            src="/static_seazit/img/seazit/logo-5.png"
+                            alt="Logo"
+                            className="img-fluid"
+                            style={{ marginRight: '10px', height: '50px' }}
+                        />
                         Data
                         <HelpButtonWidget
                             stateHolder={this}
