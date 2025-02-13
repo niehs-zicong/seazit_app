@@ -25,7 +25,7 @@ services:
   redis:
     restart: always
     build: ./compose/redis
-    command: seazit_app-redis-1 --requirepass "mypassword"
+    command: redis-server --requirepass "mypassword"
     ports:
       - "0.0.0.0:6379:6379"  
      
