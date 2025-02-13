@@ -1,4 +1,4 @@
--r base_back.txt
+-r seazit_base.txt
 
 # wsgi webserver
 gunicorn==23.0.0
