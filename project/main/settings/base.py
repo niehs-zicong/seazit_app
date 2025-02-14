@@ -48,12 +48,6 @@ MEDIA_URL = '/media/'
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'public', 'static_seazit')
 STATIC_URL = '/static_seazit/'
 
-# Additional locations of static files
-# STATICFILES_DIRS = (
-#     os.path.join(PROJECT_PATH, 'static_seazit'),
-#     # os.path.join(PROJECT_PATH, 'static'),
-# )
-
 STATICFILES_DIRS = (
     os.path.join(PROJECT_PATH, 'static_seazit'),
     os.path.join(PROJECT_PATH, 'seazit_app/project/dist'),
