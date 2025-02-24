@@ -14,7 +14,6 @@ from json import dumps
 from django.http import JsonResponse
 from . import models, serializers
 from .models import SeazitWell, AnalysisBmcInput, AnalysisBmcOutput
-import pandas as pd
 from json import dumps
 
 

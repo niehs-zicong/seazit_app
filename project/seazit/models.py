@@ -11,7 +11,6 @@ from django.db.models import F, Q
 from django.contrib.postgres.fields import ArrayField
 import matplotlib as mpl
 import numpy as np
-import pandas as pd
 
 
 # import plotly.graph_objs as go
@@ -124,6 +123,7 @@ class SeazitBmcMinMaxVw(models.Model):
         db_table = 'seazit_bmc_min_max_vw'
 
 
+
 class SeazitDose(models.Model):
     dose = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     dose_unit = models.TextField(blank=True, null=True)
@@ -135,20 +135,13 @@ class SeazitDose(models.Model):
         db_table = 'seazit_dose'
 
     @classmethod
-    def get_doses(self):
-        cols = (
-            "dose",
-            "dose_unit",
-            "protocol_source",
-            "dose_id",
-        )
-        qs = (
-            SeazitDose.objects.all().values_list(*cols)
-        )
-        return {
-            "data": pd.DataFrame(list(qs), columns=cols).to_dict(orient="records"),
+    def get_doses(cls):  # Use cls instead of self
+        cols = ("dose", "dose_unit", "protocol_source", "dose_id")
 
-        }
+        # Fetch data as a list of dictionaries
+        dose_data = list(cls.objects.values(*cols))
+
+        return {"data": dose_data}
 
 
 class SeazitEndpointDescription(models.Model):
@@ -165,21 +158,6 @@ class SeazitEndpointDescription(models.Model):
         managed = False
         # managed = True
         db_table = 'seazit_endpoint_description'
-
-    # @classmethod
-    # def get_flat(cls):
-    #     cols = (
-    #
-    #         "endpoint_id",
-    #         "protocol_source",
-    #         "endpoint_name",
-    #         "hour_post_fertilization",
-    #         "endpoint_description",
-    #     )
-    #     qs = (
-    #         cls.objects.all().values_list(*cols)
-    #     )
-    #     return pd.DataFrame(list(qs), columns=cols)
 
 
 class SeazitOntology(models.Model):
@@ -201,7 +179,6 @@ class SeazitOntology(models.Model):
     @classmethod
     def get_ontology(cls):
         cols = (
-
             "proposed_ontology_label",
             "ontology_id_number",
             "protocol_source",
@@ -213,17 +190,18 @@ class SeazitOntology(models.Model):
             "developmental_defect_grouping_general",
             "seazit_recording_id",
         )
-        qs = (
-            cls.objects.all().values_list(*cols)
-        )
-        return pd.DataFrame(list(qs), columns=cols)
+
+        # Fetch data as a list of dictionaries
+        ontology_data = list(cls.objects.values(*cols))
+
+        return ontology_data  # Returns a list of dictionaries
 
     @classmethod
     def get_sankey(cls):
         return {
-            "Seazit_ontology_sankey_nodes": SeazitOntologySankeyNodes.get_nodes().to_dict(orient="records"),
-            "Seazit_ontology_sankey_flow": SeazitOntologySankeyFlow.get_flow().to_dict(orient="records"),
-            "Seazit_ontology": SeazitOntology.get_ontology().to_dict(orient="records"),
+            "Seazit_ontology_sankey_nodes": SeazitOntologySankeyNodes.get_nodes(),  # No need for .to_dict
+            "Seazit_ontology_sankey_flow": SeazitOntologySankeyFlow.get_flow(),  # No need for .to_dict
+            "Seazit_ontology": SeazitOntology.get_ontology(),  # No need for .to_dict
         }
 
 
@@ -251,11 +229,11 @@ class SeazitOntologySankeyFlow(models.Model):
             "source_id",
             "target_id",
         )
-        qs = (
-            cls.objects.all().values_list(*cols)
-        )
-        return pd.DataFrame(list(qs), columns=cols)
 
+        # Fetch data as a list of dictionaries using Django ORM
+        flow_data = list(cls.objects.values(*cols))
+
+        return flow_data  # Returns a list of dictionaries
 
 class SeazitOntologySankeyNodes(models.Model):
     node_id = models.IntegerField(blank=True, null=True)
@@ -277,11 +255,11 @@ class SeazitOntologySankeyNodes(models.Model):
             "node_color",
             "node_name",
         )
-        qs = (
-            cls.objects.all().values_list(*cols)
-        )
 
-        return pd.DataFrame(list(qs), columns=cols)
+        # Fetch data as a list of dictionaries using Django ORM
+        node_data = list(cls.objects.values(*cols))
+
+        return node_data  # Returns a list of dictionaries
 
 
 class SeazitPlateScreen(models.Model):
@@ -311,7 +289,7 @@ class SeazitProtocol(models.Model):
     #     return self.protocol_name
 
     @classmethod
-    def get_metadata(self):
+    def get_metadata(cls):
         cols = (
             "protocol_name",
             "protocol_type",
@@ -323,15 +301,13 @@ class SeazitProtocol(models.Model):
             "protocol_name_long",
             "protocol_name_plot",
         )
-        qs = (
-            SeazitProtocol.objects.all().values_list(*cols)
-        )
+        protocol_data = list(cls.objects.values(*cols))  # Returns a list of dicts
 
         return {
-            "protocol_data": pd.DataFrame(list(qs), columns=cols).to_dict(orient="records"),
-            "Seazit_chemical_info": Seazit_chemical_info.get_chemicals().to_dict(orient="records"),
-            "Seazit_ui_panel": Seazit_ui_panel.get_flat().to_dict(orient="records"),
-            "Seazit_ontology": SeazitOntology.get_ontology().to_dict(orient="records"),
+            "protocol_data": protocol_data,
+            "Seazit_chemical_info": Seazit_chemical_info.get_chemicals(),  # No need for .to_dict
+            "Seazit_ui_panel": Seazit_ui_panel.get_flat(),  # No need for .to_dict
+            "Seazit_ontology": SeazitOntology.get_ontology(),  # No need for .to_dict
         }
 
     class Meta:
@@ -419,6 +395,7 @@ class SeazitWell(models.Model):
         db_table = 'seazit_well'
 
 
+
 class Seazit_chemical_info(models.Model):
     substance_name_by_lab = models.TextField(blank=True, null=True)
     substance_type = models.IntegerField(blank=True, null=True)
@@ -426,22 +403,16 @@ class Seazit_chemical_info(models.Model):
     substance_code = models.TextField(blank=True, null=True)
     seazit_substance_id = models.IntegerField(blank=True, null=True)
     casrn = models.TextField(blank=True, null=True)
-
     stock_conc_mm = models.FloatField(blank=True, null=True)
     supplier = models.TextField(blank=True, null=True)
     lot_number = models.TextField(blank=True, null=True)
     coa_purity = models.FloatField(blank=True, null=True)
     determined_purity = models.FloatField(blank=True, null=True)
-
     dtxsid = models.TextField(blank=True, null=True)
     preferred_name = models.TextField(blank=True, null=True)
-
     use_category1 = models.TextField(blank=True, null=True)
     use_category2 = models.TextField(blank=True, null=True)
     compound_name = models.TextField(blank=True, null=True)
-
-    # def __str__(self):
-    #     return self.input_id
 
     class Meta:
         managed = False
@@ -467,10 +438,11 @@ class Seazit_chemical_info(models.Model):
             "use_category2",
             "compound_name",
         )
-        qs = (
-            cls.objects.all().values_list(*cols).distinct()
-        )
-        return pd.DataFrame(list(qs), columns=cols)
+
+        # Fetch data as a list of dictionaries using Django ORM and distinct()
+        chemical_data = list(cls.objects.values(*cols).distinct())
+
+        return chemical_data  # Returns a list of dictionaries
 
 
 class Seazit_readout_result(models.Model):
@@ -903,12 +875,10 @@ class Seazit_ui_panel(models.Model):
     protocol_name_long = models.TextField(blank=True, null=True)
     protocol_name_plot = models.TextField(blank=True, null=True)
     endpoint_name = models.TextField(blank=True, null=True)
-
     endpoint_name_only = models.TextField(blank=True, null=True)
     endpoint_name_protocol = models.TextField(blank=True, null=True)
     hour_post_fertilization = models.IntegerField(blank=True, null=True)
     endpoint_description = models.TextField(blank=True, null=True)
-
     developmental_defect_grouping_granular = models.TextField(blank=True, null=True)
     developmental_defect_grouping_general = models.TextField(blank=True, null=True)
 
@@ -919,7 +889,6 @@ class Seazit_ui_panel(models.Model):
     @classmethod
     def get_flat(cls):
         cols = (
-
             "protocol_name",
             "protocol_source",
             "seazit_protocol_id",
@@ -930,17 +899,16 @@ class Seazit_ui_panel(models.Model):
             "endpoint_name",
             "endpoint_name_only",
             "endpoint_name_protocol",
-
             "hour_post_fertilization",
             "endpoint_description",
             "developmental_defect_grouping_granular",
             "developmental_defect_grouping_general",
         )
-        qs = (
-            cls.objects.all().values_list(*cols)
-        )
-        return pd.DataFrame(list(qs), columns=cols)
 
+        # Fetch data as a list of dictionaries using Django ORM
+        panel_data = list(cls.objects.values(*cols))
+
+        return panel_data  # Returns a list of dictionaries
 
 class Seazit_integrative_result(models.Model):
     protocol_id = models.IntegerField(blank=True, null=True)
