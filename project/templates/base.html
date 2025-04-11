@@ -24,9 +24,10 @@
           rel='stylesheet' type='text/css'>
     <link href="{{ STATIC_URL }}css/base.css"
           rel="stylesheet" type="text/css"/>
-    <link href="{{ STATIC_URL }}css/ntpweb.css"
+{#    <link href="{{ STATIC_URL }}css/ntpweb.css"#}
+{#          rel="stylesheet" type="text/css"/>#}
+    <link href="{{ STATIC_URL }}css/ntpweb-shared.css"
           rel="stylesheet" type="text/css"/>
-
 
     {% block extra-css %}{% endblock %}
     {% if ENVIRONMENT_NAME and ENVIRONMENT_COLOR and ENVIRONMENT_NAME != 'Production' %}

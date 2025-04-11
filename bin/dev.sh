@@ -1,28 +1,31 @@
 #!/bin/bash
 
-# Shell tmux script to start application
+SESSION="seazit_app"
+CONDA_PATH="$HOME/opt/anaconda3/etc/profile.d/conda.sh"
+CONDA_ENV="seazit"
+PROJECT_DIR="project"
 
-# use local development environment if it exists
-if [ -f ./bin/dev.local.sh ]; then
-   source ./bin/dev.local.sh
-   exit
+# Avoid duplicate session
+if tmux has-session -t "$SESSION" 2>/dev/null; then
+  echo "⚠️  Tmux session '$SESSION' already exists. Attaching..."
+  tmux attach -t "$SESSION"
+  exit
 fi
 
-# create the session to be used
-tmux new-session -d -s seazit_app
+# Start session with one window
+tmux new-session -d -s "$SESSION" -n main
 
-# split the windows
-tmux split-window -h
-tmux split-window -v
-tmux select-pane -t 2
-tmux split-window -h
+# Split right vertically (left 70%, right 30%)
+tmux split-window -h -p 30 -t "$SESSION"
 
-# run commands
-tmux send-keys -t 0 "conda activate seazit && cd ~/NTPapps/seazit_app/project" enter
-tmux send-keys -t 1 "conda activate seazit && cd ~/NTPapps/seazit_app/project && npm start" enter
-tmux send-keys -t 2 "conda activate seazit && cd ~/NTPapps/seazit_app/project && python manage.py runserver 8001" enter
-tmux send-keys -t 3 "conda activate seazit && cd ~/NTPapps/seazit_app/project && python manage.py shell_plus --ipython" enter
+# Split the right pane (now pane 1) horizontally (top/bottom 50%)
+tmux split-window -v -t "$SESSION:0.1"
 
-# attach to shell
-tmux select-pane -t 0
-tmux attach-session
+# Send commands to each pane
+tmux send-keys -t "$SESSION:0.0" "source $CONDA_PATH && conda activate $CONDA_ENV && cd $PROJECT_DIR && python manage.py runserver" C-m
+tmux send-keys -t "$SESSION:0.1" "source $CONDA_PATH && conda activate $CONDA_ENV && cd $PROJECT_DIR && npm start" C-m
+tmux send-keys -t "$SESSION:0.2" "source $CONDA_PATH && conda activate sandbox && cd ~/dev/sandbox/project" C-m
+
+# Focus back to main pane (left)
+tmux select-pane -t "$SESSION:0.0"
+tmux attach-session -t "$SESSION"
