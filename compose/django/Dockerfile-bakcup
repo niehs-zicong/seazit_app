@@ -1,5 +1,4 @@
-#FROM continuumio/miniconda3
-FROM continuumio/miniconda3:24.11.1-0
+FROM continuumio/miniconda3
 
 # Install wkhtmltopdf for python pdfkit library
 # Install libaio1; required for oracle client
@@ -9,7 +8,7 @@ RUN apt-get update && \
     apt-get install -y \
         zip unzip wget \
         wkhtmltopdf libaio1 \
-        libpq-dev supervisor && \
+        libpq-dev supervisor && \    
     apt-get clean
 
 # Requirements have to be pulled and installed here, otherwise caching won't work
@@ -48,24 +47,13 @@ RUN \
 # Ensure base environment has the correct certifi version
 RUN conda install -n base certifi=2024.07.04 -y
 #conda env seazit :
-#RUN conda env create -f /conda.yml  && \
-#    \
-#    . /opt/conda/etc/profile.d/conda.sh && \
-#    conda activate seazit && \
-#    pip install -U pip && \
-#    pip install -r /requirements/production.txt
-
-# Ensure base environment has the correct certifi version
-
-RUN conda env create -f /conda.yml
-
-RUN conda env list
-
-RUN conda run -n seazit python --version
-
-RUN conda run -n seazit pip install -U pip
-
-RUN conda run -n seazit pip install -r /requirements/production.txt
+RUN conda env create -f /conda.yml  && \
+    \
+    . /opt/conda/etc/profile.d/conda.sh && \
+    conda activate seazit && \
+    pip install -U pip && \
+    pip install -r /requirements/production.txt
+    
 # Download, compile, and install curl 8.9.1
 #for security scan django don't use curl 
 #RUN curl -LO https://curl.se/download/curl-8.9.1.tar.gz && \
