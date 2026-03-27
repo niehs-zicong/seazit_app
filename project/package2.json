@@ -5,9 +5,9 @@
     "repository": "add-me",
     "license": "add-me",
     "scripts": {
-        "clean": "./node_modules/.bin/rimraf ./static_seazit/bundles/* && ./node_modules/.bin/rimraf ./webpack-stats.json",
+        "clean": "rimraf ./static_seazit/bundles/* && rimraf ./webpack-stats.json",
         "build": "npm run clean && npm run build:production",
-        "build:production": "NODE_ENV=production ./node_modules/.bin/webpack --config webpack.config.prod.js",
+        "build:production": "NODE_ENV=production webpack --config webpack.config.prod.js",
         "build:dev": "webpack --config webpack.config.dev.js",
         "precommit": "lint-staged",
         "start": "webpack-dashboard -- node webpack.devServer.js",
@@ -16,10 +16,7 @@
         "prettify": "prettier --config=./.prettierrc --write \"**/*.{js,css}\""
     },
     "lint-staged": {
-        "*.{js,json,css}": [
-            "prettier --write",
-            "git add"
-        ]
+        "*.{js,json,css}": ["prettier --write", "git add"]
     },
     "devDependencies": {
         "babel-cli": "^6.26.0",
@@ -52,7 +49,6 @@
         "lint-staged": "^6.1.1",
         "mocha": "^2.3.4",
         "nock": "^5.2.1",
-        "plotly.js-dist": "^1.58.4",
         "prettier": "^1.19.1",
         "react-faux-dom": "^2.2.0",
         "react-redux": "^5.0.6",
@@ -81,6 +77,7 @@
         "isomorphic-fetch": "^2.2.1",
         "lodash": "^4.17.4",
         "papaparse": "^5.4.1",
+        "plotly.js-dist": "^2.25.0",
         "prop-types": "^15.6.0",
         "react": "^16.2.0",
         "react-bootstrap-icons": "^1.10.3",

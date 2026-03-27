@@ -22,7 +22,9 @@ module.exports = {
     },
 
     output: {
-        path: path.join(__dirname, 'dist'),
+        //        path: path.join(__dirname, 'dist'),
+        path: path.join(__dirname, 'static_seazit', 'bundles'),
+
         filename: '[name].[hash].js',
         chunkFilename: '[name].[hash].js',
     },
