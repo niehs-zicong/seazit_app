@@ -35,7 +35,6 @@ RUN \
     \
     mkdir -p /app/logs
 
-
 #RUN conda env create -f /conda.env && \
 #    \
 #    . /opt/conda/etc/profile.d/conda.sh && \
@@ -55,16 +54,16 @@ RUN conda install -n base certifi=2024.07.04 -y
 #    pip install -r /requirements/production.txt
 
 # Ensure base environment has the correct certifi version
-
 RUN conda env create -f /conda.yml
+
 RUN rm -rf /opt/conda/envs/seazit/lib/python3.8/site-packages/rest_framework* \
            /opt/conda/envs/seazit/lib/python3.8/site-packages/drf_yasg* \
            /opt/conda/envs/seazit/lib/python3.8/site-packages/selectable* && \
     /opt/conda/envs/seazit/bin/python -m pip uninstall -y djangorestframework drf-yasg || true && \
     /opt/conda/envs/seazit/bin/python -m pip install --no-cache-dir --upgrade pip setuptools wheel && \
     /opt/conda/envs/seazit/bin/python -m pip install --no-cache-dir --ignore-installed -r /requirements/production.txt
-RUN conda env list
 
+RUN conda env list
 RUN conda run -n seazit python --version
 
 # Download, compile, and install curl 8.9.1
@@ -79,21 +78,19 @@ RUN conda run -n seazit python --version
 #    cd .. && \
 #    rm -rf curl-8.9.1 curl-8.9.1.tar.gz
 
-#to:
+# Fix old rest_framework compat code
+RUN sed -e 's/from django.utils import six/import six/g' \
+        -e 's/markdown.version/markdown.__version__/g' \
+        /opt/conda/envs/seazit/lib/python3.8/site-packages/rest_framework/compat.py \
+        > /opt/conda/envs/seazit/lib/python3.8/site-packages/rest_framework/new_compat.py && \
+    mv /opt/conda/envs/seazit/lib/python3.8/site-packages/rest_framework/new_compat.py \
+       /opt/conda/envs/seazit/lib/python3.8/site-packages/rest_framework/compat.py && \
+    chmod 644 /opt/conda/envs/seazit/lib/python3.8/site-packages/rest_framework/compat.py
+
 #from django.urls import reverse, NoReverseMatch
-RUN sed -e 's/core.urlresolvers/urls/g' /opt/conda/envs/seazit/lib/python3.8/site-packages/selectable/base.py>/opt/conda/envs/seazit/lib/python3.8/site-packages/selectable/base.py.new
+RUN sed -e 's/core.urlresolvers/urls/g' /opt/conda/envs/seazit/lib/python3.8/site-packages/selectable/base.py >/opt/conda/envs/seazit/lib/python3.8/site-packages/selectable/base.py.new
 RUN mv /opt/conda/envs/seazit/lib/python3.8/site-packages/selectable/base.py.new /opt/conda/envs/seazit/lib/python3.8/site-packages/selectable/base.py
 RUN chmod 644 /opt/conda/envs/seazit/lib/python3.8/site-packages/selectable/base.py
-
-#fix markdown property vision from markdown.version
-#to: markdown.__version__
-RUN sed -e 's/markdown.version/markdown.__version__/g' /opt/conda/envs/seazit/lib/python3.8/site-packages/rest_framework/compat.py > /opt/conda/envs/seazit/lib/python3.8/site-packages/rest_framework/new_compat.py
-#replace compat.py with new_compat.py
-RUN mv /opt/conda/envs/seazit/lib/python3.8/site-packages/rest_framework/new_compat.py /opt/conda/envs/seazit/lib/python3.8/site-packages/rest_framework/compat.py
-RUN chmod 644 opt/conda/envs/seazit/lib/python3.8/site-packages/rest_framework/compat.py
-
-#RUN pip install -U pip
-#RUN pip install -r /requirements/production.txt
 
 COPY ./project /app/project
 
