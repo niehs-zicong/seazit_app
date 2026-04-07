@@ -66,6 +66,7 @@ RUN conda run -n seazit python --version
 RUN conda run -n seazit pip install -U pip
 
 RUN conda run -n seazit pip install -r /requirements/production.txt
+RUN conda run -n seazit pip install --force-reinstall djangorestframework==3.14.0
 # Download, compile, and install curl 8.9.1
 #for security scan django don't use curl
 #RUN curl -LO https://curl.se/download/curl-8.9.1.tar.gz && \
