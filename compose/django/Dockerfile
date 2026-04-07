@@ -1,4 +1,3 @@
-#FROM continuumio/miniconda3
 FROM continuumio/miniconda3:24.11.1-0
 
 # Install wkhtmltopdf for python pdfkit library
@@ -79,6 +78,18 @@ RUN conda run -n seazit pip install --force-reinstall djangorestframework==3.14.
 #    cd .. && \
 #    rm -rf curl-8.9.1 curl-8.9.1.tar.gz
 
+#to:
+#from django.urls import reverse, NoReverseMatch
+RUN sed -e 's/core.urlresolvers/urls/g' /opt/conda/envs/seazit/lib/python3.8/site-packages/selectable/base.py>/opt/conda/envs/seazit/lib/python3.8/site-packages/selectable/base.py.new
+RUN mv /opt/conda/envs/seazit/lib/python3.8/site-packages/selectable/base.py.new /opt/conda/envs/seazit/lib/python3.8/site-packages/selectable/base.py
+RUN chmod 644 /opt/conda/envs/seazit/lib/python3.8/site-packages/selectable/base.py
+
+#fix markdown property vision from markdown.version
+#to: markdown.__version__
+RUN sed -e 's/markdown.version/markdown.__version__/g' /opt/conda/envs/seazit/lib/python3.8/site-packages/rest_framework/compat.py > /opt/conda/envs/seazit/lib/python3.8/site-packages/rest_framework/new_compat.py
+#replace compat.py with new_compat.py
+RUN mv /opt/conda/envs/seazit/lib/python3.8/site-packages/rest_framework/new_compat.py /opt/conda/envs/seazit/lib/python3.8/site-packages/rest_framework/compat.py
+RUN chmod 644 opt/conda/envs/seazit/lib/python3.8/site-packages/rest_framework/compat.py
 
 #RUN pip install -U pip
 #RUN pip install -r /requirements/production.txt
