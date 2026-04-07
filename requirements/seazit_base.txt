@@ -1,10 +1,9 @@
 # web
 Django==4.2.18
-#djangorestframework>=3.12,<4.0
 djangorestframework==3.14.0 # zw added
-six==1.16.0    # zw added
+six==1.17.0
 coreapi==2.3.3  # Remove or replace if not needed
-drf-yasg[validation]==1.21.8
+drf-yasg==1.21.8
 django-filter==24.3         # Compatible with Django 4.2
 django-cors-headers==4.0.0  # Compatible with Django 4.2
 drf-extensions==0.7.1
