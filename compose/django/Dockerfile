@@ -57,19 +57,15 @@ RUN conda install -n base certifi=2024.07.04 -y
 # Ensure base environment has the correct certifi version
 
 RUN conda env create -f /conda.yml
-
+RUN rm -rf /opt/conda/envs/seazit/lib/python3.8/site-packages/rest_framework* \
+           /opt/conda/envs/seazit/lib/python3.8/site-packages/drf_yasg* \
+           /opt/conda/envs/seazit/lib/python3.8/site-packages/selectable* && \
+    /opt/conda/envs/seazit/bin/python -m pip uninstall -y djangorestframework drf-yasg || true && \
+    /opt/conda/envs/seazit/bin/python -m pip install --no-cache-dir --upgrade pip setuptools wheel && \
+    /opt/conda/envs/seazit/bin/python -m pip install --no-cache-dir --ignore-installed -r /requirements/production.txt
 RUN conda env list
 
 RUN conda run -n seazit python --version
-
-RUN conda run -n seazit pip install -U pip
-
-# Clean stale packages before installing requirements
-RUN rm -rf /opt/conda/envs/seazit/lib/python3.8/site-packages/rest_framework* \
-           /opt/conda/envs/seazit/lib/python3.8/site-packages/drf_yasg* \
-           /opt/conda/envs/seazit/lib/python3.8/site-packages/selectable*
-
-RUN conda run -n seazit pip install --no-cache-dir --force-reinstall -r /requirements/production.txt
 
 # Download, compile, and install curl 8.9.1
 #for security scan django don't use curl
