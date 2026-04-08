@@ -29,75 +29,42 @@ RUN \
     chmod +x /gunicorn.sh && \
     chown django /entrypoint.sh && \
     chown django /gunicorn.sh && \
-    #chown django /celery.sh && \
-    #chown django /celerybeat.sh && \
     chown django /supervisord.conf && \
-    \
     mkdir -p /app/logs
-
-#RUN conda env create -f /conda.env && \
-#    \
-#    . /opt/conda/etc/profile.d/conda.sh && \
-#    conda activate seazit && \
-#    pip install -U pip && \
-#    pip install -r /requirements/production.txt
-#CONDA:
 
 # Ensure base environment has the correct certifi version
 RUN conda install -n base certifi=2024.07.04 -y
-#conda env seazit :
-#RUN conda env create -f /conda.yml  && \
-#    \
-#    . /opt/conda/etc/profile.d/conda.sh && \
-#    conda activate seazit && \
-#    pip install -U pip && \
-#    pip install -r /requirements/production.txt
 
-# Ensure base environment has the correct certifi version
+# Create conda environment
 RUN conda env create -f /conda.yml
 
+# Force clean reinstall of DRF and drf-yasg to ensure correct compat.py on disk
 RUN rm -rf /opt/conda/envs/seazit/lib/python3.8/site-packages/rest_framework* \
-           /opt/conda/envs/seazit/lib/python3.8/site-packages/drf_yasg* \
-           /opt/conda/envs/seazit/lib/python3.8/site-packages/selectable* && \
-    /opt/conda/envs/seazit/bin/python -m pip uninstall -y djangorestframework drf-yasg || true && \
+           /opt/conda/envs/seazit/lib/python3.8/site-packages/drf_yasg* && \
     /opt/conda/envs/seazit/bin/python -m pip install --no-cache-dir --upgrade pip setuptools wheel && \
-    /opt/conda/envs/seazit/bin/python -m pip install --no-cache-dir --ignore-installed -r /requirements/production.txt
+    /opt/conda/envs/seazit/bin/python -m pip install --no-cache-dir -r /requirements/production.txt
 
 RUN conda env list
 RUN conda run -n seazit python --version
 
-# Download, compile, and install curl 8.9.1
-#for security scan django don't use curl
-#RUN curl -LO https://curl.se/download/curl-8.9.1.tar.gz && \
-#RUN wget https://curl.se/download/curl-8.9.1.tar.gz && \
-#    tar -xzf curl-8.9.1.tar.gz && \
-#    cd curl-8.9.1 && \
-#    ./configure --with-ssl && \
-#    make && \
-#    make install && \
-#    cd .. && \
-#    rm -rf curl-8.9.1 curl-8.9.1.tar.gz
+# Fix rest_framework compat.py - remove six dependency (removed in Django 3.0+)
+RUN sed -i \
+    -e '/from django.utils import six/d' \
+    -e 's/six\.PY2/False/g' \
+    -e 's/six\.PY3/True/g' \
+    -e 's/six\.binary_type/bytes/g' \
+    -e 's/six\.string_types/str/g' \
+    /opt/conda/envs/seazit/lib/python3.8/site-packages/rest_framework/compat.py
 
-# Fix old rest_framework compat code
-RUN sed -e 's/from django.utils import six/import six/g' \
-        -e 's/markdown.version/markdown.__version__/g' \
-        /opt/conda/envs/seazit/lib/python3.8/site-packages/rest_framework/compat.py \
-        > /opt/conda/envs/seazit/lib/python3.8/site-packages/rest_framework/new_compat.py && \
-    mv /opt/conda/envs/seazit/lib/python3.8/site-packages/rest_framework/new_compat.py \
-       /opt/conda/envs/seazit/lib/python3.8/site-packages/rest_framework/compat.py && \
-    chmod 644 /opt/conda/envs/seazit/lib/python3.8/site-packages/rest_framework/compat.py
+# Fix django.log permission
+RUN touch /app/django.log && chmod 777 /app/django.log
 
-#from django.urls import reverse, NoReverseMatch
-RUN sed -e 's/core.urlresolvers/urls/g' /opt/conda/envs/seazit/lib/python3.8/site-packages/selectable/base.py >/opt/conda/envs/seazit/lib/python3.8/site-packages/selectable/base.py.new
-RUN mv /opt/conda/envs/seazit/lib/python3.8/site-packages/selectable/base.py.new /opt/conda/envs/seazit/lib/python3.8/site-packages/selectable/base.py
-RUN chmod 644 /opt/conda/envs/seazit/lib/python3.8/site-packages/selectable/base.py
+# Fix static files permissions
+RUN mkdir -p /app/public/static_seazit && chmod -R 777 /app/public/
 
 COPY ./project /app/project
 
-# django can't write in volume /app/public
-# fix? https://denibertovic.com/posts/handling-permissions-with-docker-volumes/
 RUN chown -R django /app
-#USER django
 
 WORKDIR /app/project
 
