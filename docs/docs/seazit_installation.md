@@ -25,10 +25,6 @@ conda install pygraphviz
 
 # copy default local settings (and modify as needed)
 cp ./project/main/settings/local.example.py ./project/main/settings/local.py
-npm install
-# build webpack-stats.json file
-yarn build
-
 # install javascript libraries
 cd ./project
 yarn install

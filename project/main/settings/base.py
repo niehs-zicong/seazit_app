@@ -133,7 +133,6 @@ INSTALLED_APPS = (
     'markdown_deux',
     'rest_framework',
     'rest_framework.authtoken',
-    'selectable',
     'webpack_loader',
     'corsheaders',
     'drf_yasg',

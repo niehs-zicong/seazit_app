@@ -11060,6 +11060,33 @@ table .ntpHome #section-about caption {
     }
 }
 
+.ntpHome.user-logged-in .callout.outage,
+.ntpHome.user-logged-in .outage.blueCalloutBox,
+.ntpHome.user-logged-in .outage.grayCalloutBox,
+.ntpHome.user-logged-in .outage.yellowCalloutBox {
+    margin: 1.5rem 1rem 1rem;
+}
+
+.ntpHome.user-logged-in.page-node-preview #block-breadcrumbs {
+    display: none;
+}
+
+.ntpHome.user-logged-in.page-node-preview .callout.outage,
+.ntpHome.user-logged-in.page-node-preview .outage.blueCalloutBox,
+.ntpHome.user-logged-in.page-node-preview .outage.grayCalloutBox,
+.ntpHome.user-logged-in.page-node-preview .outage.yellowCalloutBox {
+    margin: -2.5rem 1rem 1rem;
+}
+
+@media print, screen and (max-width: 63.99875em) {
+    .ntpHome.user-logged-in.page-node-preview .callout.outage,
+    .ntpHome.user-logged-in.page-node-preview .outage.blueCalloutBox,
+    .ntpHome.user-logged-in.page-node-preview .outage.grayCalloutBox,
+    .ntpHome.user-logged-in.page-node-preview .outage.yellowCalloutBox {
+        margin: 0rem 1rem 1rem;
+    }
+}
+
 .homeHighlight {
     max-width: 78.75rem;
     margin: 0 auto 1.875rem;
@@ -11078,19 +11105,6 @@ table .ntpHome #section-about caption {
 .homeHighlight h3 {
     font-size: 1.5rem;
     margin: 0;
-}
-
-.homeHighlight .h3::before,
-.homeHighlight h3::before {
-    content: '\f005';
-    font-family: FontAwesome;
-    margin-right: 0.5rem;
-}
-
-.homeHighlight .h3::after,
-.homeHighlight h3::after {
-    content: ':';
-    margin-right: 0.25rem;
 }
 
 .homeHighlight div > :first-child {
@@ -14616,7 +14630,6 @@ table .page-listing .overview #registrationForm div.notes .outage.yellowCalloutB
 }
 
 header#top div.alert.site-wide .row {
-    text-align: center;
     display: block;
     padding: 0.9375rem;
 }
@@ -14626,17 +14639,15 @@ header#top div.alert.site-wide .h2,
 header#top div.alert.site-wide h2,
 header#top div.alert.site-wide table caption,
 table header#top div.alert.site-wide caption {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
     font-weight: 700;
-    line-height: 1.1;
     letter-spacing: -0.05rem;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.5rem;
     display: block;
 }
 
 header#top div.alert.site-wide p,
 header#top div.alert.site-wide ul {
-    font-size: 0.85rem;
     margin-bottom: 0;
 }
 
@@ -14960,6 +14971,46 @@ header#top div.alert.site-wide a {
     .yellowCalloutBox .imgcaption.float-right {
         margin-bottom: 0.5rem;
     }
+}
+
+#archives-notice {
+    font-size: 0.9rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.7rem;
+}
+
+#archives-notice a {
+    text-decoration: underline;
+}
+
+#archives-notice a.external-link::after,
+#archives-notice a.external::after {
+    content: url(/sites/default/files/images/icons/icon_external_white.svg) !important;
+}
+
+#archives-notice a.external-link.pdf::after,
+#archives-notice a.external.pdf::after {
+    background-image: url(/sites/default/files/images/icons/icon_external_white.svg) !important;
+}
+
+#archives-notice .columns {
+    position: relative;
+    padding-left: 2.65rem;
+}
+
+#archives-notice .columns > p:first-child::before {
+    content: '\f06a';
+    font-size: 1.125rem;
+    font-family: FontAwesome;
+    display: inline-block;
+    position: absolute;
+    margin-top: -0.125rem;
+    margin-left: -1.5rem;
+}
+
+#archives-notice .columns > :last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
 }
 
 .CalloutBox,
@@ -15874,6 +15925,7 @@ table footer#footer #registrationForm div.notes .page-listing .overview caption,
 table footer#footer .page-listing .overview #registrationForm div.notes caption {
     font-size: 1.5rem;
     font-weight: 400;
+    display: block;
     margin-bottom: 0.8rem;
 }
 
@@ -17715,6 +17767,58 @@ input[type='submit']:hover {
     padding: 0;
 }
 
+.fieldgroup.webform-type-radios .fieldset-wrapper .form-item.form-type-radio {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-flow: row wrap;
+    flex-flow: row wrap;
+}
+
+.fieldgroup.webform-type-radios .fieldset-wrapper .form-item.form-type-radio input[type='radio'] {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 auto;
+    flex: 0 0 auto;
+    -webkit-box-ordinal-group: 3;
+    -ms-flex-order: 2;
+    order: 2;
+}
+
+.fieldgroup.webform-type-radios .fieldset-wrapper .form-item.form-type-radio label.error {
+    -webkit-box-ordinal-group: 2;
+    -ms-flex-order: 1;
+    order: 1;
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 100%;
+    flex: 0 0 100%;
+    max-width: 100%;
+    margin-left: 0;
+    margin-bottom: 0.25rem;
+}
+
+.fieldgroup.webform-type-radios .fieldset-wrapper .form-item.form-type-radio label.option {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 auto;
+    flex: 0 0 auto;
+    -webkit-box-ordinal-group: 4;
+    -ms-flex-order: 3;
+    order: 3;
+    margin-left: 0.5rem;
+    margin-right: 1rem;
+}
+
+.topic-tips {
+    font-size: 80%;
+    margin-top: 1rem;
+}
+
+.topic-tips > :last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
 #altbib .search-options #altbib-hedge.hedge-form .notes div.form-tip .h3,
 #altbib .search-options #altbib-hedge.hedge-form .notes div.form-tip h3,
 #altbib .search-options #registrationForm div.notes h4,
@@ -17842,6 +17946,27 @@ table #altbib .search-options caption {
 #altbib-hedge p.form-tip {
     font-size: 80%;
     margin: 0.5rem 0;
+}
+
+.page-updatethispage .form-item-attachment .form-managed-file {
+    border: 1px solid;
+    padding: 0.75rem;
+}
+
+.page-updatethispage .form-item-attachment .form-managed-file .form-item:first-of-type {
+    margin-top: 0.5rem;
+}
+
+.page-updatethispage
+    .form-item-attachment
+    .form-managed-file
+    input[name='attachment_remove_button'] {
+    margin-top: 0.5rem;
+}
+
+.page-updatethispage .form-item-attachment .description {
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
 }
 
 #skip-nav {
@@ -19378,638 +19503,1414 @@ details.summary summary {
     }
 }
 
-#altbib-hedge.hedge-form .notes div.form-tip details.plus .h3,
-#altbib-hedge.hedge-form .notes div.form-tip details.plus h3,
-#altbib-hedge.hedge-form .notes div.form-tip details.summary .h3,
-#altbib-hedge.hedge-form .notes div.form-tip details.summary h3,
-#registrationForm div.notes .page-listing .overview details.plus .h2,
-#registrationForm div.notes .page-listing .overview details.plus h2,
-#registrationForm div.notes .page-listing .overview details.plus table caption,
-#registrationForm div.notes .page-listing .overview details.summary .h2,
-#registrationForm div.notes .page-listing .overview details.summary h2,
-#registrationForm div.notes .page-listing .overview details.summary table caption,
-#registrationForm div.notes .page-listing section details.plus .h3,
-#registrationForm div.notes .page-listing section details.plus h3,
-#registrationForm div.notes .page-listing section details.summary .h3,
-#registrationForm div.notes .page-listing section details.summary h3,
-#registrationForm div.notes .page-listing section table details.plus caption,
-#registrationForm div.notes .page-listing section table details.summary caption,
-#registrationForm div.notes .study-type section details.plus .h3,
-#registrationForm div.notes .study-type section details.plus h3,
-#registrationForm div.notes .study-type section details.summary .h3,
-#registrationForm div.notes .study-type section details.summary h3,
-#registrationForm div.notes .study-type section table details.plus caption,
-#registrationForm div.notes .study-type section table details.summary caption,
-#registrationForm div.notes details.plus .h4,
-#registrationForm div.notes details.plus h4,
-#registrationForm div.notes details.summary .h4,
-#registrationForm div.notes details.summary h4,
-.page-listing .overview #registrationForm div.notes details.plus .h2,
-.page-listing .overview #registrationForm div.notes details.plus h2,
-.page-listing .overview #registrationForm div.notes details.plus table caption,
-.page-listing .overview #registrationForm div.notes details.summary .h2,
-.page-listing .overview #registrationForm div.notes details.summary h2,
-.page-listing .overview #registrationForm div.notes details.summary table caption,
-.page-listing .overview details.plus h2,
-.page-listing .overview details.plus table caption,
-.page-listing .overview details.summary h2,
-.page-listing .overview details.summary table caption,
-.page-listing section #registrationForm div.notes details.plus .h3,
-.page-listing section #registrationForm div.notes details.plus h3,
-.page-listing section #registrationForm div.notes details.summary .h3,
-.page-listing section #registrationForm div.notes details.summary h3,
-.page-listing section table #registrationForm div.notes details.plus caption,
-.page-listing section table #registrationForm div.notes details.summary caption,
-.study-type section #registrationForm div.notes details.plus .h3,
-.study-type section #registrationForm div.notes details.plus h3,
-.study-type section #registrationForm div.notes details.summary .h3,
-.study-type section #registrationForm div.notes details.summary h3,
-.study-type section table #registrationForm div.notes details.plus caption,
-.study-type section table #registrationForm div.notes details.summary caption,
-details.plus #altbib-hedge.hedge-form .notes div.form-tip .h3,
-details.plus #altbib-hedge.hedge-form .notes div.form-tip h3,
-details.plus #registrationForm div.notes .h4,
-details.plus #registrationForm div.notes .page-listing .overview .h2,
-details.plus #registrationForm div.notes .page-listing .overview h2,
-details.plus #registrationForm div.notes .page-listing .overview table caption,
-details.plus #registrationForm div.notes .page-listing section .h3,
-details.plus #registrationForm div.notes .page-listing section h3,
-details.plus #registrationForm div.notes .page-listing section table caption,
-details.plus #registrationForm div.notes .study-type section .h3,
-details.plus #registrationForm div.notes .study-type section h3,
-details.plus #registrationForm div.notes .study-type section table caption,
-details.plus #registrationForm div.notes h4,
-details.plus .h1,
-details.plus .h2,
-details.plus .h3,
-details.plus .h4,
-details.plus .h5,
-details.plus .h6,
-details.plus .page-listing .overview #registrationForm div.notes .h2,
-details.plus .page-listing .overview #registrationForm div.notes h2,
-details.plus .page-listing .overview #registrationForm div.notes table caption,
-details.plus .page-listing .overview h2,
-details.plus .page-listing .overview table caption,
-details.plus .page-listing section #registrationForm div.notes .h3,
-details.plus .page-listing section #registrationForm div.notes h3,
-details.plus .page-listing section table #registrationForm div.notes caption,
-details.plus .study-type section #registrationForm div.notes .h3,
-details.plus .study-type section #registrationForm div.notes h3,
-details.plus .study-type section table #registrationForm div.notes caption,
-details.plus .video-container-jw,
-details.plus div,
-details.plus h1,
-details.plus h2,
-details.plus h3,
-details.plus h4,
-details.plus h5,
-details.plus h6,
-details.plus ol,
-details.plus p,
-details.plus table caption,
-details.plus ul,
-details.summary #altbib-hedge.hedge-form .notes div.form-tip .h3,
-details.summary #altbib-hedge.hedge-form .notes div.form-tip h3,
-details.summary #registrationForm div.notes .h4,
-details.summary #registrationForm div.notes .page-listing .overview .h2,
-details.summary #registrationForm div.notes .page-listing .overview h2,
-details.summary #registrationForm div.notes .page-listing .overview table caption,
-details.summary #registrationForm div.notes .page-listing section .h3,
-details.summary #registrationForm div.notes .page-listing section h3,
-details.summary #registrationForm div.notes .page-listing section table caption,
-details.summary #registrationForm div.notes .study-type section .h3,
-details.summary #registrationForm div.notes .study-type section h3,
-details.summary #registrationForm div.notes .study-type section table caption,
-details.summary #registrationForm div.notes h4,
-details.summary .h1,
-details.summary .h2,
-details.summary .h3,
-details.summary .h4,
-details.summary .h5,
-details.summary .h6,
-details.summary .page-listing .overview #registrationForm div.notes .h2,
-details.summary .page-listing .overview #registrationForm div.notes h2,
-details.summary .page-listing .overview #registrationForm div.notes table caption,
-details.summary .page-listing .overview h2,
-details.summary .page-listing .overview table caption,
-details.summary .page-listing section #registrationForm div.notes .h3,
-details.summary .page-listing section #registrationForm div.notes h3,
-details.summary .page-listing section table #registrationForm div.notes caption,
-details.summary .study-type section #registrationForm div.notes .h3,
-details.summary .study-type section #registrationForm div.notes h3,
-details.summary .study-type section table #registrationForm div.notes caption,
-details.summary .video-container-jw,
-details.summary div,
-details.summary h1,
-details.summary h2,
-details.summary h3,
-details.summary h4,
-details.summary h5,
-details.summary h6,
-details.summary ol,
-details.summary p,
-details.summary table caption,
-details.summary ul,
-table #registrationForm div.notes .page-listing .overview details.plus caption,
-table #registrationForm div.notes .page-listing .overview details.summary caption,
-table .page-listing .overview #registrationForm div.notes details.plus caption,
-table .page-listing .overview #registrationForm div.notes details.summary caption,
-table .page-listing .overview details.plus caption,
-table .page-listing .overview details.summary caption,
-table details.plus #registrationForm div.notes .page-listing .overview caption,
-table details.plus .page-listing .overview #registrationForm div.notes caption,
-table details.plus .page-listing .overview caption,
-table details.plus caption,
-table details.summary #registrationForm div.notes .page-listing .overview caption,
-table details.summary .page-listing .overview #registrationForm div.notes caption,
-table details.summary .page-listing .overview caption,
-table details.summary caption {
+#altbib-hedge.hedge-form .notes div.form-tip details.plus:not(.archive-updates) .h3,
+#altbib-hedge.hedge-form .notes div.form-tip details.plus:not(.archive-updates) h3,
+#altbib-hedge.hedge-form .notes div.form-tip details.summary:not(.archive-updates) .h3,
+#altbib-hedge.hedge-form .notes div.form-tip details.summary:not(.archive-updates) h3,
+#registrationForm div.notes .page-listing .overview details.plus:not(.archive-updates) .h2,
+#registrationForm div.notes .page-listing .overview details.plus:not(.archive-updates) h2,
+#registrationForm
+    div.notes
+    .page-listing
+    .overview
+    details.plus:not(.archive-updates)
+    table
+    caption,
+#registrationForm div.notes .page-listing .overview details.summary:not(.archive-updates) .h2,
+#registrationForm div.notes .page-listing .overview details.summary:not(.archive-updates) h2,
+#registrationForm
+    div.notes
+    .page-listing
+    .overview
+    details.summary:not(.archive-updates)
+    table
+    caption,
+#registrationForm div.notes .page-listing section details.plus:not(.archive-updates) .h3,
+#registrationForm div.notes .page-listing section details.plus:not(.archive-updates) h3,
+#registrationForm div.notes .page-listing section details.summary:not(.archive-updates) .h3,
+#registrationForm div.notes .page-listing section details.summary:not(.archive-updates) h3,
+#registrationForm div.notes .page-listing section table details.plus:not(.archive-updates) caption,
+#registrationForm
+    div.notes
+    .page-listing
+    section
+    table
+    details.summary:not(.archive-updates)
+    caption,
+#registrationForm div.notes .study-type section details.plus:not(.archive-updates) .h3,
+#registrationForm div.notes .study-type section details.plus:not(.archive-updates) h3,
+#registrationForm div.notes .study-type section details.summary:not(.archive-updates) .h3,
+#registrationForm div.notes .study-type section details.summary:not(.archive-updates) h3,
+#registrationForm div.notes .study-type section table details.plus:not(.archive-updates) caption,
+#registrationForm div.notes .study-type section table details.summary:not(.archive-updates) caption,
+#registrationForm div.notes details.plus:not(.archive-updates) .h4,
+#registrationForm div.notes details.plus:not(.archive-updates) h4,
+#registrationForm div.notes details.summary:not(.archive-updates) .h4,
+#registrationForm div.notes details.summary:not(.archive-updates) h4,
+.page-listing .overview #registrationForm div.notes details.plus:not(.archive-updates) .h2,
+.page-listing .overview #registrationForm div.notes details.plus:not(.archive-updates) h2,
+.page-listing
+    .overview
+    #registrationForm
+    div.notes
+    details.plus:not(.archive-updates)
+    table
+    caption,
+.page-listing .overview #registrationForm div.notes details.summary:not(.archive-updates) .h2,
+.page-listing .overview #registrationForm div.notes details.summary:not(.archive-updates) h2,
+.page-listing
+    .overview
+    #registrationForm
+    div.notes
+    details.summary:not(.archive-updates)
+    table
+    caption,
+.page-listing section #registrationForm div.notes details.plus:not(.archive-updates) .h3,
+.page-listing section #registrationForm div.notes details.plus:not(.archive-updates) h3,
+.page-listing section #registrationForm div.notes details.summary:not(.archive-updates) .h3,
+.page-listing section #registrationForm div.notes details.summary:not(.archive-updates) h3,
+.page-listing section table #registrationForm div.notes details.plus:not(.archive-updates) caption,
+.page-listing
+    section
+    table
+    #registrationForm
+    div.notes
+    details.summary:not(.archive-updates)
+    caption,
+.study-type section #registrationForm div.notes details.plus:not(.archive-updates) .h3,
+.study-type section #registrationForm div.notes details.plus:not(.archive-updates) h3,
+.study-type section #registrationForm div.notes details.summary:not(.archive-updates) .h3,
+.study-type section #registrationForm div.notes details.summary:not(.archive-updates) h3,
+.study-type section table #registrationForm div.notes details.plus:not(.archive-updates) caption,
+.study-type section table #registrationForm div.notes details.summary:not(.archive-updates) caption,
+details.plus:not(.archive-updates) #altbib-hedge.hedge-form .notes div.form-tip .h3,
+details.plus:not(.archive-updates) #altbib-hedge.hedge-form .notes div.form-tip h3,
+details.plus:not(.archive-updates) #registrationForm div.notes .h4,
+details.plus:not(.archive-updates) #registrationForm div.notes .page-listing .overview .h2,
+details.plus:not(.archive-updates) #registrationForm div.notes .page-listing .overview h2,
+details.plus:not(.archive-updates)
+    #registrationForm
+    div.notes
+    .page-listing
+    .overview
+    table
+    caption,
+details.plus:not(.archive-updates) #registrationForm div.notes .page-listing section .h3,
+details.plus:not(.archive-updates) #registrationForm div.notes .page-listing section h3,
+details.plus:not(.archive-updates) #registrationForm div.notes .page-listing section table caption,
+details.plus:not(.archive-updates) #registrationForm div.notes .study-type section .h3,
+details.plus:not(.archive-updates) #registrationForm div.notes .study-type section h3,
+details.plus:not(.archive-updates) #registrationForm div.notes .study-type section table caption,
+details.plus:not(.archive-updates) #registrationForm div.notes h4,
+details.plus:not(.archive-updates) .h1,
+details.plus:not(.archive-updates) .h2,
+details.plus:not(.archive-updates) .h3,
+details.plus:not(.archive-updates) .h4,
+details.plus:not(.archive-updates) .h5,
+details.plus:not(.archive-updates) .h6,
+details.plus:not(.archive-updates) .page-listing .overview #registrationForm div.notes .h2,
+details.plus:not(.archive-updates) .page-listing .overview #registrationForm div.notes h2,
+details.plus:not(.archive-updates)
+    .page-listing
+    .overview
+    #registrationForm
+    div.notes
+    table
+    caption,
+details.plus:not(.archive-updates) .page-listing section #registrationForm div.notes .h3,
+details.plus:not(.archive-updates) .page-listing section #registrationForm div.notes h3,
+details.plus:not(.archive-updates) .page-listing section table #registrationForm div.notes caption,
+details.plus:not(.archive-updates) .study-type section #registrationForm div.notes .h3,
+details.plus:not(.archive-updates) .study-type section #registrationForm div.notes h3,
+details.plus:not(.archive-updates) .study-type section table #registrationForm div.notes caption,
+details.plus:not(.archive-updates) .video-container-jw,
+details.plus:not(.archive-updates) div,
+details.plus:not(.archive-updates) h1,
+details.plus:not(.archive-updates) h2,
+details.plus:not(.archive-updates) h3,
+details.plus:not(.archive-updates) h4,
+details.plus:not(.archive-updates) h5,
+details.plus:not(.archive-updates) h6,
+details.plus:not(.archive-updates) ol,
+details.plus:not(.archive-updates) p,
+details.plus:not(.archive-updates) table caption,
+details.plus:not(.archive-updates) ul,
+details.summary:not(.archive-updates) #altbib-hedge.hedge-form .notes div.form-tip .h3,
+details.summary:not(.archive-updates) #altbib-hedge.hedge-form .notes div.form-tip h3,
+details.summary:not(.archive-updates) #registrationForm div.notes .h4,
+details.summary:not(.archive-updates) #registrationForm div.notes .page-listing .overview .h2,
+details.summary:not(.archive-updates) #registrationForm div.notes .page-listing .overview h2,
+details.summary:not(.archive-updates)
+    #registrationForm
+    div.notes
+    .page-listing
+    .overview
+    table
+    caption,
+details.summary:not(.archive-updates) #registrationForm div.notes .page-listing section .h3,
+details.summary:not(.archive-updates) #registrationForm div.notes .page-listing section h3,
+details.summary:not(.archive-updates)
+    #registrationForm
+    div.notes
+    .page-listing
+    section
+    table
+    caption,
+details.summary:not(.archive-updates) #registrationForm div.notes .study-type section .h3,
+details.summary:not(.archive-updates) #registrationForm div.notes .study-type section h3,
+details.summary:not(.archive-updates) #registrationForm div.notes .study-type section table caption,
+details.summary:not(.archive-updates) #registrationForm div.notes h4,
+details.summary:not(.archive-updates) .h1,
+details.summary:not(.archive-updates) .h2,
+details.summary:not(.archive-updates) .h3,
+details.summary:not(.archive-updates) .h4,
+details.summary:not(.archive-updates) .h5,
+details.summary:not(.archive-updates) .h6,
+details.summary:not(.archive-updates) .page-listing .overview #registrationForm div.notes .h2,
+details.summary:not(.archive-updates) .page-listing .overview #registrationForm div.notes h2,
+details.summary:not(.archive-updates)
+    .page-listing
+    .overview
+    #registrationForm
+    div.notes
+    table
+    caption,
+details.summary:not(.archive-updates) .page-listing section #registrationForm div.notes .h3,
+details.summary:not(.archive-updates) .page-listing section #registrationForm div.notes h3,
+details.summary:not(.archive-updates)
+    .page-listing
+    section
+    table
+    #registrationForm
+    div.notes
+    caption,
+details.summary:not(.archive-updates) .study-type section #registrationForm div.notes .h3,
+details.summary:not(.archive-updates) .study-type section #registrationForm div.notes h3,
+details.summary:not(.archive-updates) .study-type section table #registrationForm div.notes caption,
+details.summary:not(.archive-updates) .video-container-jw,
+details.summary:not(.archive-updates) div,
+details.summary:not(.archive-updates) h1,
+details.summary:not(.archive-updates) h2,
+details.summary:not(.archive-updates) h3,
+details.summary:not(.archive-updates) h4,
+details.summary:not(.archive-updates) h5,
+details.summary:not(.archive-updates) h6,
+details.summary:not(.archive-updates) ol,
+details.summary:not(.archive-updates) p,
+details.summary:not(.archive-updates) table caption,
+details.summary:not(.archive-updates) ul,
+table
+    #registrationForm
+    div.notes
+    .page-listing
+    .overview
+    details.plus:not(.archive-updates)
+    caption,
+table
+    #registrationForm
+    div.notes
+    .page-listing
+    .overview
+    details.summary:not(.archive-updates)
+    caption,
+table
+    .page-listing
+    .overview
+    #registrationForm
+    div.notes
+    details.plus:not(.archive-updates)
+    caption,
+table
+    .page-listing
+    .overview
+    #registrationForm
+    div.notes
+    details.summary:not(.archive-updates)
+    caption,
+table
+    details.plus:not(.archive-updates)
+    #registrationForm
+    div.notes
+    .page-listing
+    .overview
+    caption,
+table
+    details.plus:not(.archive-updates)
+    .page-listing
+    .overview
+    #registrationForm
+    div.notes
+    caption,
+table details.plus:not(.archive-updates) caption,
+table
+    details.summary:not(.archive-updates)
+    #registrationForm
+    div.notes
+    .page-listing
+    .overview
+    caption,
+table
+    details.summary:not(.archive-updates)
+    .page-listing
+    .overview
+    #registrationForm
+    div.notes
+    caption,
+table details.summary:not(.archive-updates) caption {
     padding-right: 2rem;
     padding-left: 2rem;
 }
 
 @media print, screen and (max-width: 39.99875em) {
-    #altbib-hedge.hedge-form .notes div.form-tip details.plus .h3,
-    #altbib-hedge.hedge-form .notes div.form-tip details.plus h3,
-    #altbib-hedge.hedge-form .notes div.form-tip details.summary .h3,
-    #altbib-hedge.hedge-form .notes div.form-tip details.summary h3,
-    #registrationForm div.notes .page-listing .overview details.plus .h2,
-    #registrationForm div.notes .page-listing .overview details.plus h2,
-    #registrationForm div.notes .page-listing .overview details.plus table caption,
-    #registrationForm div.notes .page-listing .overview details.summary .h2,
-    #registrationForm div.notes .page-listing .overview details.summary h2,
-    #registrationForm div.notes .page-listing .overview details.summary table caption,
-    #registrationForm div.notes .page-listing section details.plus .h3,
-    #registrationForm div.notes .page-listing section details.plus h3,
-    #registrationForm div.notes .page-listing section details.summary .h3,
-    #registrationForm div.notes .page-listing section details.summary h3,
-    #registrationForm div.notes .page-listing section table details.plus caption,
-    #registrationForm div.notes .page-listing section table details.summary caption,
-    #registrationForm div.notes .study-type section details.plus .h3,
-    #registrationForm div.notes .study-type section details.plus h3,
-    #registrationForm div.notes .study-type section details.summary .h3,
-    #registrationForm div.notes .study-type section details.summary h3,
-    #registrationForm div.notes .study-type section table details.plus caption,
-    #registrationForm div.notes .study-type section table details.summary caption,
-    #registrationForm div.notes details.plus .h4,
-    #registrationForm div.notes details.plus h4,
-    #registrationForm div.notes details.summary .h4,
-    #registrationForm div.notes details.summary h4,
-    .page-listing .overview #registrationForm div.notes details.plus .h2,
-    .page-listing .overview #registrationForm div.notes details.plus h2,
-    .page-listing .overview #registrationForm div.notes details.plus table caption,
-    .page-listing .overview #registrationForm div.notes details.summary .h2,
-    .page-listing .overview #registrationForm div.notes details.summary h2,
-    .page-listing .overview #registrationForm div.notes details.summary table caption,
-    .page-listing .overview details.plus h2,
-    .page-listing .overview details.plus table caption,
-    .page-listing .overview details.summary h2,
-    .page-listing .overview details.summary table caption,
-    .page-listing section #registrationForm div.notes details.plus .h3,
-    .page-listing section #registrationForm div.notes details.plus h3,
-    .page-listing section #registrationForm div.notes details.summary .h3,
-    .page-listing section #registrationForm div.notes details.summary h3,
-    .page-listing section table #registrationForm div.notes details.plus caption,
-    .page-listing section table #registrationForm div.notes details.summary caption,
-    .study-type section #registrationForm div.notes details.plus .h3,
-    .study-type section #registrationForm div.notes details.plus h3,
-    .study-type section #registrationForm div.notes details.summary .h3,
-    .study-type section #registrationForm div.notes details.summary h3,
-    .study-type section table #registrationForm div.notes details.plus caption,
-    .study-type section table #registrationForm div.notes details.summary caption,
-    details.plus #altbib-hedge.hedge-form .notes div.form-tip .h3,
-    details.plus #altbib-hedge.hedge-form .notes div.form-tip h3,
-    details.plus #registrationForm div.notes .h4,
-    details.plus #registrationForm div.notes .page-listing .overview .h2,
-    details.plus #registrationForm div.notes .page-listing .overview h2,
-    details.plus #registrationForm div.notes .page-listing .overview table caption,
-    details.plus #registrationForm div.notes .page-listing section .h3,
-    details.plus #registrationForm div.notes .page-listing section h3,
-    details.plus #registrationForm div.notes .page-listing section table caption,
-    details.plus #registrationForm div.notes .study-type section .h3,
-    details.plus #registrationForm div.notes .study-type section h3,
-    details.plus #registrationForm div.notes .study-type section table caption,
-    details.plus #registrationForm div.notes h4,
-    details.plus .h1,
-    details.plus .h2,
-    details.plus .h3,
-    details.plus .h4,
-    details.plus .h5,
-    details.plus .h6,
-    details.plus .page-listing .overview #registrationForm div.notes .h2,
-    details.plus .page-listing .overview #registrationForm div.notes h2,
-    details.plus .page-listing .overview #registrationForm div.notes table caption,
-    details.plus .page-listing .overview h2,
-    details.plus .page-listing .overview table caption,
-    details.plus .page-listing section #registrationForm div.notes .h3,
-    details.plus .page-listing section #registrationForm div.notes h3,
-    details.plus .page-listing section table #registrationForm div.notes caption,
-    details.plus .study-type section #registrationForm div.notes .h3,
-    details.plus .study-type section #registrationForm div.notes h3,
-    details.plus .study-type section table #registrationForm div.notes caption,
-    details.plus .video-container-jw,
-    details.plus div,
-    details.plus h1,
-    details.plus h2,
-    details.plus h3,
-    details.plus h4,
-    details.plus h5,
-    details.plus h6,
-    details.plus ol,
-    details.plus p,
-    details.plus table caption,
-    details.plus ul,
-    details.summary #altbib-hedge.hedge-form .notes div.form-tip .h3,
-    details.summary #altbib-hedge.hedge-form .notes div.form-tip h3,
-    details.summary #registrationForm div.notes .h4,
-    details.summary #registrationForm div.notes .page-listing .overview .h2,
-    details.summary #registrationForm div.notes .page-listing .overview h2,
-    details.summary #registrationForm div.notes .page-listing .overview table caption,
-    details.summary #registrationForm div.notes .page-listing section .h3,
-    details.summary #registrationForm div.notes .page-listing section h3,
-    details.summary #registrationForm div.notes .page-listing section table caption,
-    details.summary #registrationForm div.notes .study-type section .h3,
-    details.summary #registrationForm div.notes .study-type section h3,
-    details.summary #registrationForm div.notes .study-type section table caption,
-    details.summary #registrationForm div.notes h4,
-    details.summary .h1,
-    details.summary .h2,
-    details.summary .h3,
-    details.summary .h4,
-    details.summary .h5,
-    details.summary .h6,
-    details.summary .page-listing .overview #registrationForm div.notes .h2,
-    details.summary .page-listing .overview #registrationForm div.notes h2,
-    details.summary .page-listing .overview #registrationForm div.notes table caption,
-    details.summary .page-listing .overview h2,
-    details.summary .page-listing .overview table caption,
-    details.summary .page-listing section #registrationForm div.notes .h3,
-    details.summary .page-listing section #registrationForm div.notes h3,
-    details.summary .page-listing section table #registrationForm div.notes caption,
-    details.summary .study-type section #registrationForm div.notes .h3,
-    details.summary .study-type section #registrationForm div.notes h3,
-    details.summary .study-type section table #registrationForm div.notes caption,
-    details.summary .video-container-jw,
-    details.summary div,
-    details.summary h1,
-    details.summary h2,
-    details.summary h3,
-    details.summary h4,
-    details.summary h5,
-    details.summary h6,
-    details.summary ol,
-    details.summary p,
-    details.summary table caption,
-    details.summary ul,
-    table #registrationForm div.notes .page-listing .overview details.plus caption,
-    table #registrationForm div.notes .page-listing .overview details.summary caption,
-    table .page-listing .overview #registrationForm div.notes details.plus caption,
-    table .page-listing .overview #registrationForm div.notes details.summary caption,
-    table .page-listing .overview details.plus caption,
-    table .page-listing .overview details.summary caption,
-    table details.plus #registrationForm div.notes .page-listing .overview caption,
-    table details.plus .page-listing .overview #registrationForm div.notes caption,
-    table details.plus .page-listing .overview caption,
-    table details.plus caption,
-    table details.summary #registrationForm div.notes .page-listing .overview caption,
-    table details.summary .page-listing .overview #registrationForm div.notes caption,
-    table details.summary .page-listing .overview caption,
-    table details.summary caption {
+    #altbib-hedge.hedge-form .notes div.form-tip details.plus:not(.archive-updates) .h3,
+    #altbib-hedge.hedge-form .notes div.form-tip details.plus:not(.archive-updates) h3,
+    #altbib-hedge.hedge-form .notes div.form-tip details.summary:not(.archive-updates) .h3,
+    #altbib-hedge.hedge-form .notes div.form-tip details.summary:not(.archive-updates) h3,
+    #registrationForm div.notes .page-listing .overview details.plus:not(.archive-updates) .h2,
+    #registrationForm div.notes .page-listing .overview details.plus:not(.archive-updates) h2,
+    #registrationForm
+        div.notes
+        .page-listing
+        .overview
+        details.plus:not(.archive-updates)
+        table
+        caption,
+    #registrationForm div.notes .page-listing .overview details.summary:not(.archive-updates) .h2,
+    #registrationForm div.notes .page-listing .overview details.summary:not(.archive-updates) h2,
+    #registrationForm
+        div.notes
+        .page-listing
+        .overview
+        details.summary:not(.archive-updates)
+        table
+        caption,
+    #registrationForm div.notes .page-listing section details.plus:not(.archive-updates) .h3,
+    #registrationForm div.notes .page-listing section details.plus:not(.archive-updates) h3,
+    #registrationForm div.notes .page-listing section details.summary:not(.archive-updates) .h3,
+    #registrationForm div.notes .page-listing section details.summary:not(.archive-updates) h3,
+    #registrationForm
+        div.notes
+        .page-listing
+        section
+        table
+        details.plus:not(.archive-updates)
+        caption,
+    #registrationForm
+        div.notes
+        .page-listing
+        section
+        table
+        details.summary:not(.archive-updates)
+        caption,
+    #registrationForm div.notes .study-type section details.plus:not(.archive-updates) .h3,
+    #registrationForm div.notes .study-type section details.plus:not(.archive-updates) h3,
+    #registrationForm div.notes .study-type section details.summary:not(.archive-updates) .h3,
+    #registrationForm div.notes .study-type section details.summary:not(.archive-updates) h3,
+    #registrationForm
+        div.notes
+        .study-type
+        section
+        table
+        details.plus:not(.archive-updates)
+        caption,
+    #registrationForm
+        div.notes
+        .study-type
+        section
+        table
+        details.summary:not(.archive-updates)
+        caption,
+    #registrationForm div.notes details.plus:not(.archive-updates) .h4,
+    #registrationForm div.notes details.plus:not(.archive-updates) h4,
+    #registrationForm div.notes details.summary:not(.archive-updates) .h4,
+    #registrationForm div.notes details.summary:not(.archive-updates) h4,
+    .page-listing .overview #registrationForm div.notes details.plus:not(.archive-updates) .h2,
+    .page-listing .overview #registrationForm div.notes details.plus:not(.archive-updates) h2,
+    .page-listing
+        .overview
+        #registrationForm
+        div.notes
+        details.plus:not(.archive-updates)
+        table
+        caption,
+    .page-listing .overview #registrationForm div.notes details.summary:not(.archive-updates) .h2,
+    .page-listing .overview #registrationForm div.notes details.summary:not(.archive-updates) h2,
+    .page-listing
+        .overview
+        #registrationForm
+        div.notes
+        details.summary:not(.archive-updates)
+        table
+        caption,
+    .page-listing section #registrationForm div.notes details.plus:not(.archive-updates) .h3,
+    .page-listing section #registrationForm div.notes details.plus:not(.archive-updates) h3,
+    .page-listing section #registrationForm div.notes details.summary:not(.archive-updates) .h3,
+    .page-listing section #registrationForm div.notes details.summary:not(.archive-updates) h3,
+    .page-listing
+        section
+        table
+        #registrationForm
+        div.notes
+        details.plus:not(.archive-updates)
+        caption,
+    .page-listing
+        section
+        table
+        #registrationForm
+        div.notes
+        details.summary:not(.archive-updates)
+        caption,
+    .study-type section #registrationForm div.notes details.plus:not(.archive-updates) .h3,
+    .study-type section #registrationForm div.notes details.plus:not(.archive-updates) h3,
+    .study-type section #registrationForm div.notes details.summary:not(.archive-updates) .h3,
+    .study-type section #registrationForm div.notes details.summary:not(.archive-updates) h3,
+    .study-type
+        section
+        table
+        #registrationForm
+        div.notes
+        details.plus:not(.archive-updates)
+        caption,
+    .study-type
+        section
+        table
+        #registrationForm
+        div.notes
+        details.summary:not(.archive-updates)
+        caption,
+    details.plus:not(.archive-updates) #altbib-hedge.hedge-form .notes div.form-tip .h3,
+    details.plus:not(.archive-updates) #altbib-hedge.hedge-form .notes div.form-tip h3,
+    details.plus:not(.archive-updates) #registrationForm div.notes .h4,
+    details.plus:not(.archive-updates) #registrationForm div.notes .page-listing .overview .h2,
+    details.plus:not(.archive-updates) #registrationForm div.notes .page-listing .overview h2,
+    details.plus:not(.archive-updates)
+        #registrationForm
+        div.notes
+        .page-listing
+        .overview
+        table
+        caption,
+    details.plus:not(.archive-updates) #registrationForm div.notes .page-listing section .h3,
+    details.plus:not(.archive-updates) #registrationForm div.notes .page-listing section h3,
+    details.plus:not(.archive-updates)
+        #registrationForm
+        div.notes
+        .page-listing
+        section
+        table
+        caption,
+    details.plus:not(.archive-updates) #registrationForm div.notes .study-type section .h3,
+    details.plus:not(.archive-updates) #registrationForm div.notes .study-type section h3,
+    details.plus:not(.archive-updates)
+        #registrationForm
+        div.notes
+        .study-type
+        section
+        table
+        caption,
+    details.plus:not(.archive-updates) #registrationForm div.notes h4,
+    details.plus:not(.archive-updates) .h1,
+    details.plus:not(.archive-updates) .h2,
+    details.plus:not(.archive-updates) .h3,
+    details.plus:not(.archive-updates) .h4,
+    details.plus:not(.archive-updates) .h5,
+    details.plus:not(.archive-updates) .h6,
+    details.plus:not(.archive-updates) .page-listing .overview #registrationForm div.notes .h2,
+    details.plus:not(.archive-updates) .page-listing .overview #registrationForm div.notes h2,
+    details.plus:not(.archive-updates)
+        .page-listing
+        .overview
+        #registrationForm
+        div.notes
+        table
+        caption,
+    details.plus:not(.archive-updates) .page-listing section #registrationForm div.notes .h3,
+    details.plus:not(.archive-updates) .page-listing section #registrationForm div.notes h3,
+    details.plus:not(.archive-updates)
+        .page-listing
+        section
+        table
+        #registrationForm
+        div.notes
+        caption,
+    details.plus:not(.archive-updates) .study-type section #registrationForm div.notes .h3,
+    details.plus:not(.archive-updates) .study-type section #registrationForm div.notes h3,
+    details.plus:not(.archive-updates)
+        .study-type
+        section
+        table
+        #registrationForm
+        div.notes
+        caption,
+    details.plus:not(.archive-updates) .video-container-jw,
+    details.plus:not(.archive-updates) div,
+    details.plus:not(.archive-updates) h1,
+    details.plus:not(.archive-updates) h2,
+    details.plus:not(.archive-updates) h3,
+    details.plus:not(.archive-updates) h4,
+    details.plus:not(.archive-updates) h5,
+    details.plus:not(.archive-updates) h6,
+    details.plus:not(.archive-updates) ol,
+    details.plus:not(.archive-updates) p,
+    details.plus:not(.archive-updates) table caption,
+    details.plus:not(.archive-updates) ul,
+    details.summary:not(.archive-updates) #altbib-hedge.hedge-form .notes div.form-tip .h3,
+    details.summary:not(.archive-updates) #altbib-hedge.hedge-form .notes div.form-tip h3,
+    details.summary:not(.archive-updates) #registrationForm div.notes .h4,
+    details.summary:not(.archive-updates) #registrationForm div.notes .page-listing .overview .h2,
+    details.summary:not(.archive-updates) #registrationForm div.notes .page-listing .overview h2,
+    details.summary:not(.archive-updates)
+        #registrationForm
+        div.notes
+        .page-listing
+        .overview
+        table
+        caption,
+    details.summary:not(.archive-updates) #registrationForm div.notes .page-listing section .h3,
+    details.summary:not(.archive-updates) #registrationForm div.notes .page-listing section h3,
+    details.summary:not(.archive-updates)
+        #registrationForm
+        div.notes
+        .page-listing
+        section
+        table
+        caption,
+    details.summary:not(.archive-updates) #registrationForm div.notes .study-type section .h3,
+    details.summary:not(.archive-updates) #registrationForm div.notes .study-type section h3,
+    details.summary:not(.archive-updates)
+        #registrationForm
+        div.notes
+        .study-type
+        section
+        table
+        caption,
+    details.summary:not(.archive-updates) #registrationForm div.notes h4,
+    details.summary:not(.archive-updates) .h1,
+    details.summary:not(.archive-updates) .h2,
+    details.summary:not(.archive-updates) .h3,
+    details.summary:not(.archive-updates) .h4,
+    details.summary:not(.archive-updates) .h5,
+    details.summary:not(.archive-updates) .h6,
+    details.summary:not(.archive-updates) .page-listing .overview #registrationForm div.notes .h2,
+    details.summary:not(.archive-updates) .page-listing .overview #registrationForm div.notes h2,
+    details.summary:not(.archive-updates)
+        .page-listing
+        .overview
+        #registrationForm
+        div.notes
+        table
+        caption,
+    details.summary:not(.archive-updates) .page-listing section #registrationForm div.notes .h3,
+    details.summary:not(.archive-updates) .page-listing section #registrationForm div.notes h3,
+    details.summary:not(.archive-updates)
+        .page-listing
+        section
+        table
+        #registrationForm
+        div.notes
+        caption,
+    details.summary:not(.archive-updates) .study-type section #registrationForm div.notes .h3,
+    details.summary:not(.archive-updates) .study-type section #registrationForm div.notes h3,
+    details.summary:not(.archive-updates)
+        .study-type
+        section
+        table
+        #registrationForm
+        div.notes
+        caption,
+    details.summary:not(.archive-updates) .video-container-jw,
+    details.summary:not(.archive-updates) div,
+    details.summary:not(.archive-updates) h1,
+    details.summary:not(.archive-updates) h2,
+    details.summary:not(.archive-updates) h3,
+    details.summary:not(.archive-updates) h4,
+    details.summary:not(.archive-updates) h5,
+    details.summary:not(.archive-updates) h6,
+    details.summary:not(.archive-updates) ol,
+    details.summary:not(.archive-updates) p,
+    details.summary:not(.archive-updates) table caption,
+    details.summary:not(.archive-updates) ul,
+    table
+        #registrationForm
+        div.notes
+        .page-listing
+        .overview
+        details.plus:not(.archive-updates)
+        caption,
+    table
+        #registrationForm
+        div.notes
+        .page-listing
+        .overview
+        details.summary:not(.archive-updates)
+        caption,
+    table
+        .page-listing
+        .overview
+        #registrationForm
+        div.notes
+        details.plus:not(.archive-updates)
+        caption,
+    table
+        .page-listing
+        .overview
+        #registrationForm
+        div.notes
+        details.summary:not(.archive-updates)
+        caption,
+    table
+        details.plus:not(.archive-updates)
+        #registrationForm
+        div.notes
+        .page-listing
+        .overview
+        caption,
+    table
+        details.plus:not(.archive-updates)
+        .page-listing
+        .overview
+        #registrationForm
+        div.notes
+        caption,
+    table details.plus:not(.archive-updates) caption,
+    table
+        details.summary:not(.archive-updates)
+        #registrationForm
+        div.notes
+        .page-listing
+        .overview
+        caption,
+    table
+        details.summary:not(.archive-updates)
+        .page-listing
+        .overview
+        #registrationForm
+        div.notes
+        caption,
+    table details.summary:not(.archive-updates) caption {
         padding: 0.5rem 0.75rem;
     }
 }
 
-details.plus ol.flowchart,
-details.summary ol.flowchart {
+details.plus:not(.archive-updates) ol.flowchart,
+details.summary:not(.archive-updates) ol.flowchart {
     width: 92.5%;
 }
 
-#altbib-hedge.hedge-form .notes div.form-tip details.plus ol li .h3,
-#altbib-hedge.hedge-form .notes div.form-tip details.plus ol li h3,
-#altbib-hedge.hedge-form .notes div.form-tip details.plus ul li .h3,
-#altbib-hedge.hedge-form .notes div.form-tip details.plus ul li h3,
-#altbib-hedge.hedge-form .notes div.form-tip details.summary ol li .h3,
-#altbib-hedge.hedge-form .notes div.form-tip details.summary ol li h3,
-#altbib-hedge.hedge-form .notes div.form-tip details.summary ul li .h3,
-#altbib-hedge.hedge-form .notes div.form-tip details.summary ul li h3,
-#registrationForm div.notes .page-listing .overview details.plus ol li .h2,
-#registrationForm div.notes .page-listing .overview details.plus ol li h2,
-#registrationForm div.notes .page-listing .overview details.plus ol li table caption,
-#registrationForm div.notes .page-listing .overview details.plus ul li .h2,
-#registrationForm div.notes .page-listing .overview details.plus ul li h2,
-#registrationForm div.notes .page-listing .overview details.plus ul li table caption,
-#registrationForm div.notes .page-listing .overview details.summary ol li .h2,
-#registrationForm div.notes .page-listing .overview details.summary ol li h2,
-#registrationForm div.notes .page-listing .overview details.summary ol li table caption,
-#registrationForm div.notes .page-listing .overview details.summary ul li .h2,
-#registrationForm div.notes .page-listing .overview details.summary ul li h2,
-#registrationForm div.notes .page-listing .overview details.summary ul li table caption,
-#registrationForm div.notes .page-listing section details.plus ol li .h3,
-#registrationForm div.notes .page-listing section details.plus ol li h3,
-#registrationForm div.notes .page-listing section details.plus ul li .h3,
-#registrationForm div.notes .page-listing section details.plus ul li h3,
-#registrationForm div.notes .page-listing section details.summary ol li .h3,
-#registrationForm div.notes .page-listing section details.summary ol li h3,
-#registrationForm div.notes .page-listing section details.summary ul li .h3,
-#registrationForm div.notes .page-listing section details.summary ul li h3,
-#registrationForm div.notes .page-listing section table details.plus ol li caption,
-#registrationForm div.notes .page-listing section table details.plus ul li caption,
-#registrationForm div.notes .page-listing section table details.summary ol li caption,
-#registrationForm div.notes .page-listing section table details.summary ul li caption,
-#registrationForm div.notes .study-type section details.plus ol li .h3,
-#registrationForm div.notes .study-type section details.plus ol li h3,
-#registrationForm div.notes .study-type section details.plus ul li .h3,
-#registrationForm div.notes .study-type section details.plus ul li h3,
-#registrationForm div.notes .study-type section details.summary ol li .h3,
-#registrationForm div.notes .study-type section details.summary ol li h3,
-#registrationForm div.notes .study-type section details.summary ul li .h3,
-#registrationForm div.notes .study-type section details.summary ul li h3,
-#registrationForm div.notes .study-type section table details.plus ol li caption,
-#registrationForm div.notes .study-type section table details.plus ul li caption,
-#registrationForm div.notes .study-type section table details.summary ol li caption,
-#registrationForm div.notes .study-type section table details.summary ul li caption,
-#registrationForm div.notes details.plus ol li .h4,
-#registrationForm div.notes details.plus ol li h4,
-#registrationForm div.notes details.plus ul li .h4,
-#registrationForm div.notes details.plus ul li h4,
-#registrationForm div.notes details.summary ol li .h4,
-#registrationForm div.notes details.summary ol li h4,
-#registrationForm div.notes details.summary ul li .h4,
-#registrationForm div.notes details.summary ul li h4,
-.page-listing .overview #registrationForm div.notes details.plus ol li .h2,
-.page-listing .overview #registrationForm div.notes details.plus ol li h2,
-.page-listing .overview #registrationForm div.notes details.plus ol li table caption,
-.page-listing .overview #registrationForm div.notes details.plus ul li .h2,
-.page-listing .overview #registrationForm div.notes details.plus ul li h2,
-.page-listing .overview #registrationForm div.notes details.plus ul li table caption,
-.page-listing .overview #registrationForm div.notes details.summary ol li .h2,
-.page-listing .overview #registrationForm div.notes details.summary ol li h2,
-.page-listing .overview #registrationForm div.notes details.summary ol li table caption,
-.page-listing .overview #registrationForm div.notes details.summary ul li .h2,
-.page-listing .overview #registrationForm div.notes details.summary ul li h2,
-.page-listing .overview #registrationForm div.notes details.summary ul li table caption,
-.page-listing .overview details.plus ol li h2,
-.page-listing .overview details.plus ol li table caption,
-.page-listing .overview details.plus ul li h2,
-.page-listing .overview details.plus ul li table caption,
-.page-listing .overview details.summary ol li h2,
-.page-listing .overview details.summary ol li table caption,
-.page-listing .overview details.summary ul li h2,
-.page-listing .overview details.summary ul li table caption,
-.page-listing section #registrationForm div.notes details.plus ol li .h3,
-.page-listing section #registrationForm div.notes details.plus ol li h3,
-.page-listing section #registrationForm div.notes details.plus ul li .h3,
-.page-listing section #registrationForm div.notes details.plus ul li h3,
-.page-listing section #registrationForm div.notes details.summary ol li .h3,
-.page-listing section #registrationForm div.notes details.summary ol li h3,
-.page-listing section #registrationForm div.notes details.summary ul li .h3,
-.page-listing section #registrationForm div.notes details.summary ul li h3,
-.page-listing section table #registrationForm div.notes details.plus ol li caption,
-.page-listing section table #registrationForm div.notes details.plus ul li caption,
-.page-listing section table #registrationForm div.notes details.summary ol li caption,
-.page-listing section table #registrationForm div.notes details.summary ul li caption,
-.study-type section #registrationForm div.notes details.plus ol li .h3,
-.study-type section #registrationForm div.notes details.plus ol li h3,
-.study-type section #registrationForm div.notes details.plus ul li .h3,
-.study-type section #registrationForm div.notes details.plus ul li h3,
-.study-type section #registrationForm div.notes details.summary ol li .h3,
-.study-type section #registrationForm div.notes details.summary ol li h3,
-.study-type section #registrationForm div.notes details.summary ul li .h3,
-.study-type section #registrationForm div.notes details.summary ul li h3,
-.study-type section table #registrationForm div.notes details.plus ol li caption,
-.study-type section table #registrationForm div.notes details.plus ul li caption,
-.study-type section table #registrationForm div.notes details.summary ol li caption,
-.study-type section table #registrationForm div.notes details.summary ul li caption,
-details.plus ol li #altbib-hedge.hedge-form .notes div.form-tip .h3,
-details.plus ol li #altbib-hedge.hedge-form .notes div.form-tip h3,
-details.plus ol li #registrationForm div.notes .h4,
-details.plus ol li #registrationForm div.notes .page-listing .overview .h2,
-details.plus ol li #registrationForm div.notes .page-listing .overview h2,
-details.plus ol li #registrationForm div.notes .page-listing .overview table caption,
-details.plus ol li #registrationForm div.notes .page-listing section .h3,
-details.plus ol li #registrationForm div.notes .page-listing section h3,
-details.plus ol li #registrationForm div.notes .page-listing section table caption,
-details.plus ol li #registrationForm div.notes .study-type section .h3,
-details.plus ol li #registrationForm div.notes .study-type section h3,
-details.plus ol li #registrationForm div.notes .study-type section table caption,
-details.plus ol li #registrationForm div.notes h4,
-details.plus ol li .h1,
-details.plus ol li .h2,
-details.plus ol li .h3,
-details.plus ol li .h4,
-details.plus ol li .h5,
-details.plus ol li .h6,
-details.plus ol li .page-listing .overview #registrationForm div.notes .h2,
-details.plus ol li .page-listing .overview #registrationForm div.notes h2,
-details.plus ol li .page-listing .overview #registrationForm div.notes table caption,
-details.plus ol li .page-listing .overview h2,
-details.plus ol li .page-listing .overview table caption,
-details.plus ol li .page-listing section #registrationForm div.notes .h3,
-details.plus ol li .page-listing section #registrationForm div.notes h3,
-details.plus ol li .page-listing section table #registrationForm div.notes caption,
-details.plus ol li .study-type section #registrationForm div.notes .h3,
-details.plus ol li .study-type section #registrationForm div.notes h3,
-details.plus ol li .study-type section table #registrationForm div.notes caption,
-details.plus ol li .video-container-jw,
-details.plus ol li div,
-details.plus ol li h1,
-details.plus ol li h2,
-details.plus ol li h3,
-details.plus ol li h4,
-details.plus ol li h5,
-details.plus ol li h6,
-details.plus ol li li,
-details.plus ol li ol,
-details.plus ol li p,
-details.plus ol li table caption,
-details.plus ol li ul,
-details.plus ul li #altbib-hedge.hedge-form .notes div.form-tip .h3,
-details.plus ul li #altbib-hedge.hedge-form .notes div.form-tip h3,
-details.plus ul li #registrationForm div.notes .h4,
-details.plus ul li #registrationForm div.notes .page-listing .overview .h2,
-details.plus ul li #registrationForm div.notes .page-listing .overview h2,
-details.plus ul li #registrationForm div.notes .page-listing .overview table caption,
-details.plus ul li #registrationForm div.notes .page-listing section .h3,
-details.plus ul li #registrationForm div.notes .page-listing section h3,
-details.plus ul li #registrationForm div.notes .page-listing section table caption,
-details.plus ul li #registrationForm div.notes .study-type section .h3,
-details.plus ul li #registrationForm div.notes .study-type section h3,
-details.plus ul li #registrationForm div.notes .study-type section table caption,
-details.plus ul li #registrationForm div.notes h4,
-details.plus ul li .h1,
-details.plus ul li .h2,
-details.plus ul li .h3,
-details.plus ul li .h4,
-details.plus ul li .h5,
-details.plus ul li .h6,
-details.plus ul li .page-listing .overview #registrationForm div.notes .h2,
-details.plus ul li .page-listing .overview #registrationForm div.notes h2,
-details.plus ul li .page-listing .overview #registrationForm div.notes table caption,
-details.plus ul li .page-listing .overview h2,
-details.plus ul li .page-listing .overview table caption,
-details.plus ul li .page-listing section #registrationForm div.notes .h3,
-details.plus ul li .page-listing section #registrationForm div.notes h3,
-details.plus ul li .page-listing section table #registrationForm div.notes caption,
-details.plus ul li .study-type section #registrationForm div.notes .h3,
-details.plus ul li .study-type section #registrationForm div.notes h3,
-details.plus ul li .study-type section table #registrationForm div.notes caption,
-details.plus ul li .video-container-jw,
-details.plus ul li div,
-details.plus ul li h1,
-details.plus ul li h2,
-details.plus ul li h3,
-details.plus ul li h4,
-details.plus ul li h5,
-details.plus ul li h6,
-details.plus ul li li,
-details.plus ul li ol,
-details.plus ul li p,
-details.plus ul li table caption,
-details.plus ul li ul,
-details.summary ol li #altbib-hedge.hedge-form .notes div.form-tip .h3,
-details.summary ol li #altbib-hedge.hedge-form .notes div.form-tip h3,
-details.summary ol li #registrationForm div.notes .h4,
-details.summary ol li #registrationForm div.notes .page-listing .overview .h2,
-details.summary ol li #registrationForm div.notes .page-listing .overview h2,
-details.summary ol li #registrationForm div.notes .page-listing .overview table caption,
-details.summary ol li #registrationForm div.notes .page-listing section .h3,
-details.summary ol li #registrationForm div.notes .page-listing section h3,
-details.summary ol li #registrationForm div.notes .page-listing section table caption,
-details.summary ol li #registrationForm div.notes .study-type section .h3,
-details.summary ol li #registrationForm div.notes .study-type section h3,
-details.summary ol li #registrationForm div.notes .study-type section table caption,
-details.summary ol li #registrationForm div.notes h4,
-details.summary ol li .h1,
-details.summary ol li .h2,
-details.summary ol li .h3,
-details.summary ol li .h4,
-details.summary ol li .h5,
-details.summary ol li .h6,
-details.summary ol li .page-listing .overview #registrationForm div.notes .h2,
-details.summary ol li .page-listing .overview #registrationForm div.notes h2,
-details.summary ol li .page-listing .overview #registrationForm div.notes table caption,
-details.summary ol li .page-listing .overview h2,
-details.summary ol li .page-listing .overview table caption,
-details.summary ol li .page-listing section #registrationForm div.notes .h3,
-details.summary ol li .page-listing section #registrationForm div.notes h3,
-details.summary ol li .page-listing section table #registrationForm div.notes caption,
-details.summary ol li .study-type section #registrationForm div.notes .h3,
-details.summary ol li .study-type section #registrationForm div.notes h3,
-details.summary ol li .study-type section table #registrationForm div.notes caption,
-details.summary ol li .video-container-jw,
-details.summary ol li div,
-details.summary ol li h1,
-details.summary ol li h2,
-details.summary ol li h3,
-details.summary ol li h4,
-details.summary ol li h5,
-details.summary ol li h6,
-details.summary ol li li,
-details.summary ol li ol,
-details.summary ol li p,
-details.summary ol li table caption,
-details.summary ol li ul,
-details.summary ul li #altbib-hedge.hedge-form .notes div.form-tip .h3,
-details.summary ul li #altbib-hedge.hedge-form .notes div.form-tip h3,
-details.summary ul li #registrationForm div.notes .h4,
-details.summary ul li #registrationForm div.notes .page-listing .overview .h2,
-details.summary ul li #registrationForm div.notes .page-listing .overview h2,
-details.summary ul li #registrationForm div.notes .page-listing .overview table caption,
-details.summary ul li #registrationForm div.notes .page-listing section .h3,
-details.summary ul li #registrationForm div.notes .page-listing section h3,
-details.summary ul li #registrationForm div.notes .page-listing section table caption,
-details.summary ul li #registrationForm div.notes .study-type section .h3,
-details.summary ul li #registrationForm div.notes .study-type section h3,
-details.summary ul li #registrationForm div.notes .study-type section table caption,
-details.summary ul li #registrationForm div.notes h4,
-details.summary ul li .h1,
-details.summary ul li .h2,
-details.summary ul li .h3,
-details.summary ul li .h4,
-details.summary ul li .h5,
-details.summary ul li .h6,
-details.summary ul li .page-listing .overview #registrationForm div.notes .h2,
-details.summary ul li .page-listing .overview #registrationForm div.notes h2,
-details.summary ul li .page-listing .overview #registrationForm div.notes table caption,
-details.summary ul li .page-listing .overview h2,
-details.summary ul li .page-listing .overview table caption,
-details.summary ul li .page-listing section #registrationForm div.notes .h3,
-details.summary ul li .page-listing section #registrationForm div.notes h3,
-details.summary ul li .page-listing section table #registrationForm div.notes caption,
-details.summary ul li .study-type section #registrationForm div.notes .h3,
-details.summary ul li .study-type section #registrationForm div.notes h3,
-details.summary ul li .study-type section table #registrationForm div.notes caption,
-details.summary ul li .video-container-jw,
-details.summary ul li div,
-details.summary ul li h1,
-details.summary ul li h2,
-details.summary ul li h3,
-details.summary ul li h4,
-details.summary ul li h5,
-details.summary ul li h6,
-details.summary ul li li,
-details.summary ul li ol,
-details.summary ul li p,
-details.summary ul li table caption,
-details.summary ul li ul,
-table #registrationForm div.notes .page-listing .overview details.plus ol li caption,
-table #registrationForm div.notes .page-listing .overview details.plus ul li caption,
-table #registrationForm div.notes .page-listing .overview details.summary ol li caption,
-table #registrationForm div.notes .page-listing .overview details.summary ul li caption,
-table .page-listing .overview #registrationForm div.notes details.plus ol li caption,
-table .page-listing .overview #registrationForm div.notes details.plus ul li caption,
-table .page-listing .overview #registrationForm div.notes details.summary ol li caption,
-table .page-listing .overview #registrationForm div.notes details.summary ul li caption,
-table .page-listing .overview details.plus ol li caption,
-table .page-listing .overview details.plus ul li caption,
-table .page-listing .overview details.summary ol li caption,
-table .page-listing .overview details.summary ul li caption,
-table details.plus ol li #registrationForm div.notes .page-listing .overview caption,
-table details.plus ol li .page-listing .overview #registrationForm div.notes caption,
-table details.plus ol li .page-listing .overview caption,
-table details.plus ol li caption,
-table details.plus ul li #registrationForm div.notes .page-listing .overview caption,
-table details.plus ul li .page-listing .overview #registrationForm div.notes caption,
-table details.plus ul li .page-listing .overview caption,
-table details.plus ul li caption,
-table details.summary ol li #registrationForm div.notes .page-listing .overview caption,
-table details.summary ol li .page-listing .overview #registrationForm div.notes caption,
-table details.summary ol li .page-listing .overview caption,
-table details.summary ol li caption,
-table details.summary ul li #registrationForm div.notes .page-listing .overview caption,
-table details.summary ul li .page-listing .overview #registrationForm div.notes caption,
-table details.summary ul li .page-listing .overview caption,
-table details.summary ul li caption {
+#altbib-hedge.hedge-form .notes div.form-tip details.plus:not(.archive-updates) ol li .h3,
+#altbib-hedge.hedge-form .notes div.form-tip details.plus:not(.archive-updates) ol li h3,
+#altbib-hedge.hedge-form .notes div.form-tip details.plus:not(.archive-updates) ul li .h3,
+#altbib-hedge.hedge-form .notes div.form-tip details.plus:not(.archive-updates) ul li h3,
+#altbib-hedge.hedge-form .notes div.form-tip details.summary:not(.archive-updates) ol li .h3,
+#altbib-hedge.hedge-form .notes div.form-tip details.summary:not(.archive-updates) ol li h3,
+#altbib-hedge.hedge-form .notes div.form-tip details.summary:not(.archive-updates) ul li .h3,
+#altbib-hedge.hedge-form .notes div.form-tip details.summary:not(.archive-updates) ul li h3,
+#registrationForm div.notes .page-listing .overview details.plus:not(.archive-updates) ol li .h2,
+#registrationForm div.notes .page-listing .overview details.plus:not(.archive-updates) ol li h2,
+#registrationForm
+    div.notes
+    .page-listing
+    .overview
+    details.plus:not(.archive-updates)
+    ol
+    li
+    table
+    caption,
+#registrationForm div.notes .page-listing .overview details.plus:not(.archive-updates) ul li .h2,
+#registrationForm div.notes .page-listing .overview details.plus:not(.archive-updates) ul li h2,
+#registrationForm
+    div.notes
+    .page-listing
+    .overview
+    details.plus:not(.archive-updates)
+    ul
+    li
+    table
+    caption,
+#registrationForm div.notes .page-listing .overview details.summary:not(.archive-updates) ol li .h2,
+#registrationForm div.notes .page-listing .overview details.summary:not(.archive-updates) ol li h2,
+#registrationForm
+    div.notes
+    .page-listing
+    .overview
+    details.summary:not(.archive-updates)
+    ol
+    li
+    table
+    caption,
+#registrationForm div.notes .page-listing .overview details.summary:not(.archive-updates) ul li .h2,
+#registrationForm div.notes .page-listing .overview details.summary:not(.archive-updates) ul li h2,
+#registrationForm
+    div.notes
+    .page-listing
+    .overview
+    details.summary:not(.archive-updates)
+    ul
+    li
+    table
+    caption,
+#registrationForm div.notes .page-listing section details.plus:not(.archive-updates) ol li .h3,
+#registrationForm div.notes .page-listing section details.plus:not(.archive-updates) ol li h3,
+#registrationForm div.notes .page-listing section details.plus:not(.archive-updates) ul li .h3,
+#registrationForm div.notes .page-listing section details.plus:not(.archive-updates) ul li h3,
+#registrationForm div.notes .page-listing section details.summary:not(.archive-updates) ol li .h3,
+#registrationForm div.notes .page-listing section details.summary:not(.archive-updates) ol li h3,
+#registrationForm div.notes .page-listing section details.summary:not(.archive-updates) ul li .h3,
+#registrationForm div.notes .page-listing section details.summary:not(.archive-updates) ul li h3,
+#registrationForm
+    div.notes
+    .page-listing
+    section
+    table
+    details.plus:not(.archive-updates)
+    ol
+    li
+    caption,
+#registrationForm
+    div.notes
+    .page-listing
+    section
+    table
+    details.plus:not(.archive-updates)
+    ul
+    li
+    caption,
+#registrationForm
+    div.notes
+    .page-listing
+    section
+    table
+    details.summary:not(.archive-updates)
+    ol
+    li
+    caption,
+#registrationForm
+    div.notes
+    .page-listing
+    section
+    table
+    details.summary:not(.archive-updates)
+    ul
+    li
+    caption,
+#registrationForm div.notes .study-type section details.plus:not(.archive-updates) ol li .h3,
+#registrationForm div.notes .study-type section details.plus:not(.archive-updates) ol li h3,
+#registrationForm div.notes .study-type section details.plus:not(.archive-updates) ul li .h3,
+#registrationForm div.notes .study-type section details.plus:not(.archive-updates) ul li h3,
+#registrationForm div.notes .study-type section details.summary:not(.archive-updates) ol li .h3,
+#registrationForm div.notes .study-type section details.summary:not(.archive-updates) ol li h3,
+#registrationForm div.notes .study-type section details.summary:not(.archive-updates) ul li .h3,
+#registrationForm div.notes .study-type section details.summary:not(.archive-updates) ul li h3,
+#registrationForm
+    div.notes
+    .study-type
+    section
+    table
+    details.plus:not(.archive-updates)
+    ol
+    li
+    caption,
+#registrationForm
+    div.notes
+    .study-type
+    section
+    table
+    details.plus:not(.archive-updates)
+    ul
+    li
+    caption,
+#registrationForm
+    div.notes
+    .study-type
+    section
+    table
+    details.summary:not(.archive-updates)
+    ol
+    li
+    caption,
+#registrationForm
+    div.notes
+    .study-type
+    section
+    table
+    details.summary:not(.archive-updates)
+    ul
+    li
+    caption,
+#registrationForm div.notes details.plus:not(.archive-updates) ol li .h4,
+#registrationForm div.notes details.plus:not(.archive-updates) ol li h4,
+#registrationForm div.notes details.plus:not(.archive-updates) ul li .h4,
+#registrationForm div.notes details.plus:not(.archive-updates) ul li h4,
+#registrationForm div.notes details.summary:not(.archive-updates) ol li .h4,
+#registrationForm div.notes details.summary:not(.archive-updates) ol li h4,
+#registrationForm div.notes details.summary:not(.archive-updates) ul li .h4,
+#registrationForm div.notes details.summary:not(.archive-updates) ul li h4,
+.page-listing .overview #registrationForm div.notes details.plus:not(.archive-updates) ol li .h2,
+.page-listing .overview #registrationForm div.notes details.plus:not(.archive-updates) ol li h2,
+.page-listing
+    .overview
+    #registrationForm
+    div.notes
+    details.plus:not(.archive-updates)
+    ol
+    li
+    table
+    caption,
+.page-listing .overview #registrationForm div.notes details.plus:not(.archive-updates) ul li .h2,
+.page-listing .overview #registrationForm div.notes details.plus:not(.archive-updates) ul li h2,
+.page-listing
+    .overview
+    #registrationForm
+    div.notes
+    details.plus:not(.archive-updates)
+    ul
+    li
+    table
+    caption,
+.page-listing .overview #registrationForm div.notes details.summary:not(.archive-updates) ol li .h2,
+.page-listing .overview #registrationForm div.notes details.summary:not(.archive-updates) ol li h2,
+.page-listing
+    .overview
+    #registrationForm
+    div.notes
+    details.summary:not(.archive-updates)
+    ol
+    li
+    table
+    caption,
+.page-listing .overview #registrationForm div.notes details.summary:not(.archive-updates) ul li .h2,
+.page-listing .overview #registrationForm div.notes details.summary:not(.archive-updates) ul li h2,
+.page-listing
+    .overview
+    #registrationForm
+    div.notes
+    details.summary:not(.archive-updates)
+    ul
+    li
+    table
+    caption,
+.page-listing section #registrationForm div.notes details.plus:not(.archive-updates) ol li .h3,
+.page-listing section #registrationForm div.notes details.plus:not(.archive-updates) ol li h3,
+.page-listing section #registrationForm div.notes details.plus:not(.archive-updates) ul li .h3,
+.page-listing section #registrationForm div.notes details.plus:not(.archive-updates) ul li h3,
+.page-listing section #registrationForm div.notes details.summary:not(.archive-updates) ol li .h3,
+.page-listing section #registrationForm div.notes details.summary:not(.archive-updates) ol li h3,
+.page-listing section #registrationForm div.notes details.summary:not(.archive-updates) ul li .h3,
+.page-listing section #registrationForm div.notes details.summary:not(.archive-updates) ul li h3,
+.page-listing
+    section
+    table
+    #registrationForm
+    div.notes
+    details.plus:not(.archive-updates)
+    ol
+    li
+    caption,
+.page-listing
+    section
+    table
+    #registrationForm
+    div.notes
+    details.plus:not(.archive-updates)
+    ul
+    li
+    caption,
+.page-listing
+    section
+    table
+    #registrationForm
+    div.notes
+    details.summary:not(.archive-updates)
+    ol
+    li
+    caption,
+.page-listing
+    section
+    table
+    #registrationForm
+    div.notes
+    details.summary:not(.archive-updates)
+    ul
+    li
+    caption,
+.study-type section #registrationForm div.notes details.plus:not(.archive-updates) ol li .h3,
+.study-type section #registrationForm div.notes details.plus:not(.archive-updates) ol li h3,
+.study-type section #registrationForm div.notes details.plus:not(.archive-updates) ul li .h3,
+.study-type section #registrationForm div.notes details.plus:not(.archive-updates) ul li h3,
+.study-type section #registrationForm div.notes details.summary:not(.archive-updates) ol li .h3,
+.study-type section #registrationForm div.notes details.summary:not(.archive-updates) ol li h3,
+.study-type section #registrationForm div.notes details.summary:not(.archive-updates) ul li .h3,
+.study-type section #registrationForm div.notes details.summary:not(.archive-updates) ul li h3,
+.study-type
+    section
+    table
+    #registrationForm
+    div.notes
+    details.plus:not(.archive-updates)
+    ol
+    li
+    caption,
+.study-type
+    section
+    table
+    #registrationForm
+    div.notes
+    details.plus:not(.archive-updates)
+    ul
+    li
+    caption,
+.study-type
+    section
+    table
+    #registrationForm
+    div.notes
+    details.summary:not(.archive-updates)
+    ol
+    li
+    caption,
+.study-type
+    section
+    table
+    #registrationForm
+    div.notes
+    details.summary:not(.archive-updates)
+    ul
+    li
+    caption,
+details.plus:not(.archive-updates) ol li #altbib-hedge.hedge-form .notes div.form-tip .h3,
+details.plus:not(.archive-updates) ol li #altbib-hedge.hedge-form .notes div.form-tip h3,
+details.plus:not(.archive-updates) ol li #registrationForm div.notes .h4,
+details.plus:not(.archive-updates) ol li #registrationForm div.notes .page-listing .overview .h2,
+details.plus:not(.archive-updates) ol li #registrationForm div.notes .page-listing .overview h2,
+details.plus:not(.archive-updates)
+    ol
+    li
+    #registrationForm
+    div.notes
+    .page-listing
+    .overview
+    table
+    caption,
+details.plus:not(.archive-updates) ol li #registrationForm div.notes .page-listing section .h3,
+details.plus:not(.archive-updates) ol li #registrationForm div.notes .page-listing section h3,
+details.plus:not(.archive-updates)
+    ol
+    li
+    #registrationForm
+    div.notes
+    .page-listing
+    section
+    table
+    caption,
+details.plus:not(.archive-updates) ol li #registrationForm div.notes .study-type section .h3,
+details.plus:not(.archive-updates) ol li #registrationForm div.notes .study-type section h3,
+details.plus:not(.archive-updates)
+    ol
+    li
+    #registrationForm
+    div.notes
+    .study-type
+    section
+    table
+    caption,
+details.plus:not(.archive-updates) ol li #registrationForm div.notes h4,
+details.plus:not(.archive-updates) ol li .h1,
+details.plus:not(.archive-updates) ol li .h2,
+details.plus:not(.archive-updates) ol li .h3,
+details.plus:not(.archive-updates) ol li .h4,
+details.plus:not(.archive-updates) ol li .h5,
+details.plus:not(.archive-updates) ol li .h6,
+details.plus:not(.archive-updates) ol li .page-listing .overview #registrationForm div.notes .h2,
+details.plus:not(.archive-updates) ol li .page-listing .overview #registrationForm div.notes h2,
+details.plus:not(.archive-updates)
+    ol
+    li
+    .page-listing
+    .overview
+    #registrationForm
+    div.notes
+    table
+    caption,
+details.plus:not(.archive-updates) ol li .page-listing section #registrationForm div.notes .h3,
+details.plus:not(.archive-updates) ol li .page-listing section #registrationForm div.notes h3,
+details.plus:not(.archive-updates)
+    ol
+    li
+    .page-listing
+    section
+    table
+    #registrationForm
+    div.notes
+    caption,
+details.plus:not(.archive-updates) ol li .study-type section #registrationForm div.notes .h3,
+details.plus:not(.archive-updates) ol li .study-type section #registrationForm div.notes h3,
+details.plus:not(.archive-updates)
+    ol
+    li
+    .study-type
+    section
+    table
+    #registrationForm
+    div.notes
+    caption,
+details.plus:not(.archive-updates) ol li .video-container-jw,
+details.plus:not(.archive-updates) ol li div,
+details.plus:not(.archive-updates) ol li h1,
+details.plus:not(.archive-updates) ol li h2,
+details.plus:not(.archive-updates) ol li h3,
+details.plus:not(.archive-updates) ol li h4,
+details.plus:not(.archive-updates) ol li h5,
+details.plus:not(.archive-updates) ol li h6,
+details.plus:not(.archive-updates) ol li li,
+details.plus:not(.archive-updates) ol li ol,
+details.plus:not(.archive-updates) ol li p,
+details.plus:not(.archive-updates) ol li table caption,
+details.plus:not(.archive-updates) ol li ul,
+details.plus:not(.archive-updates) ul li #altbib-hedge.hedge-form .notes div.form-tip .h3,
+details.plus:not(.archive-updates) ul li #altbib-hedge.hedge-form .notes div.form-tip h3,
+details.plus:not(.archive-updates) ul li #registrationForm div.notes .h4,
+details.plus:not(.archive-updates) ul li #registrationForm div.notes .page-listing .overview .h2,
+details.plus:not(.archive-updates) ul li #registrationForm div.notes .page-listing .overview h2,
+details.plus:not(.archive-updates)
+    ul
+    li
+    #registrationForm
+    div.notes
+    .page-listing
+    .overview
+    table
+    caption,
+details.plus:not(.archive-updates) ul li #registrationForm div.notes .page-listing section .h3,
+details.plus:not(.archive-updates) ul li #registrationForm div.notes .page-listing section h3,
+details.plus:not(.archive-updates)
+    ul
+    li
+    #registrationForm
+    div.notes
+    .page-listing
+    section
+    table
+    caption,
+details.plus:not(.archive-updates) ul li #registrationForm div.notes .study-type section .h3,
+details.plus:not(.archive-updates) ul li #registrationForm div.notes .study-type section h3,
+details.plus:not(.archive-updates)
+    ul
+    li
+    #registrationForm
+    div.notes
+    .study-type
+    section
+    table
+    caption,
+details.plus:not(.archive-updates) ul li #registrationForm div.notes h4,
+details.plus:not(.archive-updates) ul li .h1,
+details.plus:not(.archive-updates) ul li .h2,
+details.plus:not(.archive-updates) ul li .h3,
+details.plus:not(.archive-updates) ul li .h4,
+details.plus:not(.archive-updates) ul li .h5,
+details.plus:not(.archive-updates) ul li .h6,
+details.plus:not(.archive-updates) ul li .page-listing .overview #registrationForm div.notes .h2,
+details.plus:not(.archive-updates) ul li .page-listing .overview #registrationForm div.notes h2,
+details.plus:not(.archive-updates)
+    ul
+    li
+    .page-listing
+    .overview
+    #registrationForm
+    div.notes
+    table
+    caption,
+details.plus:not(.archive-updates) ul li .page-listing section #registrationForm div.notes .h3,
+details.plus:not(.archive-updates) ul li .page-listing section #registrationForm div.notes h3,
+details.plus:not(.archive-updates)
+    ul
+    li
+    .page-listing
+    section
+    table
+    #registrationForm
+    div.notes
+    caption,
+details.plus:not(.archive-updates) ul li .study-type section #registrationForm div.notes .h3,
+details.plus:not(.archive-updates) ul li .study-type section #registrationForm div.notes h3,
+details.plus:not(.archive-updates)
+    ul
+    li
+    .study-type
+    section
+    table
+    #registrationForm
+    div.notes
+    caption,
+details.plus:not(.archive-updates) ul li .video-container-jw,
+details.plus:not(.archive-updates) ul li div,
+details.plus:not(.archive-updates) ul li h1,
+details.plus:not(.archive-updates) ul li h2,
+details.plus:not(.archive-updates) ul li h3,
+details.plus:not(.archive-updates) ul li h4,
+details.plus:not(.archive-updates) ul li h5,
+details.plus:not(.archive-updates) ul li h6,
+details.plus:not(.archive-updates) ul li li,
+details.plus:not(.archive-updates) ul li ol,
+details.plus:not(.archive-updates) ul li p,
+details.plus:not(.archive-updates) ul li table caption,
+details.plus:not(.archive-updates) ul li ul,
+details.summary:not(.archive-updates) ol li #altbib-hedge.hedge-form .notes div.form-tip .h3,
+details.summary:not(.archive-updates) ol li #altbib-hedge.hedge-form .notes div.form-tip h3,
+details.summary:not(.archive-updates) ol li #registrationForm div.notes .h4,
+details.summary:not(.archive-updates) ol li #registrationForm div.notes .page-listing .overview .h2,
+details.summary:not(.archive-updates) ol li #registrationForm div.notes .page-listing .overview h2,
+details.summary:not(.archive-updates)
+    ol
+    li
+    #registrationForm
+    div.notes
+    .page-listing
+    .overview
+    table
+    caption,
+details.summary:not(.archive-updates) ol li #registrationForm div.notes .page-listing section .h3,
+details.summary:not(.archive-updates) ol li #registrationForm div.notes .page-listing section h3,
+details.summary:not(.archive-updates)
+    ol
+    li
+    #registrationForm
+    div.notes
+    .page-listing
+    section
+    table
+    caption,
+details.summary:not(.archive-updates) ol li #registrationForm div.notes .study-type section .h3,
+details.summary:not(.archive-updates) ol li #registrationForm div.notes .study-type section h3,
+details.summary:not(.archive-updates)
+    ol
+    li
+    #registrationForm
+    div.notes
+    .study-type
+    section
+    table
+    caption,
+details.summary:not(.archive-updates) ol li #registrationForm div.notes h4,
+details.summary:not(.archive-updates) ol li .h1,
+details.summary:not(.archive-updates) ol li .h2,
+details.summary:not(.archive-updates) ol li .h3,
+details.summary:not(.archive-updates) ol li .h4,
+details.summary:not(.archive-updates) ol li .h5,
+details.summary:not(.archive-updates) ol li .h6,
+details.summary:not(.archive-updates) ol li .page-listing .overview #registrationForm div.notes .h2,
+details.summary:not(.archive-updates) ol li .page-listing .overview #registrationForm div.notes h2,
+details.summary:not(.archive-updates)
+    ol
+    li
+    .page-listing
+    .overview
+    #registrationForm
+    div.notes
+    table
+    caption,
+details.summary:not(.archive-updates) ol li .page-listing section #registrationForm div.notes .h3,
+details.summary:not(.archive-updates) ol li .page-listing section #registrationForm div.notes h3,
+details.summary:not(.archive-updates)
+    ol
+    li
+    .page-listing
+    section
+    table
+    #registrationForm
+    div.notes
+    caption,
+details.summary:not(.archive-updates) ol li .study-type section #registrationForm div.notes .h3,
+details.summary:not(.archive-updates) ol li .study-type section #registrationForm div.notes h3,
+details.summary:not(.archive-updates)
+    ol
+    li
+    .study-type
+    section
+    table
+    #registrationForm
+    div.notes
+    caption,
+details.summary:not(.archive-updates) ol li .video-container-jw,
+details.summary:not(.archive-updates) ol li div,
+details.summary:not(.archive-updates) ol li h1,
+details.summary:not(.archive-updates) ol li h2,
+details.summary:not(.archive-updates) ol li h3,
+details.summary:not(.archive-updates) ol li h4,
+details.summary:not(.archive-updates) ol li h5,
+details.summary:not(.archive-updates) ol li h6,
+details.summary:not(.archive-updates) ol li li,
+details.summary:not(.archive-updates) ol li ol,
+details.summary:not(.archive-updates) ol li p,
+details.summary:not(.archive-updates) ol li table caption,
+details.summary:not(.archive-updates) ol li ul,
+details.summary:not(.archive-updates) ul li #altbib-hedge.hedge-form .notes div.form-tip .h3,
+details.summary:not(.archive-updates) ul li #altbib-hedge.hedge-form .notes div.form-tip h3,
+details.summary:not(.archive-updates) ul li #registrationForm div.notes .h4,
+details.summary:not(.archive-updates) ul li #registrationForm div.notes .page-listing .overview .h2,
+details.summary:not(.archive-updates) ul li #registrationForm div.notes .page-listing .overview h2,
+details.summary:not(.archive-updates)
+    ul
+    li
+    #registrationForm
+    div.notes
+    .page-listing
+    .overview
+    table
+    caption,
+details.summary:not(.archive-updates) ul li #registrationForm div.notes .page-listing section .h3,
+details.summary:not(.archive-updates) ul li #registrationForm div.notes .page-listing section h3,
+details.summary:not(.archive-updates)
+    ul
+    li
+    #registrationForm
+    div.notes
+    .page-listing
+    section
+    table
+    caption,
+details.summary:not(.archive-updates) ul li #registrationForm div.notes .study-type section .h3,
+details.summary:not(.archive-updates) ul li #registrationForm div.notes .study-type section h3,
+details.summary:not(.archive-updates)
+    ul
+    li
+    #registrationForm
+    div.notes
+    .study-type
+    section
+    table
+    caption,
+details.summary:not(.archive-updates) ul li #registrationForm div.notes h4,
+details.summary:not(.archive-updates) ul li .h1,
+details.summary:not(.archive-updates) ul li .h2,
+details.summary:not(.archive-updates) ul li .h3,
+details.summary:not(.archive-updates) ul li .h4,
+details.summary:not(.archive-updates) ul li .h5,
+details.summary:not(.archive-updates) ul li .h6,
+details.summary:not(.archive-updates) ul li .page-listing .overview #registrationForm div.notes .h2,
+details.summary:not(.archive-updates) ul li .page-listing .overview #registrationForm div.notes h2,
+details.summary:not(.archive-updates)
+    ul
+    li
+    .page-listing
+    .overview
+    #registrationForm
+    div.notes
+    table
+    caption,
+details.summary:not(.archive-updates) ul li .page-listing section #registrationForm div.notes .h3,
+details.summary:not(.archive-updates) ul li .page-listing section #registrationForm div.notes h3,
+details.summary:not(.archive-updates)
+    ul
+    li
+    .page-listing
+    section
+    table
+    #registrationForm
+    div.notes
+    caption,
+details.summary:not(.archive-updates) ul li .study-type section #registrationForm div.notes .h3,
+details.summary:not(.archive-updates) ul li .study-type section #registrationForm div.notes h3,
+details.summary:not(.archive-updates)
+    ul
+    li
+    .study-type
+    section
+    table
+    #registrationForm
+    div.notes
+    caption,
+details.summary:not(.archive-updates) ul li .video-container-jw,
+details.summary:not(.archive-updates) ul li div,
+details.summary:not(.archive-updates) ul li h1,
+details.summary:not(.archive-updates) ul li h2,
+details.summary:not(.archive-updates) ul li h3,
+details.summary:not(.archive-updates) ul li h4,
+details.summary:not(.archive-updates) ul li h5,
+details.summary:not(.archive-updates) ul li h6,
+details.summary:not(.archive-updates) ul li li,
+details.summary:not(.archive-updates) ul li ol,
+details.summary:not(.archive-updates) ul li p,
+details.summary:not(.archive-updates) ul li table caption,
+details.summary:not(.archive-updates) ul li ul,
+table
+    #registrationForm
+    div.notes
+    .page-listing
+    .overview
+    details.plus:not(.archive-updates)
+    ol
+    li
+    caption,
+table
+    #registrationForm
+    div.notes
+    .page-listing
+    .overview
+    details.plus:not(.archive-updates)
+    ul
+    li
+    caption,
+table
+    #registrationForm
+    div.notes
+    .page-listing
+    .overview
+    details.summary:not(.archive-updates)
+    ol
+    li
+    caption,
+table
+    #registrationForm
+    div.notes
+    .page-listing
+    .overview
+    details.summary:not(.archive-updates)
+    ul
+    li
+    caption,
+table
+    .page-listing
+    .overview
+    #registrationForm
+    div.notes
+    details.plus:not(.archive-updates)
+    ol
+    li
+    caption,
+table
+    .page-listing
+    .overview
+    #registrationForm
+    div.notes
+    details.plus:not(.archive-updates)
+    ul
+    li
+    caption,
+table
+    .page-listing
+    .overview
+    #registrationForm
+    div.notes
+    details.summary:not(.archive-updates)
+    ol
+    li
+    caption,
+table
+    .page-listing
+    .overview
+    #registrationForm
+    div.notes
+    details.summary:not(.archive-updates)
+    ul
+    li
+    caption,
+table
+    details.plus:not(.archive-updates)
+    ol
+    li
+    #registrationForm
+    div.notes
+    .page-listing
+    .overview
+    caption,
+table
+    details.plus:not(.archive-updates)
+    ol
+    li
+    .page-listing
+    .overview
+    #registrationForm
+    div.notes
+    caption,
+table details.plus:not(.archive-updates) ol li caption,
+table
+    details.plus:not(.archive-updates)
+    ul
+    li
+    #registrationForm
+    div.notes
+    .page-listing
+    .overview
+    caption,
+table
+    details.plus:not(.archive-updates)
+    ul
+    li
+    .page-listing
+    .overview
+    #registrationForm
+    div.notes
+    caption,
+table details.plus:not(.archive-updates) ul li caption,
+table
+    details.summary:not(.archive-updates)
+    ol
+    li
+    #registrationForm
+    div.notes
+    .page-listing
+    .overview
+    caption,
+table
+    details.summary:not(.archive-updates)
+    ol
+    li
+    .page-listing
+    .overview
+    #registrationForm
+    div.notes
+    caption,
+table details.summary:not(.archive-updates) ol li caption,
+table
+    details.summary:not(.archive-updates)
+    ul
+    li
+    #registrationForm
+    div.notes
+    .page-listing
+    .overview
+    caption,
+table
+    details.summary:not(.archive-updates)
+    ul
+    li
+    .page-listing
+    .overview
+    #registrationForm
+    div.notes
+    caption,
+table details.summary:not(.archive-updates) ul li caption {
     padding-right: 0.25rem;
     padding-left: 0.25rem;
 }
 
-details.plus ol li p ~ ol,
-details.plus ol li p ~ ul,
-details.plus ul li p ~ ol,
-details.plus ul li p ~ ul,
-details.summary ol li p ~ ol,
-details.summary ol li p ~ ul,
-details.summary ul li p ~ ol,
-details.summary ul li p ~ ul {
+details.plus:not(.archive-updates) ol li p ~ ol,
+details.plus:not(.archive-updates) ol li p ~ ul,
+details.plus:not(.archive-updates) ul li p ~ ol,
+details.plus:not(.archive-updates) ul li p ~ ul,
+details.summary:not(.archive-updates) ol li p ~ ol,
+details.summary:not(.archive-updates) ol li p ~ ul,
+details.summary:not(.archive-updates) ul li p ~ ol,
+details.summary:not(.archive-updates) ul li p ~ ul {
     margin-bottom: 1.5rem;
 }
 
-details.plus table,
-details.summary table {
+details.plus:not(.archive-updates) table,
+details.summary:not(.archive-updates) table {
     width: 92.5%;
     margin-left: 2rem;
 }
 
 @media print, screen and (max-width: 39.99875em) {
-    details.plus table,
-    details.summary table {
+    details.plus:not(.archive-updates) table,
+    details.summary:not(.archive-updates) table {
         margin-left: 0.75rem;
     }
 }
 
-details.plus .video-container-jw,
-details.summary .video-container-jw {
+details.plus:not(.archive-updates) .video-container-jw,
+details.summary:not(.archive-updates) .video-container-jw {
     padding-bottom: 1.5rem;
 }
 
@@ -20647,7 +21548,7 @@ table .sidebar.feature caption a {
     max-width: 60%;
     position: absolute;
     bottom: -3rem;
-    left: -3rem;
+    left: -1.5rem;
     z-index: 1;
 }
 
@@ -20666,19 +21567,19 @@ table .sidebar.feature caption a {
 
 @media screen and (max-width: 1305px) and (min-width: 1250px) {
     .sidebar.feature.single.director .director-portrait {
-        left: -2rem;
+        left: -1rem;
     }
 }
 
 @media screen and (max-width: 1250px) and (min-width: 1024px) {
     .sidebar.feature.single.director .director-portrait {
-        left: -2.75rem;
+        left: -1.75rem;
     }
 }
 
 @media screen and (max-width: 640px) and (min-width: 365px) {
     .sidebar.feature.single.director .director-portrait {
-        top: 0;
+        top: -2rem;
         left: initial;
     }
 }
@@ -23364,14 +24265,16 @@ table.index th[scope='rowgroup'] {
     }
 }
 
-.index-key i.callout-custom {
+.index-key i.callout-custom,
+.index-key span.callout-custom {
     font-size: 2.125rem;
     margin-right: 0.5rem;
     vertical-align: middle;
 }
 
 @media print, screen and (max-width: 39.99875em) {
-    .index-key i.callout-custom {
+    .index-key i.callout-custom,
+    .index-key span.callout-custom {
         display: none;
     }
 }
@@ -24385,6 +25288,11 @@ header#top .input-group-label {
 
 header#top .input-group-label .fa {
     border-right-color: #d9d9d9;
+}
+
+header#top input.input-group-field {
+    background-color: #fff !important;
+    padding: 0.5rem !important;
 }
 
 header#top input::-webkit-input-placeholder {
@@ -27015,6 +27923,28 @@ header#top div.alert.site-wide a.external.pdf::after {
     color: #f26522;
 }
 
+#archives-notice {
+    color: #fff;
+    background-color: #cd0000;
+}
+
+#archives-notice a {
+    color: #fff;
+}
+
+#archives-notice a:hover {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+#archives-notice .columns {
+    position: relative;
+    padding-left: 2.65rem;
+}
+
+#archives-notice .columns > p:first-child::before {
+    color: #fff;
+}
+
 .card {
     background: 0 0;
 }
@@ -27626,6 +28556,15 @@ table #altbib .search-options caption {
 
 #altbib-hedge p.form-tip .fa {
     color: #0b4898;
+}
+
+.page-updatethispage .form-item-attachment .form-managed-file {
+    border-color: #d9d9d9;
+    background-color: #fff;
+}
+
+.page-updatethispage .form-item-attachment .description {
+    color: #545454;
 }
 
 #altbib-hedge.hedge-form .notes div.form-tip .h3,
@@ -35482,28 +36421,82 @@ table #atlaspage caption {
     }
 }
 
-.view-atlas-parent-terms .column,
-.view-atlas-parent-terms .columns {
-    position: relative;
-    margin-bottom: 1.5rem;
+.view-atlas-parent-terms .views-view-grid .row {
+    margin-left: -0.75rem;
+    margin-right: -0.75rem;
 }
 
-.view-atlas-parent-terms .column .column-wrapper,
-.view-atlas-parent-terms .columns .column-wrapper {
-    border: solid 1px;
+@media print, screen and (min-width: 40em) {
+    .view-atlas-parent-terms .views-view-grid .row.medium-up-3 .column,
+    .view-atlas-parent-terms .views-view-grid .row.medium-up-3 .columns {
+        -ms-flex: 0 0 31%;
+        -webkit-box-flex: 0;
+        flex: 0 0 calc(33.3333333333% - 2rem);
+        max-width: calc(33.3333333333% - 2rem);
+    }
+}
+
+@media print, screen and (max-width: 39.99875em) {
+    .view-atlas-parent-terms .views-view-grid .row.small-up-1 .column,
+    .view-atlas-parent-terms .views-view-grid .row.small-up-1 .columns {
+        -ms-flex: 0 0 98%;
+        -webkit-box-flex: 0;
+        flex: 0 0 calc(100% - 2rem);
+        max-width: calc(100% - 2rem);
+    }
+}
+
+.view-atlas-parent-terms .views-view-grid .column,
+.view-atlas-parent-terms .views-view-grid .columns {
+    border-width: 3px;
+    border-style: solid;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    position: relative;
+    margin: 1rem;
+    padding: 0 !important;
+}
+
+.view-atlas-parent-terms .views-view-grid .column a,
+.view-atlas-parent-terms .views-view-grid .columns a {
+    text-decoration: none !important;
+}
+
+.view-atlas-parent-terms
+    .views-view-grid
+    .column
+    .views-field.views-field-field-featured-image-media,
+.view-atlas-parent-terms
+    .views-view-grid
+    .columns
+    .views-field.views-field-field-featured-image-media {
+    aspect-ratio: 11/8;
+}
+
+.view-atlas-parent-terms
+    .views-view-grid
+    .column
+    .views-field.views-field-field-featured-image-media
+    img,
+.view-atlas-parent-terms
+    .views-view-grid
+    .columns
+    .views-field.views-field-field-featured-image-media
+    img {
+    width: 100%;
     height: 100%;
-    position: relative;
+    -o-object-fit: cover;
+    object-fit: cover;
+    -o-object-position: center;
+    object-position: center;
 }
 
-.view-atlas-parent-terms .views-field.views-field-name {
-    bottom: 0;
-    position: absolute;
+.view-atlas-parent-terms .views-view-grid .column .views-field.views-field-name,
+.view-atlas-parent-terms .views-view-grid .columns .views-field.views-field-name {
     text-align: center;
     width: 100%;
-}
-
-.view-atlas-parent-terms .views-field.views-field-name a {
-    text-decoration: none !important;
+    display: block;
+    padding: 0.5rem;
 }
 
 a[href$='.jpg'].lg-download::after {
@@ -36512,34 +37505,46 @@ body.page-atlas #main-nav.atlastopmenu #mobile-nav.dropdown li#atlas-pdf:hover a
     border-color: #d9d9d9;
 }
 
-.view-atlas-parent-terms .column .column-wrapper,
-.view-atlas-parent-terms .columns .column-wrapper {
-    border: solid 3px #e3e3e3;
-}
-
-.view-atlas-parent-terms .column .column-wrapper:hover,
-.view-atlas-parent-terms .columns .column-wrapper:hover {
-    border: solid 3px #5e5e5e;
-}
-
-.view-atlas-parent-terms .column .column-wrapper:hover .views-field.views-field-name,
-.view-atlas-parent-terms .columns .column-wrapper:hover .views-field.views-field-name {
-    background-color: #5e5e5e;
-}
-
-.view-atlas-parent-terms .column .column-wrapper:hover .views-field.views-field-name a,
-.view-atlas-parent-terms .columns .column-wrapper:hover .views-field.views-field-name a {
-    color: #fff;
-}
-
-.view-atlas-parent-terms .views-field.views-field-name {
+.view-atlas-parent-terms .column,
+.view-atlas-parent-terms .columns {
+    border-color: #e3e3e3;
     background-color: #e3e3e3;
 }
 
-.view-atlas-parent-terms .views-field.views-field-name a {
+.view-atlas-parent-terms .column a,
+.view-atlas-parent-terms .columns a {
     color: #000;
-    display: block;
-    padding: 0.5rem;
+}
+
+.view-atlas-parent-terms .column a:hover,
+.view-atlas-parent-terms .columns a:hover {
+    color: #fff;
+}
+
+.view-atlas-parent-terms .column:hover,
+.view-atlas-parent-terms .columns:hover {
+    border-color: #5e5e5e;
+    background-color: #5e5e5e;
+}
+
+.view-atlas-parent-terms .column:hover a,
+.view-atlas-parent-terms .columns:hover a {
+    color: #fff;
+}
+
+.view-atlas-parent-terms .column:hover .views-field.views-field-name,
+.view-atlas-parent-terms .columns:hover .views-field.views-field-name {
+    background-color: #5e5e5e;
+}
+
+.view-atlas-parent-terms .column .views-field.views-field-field-featured-image-media,
+.view-atlas-parent-terms .columns .views-field.views-field-field-featured-image-media {
+    background-color: #fff;
+}
+
+.view-atlas-parent-terms .column .views-field.views-field-name,
+.view-atlas-parent-terms .columns .views-field.views-field-name {
+    background-color: #e3e3e3;
 }
 
 a[href$='.jpg'].lg-download::after {
@@ -36750,24 +37755,13 @@ table .page-listing .overview #atlas-facets caption {
     background-color: #b30000;
 }
 
-@media print, screen and (min-width: 64em) {
-    .lightgallery.large-up-3 .column,
-    .lightgallery.large-up-3 .columns {
-        -ms-flex: 0 0 30%;
-        -webkit-box-flex: 0;
-        flex: 0 0 30%;
-        max-width: 30%;
-    }
-}
-
 @media print, screen and (min-width: 40em) {
     .lightgallery.medium-up-3 .column,
     .lightgallery.medium-up-3 .columns {
-        -ms-flex: 0 0 30%;
+        -ms-flex: 0 0 32%;
         -webkit-box-flex: 0;
-        flex: 0 0 31%;
-        max-width: 31%;
-        padding: 0 5px;
+        flex: 0 0 calc(33.3333333333% - 0.5rem);
+        max-width: calc(33.3333333333% - 0.5rem);
     }
 
     .lightgallery.medium-up-3 .column div.field-content a,
@@ -36795,33 +37789,33 @@ table .page-listing .overview #atlas-facets caption {
     }
 }
 
-@media print, screen and (max-width: 63.99875em) {
-    .lightgallery.medium-up-2 .column,
-    .lightgallery.medium-up-2 .columns {
-        -ms-flex: 0 0 45%;
-        -webkit-box-flex: 0;
-        flex: 0 0 45%;
-        max-width: 45%;
-    }
-}
-
 @media print, screen and (max-width: 39.99875em) {
     .lightgallery.small-up-1 .column,
     .lightgallery.small-up-1 .columns {
-        -ms-flex: 0 0 100%;
+        -ms-flex: 0 0 99%;
         -webkit-box-flex: 0;
-        flex: 0 0 100%;
-        max-width: 100%;
+        flex: 0 0 calc(100% - 0.5rem);
+        max-width: calc(100% - 0.5rem);
     }
 }
 
-.lightgallery .field-content {
-    border: #e3e3e3 3px solid;
-    margin-bottom: 1rem;
+.lightgallery.row {
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
 }
 
-.lightgallery .field-content:hover {
+.lightgallery .lightgallery-column {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    border: #e3e3e3 3px solid;
+    margin: 0.5rem 0.25rem;
+    padding: 0 !important;
+}
+
+.lightgallery .lightgallery-column:hover {
     border: #5e5e5e 3px solid;
+    cursor: pointer;
 }
 
 .lightgallery .caption {
@@ -36838,7 +37832,7 @@ table .page-listing .overview #atlas-facets caption {
 .view-atlas-lightgallery .enlarge-all,
 .view-atlas-lightgallery-media- .enlarge-all {
     margin: 1rem;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 0.5rem;
     font-size: 0.8rem;
 }
 
@@ -37337,6 +38331,118 @@ table .page-listing .overview .eventscarousel .flexslider .slides > li caption {
 
 #block-tabs .ntp-site-tabs .tabs li.is-active a {
     background-color: #fff;
+}
+
+.view-all-past-events .view-filters {
+    padding: 0.3125rem 1.25rem;
+}
+
+.view-all-past-events .view-filters .form-item {
+    padding-top: 0.3125rem;
+    padding-bottom: 0.3125rem;
+}
+
+@media print, screen and (min-width: 40em) {
+    .view-all-past-events .view-filters .form-item {
+        display: inline-block;
+    }
+}
+
+.view-all-past-events .view-filters .form-item:not(:first-child) {
+    padding-left: 0.25rem;
+}
+
+.view-all-past-events .view-filters .form-item label {
+    font-size: 0.85rem;
+    line-height: 1.3;
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.view-all-past-events .view-filters .form-item input,
+.view-all-past-events .view-filters .form-item select {
+    width: 100%;
+    display: block;
+}
+
+.view-all-past-events .view-filters .form-item.js-form-item-datefull {
+    display: none;
+}
+
+.view-all-past-events .view-filters .form-actions {
+    display: inline-block;
+    padding: 0.3125rem 0 0.3125rem 0.25rem;
+}
+
+@media print, screen and (min-width: 40em) {
+    .view-all-past-events table thead th.views-field-field-event-start-date-2 {
+        width: 10%;
+    }
+}
+
+@media print, screen and (min-width: 40em) {
+    .view-all-past-events table thead th.views-field-description__value {
+        width: 18%;
+    }
+}
+
+@media print, screen and (min-width: 40em) {
+    .view-all-past-events table thead th.views-field-nothing {
+        width: 22%;
+    }
+}
+
+.view-all-past-events table td[headers^='view-field-event-start-date'] {
+    white-space: nowrap;
+}
+
+.view-all-past-events .pager {
+    text-align: right;
+    float: right;
+    display: inline-block;
+    max-width: 50%;
+}
+
+.view-all-past-events .pager ul {
+    list-style: none;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+}
+
+.view-all-past-events .pager ul li {
+    font-size: 1rem;
+    border-radius: 3px;
+    display: inline-block;
+    margin-right: 0.0625rem;
+}
+
+.view-all-past-events .pager ul li.pager__item--first,
+.view-all-past-events .pager ul li.pager__item--last {
+    display: none;
+}
+
+@media print, screen and (max-width: 39.99875em) {
+    .view-all-past-events .pager ul li.pager__item:not(.pager__item--next, .pager__item--previous) {
+        display: none;
+    }
+}
+
+.view-all-past-events .pager ul li a,
+.view-all-past-events .pager ul li button {
+    border-radius: 3px;
+    display: block;
+    padding: 0.1875rem 0.625rem;
+}
+
+.view-all-past-events .pager ul li.is-active a {
+    text-decoration: none !important;
+    padding: 0.1875rem 0.625rem;
+}
+
+.view-all-past-events .pager + .view-footer {
+    display: inline-block;
+    max-width: 48%;
 }
 
 .slider {
@@ -40448,4 +41554,24 @@ body.page-getinvolved-public-comments .public-comment .comment-public-comments {
 
 body.page-events-past table td ul {
     margin-bottom: 0;
+}
+
+.view-all-past-events .view-filters {
+    background-color: #d9d9d9;
+}
+
+.view-all-past-events .pager ul li a,
+.view-all-past-events .pager ul li button {
+    color: #000;
+}
+
+.view-all-past-events .pager ul li a:hover,
+.view-all-past-events .pager ul li button:hover {
+    color: #4c6eac;
+    background: #f0f0f0;
+}
+
+.view-all-past-events .pager ul li.is-active a {
+    color: #fff;
+    background: #527f24;
 }

@@ -32,7 +32,6 @@ schema_view = get_schema_view(
 # serve production apps
 urlpatterns = [
     path('', Home.as_view(), name='home'),
-    path('selectable/', include('selectable.urls')),
     path('seazit/', include(('seazit.urls', 'seazit'), namespace='seazit')),
 
     # API schema docs
