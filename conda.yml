@@ -1,4 +1,4 @@
-name: seazit2
+name: seazit
 channels:
   - anaconda-platform
   - conda-forge
