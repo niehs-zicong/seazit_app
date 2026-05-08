@@ -7,7 +7,7 @@ var args = process.argv.slice(2),
 
 if (args.indexOf('--testProduction') >= 0) {
     console.log('Using test production;');
-    config.plugins.unshift(
+    config.plugins.push(
         new webpack.DefinePlugin({
             'process.env': {
                 NODE_ENV: JSON.stringify('production'),
@@ -19,19 +19,16 @@ if (args.indexOf('--testProduction') >= 0) {
 var app = express(),
     compiler = webpack(config);
 
-compiler.apply(new DashboardPlugin());
+new DashboardPlugin().apply(compiler);
 
 app.use(
     require('webpack-dev-middleware')(compiler, {
-        noInfo: true,
         publicPath: config.output.publicPath,
     })
 );
 
 app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
-    // res.header('Access-Control-Allow-Origin', 'https://ntp.niehs.nih.gov/fonts/sourcesanspro-400i.ttf');
-    // res.header('Access-Control-Allow-Origin: *');
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     next();

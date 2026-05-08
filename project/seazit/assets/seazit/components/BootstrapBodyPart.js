@@ -255,7 +255,7 @@ class sankeyPlotGraphBody extends React.Component {
 
     render() {
         return (
-            <div className="col-10">
+            <div className="col-12">
                 <SankeyPlot cells={this.props.cells} />
             </div>
         );

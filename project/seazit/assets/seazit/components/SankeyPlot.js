@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import Loading from 'utils/Loading';
 import HelpButtonWidget from '../widgets/HelpButtonWidget';
-import Plotly from 'plotly.js-dist';
+import Plotly from 'Plotly';
 // import FileReaderInput from 'react-file-reader';
 
 import {
@@ -240,7 +240,6 @@ class SankeyPlot extends React.Component {
             );
         }
 
-        let colNum = Math.ceil(12 / this.props.cols);
         return (
             <div>
                 <h4 className="label-horizontal">

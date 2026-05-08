@@ -12,21 +12,16 @@ module.exports = {
     resolve: {
         modules: [
             path.join(__dirname, 'assets'),
-            path.join(__dirname, 'neurotox', 'assets'),
-
             path.join(__dirname, 'seazit', 'assets'),
-
             'node_modules',
         ],
-        extensions: ['.js', '.css'],
+        extensions: ['.js', '.jsx', '.css'],
     },
 
     output: {
-        //        path: path.join(__dirname, 'dist'),
         path: path.join(__dirname, 'static_seazit', 'bundles'),
-
-        filename: '[name].[hash].js',
-        chunkFilename: '[name].[hash].js',
+        filename: '[name].[contenthash].js',
+        chunkFilename: '[name].[contenthash].js',
     },
 
     externals: {
@@ -34,21 +29,25 @@ module.exports = {
         Plotly: 'Plotly',
     },
 
-    plugins: [
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'vendor',
-            filename: 'vendor.[hash].js',
-            minChunks: (module, count) => {
-                return module.context && module.context.indexOf('node_modules') !== -1;
+    optimization: {
+        emitOnErrors: false,
+        splitChunks: {
+            chunks: 'all',
+            cacheGroups: {
+                vendor: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: 'vendor',
+                    chunks: 'all',
+                },
             },
-        }),
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'manifest',
-            filename: 'manifest.[hash].js',
-        }),
-        new webpack.NoEmitOnErrorsPlugin(),
+        },
+        runtimeChunk: 'single',
+    },
+
+    plugins: [
         new BundleTracker({
-            filename: './webpack-stats.json',
+            path: __dirname,
+            filename: 'webpack-stats.json',
         }),
     ],
 };

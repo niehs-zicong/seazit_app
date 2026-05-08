@@ -1,33 +1,23 @@
 var config = require('./webpack.base.js'),
     path = require('path'),
     webpack = require('webpack'),
-    ExtractTextPlugin = require('extract-text-webpack-plugin');
+    MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 config.devtool = 'source-map';
+config.mode = 'production';
 
 config.output.path = path.resolve('./static_seazit/bundles');
 config.output.publicPath = '/static_seazit/bundles/';
 
-config.plugins.unshift.apply(config.plugins, [
-    new webpack.DefinePlugin({
-        'process.env': {
-            NODE_ENV: JSON.stringify('production'),
-        },
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-        compressor: {
-            warnings: false,
-        },
-        sourceMap: true,
-    }),
-    new webpack.LoaderOptionsPlugin({
-        minimize: true,
-    }),
-    new ExtractTextPlugin({
+config.plugins.push(
+    new MiniCssExtractPlugin({
         filename: 'style.css',
-        allChunks: true,
-    }),
-]);
+    })
+);
+
+config.optimization = Object.assign({}, config.optimization, {
+    minimize: true,
+});
 
 config.module = {
     noParse: [/xlsx\/jszip.js/],
@@ -39,11 +29,18 @@ config.module = {
         },
         {
             test: /\.css$/,
-            use: ExtractTextPlugin.extract({
-                fallback: 'style-loader',
-                use:
-                    'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
-            }),
+            use: [
+                MiniCssExtractPlugin.loader,
+                {
+                    loader: 'css-loader',
+                    options: {
+                        modules: {
+                            localIdentName: '[name]__[local]___[hash:base64:5]',
+                        },
+                        importLoaders: 1,
+                    },
+                },
+            ],
         },
     ],
 };

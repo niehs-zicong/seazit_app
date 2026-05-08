@@ -1,6 +1,6 @@
 # python
 *.py[cod]
-
+opencode.json
 #kube
 .kube/
 
