@@ -8,10 +8,11 @@ django-filter==24.3         # Compatible with Django 4.2
 django-cors-headers==4.0.0  # Compatible with Django 4.2
 drf-extensions==0.7.1
 django-crispy-forms==2.3    # Compatible with Django 4.2
+crispy-bootstrap3>=2024.1   # Bootstrap 3 templates for django-crispy-forms v2+
 django-extensions==3.2.3
 
 # django-webpack-loader==3.1.1    # too advanced for Django 4.2
-django-webpack-loader==0.7.0
+django-webpack-loader>=1.0.0,<2.0.0
 django-markdown-deux==1.0.6
 #django-selectable==1.4.0     # too advanced for python 3, TODO
 

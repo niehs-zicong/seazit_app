@@ -101,24 +101,6 @@ class SankeyPlot extends React.Component {
         // }
         let ontologyType =
             this.props.cells.ontologyType == integrative_Granular ? 'granular' : 'general';
-        let wrapLabel = (name, maxLen = 20) => {
-            if (name.length <= maxLen) return name;
-            const mid = Math.floor(name.length / 2);
-            // Try splitting on space first
-            const spaceAfter = name.indexOf(' ', mid);
-            const spaceBefore = name.lastIndexOf(' ', mid);
-            let splitAt = spaceAfter !== -1 ? spaceAfter : spaceBefore;
-            // Fall back to underscore if no space found
-            if (splitAt === -1) {
-                const underAfter = name.indexOf('_', mid);
-                const underBefore = name.lastIndexOf('_', mid);
-                splitAt = underAfter !== -1 ? underAfter : underBefore;
-                if (splitAt === -1) return name;
-                // Keep the underscore on the first line, split after it
-                return name.slice(0, splitAt + 1) + '<br>' + name.slice(splitAt + 1);
-            }
-            return name.slice(0, splitAt) + '<br>' + name.slice(splitAt + 1);
-        };
         let getStyledLabel = (node_name, node_level) => {
             const style = {
                 'font-weight': 'bold',
@@ -133,7 +115,7 @@ class SankeyPlot extends React.Component {
             const styleString = Object.entries(style)
                 .map(([key, value]) => `${key}: ${value}`)
                 .join(';');
-            return `<span style='${styleString}'>${wrapLabel(node_name)}</span>`;
+            return `<span style='${styleString}'>${node_name}</span>`;
         };
 
         let getNodeLevelLabel = (node_level) => {
@@ -197,7 +179,7 @@ class SankeyPlot extends React.Component {
             // i use width to be 2400 to avoid node label overlapping.
             autosize: true,
             font: {
-                size: 13,
+                size: 20,
             },
             hoverlabel: {
                 font: {

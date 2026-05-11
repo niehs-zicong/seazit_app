@@ -197,7 +197,7 @@ class SankeyPlot extends React.Component {
             // i use width to be 2400 to avoid node label overlapping.
             autosize: true,
             font: {
-                size: 13,
+                size: 15,
             },
             hoverlabel: {
                 font: {

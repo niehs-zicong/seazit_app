@@ -112,6 +112,7 @@ TEMPLATES = [
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
+CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap3'
 
 FIXTURE_DIRS = (
     os.path.join(PROJECT_PATH, 'fixtures'),
@@ -129,6 +130,7 @@ INSTALLED_APPS = (
     'django.contrib.sitemaps',
     # External apps
     'crispy_forms',
+    'crispy_bootstrap3',
     'django_filters',
     'markdown_deux',
     'rest_framework',
