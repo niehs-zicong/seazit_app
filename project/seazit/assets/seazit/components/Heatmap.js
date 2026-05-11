@@ -6,13 +6,7 @@ import * as d3 from 'd3';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import BootstrapModal from 'utils/BootstrapModal';
-import {
-    Header,
-    SingleCurveBody,
-    MultipleCurveBody,
-    molecularGraphBody,
-    sankeyPlotGraphBody,
-} from './BootstrapBodyPart';
+import { Header, molecularGraphBody, sankeyPlotGraphBody } from './BootstrapBodyPart';
 import {
     COLLAPSE_WITH_Mortality120,
     getDoseResponsesUrl,

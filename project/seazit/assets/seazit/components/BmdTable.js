@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import BootstrapModal from 'utils/BootstrapModal';
-import { Header, SingleCurveBody } from './BootstrapBodyPart';
+import { Header, DoseResponseBody } from './BootstrapBodyPart';
 import { BMDVIZ_ACTIVITY, BMDVIZ_SELECTIVITY, pod_med_processed, printFloat } from '../shared';
 import _ from 'lodash';
 
@@ -90,7 +90,7 @@ class BmdTable extends React.Component {
         // console.log( jsonData,jsonData.minimimumNonViability, jsonData.minimimumViability)
         let showModal = () => {
             // console.log( jsonData)
-            new BootstrapModal(Header, SingleCurveBody, {
+            new BootstrapModal(Header, DoseResponseBody, {
                 // title: `${d.preferred_name} (${d.chemical_casrn}): ${d.readout_endpoint}`,
                 title:
                     flag == 'NonMortality'

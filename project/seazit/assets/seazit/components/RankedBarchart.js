@@ -14,7 +14,6 @@ import {
     svg_download_form,
 } from '../shared';
 import BootstrapModal from 'utils/BootstrapModal';
-import { Header, MultipleCurveBody, SingleCurveBody } from './BootstrapBodyPart';
 import RankedBarchartHandler from './RankedBarchartHandler';
 
 import {

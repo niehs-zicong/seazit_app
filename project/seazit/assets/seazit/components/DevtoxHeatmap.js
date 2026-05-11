@@ -6,13 +6,7 @@ import * as d3 from 'd3';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import BootstrapModal from 'utils/BootstrapModal';
-import {
-    Header,
-    SingleCurveBody,
-    MultipleCurveBody,
-    sankeyPlotGraphBody,
-    molecularGraphBody,
-} from './BootstrapBodyPart';
+import { Header, sankeyPlotGraphBody, molecularGraphBody } from './BootstrapBodyPart';
 
 import { getLog10AxisFunction } from 'utils/d3';
 import { integrativeHandleCellClick, printFloat, pod_med_processed } from '../shared';

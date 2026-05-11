@@ -66,20 +66,28 @@ Header.propTypes = {
     title: PropTypes.string.isRequired,
 };
 
-class SingleCurveBody extends React.Component {
+class DoseResponseBody extends React.Component {
     constructor(props) {
         super(props);
         // take 75% of the screen width since main body is col-9 size; assume
         // each plot is ~400px for a reasonable start, make sure it's at least 1
+        let initialCols = Math.max(1, Math.floor((0.75 * window.innerWidth) / 400));
         this.state = {
+            vizColumns: initialCols,
+            vizHeight: 350,
             mortalityCheck: false,
             showHelpText: false,
-            vizHeight: 350,
-            collapse: NO_COLLAPSE, // Set initial collapse state
+            collapse: NO_COLLAPSE,
         };
     }
 
+    _isMultiple() {
+        return this.props.readout_ids && this.props.readout_ids.length > 1;
+    }
+
     _renderDoseResponse(state) {
+        const cols = this._isMultiple() ? state.vizColumns : 1;
+
         const commonHeader = (
             <div className="col-10">
                 <h4 className="label-horizontal">
@@ -101,7 +109,7 @@ class SingleCurveBody extends React.Component {
                 <DoseResponse
                     stateHolder={this}
                     url={state.url}
-                    cols={3}
+                    cols={cols}
                     height={state.vizHeight}
                     collapse={state.collapse}
                     devtoxEndPointList={this.props.devtoxEndPointList}
@@ -114,19 +122,25 @@ class SingleCurveBody extends React.Component {
     render() {
         this.state.collapse = this.state.mortalityCheck ? COLLAPSE_WITH_Mortality120 : NO_COLLAPSE;
 
+        // Normalize: always work with an array of readout_ids internally
+        const baseIds = this.props.readout_ids || [this.props.readout_id];
+        const casrns = this.props.casrns || [this.props.casrn];
+
         let readout_ids = this.state.mortalityCheck
-            ? [this.props.readout_id].concat(['Mortality@120' + '_' + this.props.protocol_id])
-            : [this.props.readout_id];
-        this.state.url = getDoseResponsesUrl(
-            [this.props.protocol_id],
-            [readout_ids],
-            [this.props.casrn]
-        );
+            ? baseIds.concat(['Mortality@120' + '_' + this.props.protocol_id])
+            : baseIds;
+
+        this.state.url = getDoseResponsesUrl([this.props.protocol_id], [readout_ids], casrns);
 
         return (
-            // <div className="row  ">
             <div className="d-flex flex-wrap mx-5 my-3">
                 <div className="col-2  pe-3">
+                    {this._isMultiple() && (
+                        <span>
+                            <DoseResponseGridWidget stateHolder={this} />
+                            <br />
+                        </span>
+                    )}
                     {this.props.CheckBoxDisable ? null : (
                         <IntegrativeCheckBoxWidget stateHolder={this} />
                     )}
@@ -137,94 +151,18 @@ class SingleCurveBody extends React.Component {
     }
 }
 
-SingleCurveBody.propTypes = {
+DoseResponseBody.propTypes = {
     protocol_id: PropTypes.number.isRequired,
-    readout_id: PropTypes.string.isRequired,
-    casrn: PropTypes.array.isRequired,
-    devtoxEndPointList: PropTypes.string,
-    CheckBoxDisable: false,
+    // single-readout usage: pass readout_id (string) + casrn (array)
+    readout_id: PropTypes.string,
+    casrn: PropTypes.array,
+    // multi-readout usage: pass readout_ids (array) + casrns (array)
+    readout_ids: PropTypes.array,
+    casrns: PropTypes.array,
+    devtoxEndPointList: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
+    CheckBoxDisable: PropTypes.bool,
     heading: PropTypes.string,
     final_dev_call: PropTypes.string,
-};
-
-class MultipleCurveBody extends React.Component {
-    constructor(props) {
-        super(props);
-        // take 75% of the screen width since main body is col-9 size; assume
-        // each plot is ~400px for a reasonable start, make sure it's at least 1
-        let initialCols = Math.max(1, Math.floor((0.75 * window.innerWidth) / 400));
-        this.state = {
-            vizColumns: initialCols,
-            vizHeight: 350,
-            mortalityCheck: false,
-            showHelpText: false,
-            collapse: NO_COLLAPSE, // Set initial collapse state
-        };
-    }
-
-    _renderDoseResponse(state) {
-        // console.log(state)
-
-        const commonHeader = (
-            <div className="col-10">
-                <h4 className="label-horizontal">
-                    Developmental Toxicity Concentration Response Figures
-                    <HelpButtonWidget
-                        stateHolder={this}
-                        headLevel={'h4'}
-                        title={'Click to toggle help-text'}
-                    />
-                </h4>
-                {this.props.heading && <h5>{this.props.heading}</h5>}
-                {_renderHelpText(this.state)}
-            </div>
-        );
-
-        return (
-            <div className="col-10">
-                {commonHeader}
-                <DoseResponse
-                    stateHolder={this}
-                    url={state.url}
-                    cols={state.vizColumns}
-                    height={state.vizHeight}
-                    collapse={state.collapse}
-                    devtoxEndPointList={this.props.devtoxEndPointList}
-                />
-            </div>
-        );
-    }
-
-    render() {
-        this.state.collapse = this.state.mortalityCheck ? COLLAPSE_WITH_Mortality120 : NO_COLLAPSE;
-        let readout_ids = this.state.mortalityCheck
-            ? this.props.readout_ids.concat(['Mortality@120' + '_' + this.props.protocol_id])
-            : [this.props.readout_ids];
-        this.state.url = getDoseResponsesUrl(
-            [this.props.protocol_id],
-            [readout_ids],
-            [this.props.casrns]
-        );
-        return (
-            // <div className="row">
-            <div className="d-flex flex-wrap mx-5 my-3">
-                <div className="col-2  pe-3">
-                    <DoseResponseGridWidget stateHolder={this} />
-                    <br />
-                    <IntegrativeCheckBoxWidget stateHolder={this} />
-                </div>
-                {this._renderDoseResponse(this.state)}
-            </div>
-        );
-    }
-}
-
-MultipleCurveBody.propTypes = {
-    protocol_id: PropTypes.number.isRequired,
-    readout_ids: PropTypes.array.isRequired,
-    casrns: PropTypes.array.isRequired,
-    devtoxEndPointList: PropTypes.array.isRequired,
-    heading: PropTypes.string,
 };
 
 class molecularGraphBody extends React.Component {
@@ -267,4 +205,4 @@ sankeyPlotGraphBody.propTypes = {
     cells: PropTypes.array.isRequired,
 };
 
-export { Header, SingleCurveBody, MultipleCurveBody, molecularGraphBody, sankeyPlotGraphBody };
+export { Header, DoseResponseBody, molecularGraphBody, sankeyPlotGraphBody };

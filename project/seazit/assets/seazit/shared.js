@@ -3,7 +3,7 @@ import * as d3 from 'd3';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Tooltip from '@material-ui/core/Tooltip';
-import { Header, MultipleCurveBody, SingleCurveBody } from './components/BootstrapBodyPart';
+import { Header, DoseResponseBody } from './components/BootstrapBodyPart';
 import BootstrapModal from 'utils/BootstrapModal';
 
 const AXIS_LINEAR = 1,
@@ -437,7 +437,7 @@ const AXIS_LINEAR = 1,
     `;
         if (d.endPointList) {
             if (d.endPointList && d.endPointList.length > 1) {
-                new BootstrapModal(Header, MultipleCurveBody, {
+                new BootstrapModal(Header, DoseResponseBody, {
                     title: d.title,
                     // ontologyGroupName: d.ontologyGroupName,
                     protocol_id: d.protocol_id,
@@ -451,7 +451,7 @@ const AXIS_LINEAR = 1,
                     heading: headingHtml,
                 });
             } else {
-                new BootstrapModal(Header, SingleCurveBody, {
+                new BootstrapModal(Header, DoseResponseBody, {
                     title: d.title,
                     // ontologyGroupName: d.ontologyGroupName,
                     protocol_id: d.protocol_id,
@@ -465,13 +465,13 @@ const AXIS_LINEAR = 1,
         }
     },
     BMCHandleCellClick = function(d, clickType) {
-        // console.log('SingleCurveBody', d);
+        // console.log('DoseResponseBody', d);
         const headingHtml = `
         ${d.endpoint_name} endpoint has the lowest BMC in selected endpoints
     `;
         switch (clickType) {
             case 'nonviabilityData':
-                new BootstrapModal(Header, SingleCurveBody, {
+                new BootstrapModal(Header, DoseResponseBody, {
                     // title: d.preferred_name + `: ` + d.endpoint_name,
                     title: d.endpoint_name + `+` + d.protocol_name_plot + `+` + d.preferred_name,
                     protocol_id: d.protocol_id,
@@ -482,7 +482,7 @@ const AXIS_LINEAR = 1,
                 });
                 break;
             case 'viabilityData':
-                new BootstrapModal(Header, SingleCurveBody, {
+                new BootstrapModal(Header, DoseResponseBody, {
                     // title: d.preferred_name + `: ` + 'Mortality@120',
                     title:
                         d.endpoint_name +
