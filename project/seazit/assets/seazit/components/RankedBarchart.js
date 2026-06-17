@@ -381,7 +381,31 @@ class RankedBarChart extends React.Component {
     }
 
     componentDidMount() {
+        if (window.ResizeObserver) {
+            // ResizeObserver fires precisely when the container dimensions change —
+            // including the moment display:none → display:block makes it visible.
+            // This is more reliable than a timed window.resize event.
+            this._resizeObserver = new ResizeObserver(() => {
+                // Only redraw if the element actually has width (is visible)
+                if ($(this.refs.bmd_svg).innerWidth() > 0) {
+                    this._renderPlot(this.props);
+                }
+            });
+            this._resizeObserver.observe(this.refs.bmd_svg);
+        } else {
+            // Fallback for older browsers: listen to window resize
+            this._resizeHandler = () => this._renderPlot(this.props);
+            window.addEventListener('resize', this._resizeHandler);
+        }
         this._renderPlot(this.props);
+    }
+
+    componentWillUnmount() {
+        if (this._resizeObserver) {
+            this._resizeObserver.disconnect();
+        } else if (this._resizeHandler) {
+            window.removeEventListener('resize', this._resizeHandler);
+        }
     }
 
     shouldComponentUpdate(nextProps, nextState) {

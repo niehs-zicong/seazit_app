@@ -7,19 +7,25 @@
 <ul class="nav nav-tabs my-2">
 
     <li class="nav-item">
-        <a class="nav-link {% if active_view_name == 'home' %}active{% endif %}" href="{% url 'seazit:home' %}">
+        <a class="nav-link {% if active_view_name == 'seazit_app' %}active{% endif %}"
+           id="nav-tab-about"
+           href="{% url 'seazit:seazit_app' %}#about">
             <i class="fa fa-home fa-lg"></i>&nbsp;About
         </a>
     </li>
 
     <li class="nav-item">
-        <a class="nav-link {% if active_view_name == 'dataset' %}active{% endif %}" href="{% url 'seazit:dataset' %}">
+        <a class="nav-link {% if active_view_name == 'seazit_app' %}active{% endif %}"
+           id="nav-tab-dataset"
+           href="{% url 'seazit:seazit_app' %}#dataset">
             Datasets
         </a>
     </li>
 
     <li class="nav-item">
-        <a class="nav-link {% if active_view_name == 'qc' %}active{% endif %}" href="{% url 'seazit:qc' %}">
+        <a class="nav-link {% if active_view_name == 'seazit_app' %}active{% endif %}"
+           id="nav-tab-qc"
+           href="{% url 'seazit:seazit_app' %}#qc">
             Quality Check
         </a>
     </li>
@@ -49,7 +55,9 @@
     </li>
 
     <li class="nav-item">
-        <a class="nav-link {% if active_view_name == 'resources' %}active{% endif %}" href="{% url 'seazit:resources' %}">
+        <a class="nav-link {% if active_view_name == 'seazit_app' %}active{% endif %}"
+           id="nav-tab-resources"
+           href="{% url 'seazit:seazit_app' %}#resources">
             Resources
         </a>
     </li>

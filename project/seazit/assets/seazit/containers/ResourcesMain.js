@@ -1,0 +1,201 @@
+import React from 'react';
+
+class ResourcesMain extends React.Component {
+    render() {
+        return (
+            <div className="container">
+                <div className="row">
+                    <div className="col-md-8">
+                        <h1>Resources</h1>
+                        <br />
+
+                        <h2>Data and Peer Reviewed Publications</h2>
+                        <br />
+
+                        <h2 style={{ textDecoration: 'underline' }}>Data</h2>
+
+                        <p>
+                            The data obtained from the Interlaboratory study are available in text
+                            and Excel file formats in a zip file and can be downloaded via the NTP
+                            CEBS data page. This also includes the results of the standardized DTT
+                            analysis including BMC analysis.
+                        </p>
+
+                        <p>To cite these data, please use the following citation:</p>
+
+                        <blockquote>
+                            <p>
+                                Systematic Evaluation of the Application of Zebrafish in Toxicology
+                                (SEAZIT) Dose Range Finding (DRF) data DOI:{' '}
+                                <a href="https://doi.org/10.22427/NTP-DATA-002-00102-0001-000-6">
+                                    10.22427/NTP-DATA-002-00102-0001-000-6
+                                </a>
+                                .
+                            </p>
+                        </blockquote>
+
+                        <br />
+                        <h2 style={{ textDecoration: 'underline' }}>Primary Literature</h2>
+                        <p>
+                            Hamm, J., Hsieh, J.-H., Roberts, G., Collins, B., Gorospe, J., Sparrow,
+                            B., Walker, N.J., Truong, L., Tanguay, R.L., Dyballa, S., Mi&ntilde;ana,
+                            R., Schiavone, V., Terriente, J., Weiner, A., Muriana, A., Quevedo, C.,
+                            Ryan, K.R., 2024. Interlaboratory Study on Zebrafish in Toxicology:
+                            Systematic Evaluation of the Application of Zebrafish in
+                            Toxicology&apos;s (SEAZIT&apos;s) Evaluation of Developmental Toxicity.
+                            Toxics 12, 93.{' '}
+                            <a href="https://doi.org/10.3390/toxics12010093">
+                                10.3390/toxics12010093
+                            </a>
+                        </p>
+
+                        <p>
+                            Hsieh, J.-H., Nolte, S., Hamm, J.T., Wang, Z., Roberts, G.K., Schmitt,
+                            C.P., Ryan, K.R., 2023. Systematic Evaluation of the Application of
+                            Zebrafish in Toxicology (SEAZIT): Developing a Data Analysis Pipeline
+                            for the Assessment of Developmental Toxicity with an Interlaboratory
+                            Study. Toxics 11, 407.{' '}
+                            <a href="https://doi.org/10.3390/toxics11050407">
+                                10.3390/toxics11050407
+                            </a>
+                        </p>
+
+                        <h2 style={{ textDecoration: 'underline' }}>Supportive Literature</h2>
+                        <p>
+                            Hsieh, J.-H., Behl, M., Parham, F., Ryan, K., 2022. Exploring the
+                            Influence of Experimental Design on Toxicity Outcomes in Zebrafish
+                            Embryo Tests. Toxicological Sciences 188, 198&ndash;207.{' '}
+                            <a href="https://doi.org/10.1093/toxsci/kfac053">
+                                10.1093/toxsci/kfac053
+                            </a>
+                        </p>
+
+                        <p>
+                            Thessen, A.E., Marvel, S., Achenbach, J.C., Fischer, S., Haendel, M.A.,
+                            Hayward, K., Kl&uuml;ver, N., K&ouml;nemann, S., Legradi, J., Lein, P.,
+                            Leong, C., Mylroie, J.E., Padilla, S., Perone, D., Planchart, A.,
+                            Prieto, R.M., Muriana, A., Quevedo, C., Reif, D., Ryan, K., Stinckens,
+                            E., Truong, L., Vergauwen, L., Vom Berg, C., Wilbanks, M., Yaghoobi, B.,
+                            Hamm, J., 2022. Implementation of Zebrafish Ontologies for Toxicology
+                            Screening. Frontiers in Toxicology 4.{' '}
+                            <a href="https://doi.org/10.3389/ftox.2022.817999">
+                                10.3389/ftox.2022.817999
+                            </a>
+                        </p>
+
+                        <p>
+                            Hsieh, J.-H., Ryan, K., Sedykh, A., Lin, J.-A., Shapiro, A.J., Parham,
+                            F., Behl, M., 2019. Application of Benchmark Concentration (BMC)
+                            Analysis on Zebrafish Data: A New Perspective for Quantifying Toxicity
+                            in Alternative Animal Models. Toxicol Sci 167, 92&ndash;104.{' '}
+                            <a href="https://doi.org/10.1093/toxsci/kfy258">
+                                10.1093/toxsci/kfy258
+                            </a>
+                        </p>
+
+                        <p>
+                            Hamm, J.T., Ceger, P., Allen, D., Stout, M., Maull, E.A., Baker, G.,
+                            Zmarowski, A., Padilla, S., Perkins, E., Planchart, A., Stedman, D.,
+                            Tal, T., Tanguay, R.L., Volz, D.C., Wilbanks, M.S., Walker, N.J., 2019.
+                            Characterizing sources of variability in zebrafish embryo screening
+                            protocols. ALTEX 36, 103&ndash;120.{' '}
+                            <a href="https://doi.org/10.14573/altex.1804162">
+                                10.14573/altex.1804162
+                            </a>
+                        </p>
+                    </div>
+
+                    <div className="col-12">
+                        <h2>The Team</h2>
+                    </div>
+
+                    <div className="col-4">
+                        <h4>&nbsp;</h4>
+                        <b>Kristen Ryan, PhD, DABT</b>
+                        <br />
+                        Toxicologist, Staff Scientist, Division of Translational Toxicology, NIEHS
+                        <br />
+                        <i>Lead, Project Design and Interpretation</i>
+                        <br />
+                        <a href="mailto:kristen.ryan@nih.gov">kristen.ryan@nih.gov</a>
+                        <br />
+                        <br />
+                        <b>Georgia Roberts, PhD, DABT</b>
+                        <br />
+                        Toxicologist, Staff Scientist, Division of Translational Toxicology, NIEHS
+                        <br />
+                        <i>Contract Support &amp; Data Interpretation</i>
+                        <br />
+                        <a href="mailto:georgia.roberts@nih.gov">georgia.roberts@nih.gov</a>
+                        <br />
+                        <br />
+                        <b>Jon Hamm, PhD</b>
+                        <br />
+                        Contractor, Inotiv
+                        <br />
+                        <i>Project Design and Data Integration</i>
+                        <br />
+                        <a href="mailto:jonathan.hamm@inotivco.com">jonathan.hamm@inotivco.com</a>
+                        <br />
+                        <br />
+                    </div>
+
+                    <div className="col-4">
+                        <h4>&nbsp;</h4>
+                        <b>Jui-Hua Hsieh, PhD</b>
+                        <br />
+                        Computational Toxicologist, Division of Translational Toxicology, NIEHS
+                        <br />
+                        <i>Data Analyst, Application Design and Development</i>
+                        <br />
+                        <a href="mailto:jui-hua.hsieh@nih.gov">jui-hua.hsieh@nih.gov</a>
+                        <br />
+                        <br />
+                        <b>Sue Nolte</b>
+                        <br />
+                        Contractor, Office of Data Science, NIEHS
+                        <br />
+                        <i>Application Full Cycle Development</i>
+                        <br />
+                        <a href="mailto:sue.nolte@nih.gov">sue.nolte@nih.gov</a>
+                        <br />
+                        <br />
+                        <b>Zicong Wang</b>
+                        <br />
+                        Contractor, Office of Data Science, NIEHS
+                        <br />
+                        <i>Software Developer and Application Deployment</i>
+                        <br />
+                        <a href="mailto:zicong.wang@nih.gov">zicong.wang@nih.gov</a>
+                        <br />
+                        <br />
+                    </div>
+
+                    <div className="col-4">
+                        <h4>&nbsp;</h4>
+                        <b>Skylar Marvel, PhD</b>
+                        <br />
+                        Contractor, Division of Translational Toxicology, NIEHS
+                        <br />
+                        <i>Application Development</i>
+                        <br />
+                        <a href="mailto:skylar.marvel@nih.gov">skylar.marvel@nih.gov</a>
+                        <br />
+                        <br />
+                        <b>Bridgett Hill, MS</b>
+                        <br />
+                        Contractor, Inotiv
+                        <br />
+                        <i>Data Management and Data Curation</i>
+                        <br />
+                        <a href="mailto:bridgett.hill@inotivco.com">bridgett.hill@inotivco.com</a>
+                        <br />
+                        <br />
+                    </div>
+                </div>
+            </div>
+        );
+    }
+}
+
+export default ResourcesMain;

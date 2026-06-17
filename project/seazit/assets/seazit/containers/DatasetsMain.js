@@ -45,7 +45,7 @@ class DatasetsMain extends React.Component {
                             className="img-fluid"
                             style={{ marginRight: '10px', height: '50px' }}
                         />
-                        Data
+                        Datasets
                         <HelpButtonWidget
                             stateHolder={this}
                             headLevel={'h1'}

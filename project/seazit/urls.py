@@ -18,11 +18,13 @@ urlpatterns = [
     # Include the router URLs under the 'api' namespace
     path("api/", include((router.urls, "seazit"), namespace="api")),
 
-    # Define regular paths for your views
-    path("", views.Home.as_view(), name="home"),
-    path("dataset/", views.Dataset.as_view(), name="dataset"),
-    path("quality-control/", views.QC.as_view(), name="qc"),
-    path("resources/", views.Resources.as_view(), name="resources"),
+    # Legacy redirects for About and Resources — now handled inside the SPA
+    path("", RedirectView.as_view(url="/seazit/app/#about", permanent=False), name="home"),
+    path("resources/", RedirectView.as_view(url="/seazit/app/#resources", permanent=False), name="resources"),
+
+    # Legacy redirects for Datasets and QC — now handled inside the SPA
+    path("dataset/", RedirectView.as_view(url="/seazit/app/#dataset", permanent=False), name="dataset"),
+    path("quality-control/", RedirectView.as_view(url="/seazit/app/#qc", permanent=False), name="qc"),
 
     # SPA shell — serves all 3 React tabs (Concentration Response, BMC by Dataset, Integrative Analyses)
     path("app/", views.SeazitApp.as_view(), name="seazit_app"),
