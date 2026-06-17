@@ -1,19 +1,13 @@
-
 {% extends "seazit/base.html" %}
-
-{% block title %}{{block.super}} | DoseResponse {% endblock %}
-
-
+{% block title %}{{block.super}} | SEAZIT{% endblock %}
 
 {% block content %}
 <div id='main'>
 </div>
 {% endblock content %}
 
-
 {% block extra-js %}
 <script>
-            window.apps.seazit.renderDoseResponse(document.getElementById('main'));
-
+    window.apps.seazit.renderSeazitApp(document.getElementById('main'));
 </script>
 {% endblock extra-js %}

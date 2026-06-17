@@ -57,7 +57,44 @@ const AXIS_LINEAR = 1,
     HEATMAP_BMC = 2,
     READOUT_TYPE_READOUT = 1,
     READOUT_TYPE_CATEGORY = 2,
+    METADATA_STORAGE_KEY = 'seazit_metadata_cache',
+    METADATA_STORAGE_VERSION = 1,
     loadMetadata = function(component) {
+        // Clear cache on page refresh so stale metadata is never served after a reload
+        try {
+            const navEntry = performance.getEntriesByType('navigation')[0];
+            const isReload = navEntry && navEntry.type === 'reload';
+            if (isReload) {
+                sessionStorage.removeItem(METADATA_STORAGE_KEY);
+            }
+        } catch (e) {
+            // performance API unavailable — fall through to fetch
+        }
+
+        // Try to restore metadata from sessionStorage (avoids network round-trip on tab switch)
+        try {
+            const raw = sessionStorage.getItem(METADATA_STORAGE_KEY);
+            if (raw) {
+                const cached = JSON.parse(raw);
+                if (cached._version === METADATA_STORAGE_VERSION) {
+                    component.setState({
+                        metadataLoaded: true,
+                        protocol_data: cached.protocol_data,
+                        Seazit_chemical_info: cached.Seazit_chemical_info,
+                        Seazit_ui_panel: cached.Seazit_ui_panel,
+                        Seazit_ontology: cached.Seazit_ontology,
+                    });
+                    return; // skip the network fetch entirely
+                }
+                // version mismatch — discard and fetch fresh
+                sessionStorage.removeItem(METADATA_STORAGE_KEY);
+            }
+        } catch (e) {
+            // corrupt cache — fall through to fetch
+            sessionStorage.removeItem(METADATA_STORAGE_KEY);
+        }
+
+        // No valid cache — fetch from API and save result for next time
         d3.json(URL_METADATA, (d) => {
             // //console.log('d');
             // //console.log(d);
@@ -68,6 +105,21 @@ const AXIS_LINEAR = 1,
                 Seazit_ui_panel: d.Seazit_ui_panel,
                 Seazit_ontology: d.Seazit_ontology,
             });
+            // Save to sessionStorage so the next component mount skips this fetch
+            try {
+                sessionStorage.setItem(
+                    METADATA_STORAGE_KEY,
+                    JSON.stringify({
+                        _version: METADATA_STORAGE_VERSION,
+                        protocol_data: d.protocol_data,
+                        Seazit_chemical_info: d.Seazit_chemical_info,
+                        Seazit_ui_panel: d.Seazit_ui_panel,
+                        Seazit_ontology: d.Seazit_ontology,
+                    })
+                );
+            } catch (e) {
+                // storage quota exceeded or unavailable — fail silently
+            }
         });
     },
     loadBaseUrl = function(inputPath) {

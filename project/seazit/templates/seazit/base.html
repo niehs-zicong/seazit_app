@@ -25,19 +25,25 @@
     </li>
 
     <li class="nav-item">
-        <a class="nav-link {% if active_view_name == 'seazit_cr' %}active{% endif %}" href="{% url 'seazit:seazit_cr' %}">
+        <a class="nav-link {% if active_view_name == 'seazit_app' %}active{% endif %}"
+           id="nav-tab-cr"
+           href="{% url 'seazit:seazit_app' %}#cr">
             Concentration Response
         </a>
     </li>
 
     <li class="nav-item">
-        <a class="nav-link {% if active_view_name == 'seazit_bmcByLab' %}active{% endif %}" href="{% url 'seazit:seazit_bmcByLab' %}">
+        <a class="nav-link {% if active_view_name == 'seazit_app' %}active{% endif %}"
+           id="nav-tab-bmc"
+           href="{% url 'seazit:seazit_app' %}#bmc">
             BMC by Dataset
         </a>
     </li>
 
     <li class="nav-item">
-        <a class="nav-link {% if active_view_name == 'seazit_integrative' %}active{% endif %}" href="{% url 'seazit:seazit_integrative' %}">
+        <a class="nav-link {% if active_view_name == 'seazit_app' %}active{% endif %}"
+           id="nav-tab-int"
+           href="{% url 'seazit:seazit_app' %}#int">
             Integrative Analyses
         </a>
     </li>

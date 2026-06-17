@@ -1,4 +1,5 @@
 from django.urls import include, path
+from django.views.generic import RedirectView
 from rest_framework.routers import DefaultRouter
 
 # Importing views and API views
@@ -22,7 +23,12 @@ urlpatterns = [
     path("dataset/", views.Dataset.as_view(), name="dataset"),
     path("quality-control/", views.QC.as_view(), name="qc"),
     path("resources/", views.Resources.as_view(), name="resources"),
-    path("seazit_cr/", views.SeazitCR.as_view(), name="seazit_cr"),
-    path("seazit_bmcByLab/", views.SeazitBmcByLab.as_view(), name="seazit_bmcByLab"),
-    path("seazit_integrative/", views.SeazitIntegrative.as_view(), name="seazit_integrative"),
+
+    # SPA shell — serves all 3 React tabs (Concentration Response, BMC by Dataset, Integrative Analyses)
+    path("app/", views.SeazitApp.as_view(), name="seazit_app"),
+
+    # Legacy redirects — keep old URLs working (bookmarks, external links)
+    path("seazit_cr/", RedirectView.as_view(url="/seazit/app/#cr", permanent=False), name="seazit_cr"),
+    path("seazit_bmcByLab/", RedirectView.as_view(url="/seazit/app/#bmc", permanent=False), name="seazit_bmcByLab"),
+    path("seazit_integrative/", RedirectView.as_view(url="/seazit/app/#int", permanent=False), name="seazit_integrative"),
 ]
