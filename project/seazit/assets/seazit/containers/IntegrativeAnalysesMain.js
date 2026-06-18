@@ -146,6 +146,11 @@ class IntegrativeAnalysesMain extends React.Component {
         // console.log(this.state.ontologyType);
         // console.log(this.state.ontologyGroup);
 
+        // Show nothing until user makes assay and chemical selections
+        if (this.state.assays.length === 0 || this.state.chemicals.length === 0) {
+            return null;
+        }
+
         return (
             <div>
                 <HeatmapHandler
@@ -201,7 +206,10 @@ class IntegrativeAnalysesMain extends React.Component {
             .filter((i) => this.state.assays.includes(i.seazit_protocol_id.toString()))
             // .map('protocol_name_plot')
             .value();
-        this.state.url = getIntegrativeUrl(this.state.assays, this.state.chemicals);
+        this.state.url =
+            this.state.assays.length > 0 && this.state.chemicals.length > 0
+                ? getIntegrativeUrl(this.state.assays, this.state.chemicals)
+                : null;
         //heatmap test
         return (
             <div className="d-flex flex-wrap mx-5 my-3">

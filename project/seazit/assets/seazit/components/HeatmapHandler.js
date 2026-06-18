@@ -94,6 +94,8 @@ class HeatmapHandler extends React.Component {
     }
 
     fetchIntegrativeData(url) {
+        // Guard against null/undefined url — happens when no selections are made yet
+        if (!url) return;
         //console.log(url);
         d3.json(url, (error, data) => {
             if (error) {
