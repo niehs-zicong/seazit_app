@@ -146,6 +146,11 @@ class IntegrativeAnalysesMain extends React.Component {
         // console.log(this.state.ontologyType);
         // console.log(this.state.ontologyGroup);
 
+        // Show nothing until user makes assay and chemical selections
+        if (this.state.assays.length === 0 || this.state.chemicals.length === 0) {
+            return null;
+        }
+
         return (
             <div>
                 <HeatmapHandler
