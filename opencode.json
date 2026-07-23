@@ -16,6 +16,13 @@
         "gemini-3-pro": {
           "name": "Gemini 3 Pro (NIEHS)"
         },
+                                "azure-claude-sonnet-5": {
+          "name": "Claude Opus 4.7 Azure (NIEHS)"
+        },
+                "azure-claude-opus-4.7": {
+          "name": "azure-claude-opus-4.7 (NIEHS)"
+        },
+
         "claude-4.6-sonnet": {
           "name": "Claude 4.6 (NIEHS)"
         }
