@@ -68,7 +68,6 @@ class OntologyWidget extends BaseWidget {
             state.ontologyType === integrative_Granular
                 ? 'developmental_defect_grouping_granular'
                 : 'developmental_defect_grouping_general';
-        // console.log(state.Seazit_ontology)
         const opts = _.chain(state.Seazit_ontology)
             .filter((r) => r[groupingKey] !== 'dead') // Filter out items where groupingKey is 'dead'
 
@@ -88,7 +87,6 @@ class OntologyWidget extends BaseWidget {
         if (_.isEmpty(opts)) {
             return null;
         }
-        // console.log(opts)
 
         return renderSelectMultiOptgroupWidget(
             'ontologyGroup',
@@ -125,7 +123,6 @@ class OntologyWidget extends BaseWidget {
         // loadBaseUrl(this);
 
         let state = this.props.stateHolder.state;
-        // console.log(state)
         return (
             <div className="clearfix">
                 {this._renderFilterBy(state)}

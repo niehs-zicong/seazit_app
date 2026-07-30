@@ -122,7 +122,6 @@ class ReadoutWidget extends BaseWidget {
     }
 
     _renderMultipleEndpointSelector(state, renderHelpButtonWidget, renderHelpText) {
-        //console.log(state.assays);
         let assays = Array.isArray(state.assays)
             ? state.assays.map((item) => Number(item))
             : [Number(state.assays)];

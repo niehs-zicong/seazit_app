@@ -87,9 +87,7 @@ class BmdTable extends React.Component {
             // match button padding-left
             return <span style={{ paddingLeft: 12 }}>-</span>;
         }
-        // console.log( jsonData,jsonData.minimimumNonViability, jsonData.minimimumViability)
         let showModal = () => {
-            // console.log( jsonData)
             new BootstrapModal(Header, DoseResponseBody, {
                 // title: `${d.preferred_name} (${d.chemical_casrn}): ${d.readout_endpoint}`,
                 title:

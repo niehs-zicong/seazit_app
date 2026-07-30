@@ -69,7 +69,6 @@ class DoseResponse extends React.Component {
                         };
                     })
                     .each((d, k) => {
-                        // console.log(this.props.final_dev_call, this.props.devtoxEndPointList, d.endpoint_name)
                         let dr = d.dose_response[0];
                         (d.title = this.getPlotTitle(dr, collapse)),
                             (d.casrn = dr.casrn),
@@ -129,8 +128,6 @@ class DoseResponse extends React.Component {
                         };
                     })
                     .each((d, k) => {
-                        // console.log(this.props.final_dev_call, this.props.devtoxEndPointList, d.endpoint_name)
-
                         let dr = d.dose_response[0];
                         (d.title = this.getPlotTitle(dr, collapse)),
                             (d.casrn = dr.casrn),
@@ -164,7 +161,6 @@ class DoseResponse extends React.Component {
         // yrange = d3.extent(responses);
         // offset = (yrange[1] - yrange[0]) * 0.15 * 0.5;
         // yrange = [yrange[0] - offset, yrange[1] + offset];
-        //console.log(collapsedData);
         return {
             data,
             collapsedData,
@@ -183,7 +179,6 @@ class DoseResponse extends React.Component {
                 });
                 return;
             }
-            //console.log('zw');
             this.updateData(data, this.props.collapse);
         });
     }
@@ -318,8 +313,6 @@ class DoseResponse extends React.Component {
     }
 
     updateData(data, collapse) {
-        //console.log('updateData');
-        //console.log(data);
         this.setKeys(data, collapse);
         let update = this.collapseData(data, collapse);
         let scale = this.getColorScale(update.collapsedData, collapse);
@@ -331,11 +324,9 @@ class DoseResponse extends React.Component {
     }
 
     _renderPlot(d, yrange) {
-        //console.log('_renderPlot');
         if (this.refs[d.key] === undefined) {
             return;
         }
-        //console.log(d);
 
         let data = [],
             dose_range = [0, 1],
@@ -536,13 +527,11 @@ class DoseResponse extends React.Component {
             // move legend to bottom of plot
             layout.legend = { orientation: 'h', y: -0.3 };
         }
-        // //console.log(d)
 
         Plotly.newPlot(this.refs[d.key], data, layout, svgConfig);
     }
 
     loadDoseResponse() {
-        //console.log('loadDoseResponse');
         this.state.collapsedData.map((d) => this._renderPlot(d, this.state.yrange));
     }
 

@@ -30,8 +30,6 @@ class IntegrativePlotWidget extends BaseWidget {
     }
 
     _renderHelpText() {
-        // console.log(this.props.stateHolder.state)
-        // console.log(this.state)
         let state = this.props.stateHolder.state;
         let contentId = this.state.helpButtonContentId;
         if (!this.state.showHelpText) {

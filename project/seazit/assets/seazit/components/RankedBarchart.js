@@ -53,12 +53,7 @@ let renderPlot = function(el, data, opts) {
         .compact()
         .value();
 
-    // console.log("data", data)
-    // console.log("nonviabilityData", nonviabilityData)
-    // console.log("viabilityData", viabilityData)
-
     // viabilityData is black dot, NonviabilityData is colored dots.
-    //console.log('data2', data, nonviabilityData, viabilityData);
     // set dimensions and margins
     let elWidth = Math.max(Math.floor($(el).innerWidth()), 800),
         margin = { top: 40, right: 100, bottom: 50, left: 300, footnote: 200 },
@@ -68,10 +63,7 @@ let renderPlot = function(el, data, opts) {
         categoryWidth = 150,
         categoryPadding = 5,
         barStart = categoryWidth + categoryPadding * 2;
-    // console.log(height)
-    // console.log( height + margin.top + margin.bottom)
     //
-    // console.log(height + margin.top - margin.bottom)
 
     let xScaleFunction = d3.scaleLog;
 
@@ -116,7 +108,6 @@ let renderPlot = function(el, data, opts) {
 
     if (opts.isSelective) {
         // add mort_pod_med circle, color bar and dot.
-        // console.log(nonviabilityData)
         barG.selectAll('.pod-circle')
             .data(nonviabilityData)
             .enter()

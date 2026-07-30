@@ -15,8 +15,6 @@ class BmdByLabPlotWidget extends BaseWidget {
         this.state = {
             showHelpText: false,
         };
-        // console.log(this.props);
-        // console.log(this.props.stateHolder.state);
     }
 
     _renderHelpText() {

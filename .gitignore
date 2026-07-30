@@ -88,3 +88,28 @@ project/chemmaps/static/chemmaps/png/*
 
 #tox21HTS
 project/tox21HTS/migrations/*
+
+# yarn 4 cache/state
+project/.yarn/install-state.gz
+project/.yarn/cache
+project/.yarn/*.log
+
+# Python testing / caches
+.coverage
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Python packaging
+dist/
+build/
+*.egg-info/
+
+# Env / secrets
+.env.local
+.env.*.local
+
+# Editor swap files
+*.swp
+*.swo

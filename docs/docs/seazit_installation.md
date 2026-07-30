@@ -1,5 +1,7 @@
 ## Quickstart development environment
 
+> **Note:** For up-to-date installation instructions, see the [top-level README](../../README.md). This page contains legacy notes and detailed reference material that may reference deprecated files (e.g., `docker-compose-dev.yml`).
+
 Installing the SEAZIT application requires installation both a webserver and a database. The following pre-requisites are required:
 
 - Anaconda or Miniconda

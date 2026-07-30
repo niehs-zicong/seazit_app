@@ -32,7 +32,6 @@ import {
 class RankedBarchartHandler extends React.Component {
     constructor(props) {
         super(props);
-        // console.log(props.stateHolder.state)
         // this.parseJSONToCSVStr = this.parseJSONToCSVStr.bind(this);
         this.state = { data: null };
     }
@@ -136,11 +135,7 @@ class RankedBarchartHandler extends React.Component {
                 };
             })
             .value();
-        // console.log('data');
         //
-        //console.log('data',data);
-        // console.log('plotData',plotData);
-        // console.log(plotData);
         return plotData;
     }
 

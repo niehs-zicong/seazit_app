@@ -14,7 +14,6 @@ import PropTypes from 'prop-types';
 class OntologyTypeWidget extends BaseWidget {
     render() {
         let state = this.props.stateHolder.state;
-        // console.log(state);
         return (
             <div>
                 <label>Ontology Groupings: Filter endpoints by:</label>

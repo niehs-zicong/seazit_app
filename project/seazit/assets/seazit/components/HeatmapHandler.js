@@ -96,7 +96,6 @@ class HeatmapHandler extends React.Component {
     fetchIntegrativeData(url) {
         // Guard against null/undefined url — happens when no selections are made yet
         if (!url) return;
-        //console.log(url);
         d3.json(url, (error, data) => {
             if (error) {
                 let err = error.target.responseText.replace('["', '').replace('"]', '');
@@ -112,13 +111,8 @@ class HeatmapHandler extends React.Component {
                     .domain(domain)
                     .range([1, 0]),
                 continuousColorScale = function(d) {
-                    // console.log('d  and scale(d)')
-                    // console.log(d)
-                    // console.log(scale(d));
-                    // console.log(d3.interpolateViridis(scale(d)));
                     return d3.interpolateViridis(scale(d));
                 };
-            //console.log("first render data", data)
             this.setState({
                 data,
                 scale,
@@ -202,16 +196,9 @@ class HeatmapHandler extends React.Component {
                 ontologyType === integrative_Granular
                     ? 'developmental_defect_grouping_granular'
                     : 'developmental_defect_grouping_general';
-        //console.log('before plot')
-        //console.log(this.props)
-        //console.log(data)
-        //console.log(ontologyGroup)
-        //console.log(ontologyGroupType)
         // const a = _.uniq(_.map(data, 'developmental_defect_grouping_granular'));
         // const b = _.uniq(_.map(data, 'developmental_defect_grouping_general'));
         //
-        // console.log('developmental_defect_grouping_general', b)
-        // console.log('developmental_defect_grouping_granular', a)
 
         function transformDataItem(d, ontologyGroupType) {
             return {
@@ -237,7 +224,6 @@ class HeatmapHandler extends React.Component {
         }
 
         function createYGroups(data) {
-            //console.log(data)
             return _.chain(data)
                 .map((item) => ({
                     casrn: item.casrn,
@@ -304,15 +290,12 @@ class HeatmapHandler extends React.Component {
                             fill: '#C9C9C9',
                         });
                     } else {
-                        // //console.log(result)
-
                         const processedItem = processHeatmapDataItem(
                             result,
                             selectivityOrder,
                             sortByKey,
                             fillFunction
                         );
-                        // //console.log(processedItem)
                         processedData.push(processedItem);
                     }
                 }
@@ -330,7 +313,6 @@ class HeatmapHandler extends React.Component {
 
         const xgroups = createXGroups(ontologyGroup, labDataset);
         const ygroups = createYGroups(data);
-        // console.log(data, xgroups, ygroups)
         switch (this.props.visualization) {
             case INTVIZ_HEATMAP:
                 return {
@@ -423,7 +405,6 @@ class HeatmapHandler extends React.Component {
     }
 
     _renderButtons(d) {
-        // //console.log(d.data);
         const title =
             this.props.visualization === INTVIZ_HEATMAP
                 ? 'More information on developmental toxicity classifications'
@@ -500,7 +481,6 @@ class HeatmapHandler extends React.Component {
                 key: 'max_highest_conc',
             },
         ];
-        //console.log(d.data)
         return (
             <div>
                 <h4 className={`label-horizontal label-normal`}>
@@ -528,10 +508,7 @@ class HeatmapHandler extends React.Component {
     }
 
     _renderMain(d) {
-        // //console.log(this.props);
-
         if (this.props.visualization === INTVIZ_HEATMAP) {
-            //console.log("heatmap", d.data)
             return (
                 <Heatmap
                     data={d.data}
