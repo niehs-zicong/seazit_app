@@ -16,7 +16,7 @@ The application combines a Django REST backend with a React/Webpack frontend, ba
 
 - **Production site:** https://seazit.dtt.niehs.nih.gov/
 - **Staging site:** https://ehssv-falcon02.niehs.nih.gov/
-- **Deployment docs:** https://gitlab.niehs.nih.gov/ods/deploy-seazit/-/blob/master/readme.md
+- **Deployment tooling:** `NIEHS/deploy-seazit` (private; see [Deploying](docs/docs/deploying.md))
 
 ---
 
@@ -216,9 +216,9 @@ mmdc -t neutral -C ./diagrams/mmd.css \
 
 ## Deployment
 
-Deployment is managed through a separate repository. See the deployment documentation:
+Deployment is managed through the private `NIEHS/deploy-seazit` repository, which contains Fabric tasks that rebuild and start the individual Docker containers on staging, production, and VM production servers.
 
-https://gitlab.niehs.nih.gov/ods/deploy-seazit/-/blob/master/readme.md
+See [`docs/docs/deploying.md`](docs/docs/deploying.md) for an overview of the deployment workflow, environments, and common commands. Full details (including credentials and hostnames) live in `deploy-seazit/readme.md`.
 
 ---
 
