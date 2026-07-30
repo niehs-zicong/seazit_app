@@ -188,33 +188,9 @@ psql -h localhost -p 5433 -d sandbox -U sandbox -f SEAZIT.sql
 | Command          | Description                                    |
 |------------------|------------------------------------------------|
 | `make dev`       | Start full dev environment via tmux            |
-| `make test`      | Run unit tests with pytest                     |
-| `make test_all`  | Run unit + integration tests                   |
 | `make servedocs` | Start MkDocs documentation server (port 8002)  |
 | `make dbdocs`    | Build auto-generated database documentation    |
 | `make notebook`  | Start Jupyter notebook server                  |
-
----
-
-## Testing
-
-Tests are implemented with [pytest](https://pytest.org/).
-
-```bash
-# Run all unit tests
-make test
-
-# Run unit + integration tests
-make test_all
-
-# Run a specific test by name
-cd project
-py.test -k test_name
-
-# Show print output during tests
-cd project
-py.test -k test_name -s
-```
 
 ---
 
